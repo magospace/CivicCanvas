@@ -204,12 +204,26 @@ function topLimit(promptIntent: PromptIntent, fallback: number) {
   return Number.isFinite(parsed) ? Math.min(Math.max(parsed, 1), fallback) : fallback;
 }
 
+function safeIdPart(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+}
+
+function generatedCanvasId(datasetId: string, createdAt: string) {
+  const timestamp = createdAt.replace(/\D/g, "").slice(0, 14);
+  const randomPart = typeof crypto !== "undefined" && "randomUUID" in crypto
+    ? crypto.randomUUID().slice(0, 8)
+    : Math.random().toString(36).slice(2, 10);
+
+  return `canvas_${safeIdPart(datasetId)}_${timestamp}_${randomPart}`;
+}
+
 function createCombinedSource(
   dataset: DatasetMetadata,
   results: QueryResult[],
   prompt: string,
   dataMode: DataMode,
-  extraCaveats: string[] = []
+  extraCaveats: string[] = [],
+  accessedAt = new Date().toISOString()
 ): SourceAttribution {
   const fieldsUsed = [...new Set(results.flatMap((result) => result.source.fieldsUsed))];
   const filtersApplied = [...new Set(results.flatMap((result) => result.source.filtersApplied))];
@@ -219,7 +233,7 @@ function createCombinedSource(
     datasetTitle: dataset.title,
     sourceName: dataset.sourceName,
     sourceUrl: dataset.sourceUrl,
-    accessedAt: "2026-05-09T00:00:00.000Z",
+    accessedAt,
     fieldsUsed,
     filtersApplied,
     queryMethod: `Rule-based prompt intent for: "${prompt}"`,
@@ -339,7 +353,8 @@ async function createDashboardForIntent({
     }))
     : rawAudits;
   const modeCaveat = mode.reason ? [`${mode.reason} Approved sample fallback is used for this dashboard.`] : [];
-  const source = createCombinedSource(dataset, results, prompt, actualDataMode, modeCaveat);
+  const generatedAt = new Date().toISOString();
+  const source = createCombinedSource(dataset, results, prompt, actualDataMode, modeCaveat, generatedAt);
   const totalCount = monthly.result.rows.reduce((sum, row) => sum + numeric(row, intent.countAlias), 0);
   const zipRows = chartRows(byZip.result, intent.geographyField, intent.countAlias);
   const dataModeText = actualDataMode === "live"
@@ -350,12 +365,12 @@ async function createDashboardForIntent({
 
   const canvas = validateCanvasDocument({
     schemaVersion: "1.0",
-    id: `canvas_${intent.datasetId}`,
+    id: generatedCanvasId(intent.datasetId, generatedAt),
     title: intent.title,
     prompt,
     description: "Generated from validated CanvasDocument JSON returned by the governed local API.",
-    createdAt: "2026-05-09T00:00:00.000Z",
-    updatedAt: "2026-05-09T00:00:00.000Z",
+    createdAt: generatedAt,
+    updatedAt: generatedAt,
     sources: [source],
     queries: audits.map((audit) => ({
       queryId: audit.queryId,
@@ -536,12 +551,13 @@ export async function generateCanvasForPrompt(
 export function createDatasetSuggestionCanvas(prompt: string): CanvasDocument {
   const datasets = getDatasetCatalog().filter((dataset) => dataset.fields.length > 0);
   const dataset = datasets[0];
+  const generatedAt = new Date().toISOString();
   const source: SourceAttribution = {
     datasetId: dataset.id,
     datasetTitle: dataset.title,
     sourceName: dataset.sourceName,
     sourceUrl: dataset.sourceUrl,
-    accessedAt: "2026-05-09T00:00:00.000Z",
+    accessedAt: generatedAt,
     fieldsUsed: [],
     filtersApplied: [],
     queryMethod: `No supported rule-based prompt match for: "${prompt}"`,
@@ -554,12 +570,12 @@ export function createDatasetSuggestionCanvas(prompt: string): CanvasDocument {
 
   return validateCanvasDocument({
     schemaVersion: "1.0",
-    id: "canvas_dataset_suggestions",
+    id: generatedCanvasId("dataset_suggestions", generatedAt),
     title: "Choose an approved dataset",
     prompt,
     description: "The prompt did not match a supported workflow.",
-    createdAt: "2026-05-09T00:00:00.000Z",
-    updatedAt: "2026-05-09T00:00:00.000Z",
+    createdAt: generatedAt,
+    updatedAt: generatedAt,
     sources: [source],
     queries: [],
     blocks: [

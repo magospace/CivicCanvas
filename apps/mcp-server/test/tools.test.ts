@@ -22,6 +22,7 @@ describe("MCP tool handlers", () => {
     expect(listSupportedSources().sources.length).toBeGreaterThan(0);
     expect(searchDatasets({ query: "Dallas 311" }).datasets[0].datasetId).toBe("dallas_311_requests");
     expect(getServerStatus().ok).toBe(true);
+    expect(getServerStatus().version).toBe("0.6.0-hosted-beta");
     expect(getServerStatus().dataModeControls).toContain("live_if_available");
     expect(validateCatalog().health.status).toBe("ok");
     const liveSources = listLiveSources().liveSources;
@@ -62,6 +63,7 @@ describe("MCP tool handlers", () => {
     const canvas = (await generateCanvasSpec({ datasetId: "austin_building_permits", mode: "live_if_available" })).canvas;
     expect(canvas.blocks.map((block) => block.type)).toContain("SourceMethodBlock");
     expect(canvas.sources[0].dataMode).toBe("fallback");
+    expect(canvas.createdAt).not.toBe("2026-05-09T00:00:00.000Z");
 
     const audit = await auditQuery({
       datasetId: "austin_building_permits",

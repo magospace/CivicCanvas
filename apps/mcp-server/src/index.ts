@@ -11,6 +11,7 @@ import {
   getSourceAttribution,
   listLiveSources,
   listSupportedSources,
+  MCP_SERVER_VERSION,
   queryDataset,
   recommendVisualization,
   searchDatasets,
@@ -68,7 +69,7 @@ const boundedQueryInput = {
 export function createServer() {
   const server = new McpServer({
     name: "texas-public-data-mcp",
-    version: "0.5.0-public-beta"
+    version: MCP_SERVER_VERSION
   });
 
   server.registerTool("list_supported_sources", {

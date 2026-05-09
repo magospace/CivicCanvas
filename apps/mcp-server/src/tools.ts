@@ -12,13 +12,15 @@ import {
 } from "@texas-data-canvas/shared";
 import { getAdapter, getCatalog } from "./data.js";
 
+export const MCP_SERVER_VERSION = "0.6.0-hosted-beta";
+
 export function getServerStatus() {
   const catalog = getCatalog();
 
   return {
     ok: true,
     name: "texas-public-data-mcp",
-    version: "0.5.0-public-beta",
+    version: MCP_SERVER_VERSION,
     datasetCount: catalog.length,
     liveEnabledDatasets: catalog.filter((dataset) => dataset.liveAvailable).map((dataset) => dataset.id),
     dataModeControls: ["auto", "live_if_available", "sample_only"],
@@ -210,14 +212,15 @@ export async function generateCanvasSpec(input: unknown) {
     limit: 10
   });
   const source = execution.result.source;
+  const generatedAt = new Date().toISOString();
 
   return {
     canvas: validateCanvasDocument({
       schemaVersion: "1.0",
       id: `canvas_${datasetId}`,
       title: `${dataset.title} Dashboard`,
-      createdAt: "2026-05-09T00:00:00.000Z",
-      updatedAt: "2026-05-09T00:00:00.000Z",
+      createdAt: generatedAt,
+      updatedAt: generatedAt,
       sources: [source],
       queries: [{ queryId: execution.result.queryId, datasetId, label: `${dataset.title} aggregate` }],
       blocks: [
@@ -258,7 +261,7 @@ export function validateCanvasSpec(input: unknown) {
 
 export function getSourceAttribution(input: unknown) {
   const spec = boundedQuerySpecSchema.parse(input);
-  return createSourceAttribution(findDataset(spec.datasetId), spec, "2026-05-09T00:00:00.000Z");
+  return createSourceAttribution(findDataset(spec.datasetId), spec, new Date().toISOString());
 }
 
 export async function auditQuery(input: unknown) {

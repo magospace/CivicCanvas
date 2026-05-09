@@ -56,7 +56,7 @@ export function getDatasetAdapter() {
   return createAdapterRouter({
     catalog: getDatasetCatalog(),
     samples: getDatasetSamples(),
-    accessedAt: "2026-05-09T00:00:00.000Z"
+    accessedAt: new Date().toISOString()
   });
 }
 

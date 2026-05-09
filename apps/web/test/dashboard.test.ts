@@ -17,11 +17,21 @@ describe("dashboard generation", () => {
     const generation = await generateCanvasForPrompt("Show Dallas 311 service requests by category and ZIP code for 2024.");
 
     expect(generation.canvas.title).toContain("Dallas 311");
+    expect(generation.canvas.id).toMatch(/^canvas_dallas_311_requests_/);
+    expect(generation.canvas.createdAt).not.toBe("2026-05-09T00:00:00.000Z");
+    expect(generation.canvas.sources[0].accessedAt).toBe(generation.canvas.createdAt);
     expect(generation.dataMode).toBe("fallback");
     expect(generation.audits.length).toBeGreaterThan(0);
     expect(generation.canvas.blocks.map((block) => block.type)).toContain("SourceMethodBlock");
     expect(generation.canvas.blocks.map((block) => block.type)).toContain("ChartBlock");
     expect(generation.canvas.blocks.map((block) => block.type)).toContain("TableBlock");
+  });
+
+  it("generates distinct canvas IDs for repeated saves", async () => {
+    const first = await generateCanvasForPrompt("Show Dallas 311 service requests by category and ZIP code for 2024.");
+    const second = await generateCanvasForPrompt("Show Dallas 311 service requests by category and ZIP code for 2024.");
+
+    expect(first.canvas.id).not.toBe(second.canvas.id);
   });
 
   it("generates the Austin demo dashboard", async () => {

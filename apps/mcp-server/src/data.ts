@@ -45,6 +45,6 @@ export function getAdapter() {
   return createAdapterRouter({
     catalog: getCatalog(),
     samples: getSamples(),
-    accessedAt: "2026-05-09T00:00:00.000Z"
+    accessedAt: new Date().toISOString()
   });
 }
