@@ -32,6 +32,7 @@ describe("MCP tool handlers", () => {
   it("returns metadata and bounded query results", async () => {
     const metadata = getDatasetMetadata({ datasetId: "dallas_311_requests" });
     expect(metadata.fields.map((field) => field.name)).toContain("category");
+    expect(metadata.liveVerification?.sampleOnlyFields).toContain("zip_code");
 
     const result = await queryDataset({
       datasetId: "dallas_311_requests",
@@ -45,6 +46,16 @@ describe("MCP tool handlers", () => {
 
     expect(result.rows.length).toBeGreaterThan(0);
     expect(result.source.datasetTitle).toContain("Dallas");
+
+    const fallback = await queryDataset({
+      datasetId: "austin_building_permits",
+      mode: "live_if_available",
+      groupBy: ["permit_type"],
+      metrics: [{ type: "count", alias: "permit_count" }],
+      limit: 10
+    });
+    expect(fallback.dataMode).toBe("fallback");
+    expect(fallback.caveats.join(" ")).toContain("not live-enabled");
   });
 
   it("generates canvas spec and query audit", async () => {

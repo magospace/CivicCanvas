@@ -46,6 +46,16 @@ pnpm smoke:live:json
 }
 ```
 
+## Data modes
+
+MCP queries use the same `BoundedQuerySpec.mode` values as the web app:
+
+- `auto`: use live only when the catalog marks the requested dataset and fields as live-ready.
+- `live_if_available`: request the public API; if the catalog or adapter cannot safely serve it, return approved sample fallback with a caveat.
+- `sample_only`: force local sample fallback for deterministic demos.
+
+`list_live_sources` returns the live field mapping plus `liveVerification` promotion status. Dallas 311 is promoted for verified non-ZIP aggregates. Austin permits remain sample-first until monthly live aggregation is safely verified.
+
 The server does not execute arbitrary SQL, generated JavaScript, generated HTML, or unapproved dataset access.
 
 ## Safety model
