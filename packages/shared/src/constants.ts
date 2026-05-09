@@ -9,5 +9,6 @@ export const governanceLimits = {
 
 export const runtimeLimits = {
   maxJsonBodyBytes: 64 * 1024,
+  maxSavedCanvasImportBytes: 256 * 1024,
   liveFetchTimeoutMs: 8000
 } as const;

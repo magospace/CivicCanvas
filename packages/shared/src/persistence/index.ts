@@ -8,6 +8,7 @@ import {
   type SavedCanvas,
   type SavedCanvasBundle
 } from "../schemas/index.js";
+import { runtimeLimits } from "../constants.js";
 
 export type StorageLike = {
   getItem(key: string): string | null;
@@ -90,6 +91,10 @@ export function createSavedCanvasBundle({
 }
 
 export function parseSavedCanvasImport(value: string): SavedCanvas[] {
+  if (new TextEncoder().encode(value).byteLength > runtimeLimits.maxSavedCanvasImportBytes) {
+    throw new Error(`Saved canvas import exceeds ${runtimeLimits.maxSavedCanvasImportBytes} bytes.`);
+  }
+
   const parsed = JSON.parse(value) as unknown;
   const bundle = savedCanvasBundleSchema.safeParse(parsed);
   if (bundle.success) {

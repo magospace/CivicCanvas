@@ -12,7 +12,8 @@ import {
   exportSavedCanvasJson,
   importSavedCanvasJson,
   listSavedCanvases,
-  queueCanvasForOpen
+  queueCanvasForOpen,
+  savedCanvasImportLimitBytes
 } from "../lib/saved-canvases";
 
 export function SavedCanvases() {
@@ -182,9 +183,13 @@ function ImportPanel({
         aria-label="Saved canvas JSON import"
         value={importText}
         onChange={(event) => onChange(event.target.value)}
+        maxLength={savedCanvasImportLimitBytes}
         className="mt-3 min-h-24 w-full rounded-md border border-slate-200 bg-civic-50 p-3 text-xs text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
         placeholder="Paste exported saved-canvas bundle or JSON"
       />
+      <p className="mt-2 text-xs text-slate-500">
+        Import limit: {savedCanvasImportLimitBytes.toLocaleString("en-US")} bytes. Bundles are validated before rendering.
+      </p>
       {importError ? (
         <p className="mt-2 rounded-md bg-signal/10 px-3 py-2 text-xs leading-5 text-signal">
           {importError}

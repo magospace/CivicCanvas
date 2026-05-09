@@ -6,6 +6,7 @@ import {
   loadSavedCanvases,
   parseSavedCanvasImport,
   pendingOpenCanvasStorageKey,
+  runtimeLimits,
   saveCanvasBundleToStorage,
   saveCanvasToStorage,
   savedCanvasSchema,
@@ -15,6 +16,8 @@ import {
   type QueryAudit,
   type SavedCanvas
 } from "@texas-data-canvas/shared";
+
+export const savedCanvasImportLimitBytes = runtimeLimits.maxSavedCanvasImportBytes;
 
 export function listSavedCanvases(): SavedCanvas[] {
   return loadSavedCanvases(window.localStorage);
@@ -73,7 +76,7 @@ export function exportSavedCanvasJson(saved: SavedCanvas) {
 export function exportSavedCanvasesBundleJson(canvases: SavedCanvas[]) {
   return JSON.stringify(createSavedCanvasBundle({
     canvases,
-    appVersion: "v0.5.0-public-beta"
+    appVersion: "v0.6.0-hosted-beta"
   }), null, 2);
 }
 
@@ -94,6 +97,10 @@ export function createCanvasShareBundleJson({
 }
 
 export function importSavedCanvasJson(value: string) {
+  if (new TextEncoder().encode(value).byteLength > savedCanvasImportLimitBytes) {
+    throw new Error(`Import exceeds ${savedCanvasImportLimitBytes.toLocaleString("en-US")} bytes.`);
+  }
+
   return saveCanvasBundleToStorage(window.localStorage, parseSavedCanvasImport(value));
 }
 

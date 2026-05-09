@@ -14,6 +14,7 @@ import {
   parseSavedCanvasImport,
   parseSavedCanvases,
   parsePromptIntent,
+  runtimeLimits,
   safeValidateCanvasDocument,
   saveCanvasToStorage,
   createSavedCanvas,
@@ -661,6 +662,7 @@ describe("local saved canvas persistence", () => {
     expect(parseSavedCanvasImport(JSON.stringify(saved))).toHaveLength(1);
     expect(parseSavedCanvasImport(JSON.stringify(canvas))[0].canvasId).toBe("canvas_saved");
     expect(parseSavedCanvasImport(JSON.stringify({ canvas, prompt: "Legacy saved canvas" }))[0].prompt).toBe("Legacy saved canvas");
+    expect(() => parseSavedCanvasImport("x".repeat(runtimeLimits.maxSavedCanvasImportBytes + 1))).toThrow(/exceeds/);
     expect(() => parseSavedCanvasImport(JSON.stringify({ ...bundle, canvases: [{ ...saved, canvas: { blocks: [] } }] }))).toThrow();
   });
 });
