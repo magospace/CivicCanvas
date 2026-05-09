@@ -3,6 +3,7 @@ import {
   boundedQuerySpecSchema,
   catalogHealthReportSchema,
   createSourceAttribution,
+  generateMiroExportSpec as generateSharedMiroExportSpec,
   queryModeSchema,
   safeValidateCanvasDocument,
   validateCanvasDocument,
@@ -277,21 +278,8 @@ export function generateMiroExportSpec(input: unknown) {
       template: z.enum(["briefing_board", "slide_deck", "community_workshop"]).default("briefing_board")
     })
     .parse(input);
-  const validCanvas = validateCanvasDocument(canvas);
 
-  return {
-    schemaVersion: "1.0",
-    title: `${validCanvas.title} ${template.replace(/_/g, " ")}`,
-    template,
-    sourceMethodFrameRequired: true,
-    frames: [
-      { title: validCanvas.title, items: [{ type: "text", content: validCanvas.description ?? validCanvas.title }] },
-      {
-        title: "Source & Method",
-        items: [{ type: "source_method", content: JSON.stringify(validCanvas.sources) }]
-      }
-    ]
-  };
+  return generateSharedMiroExportSpec({ canvas, template });
 }
 
 function findDataset(datasetId: string): DatasetMetadata {

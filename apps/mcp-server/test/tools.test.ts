@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { UnsupportedDatasetError } from "@texas-data-canvas/shared";
+import { generateMiroExportSpec as generateSharedMiroExportSpec, UnsupportedDatasetError } from "@texas-data-canvas/shared";
 import {
   auditQuery,
   generateCanvasSpec,
@@ -105,6 +105,7 @@ describe("MCP tool handlers", () => {
     expect(validateCanvasSpec(canvas).ok).toBe(true);
     const miro = generateMiroExportSpec({ canvas, template: "briefing_board" });
     expect(miro.sourceMethodFrameRequired).toBe(true);
+    expect(miro).toEqual(generateSharedMiroExportSpec({ canvas, template: "briefing_board" }));
   });
 
   it("returns structured handler data for validation failures", async () => {
