@@ -5,13 +5,26 @@
     "city": "Austin",
     "topic": "Building Permits",
     "sourceName": "City of Austin Open Data",
-    "sourceUrl": "https://data.austintexas.gov/",
+    "sourceUrl": "https://data.austintexas.gov/Building-and-Development/Issued-Building-Permits/quv8-5ckq",
     "dataAccess": "sample_first_then_api_adapter",
     "adapter": "socrata",
-    "externalDatasetId": "austin_building_permits",
+    "externalDatasetId": "quv8-5ckq",
     "apiBaseUrl": "https://data.austintexas.gov",
     "lastVerifiedAt": "2026-05-09T00:00:00.000Z",
     "liveAvailable": false,
+    "liveFieldMap": {
+      "permit_id": "permit_number",
+      "issued_date": "issue_date",
+      "month": "date_trunc_ym(issue_date)",
+      "zip_code": "zip_code",
+      "permit_type": "permit_type",
+      "estimated_value": "total_job_valuation",
+      "status": "status"
+    },
+    "liveQueryNotes": [
+      "Verified against City of Austin Socrata view quv8-5ckq.",
+      "Live access remains disabled until demo owners approve the permit source swap from the original sample scaffold."
+    ],
     "fallbackSampleFile": "austin-building-permits.sample.json",
     "description": "Public building permit records used for permit trend and geography analysis.",
     "fields": [
@@ -60,7 +73,7 @@
     ],
     "caveats": [
       "Permit records reflect administrative data and may not represent construction start dates.",
-      "Sample file is for development scaffolding; replace or supplement with live public data for final demo."
+      "Sample fallback remains available for repeatable demos even after live data is enabled."
     ]
   },
   {
@@ -69,13 +82,24 @@
     "city": "Dallas",
     "topic": "311 Requests",
     "sourceName": "City of Dallas Open Data",
-    "sourceUrl": "https://www.dallasopendata.com/",
+    "sourceUrl": "https://www.dallasopendata.com/Services/311-Service-Requests-October-1-2020-to-Present/d7e7-envw",
     "dataAccess": "sample_first_then_api_adapter",
     "adapter": "socrata",
-    "externalDatasetId": "dallas_311_requests",
+    "externalDatasetId": "d7e7-envw",
     "apiBaseUrl": "https://www.dallasopendata.com",
     "lastVerifiedAt": "2026-05-09T00:00:00.000Z",
-    "liveAvailable": false,
+    "liveAvailable": true,
+    "liveFieldMap": {
+      "request_id": "service_request_number",
+      "created_date": "created_date",
+      "month": "date_trunc_ym(created_date)",
+      "category": "service_request_type",
+      "status": "status"
+    },
+    "liveQueryNotes": [
+      "Verified against City of Dallas Socrata view d7e7-envw.",
+      "The verified live 311 view does not expose ZIP code, so ZIP dashboards intentionally use the approved sample fallback."
+    ],
     "fallbackSampleFile": "dallas-311.sample.json",
     "description": "Public 311 service request records used for category, status, trend, and geography analysis.",
     "fields": [
@@ -124,7 +148,7 @@
     ],
     "caveats": [
       "311 data reflects reported service requests and may not represent all neighborhood conditions.",
-      "Sample file is for development scaffolding; replace or supplement with live public data for final demo."
+      "ZIP-level demo views use approved sample fallback because the verified live Socrata view does not expose ZIP code."
     ]
   },
   {

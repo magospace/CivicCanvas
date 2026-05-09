@@ -10,6 +10,7 @@
     "build": "pnpm -r --sort build",
     "lint": "pnpm --filter @texas-data-canvas/web lint",
     "preflight": "node scripts/preflight.mjs && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
+    "smoke:live": "node scripts/smoke-live.mjs",
     "test": "vitest run",
     "test:watch": "vitest"
   },

@@ -20,6 +20,8 @@ export const fieldClassificationSchema = z.enum([
 ]);
 
 export const datasetAdapterSchema = z.enum(["static_json", "socrata", "ckan"]);
+export const dataModeSchema = z.enum(["live", "sample", "fallback"]);
+export const queryModeSchema = z.enum(["auto", "sample_only", "live_if_available"]);
 
 export const datasetFieldSchema = z.object({
   name: z.string().min(1),
@@ -48,6 +50,8 @@ export const datasetMetadataSchema = z.object({
   apiBaseUrl: z.string().url().optional(),
   lastVerifiedAt: z.string().datetime().optional(),
   liveAvailable: z.boolean().default(false),
+  liveFieldMap: z.record(z.string().min(1)).default({}),
+  liveQueryNotes: z.array(z.string().min(1)).default([]),
   fallbackSampleFile: z.string().min(1).optional(),
   description: z.string().min(1),
   fields: z.array(datasetFieldSchema),
@@ -87,6 +91,7 @@ export const queryMetricSchema = z.object({
 export const boundedQuerySpecSchema = z.object({
   schemaVersion: schemaVersionSchema,
   datasetId: z.string().min(1),
+  mode: queryModeSchema.default("auto"),
   filters: z.array(boundedQueryFilterSchema).default([]),
   groupBy: z.array(z.string().min(1)).default([]),
   metrics: z.array(queryMetricSchema).min(1),
@@ -110,6 +115,7 @@ export const sourceAttributionSchema = z.object({
   fieldsUsed: z.array(z.string().min(1)),
   filtersApplied: z.array(z.string().min(1)),
   queryMethod: z.string().min(1),
+  dataMode: dataModeSchema.default("sample"),
   caveats: z.array(z.string().min(1)),
   license: z.string().optional()
 });
@@ -118,6 +124,7 @@ export const queryResultSchema = z.object({
   queryId: z.string().min(1),
   datasetId: z.string().min(1),
   resultType: z.enum(["aggregate", "geo_aggregate", "sample", "metadata"]),
+  dataMode: dataModeSchema.default("sample"),
   rows: z.array(z.record(z.union([z.string(), z.number(), z.boolean(), z.null()]))),
   columns: z.array(
     z.object({
@@ -368,6 +375,7 @@ export const queryAuditSchema = z.object({
   filtersApplied: z.array(z.string().min(1)),
   rowLimit: z.number().int().positive(),
   aggregation: z.boolean(),
+  dataMode: dataModeSchema.default("sample"),
   executedAt: z.string().datetime(),
   safetyDecisions: z.array(z.string().min(1))
 });
@@ -383,6 +391,7 @@ export const promptIntentSchema = z.object({
   groupBy: z.array(z.string().min(1)).default([]),
   filters: z.array(boundedQueryFilterSchema).default([]),
   requestedVisuals: z.array(z.string().min(1)).default([]),
+  safetyWarnings: z.array(z.string().min(1)).default([]),
   confidence: z.number().min(0).max(1),
   unresolvedQuestions: z.array(z.string().min(1)).default([])
 });
@@ -394,12 +403,15 @@ export const savedCanvasSchema = z.object({
   prompt: z.string().min(1),
   canvas: canvasDocumentSchema,
   audits: z.array(queryAuditSchema).default([]),
+  intent: promptIntentSchema.optional(),
   savedAt: z.string().datetime()
 });
 
 export type FieldType = z.infer<typeof fieldTypeSchema>;
 export type FieldClassification = z.infer<typeof fieldClassificationSchema>;
 export type DatasetAdapterKind = z.infer<typeof datasetAdapterSchema>;
+export type DataMode = z.infer<typeof dataModeSchema>;
+export type QueryMode = z.infer<typeof queryModeSchema>;
 export type DatasetField = z.infer<typeof datasetFieldSchema>;
 export type DatasetSource = z.infer<typeof datasetSourceSchema>;
 export type DatasetMetadata = z.infer<typeof datasetMetadataSchema>;

@@ -10,6 +10,15 @@ for (const dataset of catalog) {
     throw new Error(`Catalog entry missing required metadata: ${JSON.stringify(dataset)}`);
   }
 
+  if (dataset.liveAvailable) {
+    if (!dataset.fallbackSampleFile) {
+      throw new Error(`Live dataset must keep a fallback sample: ${dataset.id}`);
+    }
+    if (!dataset.externalDatasetId || !dataset.apiBaseUrl || !dataset.liveFieldMap) {
+      throw new Error(`Live dataset missing adapter metadata: ${dataset.id}`);
+    }
+  }
+
   if (dataset.fallbackSampleFile) {
     const samplePath = join(root, "data/samples", dataset.fallbackSampleFile);
     if (!existsSync(samplePath)) {

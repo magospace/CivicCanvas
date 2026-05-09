@@ -9,6 +9,7 @@ import {
   createStaticJsonAdapter,
   deleteCanvasFromStorage,
   executeBoundedQuery,
+  parseSavedCanvases,
   parsePromptIntent,
   safeValidateCanvasDocument,
   saveCanvasToStorage,
@@ -360,7 +361,7 @@ describe("adapter and intent helpers", () => {
         limit: 10
       }
     });
-    expect(decodeURIComponent(url)).toContain("$select=category");
+    expect(decodeURIComponent(url).replace(/\+/g, " ")).toContain("$select=service_request_type as category");
     expect(url).toContain("count");
 
     expect(() =>
@@ -385,6 +386,10 @@ describe("adapter and intent helpers", () => {
     expect(intent.datasetCandidates).toContain("dallas_311_requests");
     expect(intent.groupBy).toContain("zip_code");
     expect(intent.dateRange).toEqual(["2024-01-01", "2024-12-31"]);
+    expect(parsePromptIntent({
+      prompt: "Show Austin permit applicant phone numbers by status",
+      catalog: catalog()
+    }).safetyWarnings.join(" ")).toContain("phone");
   });
 
   it("falls back to static samples when a live Socrata request fails", async () => {
@@ -416,7 +421,35 @@ describe("adapter and intent helpers", () => {
     });
 
     expect(execution.result.caveats.join(" ")).toContain("static sample fallback");
+    expect(execution.result.dataMode).toBe("fallback");
     expect(execution.audit.safetyDecisions.join(" ")).toContain("static fallback");
+  });
+
+  it("falls back when a live dashboard asks for an unmapped field", async () => {
+    const dataset = catalog().find((item) => item.id === "dallas_311_requests")!;
+    const fallback = createStaticJsonAdapter({
+      catalog: [dataset],
+      samples: { dallas_311_requests: rows("dallas-311.sample.json") },
+      accessedAt: "2026-05-09T00:00:00.000Z"
+    });
+    const adapter = createSocrataAdapter({
+      catalog: [dataset],
+      fallback,
+      fetcher: async () => {
+        throw new Error("Should not fetch when mapping is missing.");
+      },
+      accessedAt: "2026-05-09T00:00:00.000Z"
+    });
+
+    const execution = await adapter.queryDataset({
+      datasetId: "dallas_311_requests",
+      groupBy: ["zip_code"],
+      metrics: [{ type: "count", alias: "request_count" }],
+      limit: 10
+    });
+
+    expect(execution.result.dataMode).toBe("fallback");
+    expect(execution.result.caveats.join(" ")).toContain("not available in verified live mapping");
   });
 });
 
@@ -471,5 +504,6 @@ describe("local saved canvas persistence", () => {
     const saved = createSavedCanvas({ canvas, prompt: "Show Dallas 311" });
     expect(saveCanvasToStorage(storage, saved)).toHaveLength(1);
     expect(deleteCanvasFromStorage(storage, saved.canvasId)).toHaveLength(0);
+    expect(() => parseSavedCanvases(JSON.stringify([{ ...saved, canvas: { blocks: [] } }]))).toThrow();
   });
 });

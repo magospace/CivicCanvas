@@ -5,6 +5,7 @@ import {
   queryResultSchema,
   sourceAttributionSchema,
   type BoundedQuerySpec,
+  type DataMode,
   type DatasetMetadata,
   type QueryExecution,
   type SampleRow,
@@ -168,7 +169,9 @@ export function createSourceAttribution(
   dataset: DatasetMetadata,
   spec: BoundedQuerySpec,
   accessedAt = new Date().toISOString(),
-  queryMethod = "Validated BoundedQuerySpec executed against approved local sample data."
+  queryMethod = "Validated BoundedQuerySpec executed against approved local sample data.",
+  dataMode: DataMode = "sample",
+  caveats = dataset.caveats
 ): SourceAttribution {
   return sourceAttributionSchema.parse({
     datasetId: dataset.id,
@@ -179,7 +182,8 @@ export function createSourceAttribution(
     fieldsUsed: fieldsUsedBySpec(spec),
     filtersApplied: spec.filters.map(formatQueryFilter),
     queryMethod,
-    caveats: dataset.caveats,
+    dataMode,
+    caveats,
     license: "Refer to source portal terms"
   });
 }
@@ -222,13 +226,17 @@ export function executeBoundedQuery({
   rows,
   spec,
   accessedAt = new Date().toISOString(),
-  queryMethod
+  queryMethod,
+  dataMode = "sample",
+  caveats
 }: {
   catalog: DatasetMetadata[];
   rows: SampleRow[];
   spec: unknown;
   accessedAt?: string;
   queryMethod?: string;
+  dataMode?: DataMode;
+  caveats?: string[];
 }): QueryExecution {
   const { spec: parsedSpec, dataset, aggregation, fieldsUsed } = validateBoundedQuerySpec({ catalog, spec });
   const filteredRows = rows.filter((row) => parsedSpec.filters.every((filter) => matchesFilter(row, filter)));
@@ -269,7 +277,7 @@ export function executeBoundedQuery({
   }
 
   resultRows = sortRows(resultRows, parsedSpec).slice(0, parsedSpec.limit);
-  const source = createSourceAttribution(dataset, parsedSpec, accessedAt, queryMethod);
+  const source = createSourceAttribution(dataset, parsedSpec, accessedAt, queryMethod, dataMode, caveats);
   const queryId = createId("q", [parsedSpec.datasetId, ...parsedSpec.groupBy, ...parsedSpec.metrics.map((metric) => metric.alias)]);
   const columns = [
     ...parsedSpec.groupBy.map((field) => {
@@ -287,10 +295,11 @@ export function executeBoundedQuery({
     queryId,
     datasetId: parsedSpec.datasetId,
     resultType: parsedSpec.groupBy.some((field) => field.includes("zip")) ? "geo_aggregate" : aggregation ? "aggregate" : "sample",
+    dataMode,
     rows: resultRows,
     columns,
     source,
-    caveats: dataset.caveats
+    caveats: caveats ?? dataset.caveats
   });
 
   const audit = queryAuditSchema.parse({
@@ -301,6 +310,7 @@ export function executeBoundedQuery({
     filtersApplied: parsedSpec.filters.map(formatQueryFilter),
     rowLimit: parsedSpec.limit,
     aggregation,
+    dataMode,
     executedAt: accessedAt,
     safetyDecisions: [
       "Dataset ID matched approved catalog.",
