@@ -566,6 +566,54 @@ describe("adapter and intent helpers", () => {
     expect(execution.audit.safetyDecisions.join(" ")).toContain("static fallback");
   });
 
+  it("normalizes successful live Socrata aggregate responses without network", async () => {
+    const dataset = {
+      ...catalog().find((item) => item.id === "dallas_311_requests")!,
+      liveAvailable: true,
+      externalDatasetId: "abcd-1234",
+      apiBaseUrl: "https://www.dallasopendata.com"
+    };
+    const fallback = createStaticJsonAdapter({
+      catalog: [dataset],
+      samples: { dallas_311_requests: rows("dallas-311.sample.json") },
+      accessedAt: "2026-05-09T00:00:00.000Z"
+    });
+    let requestedUrl = "";
+    const adapter = createSocrataAdapter({
+      catalog: [dataset],
+      fallback,
+      fetcher: async (url) => {
+        requestedUrl = String(url);
+        return new Response(JSON.stringify([
+          { category: "Sanitation", request_count: "7" },
+          { category: "Streets", request_count: "5" }
+        ]), {
+          status: 200,
+          headers: { "content-type": "application/json" }
+        });
+      },
+      accessedAt: "2026-05-09T00:00:00.000Z"
+    });
+
+    const execution = await adapter.queryDataset({
+      datasetId: "dallas_311_requests",
+      mode: "live_if_available",
+      groupBy: ["category"],
+      metrics: [{ type: "count", alias: "request_count" }],
+      orderBy: [{ field: "request_count", direction: "desc" }],
+      limit: 10
+    });
+
+    expect(decodeURIComponent(requestedUrl).replace(/\+/g, " ")).toContain("service_request_type as category");
+    expect(execution.result.dataMode).toBe("live");
+    expect(execution.result.rows).toEqual([
+      { category: "Sanitation", request_count: 7 },
+      { category: "Streets", request_count: 5 }
+    ]);
+    expect(execution.result.source.queryMethod).toContain("live Socrata endpoint");
+    expect(execution.audit.safetyDecisions.join(" ")).toContain("live query generation");
+  });
+
   it("falls back when a live Socrata request times out", async () => {
     const dataset = {
       ...catalog().find((item) => item.id === "dallas_311_requests")!,
