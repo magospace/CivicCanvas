@@ -49,6 +49,7 @@ pnpm build
 pnpm preflight
 pnpm smoke:live
 pnpm smoke:live:json
+pnpm smoke:deploy -- --url http://localhost:3000
 pnpm test:e2e
 pnpm verify
 ```
@@ -80,14 +81,27 @@ Production-pilot health surfaces are available at `/api/health`, `/api/catalog/h
 
 ## Deployment
 
-The web app is ready for Vercel-style deployment from `apps/web` after the root quality gate passes.
+The web app is ready for Vercel-style deployment with the project root set to `apps/web` and the monorepo installed from the repository root.
 
 ```bash
 pnpm preflight
 pnpm --filter @texas-data-canvas/web build
 ```
 
+Recommended Vercel settings:
+
+- Install command: `pnpm install --frozen-lockfile`
+- Build command: `pnpm --filter @texas-data-canvas/web build`
+- Output framework: Next.js
+- Required secrets: none for sample mode
+
 Sample mode requires no secrets. Live Socrata adapters use verified catalog field mappings and keep sample fallbacks for demos.
+
+After deploying, smoke-check the public URL:
+
+```bash
+pnpm smoke:deploy -- --url https://your-deployment.example
+```
 
 Saved canvases remain browser-local. Use `/saved` to export/import portable saved-canvas bundles for demos and handoffs.
 

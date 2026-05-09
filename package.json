@@ -12,6 +12,7 @@
     "preflight": "node scripts/preflight.mjs && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "smoke:live": "node scripts/smoke-live.mjs",
     "smoke:live:json": "node scripts/smoke-live.mjs --json",
+    "smoke:deploy": "node scripts/smoke-deploy.mjs",
     "test": "vitest run",
     "test:e2e": "playwright test",
     "verify": "pnpm preflight && pnpm smoke:live && pnpm test:e2e",
