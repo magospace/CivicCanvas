@@ -1,4 +1,5 @@
 export * from "./constants.js";
+export * from "./errors/index.js";
 export * from "./schemas/index.js";
 export * from "./canvas/index.js";
 export * from "./query/index.js";

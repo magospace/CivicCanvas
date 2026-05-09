@@ -2,6 +2,11 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 import {
+  boundedQueryFilterSchema,
+  isGovernedError,
+  queryMetricSchema
+} from "@texas-data-canvas/shared";
+import {
   auditQuery,
   generateCanvasSpec,
   generateMiroExportSpec,
@@ -33,15 +38,7 @@ function jsonContent(value: unknown) {
 
 function toolError(error: unknown) {
   const message = error instanceof Error ? error.message : "Tool execution failed.";
-  const category = /not approved|Unknown approved dataset/i.test(message)
-    ? "unsupported_dataset"
-    : /not allowlisted|not available|Field/i.test(message)
-      ? "unsupported_field"
-      : /limit/i.test(message)
-        ? "row_limit_exceeded"
-        : /Socrata|live adapter|fetch/i.test(message)
-          ? "live_adapter_unavailable"
-          : "validation_error";
+  const category = isGovernedError(error) ? error.category : "validation_error";
 
   return { ok: false, error: { category, message } };
 }
@@ -56,15 +53,20 @@ function handled<T>(callback: (args: T) => unknown | Promise<unknown>) {
   };
 }
 
-const boundedQueryInput = {
+export const boundedQueryInput = {
   datasetId: z.string(),
   mode: z.enum(["auto", "sample_only", "live_if_available"]).default("auto"),
-  filters: z.array(z.any()).default([]),
+  filters: z.array(boundedQueryFilterSchema).default([]),
   groupBy: z.array(z.string()).default([]),
-  metrics: z.array(z.any()),
-  orderBy: z.array(z.any()).default([]),
+  metrics: z.array(queryMetricSchema),
+  orderBy: z.array(z.object({
+    field: z.string().min(1),
+    direction: z.enum(["asc", "desc"]).default("desc")
+  })).default([]),
   limit: z.number().int().positive().max(1000).default(500)
 };
+
+export const boundedQueryToolInputSchema = z.object(boundedQueryInput);
 
 export function createServer() {
   const server = new McpServer({

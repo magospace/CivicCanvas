@@ -1,5 +1,11 @@
 import { governanceLimits } from "../constants.js";
 import {
+  RowLimitExceededError,
+  UnsupportedDatasetError,
+  UnsupportedFieldError,
+  GovernedValidationError
+} from "../errors/index.js";
+import {
   boundedQuerySpecSchema,
   queryAuditSchema,
   queryResultSchema,
@@ -26,7 +32,7 @@ export function getApprovedDataset(catalog: DatasetMetadata[], datasetId: string
   const dataset = catalog.find((candidate) => candidate.id === datasetId);
 
   if (!dataset) {
-    throw new Error(`Dataset is not approved: ${datasetId}`);
+    throw new UnsupportedDatasetError(`Dataset is not approved: ${datasetId}`);
   }
 
   return dataset;
@@ -36,7 +42,7 @@ export function getDatasetField(dataset: DatasetMetadata, fieldName: string) {
   const field = dataset.fields.find((candidate) => candidate.name === fieldName);
 
   if (!field) {
-    throw new Error(`Field "${fieldName}" is not allowlisted for ${dataset.id}.`);
+    throw new UnsupportedFieldError(`Field "${fieldName}" is not allowlisted for ${dataset.id}.`);
   }
 
   return field;
@@ -46,11 +52,11 @@ function validateFieldUse(dataset: DatasetMetadata, fieldName: string, aggregati
   const field = getDatasetField(dataset, fieldName);
 
   if (field.classification === "sensitive_hide" || field.classification === "unknown_review") {
-    throw new Error(`Field "${fieldName}" is not available for safe querying.`);
+    throw new UnsupportedFieldError(`Field "${fieldName}" is not available for safe querying.`);
   }
 
   if (field.classification === "safe_with_aggregation" && !aggregation) {
-    throw new Error(`Field "${fieldName}" requires aggregation.`);
+    throw new UnsupportedFieldError(`Field "${fieldName}" requires aggregation.`);
   }
 }
 
@@ -209,13 +215,13 @@ export function validateBoundedQuerySpec({
 
   for (const metric of parsedSpec.metrics) {
     if (metric.type !== "count" && !metric.field) {
-      throw new Error(`Metric "${metric.alias}" requires a numeric field.`);
+      throw new GovernedValidationError(`Metric "${metric.alias}" requires a numeric field.`);
     }
   }
 
   const maxRows = aggregation ? governanceLimits.maxAggregateRows : governanceLimits.maxRawRows;
   if (parsedSpec.limit > maxRows) {
-    throw new Error(`Query limit ${parsedSpec.limit} exceeds max ${maxRows} for this query type.`);
+    throw new RowLimitExceededError(`Query limit ${parsedSpec.limit} exceeds max ${maxRows} for this query type.`);
   }
 
   return { spec: parsedSpec, dataset, aggregation, fieldsUsed };

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { ZodError, type ZodSchema } from "zod";
-import { apiErrorResponseSchema, runtimeLimits, type ApiValidationIssue } from "@texas-data-canvas/shared";
+import { apiErrorResponseSchema, isGovernedError, runtimeLimits, type ApiValidationIssue } from "@texas-data-canvas/shared";
 
 export function createRequestId() {
   return typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -27,6 +27,10 @@ function publicErrorMessage(error: unknown) {
   }
 
   if (error instanceof Error && isSafeInputErrorMessage(error.message)) {
+    return error.message;
+  }
+
+  if (isGovernedError(error)) {
     return error.message;
   }
 

@@ -19,6 +19,9 @@ import {
   saveCanvasToStorage,
   createSavedCanvas,
   validateCanvasDocument,
+  RowLimitExceededError,
+  UnsupportedDatasetError,
+  UnsupportedFieldError,
   type DatasetMetadata,
   type StorageLike,
   type SampleRow
@@ -157,6 +160,47 @@ describe("bounded local query execution", () => {
         }
       })
     ).toThrow(/exceeds max 100/);
+  });
+
+  it("throws typed governed errors for unsafe query failures", () => {
+    expect(() =>
+      executeBoundedQuery({
+        catalog: catalog(),
+        rows: rows("dallas-311.sample.json"),
+        spec: {
+          datasetId: "not_approved",
+          groupBy: ["month"],
+          metrics: [{ type: "count", alias: "request_count" }],
+          limit: 10
+        }
+      })
+    ).toThrow(UnsupportedDatasetError);
+
+    expect(() =>
+      executeBoundedQuery({
+        catalog: catalog(),
+        rows: rows("dallas-311.sample.json"),
+        spec: {
+          datasetId: "dallas_311_requests",
+          groupBy: ["not_a_field"],
+          metrics: [{ type: "count", alias: "request_count" }],
+          limit: 10
+        }
+      })
+    ).toThrow(UnsupportedFieldError);
+
+    expect(() =>
+      executeBoundedQuery({
+        catalog: catalog(),
+        rows: rows("dallas-311.sample.json"),
+        spec: {
+          datasetId: "dallas_311_requests",
+          groupBy: [],
+          metrics: [{ type: "count", alias: "request_count" }],
+          limit: 101
+        }
+      })
+    ).toThrow(RowLimitExceededError);
   });
 });
 

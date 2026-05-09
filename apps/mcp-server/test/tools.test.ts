@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { UnsupportedDatasetError } from "@texas-data-canvas/shared";
 import {
   auditQuery,
   generateCanvasSpec,
@@ -16,6 +17,7 @@ import {
   validateCatalog,
   validateCanvasSpec
 } from "../src/tools";
+import { boundedQueryToolInputSchema } from "../src/index";
 
 describe("MCP tool handlers", () => {
   it("lists supported sources and searches datasets", () => {
@@ -106,6 +108,17 @@ describe("MCP tool handlers", () => {
   });
 
   it("returns structured handler data for validation failures", async () => {
+    expect(() => getDatasetMetadata({ datasetId: "not_approved" })).toThrow(UnsupportedDatasetError);
+    expect(() =>
+      boundedQueryToolInputSchema.parse({
+        datasetId: "dallas_311_requests",
+        groupBy: ["category"],
+        filters: [{ field: "category", operator: "regex", value: "bad" }],
+        metrics: [{ type: "count", alias: "request_count" }],
+        limit: 10
+      })
+    ).toThrow();
+
     await expect(queryDataset({
       datasetId: "dallas_311_requests",
       mode: "sample_only",

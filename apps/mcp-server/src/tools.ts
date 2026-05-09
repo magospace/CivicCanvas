@@ -6,6 +6,7 @@ import {
   queryModeSchema,
   safeValidateCanvasDocument,
   validateCanvasDocument,
+  UnsupportedDatasetError,
   type CanvasDocument,
   type DatasetMetadata,
   type QueryResult
@@ -297,7 +298,7 @@ function findDataset(datasetId: string): DatasetMetadata {
   const dataset = getCatalog().find((candidate) => candidate.id === datasetId);
 
   if (!dataset) {
-    throw new Error(`Dataset is not approved: ${datasetId}`);
+    throw new UnsupportedDatasetError(`Dataset is not approved: ${datasetId}`);
   }
 
   return dataset;

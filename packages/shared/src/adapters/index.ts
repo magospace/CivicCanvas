@@ -1,5 +1,10 @@
 import { governanceLimits, runtimeLimits } from "../constants.js";
 import {
+  GovernedValidationError,
+  LiveAdapterUnavailableError,
+  UnsupportedFieldError
+} from "../errors/index.js";
+import {
   boundedQuerySpecSchema,
   queryAuditSchema,
   queryResultSchema,
@@ -76,7 +81,7 @@ function createId(prefix: string, parts: string[]) {
 
 function safeIdentifier(value: string) {
   if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(value)) {
-    throw new Error(`Unsafe Socrata identifier: ${value}`);
+    throw new UnsupportedFieldError(`Unsafe Socrata identifier: ${value}`);
   }
   return value;
 }
@@ -91,13 +96,13 @@ function safeSocrataExpression(value: string) {
     return `date_trunc_ym(${dateTrunc[1]})`;
   }
 
-  throw new Error(`Unsafe Socrata expression: ${value}`);
+  throw new UnsupportedFieldError(`Unsafe Socrata expression: ${value}`);
 }
 
 function liveFieldExpression(dataset: DatasetMetadata, field: string) {
   const mapped = dataset.liveFieldMap[field];
   if (!mapped) {
-    throw new Error(`Field "${field}" is not available in verified live mapping for ${dataset.id}.`);
+    throw new UnsupportedFieldError(`Field "${field}" is not available in verified live mapping for ${dataset.id}.`);
   }
   return safeSocrataExpression(mapped);
 }
@@ -105,7 +110,7 @@ function liveFieldExpression(dataset: DatasetMetadata, field: string) {
 function liveFilterField(dataset: DatasetMetadata, field: string) {
   const expression = liveFieldExpression(dataset, field);
   if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(expression)) {
-    throw new Error(`Field "${field}" cannot be used as a live filter for ${dataset.id}.`);
+    throw new UnsupportedFieldError(`Field "${field}" cannot be used as a live filter for ${dataset.id}.`);
   }
   return expression;
 }
@@ -140,18 +145,18 @@ function whereClause(dataset: DatasetMetadata, filter: BoundedQuerySpec["filters
   }
   if (filter.operator === "between") {
     if (!Array.isArray(filter.value) || filter.value.length !== 2) {
-      throw new Error(`Between filter requires exactly two values: ${formatQueryFilter(filter)}`);
+      throw new GovernedValidationError(`Between filter requires exactly two values: ${formatQueryFilter(filter)}`);
     }
     return `${field} between ${soqlLiteral(filter.value[0])} and ${soqlLiteral(filter.value[1])}`;
   }
   if (filter.operator === "in") {
     if (!Array.isArray(filter.value)) {
-      throw new Error(`In filter requires an array: ${formatQueryFilter(filter)}`);
+      throw new GovernedValidationError(`In filter requires an array: ${formatQueryFilter(filter)}`);
     }
     return `${field} in (${filter.value.map(soqlLiteral).join(", ")})`;
   }
 
-  throw new Error(`Unsupported Socrata operator: ${filter.operator}`);
+  throw new GovernedValidationError(`Unsupported Socrata operator: ${filter.operator}`);
 }
 
 export function buildSocrataQueryUrl({
@@ -163,7 +168,7 @@ export function buildSocrataQueryUrl({
 }) {
   const parsedSpec = boundedQuerySpecSchema.parse(spec);
   if (!dataset.apiBaseUrl || !dataset.externalDatasetId) {
-    throw new Error(`Dataset ${dataset.id} is missing Socrata API configuration.`);
+    throw new LiveAdapterUnavailableError(`Dataset ${dataset.id} is missing Socrata API configuration.`);
   }
 
   validateBoundedQuerySpec({ catalog: [dataset], spec: parsedSpec });
@@ -240,7 +245,7 @@ export function createSocrataAdapter({
         const timeout = setTimeout(() => controller.abort(), timeoutMs);
         const response = await fetcher(url, { signal: controller.signal }).finally(() => clearTimeout(timeout));
         if (!response.ok) {
-          throw new Error(`Socrata request failed with ${response.status}`);
+          throw new LiveAdapterUnavailableError(`Socrata request failed with ${response.status}`);
         }
         const rows = normalizeSocrataRows(await response.json(), parsedSpec);
         return createSocrataExecution({
@@ -329,7 +334,7 @@ export function createAdapterRouter({
 
 function normalizeSocrataRows(value: unknown, spec: BoundedQuerySpec): SampleRow[] {
   if (!Array.isArray(value)) {
-    throw new Error("Socrata response was not an array.");
+    throw new LiveAdapterUnavailableError("Socrata response was not an array.");
   }
 
   return value.map((row) => {
