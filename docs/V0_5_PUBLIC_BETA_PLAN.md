@@ -1,5 +1,7 @@
 # v0.5 Public Beta Plan
 
+Status: complete pending final verification and tag.
+
 ## Summary
 
 `v0.5.0-public-beta` moves Texas Data Canvas from production-pilot hardening into a deployable, no-auth public demo. The milestone deepens Dallas 311 and Austin permits reliability instead of adding broad new dataset coverage.

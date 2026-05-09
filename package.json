@@ -1,7 +1,7 @@
 {
   "name": "texas-data-canvas",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.5.0",
   "description": "Open-source MCP-powered visual explorer for Texas public datasets.",
   "packageManager": "pnpm@10.14.0",
   "scripts": {

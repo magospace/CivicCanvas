@@ -29,9 +29,10 @@ Last updated: May 9, 2026
 - Saved canvases persist only in browser `localStorage`; no auth or hosted database is wired.
 - Miro export generates a safe spec only; it does not write to Miro.
 - v0.4 production-pilot hardening is complete on branch `feat/v0.4-production-pilot`: health routes, structured errors, saved-canvas bundles, prompt transparency, MCP status tools, and Playwright smoke tests.
+- v0.5 public-beta hardening is complete on branch `feat/v0.5-public-beta`: deployment smoke, production-safe headers, Dallas/Austin live verification registry, explicit data-mode controls, saved bundle migration, source-card transparency, MCP alignment, and expanded Playwright smoke tests.
 
 ## Current Milestone
 
-`v0.4.0-production-pilot` is complete and tagged from a clean `main`.
+`v0.5.0-public-beta` is ready to tag after final verification.
 
-The active target is `v0.5.0-public-beta` on `feat/v0.5-public-beta`. This milestone keeps the scope no-auth and Dallas/Austin-focused while improving deployability, explicit data-mode controls, live-source verification transparency, portable saved-canvas sharing, and public-beta QA.
+The next target should be chosen after deployment feedback. Recommended options are a hosted public beta deployment, deeper Austin live-month resolution, or a broader dataset expansion phase.

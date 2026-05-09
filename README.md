@@ -68,6 +68,14 @@ Show Austin building permits by month and ZIP code.
 
 Unsupported prompts return approved dataset suggestions instead of hallucinated dashboards.
 
+## Data modes
+
+The dashboard prompt bar and inspector expose the same governed data modes used by the APIs and MCP server:
+
+- Auto: use live public APIs only when the approved catalog marks the requested dataset and fields as live-ready.
+- Live public API: request live data and fall back to approved samples with a visible caveat if live access is unavailable or unsafe.
+- Sample fallback: force local sample data for deterministic demos.
+
 ## MCP server
 
 ```bash
