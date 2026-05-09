@@ -44,3 +44,13 @@ The v0.6 release gate is a verified public deployment. The repo has no configure
 - Extend health and smoke checks for public hosted validation.
 - Make Playwright smoke tests reusable against an already deployed public URL.
 - Add subtle hosted-beta runtime copy while keeping the app no-auth, no-database, no-LLM, and governed by validated `CanvasDocument` JSON rendered through the allowlisted block registry.
+
+## v0.6 Verification Status
+
+Local hosted-beta implementation checks passed on May 9, 2026:
+
+- `pnpm verify`
+- `pnpm smoke:deploy -- --url http://localhost:3004 --expect-version v0.6.0-hosted-beta`
+- `PLAYWRIGHT_BASE_URL=http://localhost:3004 pnpm test:e2e:remote`
+
+Release remains blocked until a public Vercel URL is available and the same hosted checks pass against that URL. No `v0.6.0-hosted-beta` tag has been created.

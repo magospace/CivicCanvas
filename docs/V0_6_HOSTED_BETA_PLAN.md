@@ -126,3 +126,21 @@ Target tag: `v0.6.0-hosted-beta`
 - Deployment smoke passes against the public URL with `--expect-version v0.6.0-hosted-beta`.
 - Remote Playwright smoke passes with `PLAYWRIGHT_BASE_URL`.
 - Tag `v0.6.0-hosted-beta`.
+
+## Current Release Status
+
+As of May 9, 2026, the local hosted-beta implementation is complete and local gates pass. The release is not tagged because no public Vercel URL is available in this repo context.
+
+Passed locally:
+
+- `pnpm verify`
+- `pnpm smoke:deploy -- --url http://localhost:3004 --expect-version v0.6.0-hosted-beta`
+- `PLAYWRIGHT_BASE_URL=http://localhost:3004 pnpm test:e2e:remote`
+
+Blocked:
+
+- No Git remote is configured.
+- No Vercel deployment URL is available.
+- No `VERCEL_TOKEN`, `VERCEL_ORG_ID`, or `VERCEL_PROJECT_ID` values are present in the local environment.
+
+Do not create the `v0.6.0-hosted-beta` tag until hosted deployment smoke and remote Playwright smoke pass against a public URL.
