@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { CanvasDocument, DataMode, DatasetMetadata, MiroExportSpec, PromptIntent, QueryAudit } from "@texas-data-canvas/shared";
+import type { CanvasDocument, DataMode, DataModePreference, DatasetMetadata, MiroExportSpec, PromptIntent, QueryAudit } from "@texas-data-canvas/shared";
 import { CanvasRenderer } from "./canvas/canvas-renderer";
 import { DatasetSidebar } from "./dataset-sidebar";
 import { Header } from "./header";
@@ -21,6 +21,8 @@ export function AppShell({
   const [audits, setAudits] = useState<QueryAudit[]>([]);
   const [intent, setIntent] = useState<PromptIntent | null>(null);
   const [dataMode, setDataMode] = useState<DataMode>(canvas.sources[0]?.dataMode ?? "sample");
+  const [dataModePreference, setDataModePreference] = useState<DataModePreference>("auto");
+  const [fallbackReason, setFallbackReason] = useState<string | null>(null);
   const [filterValues, setFilterValues] = useState<Record<string, string>>({});
   const [isGenerating, setIsGenerating] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
@@ -35,6 +37,8 @@ export function AppShell({
       setAudits(pending.audits);
       setIntent(pending.intent ?? null);
       setDataMode(pending.canvas.sources[0]?.dataMode ?? "sample");
+      setDataModePreference("auto");
+      setFallbackReason(null);
       setStatus(`Opened saved canvas: ${pending.title}`);
     }
   }, []);
@@ -48,7 +52,7 @@ export function AppShell({
       const response = await fetch("/api/canvas/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, filters: filterValues })
+        body: JSON.stringify({ prompt, filters: filterValues, dataModePreference })
       });
       const payload = await response.json();
 
@@ -60,7 +64,14 @@ export function AppShell({
       setAudits(payload.audits ?? []);
       setIntent(payload.intent ?? null);
       setDataMode(payload.dataMode ?? payload.canvas?.sources?.[0]?.dataMode ?? "sample");
-      setStatus(payload.suggestedDatasets ? "Prompt not recognized. Showing approved dataset suggestions." : "Dashboard generated from bounded governed queries.");
+      setFallbackReason(payload.fallbackReason ?? null);
+      setStatus(
+        payload.suggestedDatasets
+          ? "Prompt not recognized. Showing approved dataset suggestions."
+          : payload.fallbackReason
+            ? `Dashboard generated with fallback: ${payload.fallbackReason}`
+            : "Dashboard generated from bounded governed queries."
+      );
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "Dashboard generation failed.");
     } finally {
@@ -124,8 +135,10 @@ export function AppShell({
         <section className="min-w-0 space-y-5 px-4 py-5 md:px-6">
           <PromptBar
             prompt={prompt}
+            dataModePreference={dataModePreference}
             isGenerating={isGenerating}
             onPromptChange={setPrompt}
+            onDataModePreferenceChange={setDataModePreference}
             onGenerate={generateDashboard}
           />
           {status ? (
@@ -218,9 +231,12 @@ export function AppShell({
           audits={audits}
           intent={intent}
           dataMode={dataMode}
+          dataModePreference={dataModePreference}
+          fallbackReason={fallbackReason}
           filterValues={filterValues}
           miroTemplate={miroTemplate}
           onFilterChange={updateFilter}
+          onDataModePreferenceChange={setDataModePreference}
           onMiroTemplateChange={setMiroTemplate}
           onExportMiro={exportMiroSpec}
           onSave={saveCurrentCanvas}

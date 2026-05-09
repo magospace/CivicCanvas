@@ -22,8 +22,11 @@ describe("MCP tool handlers", () => {
     expect(listSupportedSources().sources.length).toBeGreaterThan(0);
     expect(searchDatasets({ query: "Dallas 311" }).datasets[0].datasetId).toBe("dallas_311_requests");
     expect(getServerStatus().ok).toBe(true);
+    expect(getServerStatus().dataModeControls).toContain("live_if_available");
     expect(validateCatalog().health.status).toBe("ok");
-    expect(listLiveSources().liveSources.map((source) => source.datasetId)).toContain("dallas_311_requests");
+    const liveSources = listLiveSources().liveSources;
+    expect(liveSources.map((source) => source.datasetId)).toContain("dallas_311_requests");
+    expect(liveSources.find((source) => source.datasetId === "dallas_311_requests")?.liveVerification?.promotionStatus).toBe("promoted");
   });
 
   it("returns metadata and bounded query results", async () => {
@@ -45,11 +48,13 @@ describe("MCP tool handlers", () => {
   });
 
   it("generates canvas spec and query audit", async () => {
-    const canvas = (await generateCanvasSpec({ datasetId: "austin_building_permits" })).canvas;
+    const canvas = (await generateCanvasSpec({ datasetId: "austin_building_permits", mode: "live_if_available" })).canvas;
     expect(canvas.blocks.map((block) => block.type)).toContain("SourceMethodBlock");
+    expect(canvas.sources[0].dataMode).toBe("fallback");
 
     const audit = await auditQuery({
       datasetId: "austin_building_permits",
+      mode: "live_if_available",
       groupBy: ["month"],
       metrics: [{ type: "count", alias: "permit_count" }],
       orderBy: [{ field: "month", direction: "asc" }],

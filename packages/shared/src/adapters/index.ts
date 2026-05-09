@@ -310,6 +310,18 @@ export function createAdapterRouter({
       if (dataset.adapter === "socrata" && dataset.liveAvailable) {
         return socrataAdapter.queryDataset(parsedSpec);
       }
+      if (dataset.adapter === "socrata" && parsedSpec.mode === "live_if_available") {
+        const execution = await staticAdapter.queryDataset(parsedSpec);
+        const reason = "Live public API was requested, but this approved dataset is not live-enabled; returned static sample fallback.";
+        execution.result.dataMode = "fallback";
+        execution.result.caveats = [...execution.result.caveats, reason];
+        execution.result.source.dataMode = "fallback";
+        execution.result.source.queryMethod = `Static sample fallback because live access is not promoted for ${dataset.sourceName}.`;
+        execution.result.source.caveats = execution.result.caveats;
+        execution.audit.dataMode = "fallback";
+        execution.audit.safetyDecisions.push(reason);
+        return execution;
+      }
       return staticAdapter.queryDataset(parsedSpec);
     }
   };

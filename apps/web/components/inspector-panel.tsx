@@ -1,5 +1,5 @@
 import { Download, Filter, Save, Share2, SlidersHorizontal } from "lucide-react";
-import type { CanvasBlock, CanvasDocument, DataMode, MiroExportSpec, PromptIntent, QueryAudit } from "@texas-data-canvas/shared";
+import type { CanvasBlock, CanvasDocument, DataMode, DataModePreference, MiroExportSpec, PromptIntent, QueryAudit } from "@texas-data-canvas/shared";
 
 type FilterBlock = Extract<CanvasBlock, { type: "FilterBlock" }>;
 
@@ -8,9 +8,12 @@ export function InspectorPanel({
   audits,
   intent,
   dataMode,
+  dataModePreference,
+  fallbackReason,
   filterValues,
   miroTemplate,
   onFilterChange,
+  onDataModePreferenceChange,
   onMiroTemplateChange,
   onExportMiro,
   onSave,
@@ -21,9 +24,12 @@ export function InspectorPanel({
   audits?: QueryAudit[];
   intent?: PromptIntent | null;
   dataMode?: DataMode;
+  dataModePreference?: DataModePreference;
+  fallbackReason?: string | null;
   filterValues?: Record<string, string>;
   miroTemplate?: MiroExportSpec["template"];
   onFilterChange?: (field: string, value: string) => void;
+  onDataModePreferenceChange?: (mode: DataModePreference) => void;
   onMiroTemplateChange?: (template: MiroExportSpec["template"]) => void;
   onExportMiro?: () => void;
   onSave?: () => void;
@@ -45,6 +51,24 @@ export function InspectorPanel({
         <div className="mb-3 rounded-md bg-civic-50 px-3 py-2 text-xs font-semibold text-civic-700">
           {modeLabel}
         </div>
+        <label className="mb-3 grid gap-1.5 text-sm">
+          <span className="text-xs font-semibold text-slate-500">Requested data mode</span>
+          <select
+            aria-label="Inspector data mode"
+            value={dataModePreference ?? "auto"}
+            onChange={(event) => onDataModePreferenceChange?.(event.target.value as DataModePreference)}
+            className="rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+          >
+            <option value="auto">Auto</option>
+            <option value="live">Live public API</option>
+            <option value="sample">Sample fallback</option>
+          </select>
+        </label>
+        {fallbackReason ? (
+          <p className="mb-3 rounded-md bg-signal/10 px-3 py-2 text-xs leading-5 text-signal">
+            {fallbackReason}
+          </p>
+        ) : null}
         {filterBlock ? (
           <div className="grid gap-3 text-sm">
             {filterBlock.props.filters.map((filter) => (

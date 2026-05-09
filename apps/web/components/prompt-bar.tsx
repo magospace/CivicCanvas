@@ -1,14 +1,19 @@
 import { Sparkles, Wand2 } from "lucide-react";
+import type { DataModePreference } from "@texas-data-canvas/shared";
 
 export function PromptBar({
   prompt,
+  dataModePreference,
   isGenerating,
   onPromptChange,
+  onDataModePreferenceChange,
   onGenerate
 }: {
   prompt: string;
+  dataModePreference: DataModePreference;
   isGenerating: boolean;
   onPromptChange: (prompt: string) => void;
+  onDataModePreferenceChange: (mode: DataModePreference) => void;
   onGenerate: () => void;
 }) {
   return (
@@ -18,10 +23,10 @@ export function PromptBar({
           <Sparkles className="h-4 w-4 text-signal" />
           Ask about Texas public data
         </div>
-        <span className="text-xs font-medium text-slate-500">P1 shell / sample-first</span>
+        <span className="text-xs font-medium text-slate-500">Public beta / governed data mode</span>
       </div>
       <form
-        className="flex flex-col gap-3 lg:flex-row"
+        className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_180px_auto]"
         onSubmit={(event) => {
           event.preventDefault();
           onGenerate();
@@ -33,6 +38,19 @@ export function PromptBar({
           onChange={(event) => onPromptChange(event.target.value)}
           aria-label="Dashboard prompt"
         />
+        <label className="grid gap-1.5">
+          <span className="sr-only">Data mode</span>
+          <select
+            aria-label="Data mode"
+            value={dataModePreference}
+            onChange={(event) => onDataModePreferenceChange(event.target.value as DataModePreference)}
+            className="min-h-11 rounded-md border border-slate-200 bg-civic-50 px-3 text-sm font-semibold text-slate-700 outline-none transition focus:border-civic-500 focus:bg-white focus:ring-2 focus:ring-civic-100"
+          >
+            <option value="auto">Auto</option>
+            <option value="live">Live public API</option>
+            <option value="sample">Sample fallback</option>
+          </select>
+        </label>
         <button
           type="submit"
           disabled={isGenerating}

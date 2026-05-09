@@ -3,6 +3,7 @@ import {
   boundedQuerySpecSchema,
   catalogHealthReportSchema,
   createSourceAttribution,
+  queryModeSchema,
   safeValidateCanvasDocument,
   validateCanvasDocument,
   type CanvasDocument,
@@ -20,6 +21,7 @@ export function getServerStatus() {
     version: "0.4.0-production-pilot",
     datasetCount: catalog.length,
     liveEnabledDatasets: catalog.filter((dataset) => dataset.liveAvailable).map((dataset) => dataset.id),
+    dataModeControls: ["auto", "live_if_available", "sample_only"],
     safetyModel: "BoundedQuerySpec plus approved catalog; no raw SQL, SoQL, HTML, JavaScript, or arbitrary components."
   };
 }
@@ -75,6 +77,7 @@ export function listLiveSources() {
         apiBaseUrl: dataset.apiBaseUrl,
         fallbackSampleFile: dataset.fallbackSampleFile,
         liveFieldMap: dataset.liveFieldMap,
+        liveVerification: dataset.liveVerification,
         caveats: dataset.caveats
       }))
   };
@@ -189,13 +192,17 @@ export function recommendVisualization(input: unknown) {
 }
 
 export async function generateCanvasSpec(input: unknown) {
-  const { datasetId } = z.object({ datasetId: z.string() }).parse(input);
+  const { datasetId, mode } = z.object({
+    datasetId: z.string(),
+    mode: queryModeSchema.default("auto")
+  }).parse(input);
   const dataset = findDataset(datasetId);
   const dateField = dataset.fields.find((field) => field.type === "date")?.name ?? "month";
   const categoryField = dataset.fields.find((field) => field.name.includes("category") || field.name.includes("type"))?.name ?? "status";
   const countAlias = datasetId.includes("permit") ? "permit_count" : "request_count";
   const execution = await getAdapter().queryDataset({
     datasetId,
+    mode,
     filters: [{ field: dateField, operator: "between", value: ["2024-01-01", "2024-12-31"] }],
     groupBy: [categoryField],
     metrics: [{ type: "count", alias: countAlias }],

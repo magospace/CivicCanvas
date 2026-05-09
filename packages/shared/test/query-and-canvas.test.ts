@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import {
   approvedDatasetCatalogSchema,
   buildSocrataQueryUrl,
+  createAdapterRouter,
   createSocrataAdapter,
   createStaticJsonAdapter,
   createSavedCanvasBundle,
@@ -551,6 +552,28 @@ describe("adapter and intent helpers", () => {
 
     expect(execution.result.dataMode).toBe("fallback");
     expect(execution.result.caveats.join(" ")).toContain("aborted by test timeout");
+  });
+
+  it("marks explicit live requests as fallback when the dataset is sample-first", async () => {
+    const datasets = catalog();
+    const samples = { austin_building_permits: rows("austin-building-permits.sample.json") };
+    const adapter = createAdapterRouter({
+      catalog: datasets,
+      samples,
+      accessedAt: "2026-05-09T00:00:00.000Z"
+    });
+
+    const execution = await adapter.queryDataset({
+      datasetId: "austin_building_permits",
+      mode: "live_if_available",
+      groupBy: ["permit_type"],
+      metrics: [{ type: "count", alias: "permit_count" }],
+      limit: 10
+    });
+
+    expect(execution.result.dataMode).toBe("fallback");
+    expect(execution.result.caveats.join(" ")).toContain("not live-enabled");
+    expect(execution.audit.safetyDecisions.join(" ")).toContain("Live public API was requested");
   });
 
   it("falls back when a live dashboard asks for an unmapped field", async () => {

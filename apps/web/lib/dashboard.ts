@@ -5,6 +5,7 @@ import {
   type BoundedQuerySpec,
   type CanvasDocument,
   type DataMode,
+  type DataModePreference,
   type DatasetAdapter,
   type DatasetMetadata,
   type PromptIntent,
@@ -24,6 +25,8 @@ export type DashboardGeneration = {
   intent?: PromptIntent;
   querySpec?: BoundedQuerySpec;
   dataMode?: DataMode;
+  requestedDataMode?: DataModePreference;
+  fallbackReason?: string;
   suggestedDatasets?: DatasetMetadata[];
 };
 
@@ -164,14 +167,23 @@ function groupByMode(intent: DemoIntent, filterValues: DashboardFilterValues) {
   return [intent.categoryField, intent.geographyField];
 }
 
-function dashboardMode(dataset: DatasetMetadata, requiredFields: string[], promptIntent: PromptIntent): { queryMode: BoundedQuerySpec["mode"]; dataMode: DataMode; reason?: string } {
-  if (promptIntent.reasonCodes.includes("mode_sample_requested")) {
-    return { queryMode: "sample_only", dataMode: "sample", reason: "Prompt requested sample mode." };
+function dashboardMode(
+  dataset: DatasetMetadata,
+  requiredFields: string[],
+  promptIntent: PromptIntent,
+  dataModePreference: DataModePreference
+): { queryMode: BoundedQuerySpec["mode"]; dataMode: DataMode; reason?: string } {
+  if (dataModePreference === "sample" || promptIntent.reasonCodes.includes("mode_sample_requested")) {
+    return {
+      queryMode: "sample_only",
+      dataMode: "sample",
+      reason: dataModePreference === "sample" ? "Data mode control requested sample fallback." : "Prompt requested sample mode."
+    };
   }
 
   if (!dataset.liveAvailable) {
-    return promptIntent.reasonCodes.includes("mode_live_requested")
-      ? { queryMode: "auto", dataMode: "sample", reason: "Prompt requested live data, but this dataset is not live-enabled." }
+    return dataModePreference === "live" || promptIntent.reasonCodes.includes("mode_live_requested")
+      ? { queryMode: "sample_only", dataMode: "fallback", reason: "Live public API requested, but this dataset is not live-enabled." }
       : { queryMode: "auto", dataMode: "sample" };
   }
 
@@ -224,11 +236,13 @@ async function runQuery(adapter: DatasetAdapter, spec: BoundedQuerySpec) {
 async function createDashboardForIntent({
   prompt,
   intent,
-  filterValues = {}
+  filterValues = {},
+  dataModePreference = "auto"
 }: {
   prompt: string;
   intent: DemoIntent;
   filterValues?: DashboardFilterValues;
+  dataModePreference?: DataModePreference;
 }): Promise<DashboardGeneration> {
   const catalog = getDatasetCatalog();
   const adapter = getDatasetAdapter();
@@ -246,7 +260,7 @@ async function createDashboardForIntent({
     intent.statusField,
     intent.geographyField,
     ...tableGroupBy
-  ], promptIntent);
+  ], promptIntent, dataModePreference);
 
   const monthlySpec: BoundedQuerySpec = {
     schemaVersion: "1.0",
@@ -308,12 +322,22 @@ async function createDashboardForIntent({
   ]);
 
   const results = [monthly.result, byCategory.result, byZip.result, byStatus.result, table.result];
-  const audits = [monthly.audit, byCategory.audit, byZip.audit, byStatus.audit, table.audit];
   const actualDataMode: DataMode = results.some((result) => result.dataMode === "fallback") || mode.dataMode === "fallback"
     ? "fallback"
     : results.every((result) => result.dataMode === "live")
       ? "live"
       : "sample";
+  const rawAudits = [monthly.audit, byCategory.audit, byZip.audit, byStatus.audit, table.audit];
+  const audits = actualDataMode === "fallback"
+    ? rawAudits.map((audit) => ({
+      ...audit,
+      dataMode: "fallback" as const,
+      safetyDecisions: [
+        ...audit.safetyDecisions,
+        mode.reason ?? "Dashboard used approved sample fallback for at least one requested live view."
+      ]
+    }))
+    : rawAudits;
   const modeCaveat = mode.reason ? [`${mode.reason} Approved sample fallback is used for this dashboard.`] : [];
   const source = createCombinedSource(dataset, results, prompt, actualDataMode, modeCaveat);
   const totalCount = monthly.result.rows.reduce((sum, row) => sum + numeric(row, intent.countAlias), 0);
@@ -478,12 +502,21 @@ async function createDashboardForIntent({
     ]
   });
 
-  return { canvas, audits, intent: promptIntent, querySpec: tableSpec, dataMode: actualDataMode };
+  return {
+    canvas,
+    audits,
+    intent: promptIntent,
+    querySpec: tableSpec,
+    dataMode: actualDataMode,
+    requestedDataMode: dataModePreference,
+    fallbackReason: mode.reason
+  };
 }
 
 export async function generateCanvasForPrompt(
   prompt: string,
-  filterValues: DashboardFilterValues = {}
+  filterValues: DashboardFilterValues = {},
+  dataModePreference: DataModePreference = "auto"
 ): Promise<DashboardGeneration> {
   const intent = detectIntent(prompt);
 
@@ -492,11 +525,12 @@ export async function generateCanvasForPrompt(
       canvas: createDatasetSuggestionCanvas(prompt),
       audits: [],
       intent: parsePromptIntent({ prompt, catalog: getDatasetCatalog() }),
+      requestedDataMode: dataModePreference,
       suggestedDatasets: getDatasetCatalog().filter((dataset) => dataset.fields.length > 0)
     };
   }
 
-  return createDashboardForIntent({ prompt, intent, filterValues });
+  return createDashboardForIntent({ prompt, intent, filterValues, dataModePreference });
 }
 
 export function createDatasetSuggestionCanvas(prompt: string): CanvasDocument {

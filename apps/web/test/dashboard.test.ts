@@ -37,6 +37,27 @@ describe("dashboard generation", () => {
     expect(generation.canvas.title).toContain("Choose");
   });
 
+  it("respects explicit dashboard data-mode preferences", async () => {
+    const dallasSample = await generateCanvasForPrompt(
+      "Show Dallas 311 service requests by category for 2024.",
+      {},
+      "sample"
+    );
+    expect(dallasSample.requestedDataMode).toBe("sample");
+    expect(dallasSample.dataMode).toBe("sample");
+    expect(dallasSample.fallbackReason).toContain("sample fallback");
+
+    const austinLive = await generateCanvasForPrompt(
+      "Show Austin building permits by month and ZIP code.",
+      {},
+      "live"
+    );
+    expect(austinLive.requestedDataMode).toBe("live");
+    expect(austinLive.dataMode).toBe("fallback");
+    expect(austinLive.fallbackReason).toContain("not live-enabled");
+    expect(austinLive.canvas.sources[0].caveats.join(" ")).toContain("Approved sample fallback");
+  });
+
   it("exports a preview-only Miro spec with source method frame", async () => {
     const generation = await generateCanvasForPrompt("Show Dallas 311 service requests by category and ZIP code for 2024.");
     const spec = generateMiroExportSpec({ canvas: generation.canvas, template: "community_workshop" });
@@ -102,6 +123,24 @@ describe("production API contracts", () => {
     expect(body.ok).toBe(false);
     expect(body.error.code).toBe("query_failed");
     expect(JSON.stringify(body)).not.toContain("at ");
+  });
+
+  it("returns fallback mode when live query is requested for a sample-first dataset", async () => {
+    const response = await queryPOST(new Request("http://localhost/api/query", {
+      method: "POST",
+      body: JSON.stringify({
+        datasetId: "austin_building_permits",
+        mode: "live_if_available",
+        groupBy: ["permit_type"],
+        metrics: [{ type: "count", alias: "permit_count" }],
+        limit: 10
+      })
+    }));
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.result.dataMode).toBe("fallback");
+    expect(body.result.caveats.join(" ")).toContain("not live-enabled");
   });
 
   it("rejects oversized JSON bodies before route parsing", async () => {
