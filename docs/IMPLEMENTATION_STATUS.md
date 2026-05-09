@@ -54,3 +54,7 @@ Local hosted-beta implementation checks passed on May 9, 2026:
 - `PLAYWRIGHT_BASE_URL=http://localhost:3004 pnpm test:e2e:remote`
 
 Release remains blocked until a public Vercel URL is available and the same hosted checks pass against that URL. No `v0.6.0-hosted-beta` tag has been created.
+
+## External Review Backlog
+
+The May 9, 2026 external review was triaged into `PLAN.md`. The most important additions before a v0.6 tag are hosted data bundling, no-auth POST abuse controls, CSP/HSTS headers, runtime timestamps instead of frozen demo timestamps, MCP version metadata, broader deploy smoke coverage, deploy verification workflow setup once a remote exists, generated canvas ID collision fixes, and saved-bundle import size limits.

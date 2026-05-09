@@ -9,6 +9,7 @@
 - Support remote Playwright browser smoke tests through `PLAYWRIGHT_BASE_URL`.
 - Add hosted-beta runtime copy while preserving the no-auth, no-database, no-LLM, validated-JSON product model.
 - Release tag is intentionally blocked until a public URL passes hosted smoke and remote browser checks.
+- External review triage added a v0.6 pre-tag backlog for hosted data bundling, public POST abuse controls, CSP/HSTS, runtime timestamps, MCP version metadata, broader smoke coverage, and saved-canvas import hardening.
 
 ## v0.5.0-public-beta
 

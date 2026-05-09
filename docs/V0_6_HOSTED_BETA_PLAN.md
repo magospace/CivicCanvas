@@ -144,3 +144,18 @@ Blocked:
 - No `VERCEL_TOKEN`, `VERCEL_ORG_ID`, or `VERCEL_PROJECT_ID` values are present in the local environment.
 
 Do not create the `v0.6.0-hosted-beta` tag until hosted deployment smoke and remote Playwright smoke pass against a public URL.
+
+## External Review Triage
+
+An external senior review was triaged on May 9, 2026. The project should treat the following as additional v0.6 release work before tagging a public hosted beta:
+
+1. **Hosted data bundling:** ensure `data/catalog` and `data/samples` are available inside Vercel/Next serverless runtime bundles. Use Next output file tracing includes or deterministic JSON imports, then verify with a local Vercel build when project linkage is available.
+2. **Public POST abuse controls:** add an explicit rate-limit strategy for no-auth POST routes. Prefer Vercel-native controls if available; use middleware or KV-backed limits only after the infrastructure choice is accepted.
+3. **Security headers:** add CSP, HSTS, and `poweredByHeader: false`; update deployment smoke header checks.
+4. **Runtime timestamps:** replace frozen demo timestamps in generated canvases, source attribution, and MCP outputs with current ISO timestamps.
+5. **MCP metadata:** bump MCP server/status version strings to `0.6.0-hosted-beta`.
+6. **Deployment smoke coverage:** add `/api/datasets`, `/api/datasets/[id]`, and `/api/query` checks. Decide whether `/api/canvas/save` should be publicly callable or protected.
+7. **Deploy verification workflow:** add a manual hosted verification workflow after a Git remote and Vercel secrets exist.
+8. **Saved canvas IDs/imports:** prevent generated `canvasId` collisions and cap saved-bundle import size before JSON parsing.
+
+The full triaged backlog is tracked in `PLAN.md`.
