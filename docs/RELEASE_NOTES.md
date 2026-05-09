@@ -2,7 +2,13 @@
 
 ## v0.4.0-production-pilot
 
-Planned production-pilot release focused on live-source reliability, runtime health checks, structured API/MCP errors, portable saved-canvas bundles, governed prompt transparency, browser smoke tests, and release hardening.
+- Added structured live smoke output, `pnpm smoke:live:json`, and documented Austin live promotion blocker.
+- Added shared API error, catalog health, live smoke, and saved-canvas bundle schemas.
+- Added `/api/health`, `/api/catalog/health`, bounded request parsing, 64 KiB body limits, request IDs, and structured route errors.
+- Added portable saved-canvas bundle import/export, share-copy bundle behavior, and clear-all local saved canvases.
+- Added prompt intent matched terms, reason codes, rejected fields, mode hints, top-N parsing, and relative date parsing.
+- Added MCP status, catalog validation, and live-source tools.
+- Added Playwright browser smoke tests and `pnpm verify`.
 
 ## v0.3.0-product-demo
 
