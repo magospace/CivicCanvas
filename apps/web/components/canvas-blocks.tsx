@@ -211,7 +211,7 @@ export function MapBlockView({ props }: MapBlock) {
       )}
       {missingZipCount > 0 ? (
         <p className="mt-3 rounded-md bg-signal/10 px-3 py-2 text-xs leading-5 text-signal">
-          {missingZipCount} ZIP aggregate row{missingZipCount === 1 ? "" : "s"} could not be plotted because no governed centroid is bundled.
+          {missingZipCount} ZIP aggregate row{missingZipCount === 1 ? "" : "s"} could not be plotted because no governed centroid is bundled. Affected rows remain in the table and charts.
         </p>
       ) : null}
       {props.note ? <p className="mt-3 text-xs leading-5 text-slate-500">{props.note}</p> : null}

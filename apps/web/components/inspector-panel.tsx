@@ -139,6 +139,7 @@ export function InspectorPanel({
           <button
             onClick={onSave}
             aria-label="Save canvas locally"
+            title="Save canvas locally"
             className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
           >
             <Save className="h-4 w-4" />
@@ -146,6 +147,7 @@ export function InspectorPanel({
           <button
             onClick={onShare}
             aria-label="Copy portable saved-canvas bundle"
+            title="Copy portable saved-canvas bundle"
             className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
           >
             <Share2 className="h-4 w-4" />
@@ -153,6 +155,7 @@ export function InspectorPanel({
           <button
             onClick={onExportMiro}
             aria-label="Generate Miro export preview"
+            title="Generate Miro export preview"
             className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
           >
             <Download className="h-4 w-4" />

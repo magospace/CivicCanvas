@@ -114,6 +114,7 @@ export function SavedCanvases() {
                 href="/explore"
                 onClick={() => queueCanvasForOpen(item)}
                 aria-label={`Open ${item.title}`}
+                title={`Open ${item.title}`}
                 className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
               >
                 <ExternalLink className="h-4 w-4" />
@@ -121,6 +122,7 @@ export function SavedCanvases() {
               <button
                 onClick={() => refresh(duplicateSavedCanvas(item))}
                 aria-label={`Duplicate ${item.title}`}
+                title={`Duplicate ${item.title}`}
                 className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
               >
                 <Copy className="h-4 w-4" />
@@ -128,6 +130,7 @@ export function SavedCanvases() {
               <button
                 onClick={() => setExportText(exportSavedCanvasJson(item))}
                 aria-label={`Export ${item.title} JSON`}
+                title={`Export ${item.title} JSON`}
                 className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
               >
                 <FileJson className="h-4 w-4" />
@@ -139,6 +142,7 @@ export function SavedCanvases() {
                   }
                 }}
                 aria-label={`Delete ${item.title}`}
+                title={`Delete ${item.title}`}
                 className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-signal hover:text-signal focus:border-signal focus:outline-none focus:ring-2 focus:ring-signal/20"
               >
                 <Trash2 className="h-4 w-4" />

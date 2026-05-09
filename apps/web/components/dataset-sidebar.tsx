@@ -48,17 +48,28 @@ export function DatasetSidebar({ datasets }: { datasets: DatasetMetadata[] }) {
           Datasets
         </div>
         <div className="space-y-2">
-          {datasets.map((dataset) => (
-            <article
-              key={dataset.id}
-              className="rounded-lg border border-slate-200 bg-civic-50 p-3"
-            >
-              <h3 className="text-sm font-semibold text-ink">{dataset.title}</h3>
-              <p className="mt-1 text-xs leading-5 text-slate-500">
-                {dataset.sourceName} / {dataset.dataAccess}
-              </p>
-            </article>
-          ))}
+          {datasets.map((dataset) => {
+            const isQueryable = dataset.fields.length > 0;
+
+            return (
+              <article
+                key={dataset.id}
+                className="rounded-lg border border-slate-200 bg-civic-50 p-3"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <h3 className="text-sm font-semibold text-ink">{dataset.title}</h3>
+                  {!isQueryable ? (
+                    <span className="shrink-0 rounded bg-white px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500">
+                      Coming later
+                    </span>
+                  ) : null}
+                </div>
+                <p className="mt-1 text-xs leading-5 text-slate-500">
+                  {dataset.sourceName} / {dataset.dataAccess}
+                </p>
+              </article>
+            );
+          })}
         </div>
       </section>
     </aside>
