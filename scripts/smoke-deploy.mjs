@@ -21,6 +21,8 @@ baseUrl.search = "";
 baseUrl.hash = "";
 
 const headerExpectations = [
+  ["content-security-policy", "default-src 'self'"],
+  ["strict-transport-security", "max-age=63072000"],
   ["x-content-type-options", "nosniff"],
   ["referrer-policy", "strict-origin-when-cross-origin"],
   ["x-frame-options", "DENY"],

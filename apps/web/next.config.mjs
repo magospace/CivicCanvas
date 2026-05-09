@@ -3,9 +3,22 @@ import { fileURLToPath } from "node:url";
 
 const appDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(appDir, "../..");
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "frame-ancestors 'none'",
+  "form-action 'self'",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data:",
+  "font-src 'self' data:",
+  "connect-src 'self' https://data.austintexas.gov https://www.dallasopendata.com"
+].join("; ");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  poweredByHeader: false,
   transpilePackages: ["@texas-data-canvas/shared"],
   experimental: {
     outputFileTracingRoot: repoRoot,
@@ -18,6 +31,8 @@ const nextConfig = {
       {
         source: "/:path*",
         headers: [
+          { key: "Content-Security-Policy", value: contentSecurityPolicy },
+          { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "X-Frame-Options", value: "DENY" },
