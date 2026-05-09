@@ -14,6 +14,7 @@ export function InspectorPanel({
   onMiroTemplateChange,
   onExportMiro,
   onSave,
+  onShare,
   onApplyFilters
 }: {
   canvas: CanvasDocument;
@@ -26,6 +27,7 @@ export function InspectorPanel({
   onMiroTemplateChange?: (template: MiroExportSpec["template"]) => void;
   onExportMiro?: () => void;
   onSave?: () => void;
+  onShare?: () => void;
   onApplyFilters?: () => void;
 }) {
   const source = canvas.sources[0];
@@ -113,20 +115,21 @@ export function InspectorPanel({
           <button
             onClick={onSave}
             aria-label="Save canvas locally"
-            className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700"
+            className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
           >
             <Save className="h-4 w-4" />
           </button>
           <button
-            aria-label="Share canvas placeholder"
-            className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700"
+            onClick={onShare}
+            aria-label="Copy portable saved-canvas bundle"
+            className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
           >
             <Share2 className="h-4 w-4" />
           </button>
           <button
             onClick={onExportMiro}
             aria-label="Generate Miro export preview"
-            className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700"
+            className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
           >
             <Download className="h-4 w-4" />
           </button>
@@ -154,6 +157,9 @@ export function InspectorPanel({
             <div>City: {intent.city ?? "unresolved"}</div>
             <div>Datasets: {intent.datasetCandidates.join(", ") || "none"}</div>
             <div>Group by: {intent.groupBy.join(", ") || "none"}</div>
+            <div>Matched: {intent.matchedTerms.join(", ") || "none"}</div>
+            <div>Reasons: {intent.reasonCodes.join(", ") || "none"}</div>
+            <div>Rejected fields: {intent.rejectedFields.join(", ") || "none"}</div>
             <div>Confidence: {Math.round(intent.confidence * 100)}%</div>
             {intent.safetyWarnings.map((warning) => (
               <div key={warning} className="rounded-md bg-signal/10 px-3 py-2 text-signal">

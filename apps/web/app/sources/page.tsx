@@ -1,9 +1,10 @@
 import { Header } from "../../components/header";
 import { SourcesCatalog } from "../../components/sources-catalog";
-import { getDatasetCatalog } from "../../lib/data";
+import { getCatalogHealth, getDatasetCatalog } from "../../lib/data";
 
 export default function SourcesPage() {
   const datasets = getDatasetCatalog();
+  const health = getCatalogHealth();
 
   return (
     <main className="min-h-screen bg-civic-50">
@@ -18,6 +19,9 @@ export default function SourcesPage() {
             The catalog keeps verified source metadata, live adapter mappings, sample fallbacks,
             caveats, and recommended visual types together so dashboards stay governed.
           </p>
+          <div className="mt-4 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-civic-700 shadow-sm">
+            Catalog health: {health.status} / {health.datasetCount} datasets / {health.liveEnabledDatasets.length} live-enabled
+          </div>
         </div>
         <SourcesCatalog datasets={datasets} />
       </section>

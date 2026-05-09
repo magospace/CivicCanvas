@@ -7,7 +7,7 @@ import { DatasetSidebar } from "./dataset-sidebar";
 import { Header } from "./header";
 import { InspectorPanel } from "./inspector-panel";
 import { PromptBar } from "./prompt-bar";
-import { saveCanvasLocally, takePendingOpenCanvas } from "../lib/saved-canvases";
+import { createCanvasShareBundleJson, saveCanvasLocally, takePendingOpenCanvas } from "../lib/saved-canvases";
 
 export function AppShell({
   canvas,
@@ -53,7 +53,7 @@ export function AppShell({
       const payload = await response.json();
 
       if (!response.ok) {
-        throw new Error(payload.error ?? "Dashboard generation failed.");
+        throw new Error(payload.error?.message ?? payload.error ?? "Dashboard generation failed.");
       }
 
       setActiveCanvas(payload.canvas);
@@ -78,7 +78,7 @@ export function AppShell({
       const payload = await response.json();
 
       if (!response.ok) {
-        throw new Error(payload.error ?? "Miro export spec failed.");
+        throw new Error(payload.error?.message ?? payload.error ?? "Miro export spec failed.");
       }
 
       setStatus(`Miro export spec generated with ${payload.spec.frames.length} frames. Preview-only.`);
@@ -94,6 +94,21 @@ export function AppShell({
       setStatus(`Saved locally: ${activeCanvas.title}`);
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "Could not save canvas.");
+    }
+  }
+
+  async function shareCurrentCanvas() {
+    try {
+      const bundle = createCanvasShareBundleJson({
+        canvas: activeCanvas,
+        audits,
+        prompt,
+        intent: intent ?? undefined
+      });
+      await navigator.clipboard?.writeText(bundle);
+      setStatus("Portable saved-canvas bundle copied to clipboard.");
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Could not copy saved-canvas bundle.");
     }
   }
 
@@ -209,6 +224,7 @@ export function AppShell({
           onMiroTemplateChange={setMiroTemplate}
           onExportMiro={exportMiroSpec}
           onSave={saveCurrentCanvas}
+          onShare={shareCurrentCanvas}
           onApplyFilters={generateDashboard}
         />
       </div>

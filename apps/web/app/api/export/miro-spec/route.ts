@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { generateMiroExportSpec } from "../../../../lib/miro";
+import { apiError, createRequestId, parseJsonRequest } from "../../../../lib/api";
 
 const requestSchema = z.object({
   canvas: z.unknown(),
@@ -8,11 +9,12 @@ const requestSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  const requestId = createRequestId();
   try {
-    const body = requestSchema.parse(await request.json());
+    const body = await parseJsonRequest(request, requestSchema);
     const spec = generateMiroExportSpec({
       canvas: body.canvas,
-      template: body.template
+      template: body.template ?? "briefing_board"
     });
 
     return NextResponse.json({
@@ -20,9 +22,6 @@ export async function POST(request: Request) {
       note: "Preview-only MiroExportSpec. No Miro board write is performed in MVP."
     });
   } catch (error) {
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Miro export spec failed." },
-      { status: 400 }
-    );
+    return apiError(error, { code: "miro_export_failed", requestId });
   }
 }

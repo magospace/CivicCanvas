@@ -1,8 +1,10 @@
 import { readFileSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { z } from "zod";
 import {
   approvedDatasetCatalogSchema,
+  catalogHealthReportSchema,
   createAdapterRouter,
   type DatasetMetadata,
   type DatasetSamples
@@ -19,10 +21,13 @@ const sampleFiles: Record<string, string> = {
   dallas_311_requests: "dallas-311.sample.json"
 };
 
-function readJson(pathFromRepoRoot: string): unknown {
+function repoRoot() {
   const cwd = process.cwd();
-  const repoRoot = cwd.endsWith("apps/web") ? join(cwd, "../..") : cwd;
-  const absolutePath = join(repoRoot, pathFromRepoRoot);
+  return cwd.endsWith("apps/web") ? join(cwd, "../..") : cwd;
+}
+
+function readJson(pathFromRepoRoot: string): unknown {
+  const absolutePath = join(repoRoot(), pathFromRepoRoot);
   return JSON.parse(readFileSync(absolutePath, "utf8"));
 }
 
@@ -63,4 +68,44 @@ export function findDataset(datasets: DatasetMetadata[], datasetId: string): Dat
   }
 
   return dataset;
+}
+
+export function getCatalogHealth() {
+  const checkedAt = new Date().toISOString();
+  const issues: { path: string[]; code: string; message: string }[] = [];
+  let datasets: DatasetMetadata[] = [];
+
+  try {
+    datasets = getDatasetCatalog();
+  } catch (error) {
+    issues.push({
+      path: ["data", "catalog"],
+      code: "invalid_catalog",
+      message: error instanceof Error ? error.message : "Catalog failed validation."
+    });
+  }
+
+  const sampleFallbacks = datasets
+    .filter((dataset) => dataset.fallbackSampleFile)
+    .map((dataset) => {
+      const file = dataset.fallbackSampleFile!;
+      const available = existsSync(join(repoRoot(), "data/samples", file));
+      if (!available) {
+        issues.push({
+          path: ["data", "samples", file],
+          code: "missing_sample",
+          message: `Missing fallback sample for ${dataset.id}.`
+        });
+      }
+      return { datasetId: dataset.id, file, available };
+    });
+
+  return catalogHealthReportSchema.parse({
+    status: issues.length === 0 ? "ok" : datasets.length > 0 ? "degraded" : "failed",
+    checkedAt,
+    datasetCount: datasets.length,
+    liveEnabledDatasets: datasets.filter((dataset) => dataset.liveAvailable).map((dataset) => dataset.id),
+    sampleFallbacks,
+    issues
+  });
 }

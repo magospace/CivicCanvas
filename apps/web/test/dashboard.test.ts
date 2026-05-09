@@ -1,4 +1,11 @@
 import { describe, expect, it } from "vitest";
+import { z } from "zod";
+import { GET as catalogHealthGET } from "../app/api/catalog/health/route";
+import { POST as canvasGeneratePOST } from "../app/api/canvas/generate/route";
+import { POST as miroExportPOST } from "../app/api/export/miro-spec/route";
+import { GET as healthGET } from "../app/api/health/route";
+import { POST as queryPOST } from "../app/api/query/route";
+import { parseJsonRequest } from "../lib/api";
 import { generateCanvasForPrompt } from "../lib/dashboard";
 import { generateMiroExportSpec } from "../lib/miro";
 
@@ -63,5 +70,61 @@ describe("dashboard generation", () => {
     if (table?.type === "TableBlock") {
       expect(table.props.columns.map((column) => column.field)).toEqual(["status", "permit_count"]);
     }
+  });
+});
+
+describe("production API contracts", () => {
+  it("returns health and catalog health reports", async () => {
+    const health = await healthGET();
+    const healthBody = await health.json();
+    expect(healthBody.ok).toBe(true);
+    expect(healthBody.catalogCount).toBeGreaterThan(0);
+
+    const catalogHealth = await catalogHealthGET();
+    const catalogBody = await catalogHealth.json();
+    expect(catalogBody.health.status).toBe("ok");
+    expect(catalogBody.health.sampleFallbacks.length).toBeGreaterThan(0);
+  });
+
+  it("returns structured API errors for invalid query fields", async () => {
+    const response = await queryPOST(new Request("http://localhost/api/query", {
+      method: "POST",
+      body: JSON.stringify({
+        datasetId: "dallas_311_requests",
+        groupBy: ["private_field"],
+        metrics: [{ type: "count", alias: "request_count" }],
+        limit: 10
+      })
+    }));
+    const body = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(body.ok).toBe(false);
+    expect(body.error.code).toBe("query_failed");
+    expect(JSON.stringify(body)).not.toContain("at ");
+  });
+
+  it("rejects oversized JSON bodies before route parsing", async () => {
+    await expect(parseJsonRequest(new Request("http://localhost", {
+      method: "POST",
+      body: JSON.stringify({ value: "x".repeat(100) })
+    }), z.object({ value: z.string() }), 16)).rejects.toThrow(/exceeds/);
+  });
+
+  it("keeps canvas generation and Miro export routes governed", async () => {
+    const response = await canvasGeneratePOST(new Request("http://localhost/api/canvas/generate", {
+      method: "POST",
+      body: JSON.stringify({ prompt: "Show Dallas 311 service requests by category and ZIP code for 2024." })
+    }));
+    const body = await response.json();
+    expect(body.canvas.blocks.map((block: { type: string }) => block.type)).toContain("SourceMethodBlock");
+
+    const invalidMiro = await miroExportPOST(new Request("http://localhost/api/export/miro-spec", {
+      method: "POST",
+      body: JSON.stringify({ canvas: { blocks: [{ type: "UnknownBlock" }] } })
+    }));
+    const invalidBody = await invalidMiro.json();
+    expect(invalidMiro.status).toBe(400);
+    expect(invalidBody.ok).toBe(false);
   });
 });

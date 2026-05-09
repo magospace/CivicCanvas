@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { generateCanvasForPrompt } from "../../../../lib/dashboard";
+import { apiError, createRequestId, parseJsonRequest } from "../../../../lib/api";
 
 const requestSchema = z.object({
   prompt: z.string().min(1),
@@ -8,13 +9,11 @@ const requestSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  const requestId = createRequestId();
   try {
-    const { prompt, filters } = requestSchema.parse(await request.json());
+    const { prompt, filters } = await parseJsonRequest(request, requestSchema);
     return NextResponse.json(await generateCanvasForPrompt(prompt, filters));
   } catch (error) {
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Canvas generation failed." },
-      { status: 400 }
-    );
+    return apiError(error, { code: "canvas_generation_failed", requestId });
   }
 }

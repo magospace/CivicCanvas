@@ -1,8 +1,12 @@
 import {
+  clearSavedCanvasStorage,
   createSavedCanvas,
+  createSavedCanvasBundle,
   deleteCanvasFromStorage,
   loadSavedCanvases,
+  parseSavedCanvasImport,
   pendingOpenCanvasStorageKey,
+  saveCanvasBundleToStorage,
   saveCanvasToStorage,
   savedCanvasSchema,
   savedCanvasStorageKey,
@@ -45,6 +49,10 @@ export function deleteSavedCanvas(canvasId: string) {
   return deleteCanvasFromStorage(window.localStorage, canvasId);
 }
 
+export function clearAllSavedCanvases() {
+  return clearSavedCanvasStorage(window.localStorage);
+}
+
 export function queueCanvasForOpen(saved: SavedCanvas) {
   window.localStorage.setItem(pendingOpenCanvasStorageKey, JSON.stringify(saved));
 }
@@ -62,9 +70,31 @@ export function exportSavedCanvasJson(saved: SavedCanvas) {
   return JSON.stringify(saved, null, 2);
 }
 
+export function exportSavedCanvasesBundleJson(canvases: SavedCanvas[]) {
+  return JSON.stringify(createSavedCanvasBundle({
+    canvases,
+    appVersion: "v0.4.0-production-pilot"
+  }), null, 2);
+}
+
+export function createCanvasShareBundleJson({
+  canvas,
+  audits,
+  prompt,
+  intent
+}: {
+  canvas: CanvasDocument;
+  audits: QueryAudit[];
+  prompt: string;
+  intent?: PromptIntent;
+}) {
+  return exportSavedCanvasesBundleJson([
+    createSavedCanvas({ canvas, audits, prompt, intent })
+  ]);
+}
+
 export function importSavedCanvasJson(value: string) {
-  const saved = savedCanvasSchema.parse(JSON.parse(value));
-  return saveCanvasToStorage(window.localStorage, saved);
+  return saveCanvasBundleToStorage(window.localStorage, parseSavedCanvasImport(value));
 }
 
 export { savedCanvasStorageKey };

@@ -102,23 +102,26 @@ function topValue(result: QueryResult, labelField: string, valueField: string) {
   return top ? `${stringify(top, labelField)} (${numeric(top, valueField)})` : "No records";
 }
 
-function defaultDateRange(prompt: string) {
+function defaultDateRange(prompt: string, promptIntent?: PromptIntent) {
+  if (promptIntent?.dateRange) {
+    return promptIntent.dateRange;
+  }
   const year = prompt.match(/\b(20\d{2})\b/)?.[1] ?? "2024";
   return [`${year}-01-01`, `${year}-12-31`];
 }
 
-function parseDateRange(value: string | undefined, prompt: string) {
+function parseDateRange(value: string | undefined, prompt: string, promptIntent?: PromptIntent) {
   if (!value || value === "All") {
-    return defaultDateRange(prompt);
+    return defaultDateRange(prompt, promptIntent);
   }
   const parts = value.split(/\s+to\s+|,/i).map((part) => part.trim()).filter(Boolean);
   if (parts.length === 2) {
     return [parts[0], parts[1]];
   }
-  return defaultDateRange(prompt);
+  return defaultDateRange(prompt, promptIntent);
 }
 
-function buildFilters(prompt: string, intent: DemoIntent, filterValues: DashboardFilterValues = {}) {
+function buildFilters(prompt: string, intent: DemoIntent, filterValues: DashboardFilterValues = {}, promptIntent?: PromptIntent) {
   const allowedKeys = new Set(["city", "__groupBy", intent.dateField, intent.categoryField, intent.statusField, intent.geographyField]);
   for (const [field, value] of Object.entries(filterValues)) {
     if (value && !allowedKeys.has(field)) {
@@ -130,7 +133,7 @@ function buildFilters(prompt: string, intent: DemoIntent, filterValues: Dashboar
     {
       field: intent.dateField,
       operator: "between",
-      value: parseDateRange(filterValues[intent.dateField], prompt)
+      value: parseDateRange(filterValues[intent.dateField], prompt, promptIntent)
     }
   ];
 
@@ -161,9 +164,15 @@ function groupByMode(intent: DemoIntent, filterValues: DashboardFilterValues) {
   return [intent.categoryField, intent.geographyField];
 }
 
-function dashboardMode(dataset: DatasetMetadata, requiredFields: string[]): { queryMode: BoundedQuerySpec["mode"]; dataMode: DataMode; reason?: string } {
+function dashboardMode(dataset: DatasetMetadata, requiredFields: string[], promptIntent: PromptIntent): { queryMode: BoundedQuerySpec["mode"]; dataMode: DataMode; reason?: string } {
+  if (promptIntent.reasonCodes.includes("mode_sample_requested")) {
+    return { queryMode: "sample_only", dataMode: "sample", reason: "Prompt requested sample mode." };
+  }
+
   if (!dataset.liveAvailable) {
-    return { queryMode: "auto", dataMode: "sample" };
+    return promptIntent.reasonCodes.includes("mode_live_requested")
+      ? { queryMode: "auto", dataMode: "sample", reason: "Prompt requested live data, but this dataset is not live-enabled." }
+      : { queryMode: "auto", dataMode: "sample" };
   }
 
   const missing = [...new Set(requiredFields.filter((field) => !dataset.liveFieldMap[field]))];
@@ -176,6 +185,11 @@ function dashboardMode(dataset: DatasetMetadata, requiredFields: string[]): { qu
   }
 
   return { queryMode: "live_if_available", dataMode: "live" };
+}
+
+function topLimit(promptIntent: PromptIntent, fallback: number) {
+  const parsed = Number(promptIntent.reasonCodes.find((code) => code.startsWith("top_n:"))?.split(":")[1] ?? fallback);
+  return Number.isFinite(parsed) ? Math.min(Math.max(parsed, 1), fallback) : fallback;
 }
 
 function createCombinedSource(
@@ -220,9 +234,11 @@ async function createDashboardForIntent({
   const adapter = getDatasetAdapter();
   const dataset = findDataset(catalog, intent.datasetId);
   const promptIntent = parsePromptIntent({ prompt, catalog });
-  const filters = buildFilters(prompt, intent, filterValues);
+  const filters = buildFilters(prompt, intent, filterValues, promptIntent);
   const tableGroupBy = groupByMode(intent, filterValues);
   const primaryGroupField = intent.categoryField;
+  const categoryLimit = topLimit(promptIntent, 8);
+  const tableLimit = topLimit(promptIntent, 20);
   const mode = dashboardMode(dataset, [
     intent.dateField,
     "month",
@@ -230,7 +246,7 @@ async function createDashboardForIntent({
     intent.statusField,
     intent.geographyField,
     ...tableGroupBy
-  ]);
+  ], promptIntent);
 
   const monthlySpec: BoundedQuerySpec = {
     schemaVersion: "1.0",
@@ -250,7 +266,7 @@ async function createDashboardForIntent({
     groupBy: [primaryGroupField],
     metrics: [{ type: "count", alias: intent.countAlias }],
     orderBy: [{ field: intent.countAlias, direction: "desc" }],
-    limit: 8
+    limit: categoryLimit
   };
   const zipSpec: BoundedQuerySpec = {
     schemaVersion: "1.0",
@@ -280,7 +296,7 @@ async function createDashboardForIntent({
     groupBy: tableGroupBy,
     metrics: [{ type: "count", alias: intent.countAlias }],
     orderBy: [{ field: intent.countAlias, direction: "desc" }],
-    limit: 20
+    limit: tableLimit
   };
 
   const [monthly, byCategory, byZip, byStatus, table] = await Promise.all([

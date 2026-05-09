@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ExternalLink, FileText, ShieldCheck } from "lucide-react";
 import type { CanvasBlock } from "@texas-data-canvas/shared";
 
@@ -103,6 +103,8 @@ export function ChartBlockView({ props }: ChartBlock) {
 
 export function MapBlockView({ props }: MapBlock) {
   const max = Math.max(...props.data.map((item) => asNumber(item[props.metricField])), 1);
+  const mappedZipIds = new Set(props.features.map((feature) => feature.id));
+  const missingZipCount = props.data.filter((item) => !mappedZipIds.has(String(item[props.geographyField]))).length;
   const longitudes = props.features.map((feature) => feature.longitude);
   const latitudes = props.features.map((feature) => feature.latitude);
   const minLon = Math.min(...longitudes, -99);
@@ -172,8 +174,11 @@ export function MapBlockView({ props }: MapBlock) {
             })}
           </svg>
           {props.legend ? (
-            <div className="border-t border-slate-200 px-3 py-2 text-xs font-medium text-slate-600">
-              {props.legend}
+            <div className="flex flex-wrap items-center justify-between gap-2 border-t border-slate-200 px-3 py-2 text-xs font-medium text-slate-600">
+              <span>{props.legend}</span>
+              <span className="rounded bg-white px-2 py-1 text-[11px] text-slate-500">
+                Max bubble: {max}
+              </span>
             </div>
           ) : null}
         </div>
@@ -198,6 +203,11 @@ export function MapBlockView({ props }: MapBlock) {
           })}
         </div>
       )}
+      {missingZipCount > 0 ? (
+        <p className="mt-3 rounded-md bg-signal/10 px-3 py-2 text-xs leading-5 text-signal">
+          {missingZipCount} ZIP aggregate row{missingZipCount === 1 ? "" : "s"} could not be plotted because no governed centroid is bundled.
+        </p>
+      ) : null}
       {props.note ? <p className="mt-3 text-xs leading-5 text-slate-500">{props.note}</p> : null}
     </article>
   );
@@ -207,7 +217,7 @@ export function TableBlockView({ props }: TableBlock) {
   const [sortField, setSortField] = useState(props.sortBy ?? props.columns[0]?.field ?? "");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [page, setPage] = useState(0);
-  const pageSize = props.pageSize ?? props.rows.length;
+  const pageSize = Math.max(props.pageSize ?? props.rows.length, 1);
   const rows = useMemo(() => {
     if (!sortField) {
       return props.rows;
@@ -222,7 +232,12 @@ export function TableBlockView({ props }: TableBlock) {
     });
   }, [props.rows, sortDirection, sortField]);
   const pageCount = Math.max(Math.ceil(rows.length / pageSize), 1);
+  useEffect(() => {
+    setPage((value) => Math.min(value, pageCount - 1));
+  }, [pageCount, props.rows.length]);
   const visibleRows = rows.slice(page * pageSize, page * pageSize + pageSize);
+  const firstVisible = rows.length === 0 ? 0 : page * pageSize + 1;
+  const lastVisible = rows.length === 0 ? 0 : page * pageSize + visibleRows.length;
   const changeSort = (field: string) => {
     setPage(0);
     if (field === sortField) {
@@ -246,12 +261,13 @@ export function TableBlockView({ props }: TableBlock) {
               {props.columns.map((column) => (
                 <th
                   key={column.field}
+                  aria-sort={sortField === column.field ? (sortDirection === "asc" ? "ascending" : "descending") : "none"}
                   className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-slate-500"
                 >
                   <button
                     type="button"
                     onClick={() => changeSort(column.field)}
-                    className="flex items-center gap-1 text-left uppercase tracking-[0.12em] transition hover:text-civic-700"
+                    className="flex items-center gap-1 text-left uppercase tracking-[0.12em] transition hover:text-civic-700 focus:outline-none focus:ring-2 focus:ring-civic-100"
                     aria-label={`Sort by ${column.label}`}
                   >
                     {column.label}
@@ -275,13 +291,13 @@ export function TableBlockView({ props }: TableBlock) {
         </table>
       </div>
       <div className="flex items-center justify-between gap-3 border-t border-slate-200 bg-civic-50 px-4 py-2 text-xs text-slate-500">
-        <span>Showing {visibleRows.length} of {props.rows.length} rows</span>
+        <span>Showing {firstVisible}-{lastVisible} of {props.rows.length} rows</span>
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={() => setPage((value) => Math.max(value - 1, 0))}
             disabled={page === 0}
-            className="rounded border border-slate-200 px-2 py-1 font-semibold disabled:opacity-40"
+            className="rounded border border-slate-200 px-2 py-1 font-semibold focus:outline-none focus:ring-2 focus:ring-civic-100 disabled:opacity-40"
           >
             Prev
           </button>
@@ -290,7 +306,7 @@ export function TableBlockView({ props }: TableBlock) {
             type="button"
             onClick={() => setPage((value) => Math.min(value + 1, pageCount - 1))}
             disabled={page + 1 >= pageCount}
-            className="rounded border border-slate-200 px-2 py-1 font-semibold disabled:opacity-40"
+            className="rounded border border-slate-200 px-2 py-1 font-semibold focus:outline-none focus:ring-2 focus:ring-civic-100 disabled:opacity-40"
           >
             Next
           </button>
@@ -343,7 +359,7 @@ export function FilterBlockView({
       {onApply ? (
         <button
           onClick={onApply}
-          className="mt-4 w-full rounded-md bg-civic-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-civic-700"
+          className="mt-4 w-full rounded-md bg-civic-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-civic-700 focus:outline-none focus:ring-2 focus:ring-civic-100"
         >
           Apply filter state
         </button>
@@ -389,7 +405,7 @@ export function SourceMethodBlockView({ props }: SourceMethodBlock) {
         </div>
         <a
           href={props.attribution.sourceUrl}
-          className="rounded-md border border-white/20 p-2 text-white/80 transition hover:text-white"
+          className="rounded-md border border-white/20 p-2 text-white/80 transition hover:text-white focus:outline-none focus:ring-2 focus:ring-white/30"
           aria-label={`Open source for ${props.attribution.datasetTitle}`}
         >
           <ExternalLink className="h-4 w-4" />
