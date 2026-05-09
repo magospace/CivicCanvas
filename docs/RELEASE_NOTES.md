@@ -8,8 +8,8 @@
 - Expand deployment smoke checks to cover health, catalog health, pages, response headers, Dallas/Austin dashboard generation, unsupported prompt behavior, and expected app version.
 - Support remote Playwright browser smoke tests through `PLAYWRIGHT_BASE_URL`.
 - Add hosted-beta runtime copy while preserving the no-auth, no-database, no-LLM, validated-JSON product model.
-- Release tag is intentionally blocked until a public URL passes hosted smoke and remote browser checks.
-- External review triage added a v0.6 pre-tag backlog for hosted data bundling, public POST abuse controls, CSP/HSTS, runtime timestamps, MCP version metadata, broader smoke coverage, and saved-canvas import hardening.
+- Add hosted runtime data tracing for catalog/sample files, CSP/HSTS headers, generic unexpected API errors, best-effort POST throttling, current runtime timestamps, unique generated canvas IDs, saved import size caps, MCP v0.6 metadata, and review-polish UI caveats.
+- Release tag remains intentionally blocked until a public URL passes hosted smoke and remote browser checks.
 
 ## v0.5.0-public-beta
 

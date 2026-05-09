@@ -44,6 +44,7 @@ The v0.6 release gate is a verified public deployment. The repo has no configure
 - Extend health and smoke checks for public hosted validation.
 - Make Playwright smoke tests reusable against an already deployed public URL.
 - Add subtle hosted-beta runtime copy while keeping the app no-auth, no-database, no-LLM, and governed by validated `CanvasDocument` JSON rendered through the allowlisted block registry.
+- Apply the accepted external review hardening items before tagging: hosted data tracing, CSP/HSTS, sanitized API errors, best-effort POST throttling, runtime timestamps, unique generated canvas IDs, saved import size caps, expanded deploy smoke, and small demo UX polish.
 
 ## v0.6 Verification Status
 
@@ -57,4 +58,6 @@ Release remains blocked until a public Vercel URL is available and the same host
 
 ## External Review Backlog
 
-The May 9, 2026 external review was triaged into `PLAN.md`. The most important additions before a v0.6 tag are hosted data bundling, no-auth POST abuse controls, CSP/HSTS headers, runtime timestamps instead of frozen demo timestamps, MCP version metadata, broader deploy smoke coverage, deploy verification workflow setup once a remote exists, generated canvas ID collision fixes, and saved-bundle import size limits.
+The May 9, 2026 external review was triaged into `PLAN.md`. The code-level v0.6 hardening items have been implemented locally: hosted data bundling, no-auth POST abuse controls, CSP/HSTS headers, runtime timestamps instead of frozen demo timestamps, MCP version metadata, broader deploy smoke coverage, deploy verification workflow setup, generated canvas ID collision fixes, saved-bundle import size limits, public API error sanitization, and small UX caveats/tooltips.
+
+Remaining release work is operational: obtain a public Vercel URL, run deployment smoke and remote Playwright against it, verify platform-level firewall/rate limiting for broad sharing, and then tag `v0.6.0-hosted-beta`.

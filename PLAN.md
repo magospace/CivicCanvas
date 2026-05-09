@@ -8,68 +8,72 @@ This plan incorporates the external senior review feedback against the current `
 
 - `main` has been fast-forwarded to `v0.5.0-public-beta`.
 - Active branch: `feat/v0.6-hosted-beta`.
-- v0.6 local hosted-beta work is implemented and local gates previously passed.
+- v0.6 local hosted-beta work is implemented, including the external review hardening backlog listed below.
 - v0.6 is not tagged because there is no public Vercel URL, no Git remote, and no Vercel credential environment in this repo context.
 - All dashboard output must remain validated `CanvasDocument` JSON rendered through the allowlisted React block registry.
 
-## Reviewed Feedback: Applies Now
+## Implemented v0.6 Review Hardening
 
-These findings are valid against the current branch and should be worked before or during the v0.6 hosted-beta release pass.
+The May 9, 2026 external review was accepted where it applied to the hosted-beta release and converted into code/docs on `feat/v0.6-hosted-beta`.
 
-### Must Fix Before v0.6 Tag
+### Completed Before v0.6 Tag
 
 1. **Bundle `data/` for hosted runtime.**
-   - Current code reads `data/catalog` and `data/samples` from filesystem paths outside `apps/web`.
-   - Add and verify Next/Vercel output file tracing for `../../data/**/*`, or switch catalog/sample loading to deterministic bundled imports.
-   - Verify with a local Vercel build if credentials/project linkage are available.
+   - Added Next output file tracing for the repo-level `data/**/*` directory.
+   - Extended preflight to validate catalog/sample paths from the same root assumptions used by the web app.
+   - Verified production build traces include catalog and sample files.
 
 2. **Add public abuse controls for POST routes.**
-   - Public no-auth routes include `/api/canvas/generate`, `/api/query`, `/api/export/miro-spec`, and `/api/canvas/save`.
-   - Keep the 64 KiB body cap, but add a rate-limit strategy before public launch.
-   - Preferred options, in order: Vercel Firewall/rate limiting if available; lightweight edge middleware; external KV-backed rate limit only if that infrastructure choice is explicitly accepted.
+   - Added best-effort middleware throttling for `/api/canvas/generate`, `/api/query`, `/api/export/miro-spec`, and `/api/canvas/save`.
+   - Kept the existing 64 KiB request body cap.
+   - Documented that broad public sharing should still use Vercel-native firewall/rate limiting in front of the no-auth app.
 
 3. **Add CSP/HSTS and suppress the powered-by header.**
-   - Current headers include `nosniff`, referrer policy, frame denial, and permissions policy.
-   - Add a conservative CSP compatible with Next.js and Socrata fetches.
-   - Add `Strict-Transport-Security` for hosted HTTPS.
-   - Set `poweredByHeader: false`.
-   - Extend deployment smoke header checks accordingly.
+   - Added a conservative Content Security Policy, HSTS, and `poweredByHeader: false`.
+   - Preserved `nosniff`, referrer policy, frame denial, and permissions policy.
+   - Extended deployment smoke header checks for CSP and HSTS.
 
 4. **Replace frozen audit/source timestamps.**
-   - Runtime-generated canvases and MCP outputs still use `2026-05-09T00:00:00.000Z` in several places.
-   - Replace runtime source `accessedAt`, `createdAt`, and `updatedAt` with current ISO timestamps.
-   - Keep deterministic timestamps only in fixtures/tests where needed.
+   - Runtime web canvases now use one current ISO timestamp per generation for `createdAt`, `updatedAt`, and source `accessedAt`.
+   - MCP canvas/source attribution also uses current ISO timestamps.
+   - Fixed timestamps remain only in tests/static fixtures where intentional.
 
 5. **Bump MCP runtime version metadata.**
-   - MCP server status still reports `0.5.0-public-beta`.
-   - Bump MCP status and server version to `0.6.0-hosted-beta` before tagging v0.6.
+   - MCP server/status metadata now reports `0.6.0-hosted-beta`.
 
 6. **Extend deployment smoke coverage.**
-   - Current smoke covers health, catalog health, pages, headers, Dallas/Austin canvas generation, and unsupported prompt behavior.
-   - Add `/api/datasets`, `/api/datasets/[id]`, and `/api/query`.
-   - Add `/api/canvas/save` only if it is expected to be public-write safe in hosted mode; otherwise document its current role and protect it.
+   - Deployment smoke now covers `/api/datasets`, `/api/datasets/dallas_311_requests`, and a known-safe Dallas aggregate `/api/query` POST.
+   - Existing health, catalog health, page, response-header, Dallas/Austin canvas, and unsupported prompt checks remain.
 
 7. **Add deploy verification workflow after remote/credentials exist.**
-   - Current CI covers lint/typecheck/test/build and manual live smoke.
-   - Add a manual deploy verification workflow for hosted URLs once a Git remote and Vercel secrets are configured.
-   - Do not commit secrets or `.vercel/project.json`.
+   - Added a manual `workflow_dispatch` deploy verification workflow that accepts `base_url` and `expected_version`.
+   - The workflow verifies an already-deployed URL; it does not require committing secrets or `.vercel/project.json`.
 
 8. **Fix generated canvas ID collisions.**
-   - Generated Dallas/Austin canvases use stable IDs such as `canvas_dallas_311_requests`.
-   - Local save currently replaces an existing saved canvas with the same `canvasId`.
-   - Add per-generation IDs for user-generated canvases while preserving separate stable IDs for seeded/demo lookups.
+   - Generated canvases now use unique IDs with dataset, timestamp, and short random suffixes.
+   - Repeated Dallas/Austin saves no longer silently overwrite prior saved canvases.
 
 9. **Prevent oversized saved-bundle imports in the browser.**
-   - Saved canvas import validates JSON shape after parsing, but the textarea path has no client-side length cap.
-   - Add a visible limit and reject oversized pasted JSON before `JSON.parse`.
+   - Added a shared saved import byte limit.
+   - `/saved` displays the limit and rejects oversized pasted JSON before `JSON.parse`.
 
-### Should Fix If Time Before v0.6
+10. **Sanitize public API errors.**
+   - Zod validation issues remain user-fixable and structured.
+   - Unexpected internal errors return generic messages without local paths or stack details.
 
-- Sanitize generic API error responses so internal filesystem paths or unexpected messages are not returned to clients.
-- Add `title` tooltips to icon-only inspector controls.
-- Add a visible "coming soon" treatment or filtering for stretch datasets with empty `fields[]` in the explore sidebar.
-- Raise `maxDashboardBlocks` only if a v0.6 change adds blocks; otherwise keep the documented limit at 10.
-- Add a warning when ZIP rows are dropped because no bundled centroid is available.
+11. **Apply small hosted-beta UX polish.**
+   - Added visible tooltips to icon-only inspector and saved-canvas controls.
+   - Marked stretch datasets with empty `fields[]` as "Coming later" in the explore sidebar.
+   - Clarified ZIP-map caveats when aggregate rows cannot be plotted because no bundled centroid exists.
+
+### Remaining Operational Release Blockers
+
+- Run the full local release gate after the final doc updates.
+- Deploy to a public Vercel URL once project linkage/credentials exist.
+- Run `pnpm smoke:deploy -- --url <public-url> --expect-version v0.6.0-hosted-beta`.
+- Run `PLAYWRIGHT_BASE_URL=<public-url> pnpm test:e2e:remote`.
+- Confirm Vercel-native firewall/rate limiting is configured before broad public sharing.
+- Tag `v0.6.0-hosted-beta` only after hosted checks pass and `git status --short` is clean.
 
 ## Reviewed Feedback: Qualified Or Not Immediate
 

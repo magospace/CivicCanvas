@@ -112,6 +112,7 @@ Target tag: `v0.6.0-hosted-beta`
 - `/api/health` exposes optional hosted metadata while keeping existing fields compatible.
 - Deployment smoke can validate pages, APIs, response headers, dashboard generation, unsupported prompt behavior, and expected app version.
 - Playwright can run against either a local dev server or a remote public URL.
+- External review hardening is applied: data file tracing, CSP/HSTS, generic unexpected API errors, best-effort no-auth throttling, runtime timestamps, MCP v0.6 metadata, unique generated canvas IDs, saved import size caps, expanded smoke coverage, and review-polish UI caveats.
 - Public hosted verification has either passed and produced a v0.6 tag, or the missing public URL/credential blocker is explicitly documented.
 
 ## Release Checklist
@@ -147,15 +148,16 @@ Do not create the `v0.6.0-hosted-beta` tag until hosted deployment smoke and rem
 
 ## External Review Triage
 
-An external senior review was triaged on May 9, 2026. The project should treat the following as additional v0.6 release work before tagging a public hosted beta:
+An external senior review was triaged on May 9, 2026. The accepted v0.6 code/docs backlog has been implemented locally:
 
-1. **Hosted data bundling:** ensure `data/catalog` and `data/samples` are available inside Vercel/Next serverless runtime bundles. Use Next output file tracing includes or deterministic JSON imports, then verify with a local Vercel build when project linkage is available.
-2. **Public POST abuse controls:** add an explicit rate-limit strategy for no-auth POST routes. Prefer Vercel-native controls if available; use middleware or KV-backed limits only after the infrastructure choice is accepted.
-3. **Security headers:** add CSP, HSTS, and `poweredByHeader: false`; update deployment smoke header checks.
-4. **Runtime timestamps:** replace frozen demo timestamps in generated canvases, source attribution, and MCP outputs with current ISO timestamps.
-5. **MCP metadata:** bump MCP server/status version strings to `0.6.0-hosted-beta`.
-6. **Deployment smoke coverage:** add `/api/datasets`, `/api/datasets/[id]`, and `/api/query` checks. Decide whether `/api/canvas/save` should be publicly callable or protected.
-7. **Deploy verification workflow:** add a manual hosted verification workflow after a Git remote and Vercel secrets exist.
-8. **Saved canvas IDs/imports:** prevent generated `canvasId` collisions and cap saved-bundle import size before JSON parsing.
+1. **Hosted data bundling:** Next output tracing includes repo-level `data/**/*`, and preflight validates catalog/sample paths from the web runtime assumption.
+2. **Public POST abuse controls:** middleware-level best-effort throttling protects no-auth POST routes. Production should still use Vercel-native firewall/rate limiting before broad sharing.
+3. **Security headers:** CSP, HSTS, and `poweredByHeader: false` are configured, and deployment smoke checks assert CSP/HSTS.
+4. **Runtime timestamps:** generated web/MCP canvases and source attribution now use current ISO timestamps.
+5. **MCP metadata:** MCP server/status version strings report `0.6.0-hosted-beta`.
+6. **Deployment smoke coverage:** smoke now covers `/api/datasets`, `/api/datasets/dallas_311_requests`, and a known-safe `/api/query` aggregate.
+7. **Deploy verification workflow:** a manual hosted verification workflow can check an already-deployed URL with deployment smoke plus remote Playwright.
+8. **Saved canvas IDs/imports:** generated canvas IDs are unique, and saved-bundle imports are capped before JSON parsing.
+9. **Public error/UX polish:** unexpected API errors are generic, icon-only controls have titles, stretch sidebar datasets are marked "Coming later", and ZIP-map omission caveats are clearer.
 
-The full triaged backlog is tracked in `PLAN.md`.
+The remaining release blocker is external to the codebase: no public hosted URL is available yet. The full triaged backlog and release blockers are tracked in `PLAN.md`.
