@@ -80,6 +80,23 @@ export function parsePromptIntent({
 }): PromptIntent {
   const normalized = prompt.toLowerCase();
   const sensitiveTerms = ["name", "phone", "email", "address", "applicant", "contractor", "personal", "private"];
+  const synonymTerms = [
+    "service request",
+    "service requests",
+    "city request",
+    "city requests",
+    "complaint",
+    "complaints",
+    "case",
+    "cases",
+    "building activity",
+    "construction permit",
+    "construction permits",
+    "issued permit",
+    "issued permits",
+    "status breakdown",
+    "top categories"
+  ];
   const matchedTerms = new Set<string>();
   const reasonCodes = new Set<string>();
   const candidates = catalog.filter((dataset) => {
@@ -103,6 +120,13 @@ export function parsePromptIntent({
     matchedTerms.add(dataset.topic.toLowerCase());
     reasonCodes.add("dataset_candidate_match");
   }
+
+  for (const term of synonymTerms) {
+    if (normalized.includes(term)) {
+      matchedTerms.add(term);
+      reasonCodes.add(`synonym:${term.replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "")}`);
+    }
+  }
   const groupBy = new Set<string>();
   const requestedVisuals = new Set(["summary", "metric", "table", "source_method"]);
 
@@ -118,10 +142,10 @@ export function parsePromptIntent({
     matchedTerms.add("zip");
     reasonCodes.add("geography_requested");
   }
-  if (normalized.includes("category")) {
+  if (normalized.includes("category") || normalized.includes("categories")) {
     groupBy.add("category");
     requestedVisuals.add("chart");
-    matchedTerms.add("category");
+    matchedTerms.add(normalized.includes("categories") ? "categories" : "category");
     reasonCodes.add("category_grouping_requested");
   }
   if (normalized.includes("status")) {

@@ -75,10 +75,31 @@ const demoIntents: DemoIntent[] = [
 
 function detectIntent(prompt: string): DemoIntent | null {
   const normalized = prompt.toLowerCase();
-  if (normalized.includes("austin") && normalized.includes("permit")) {
+  const dallasTopicTerms = [
+    "311",
+    "service request",
+    "service requests",
+    "city request",
+    "city requests",
+    "complaint",
+    "complaints",
+    "case",
+    "cases"
+  ];
+  const austinTopicTerms = [
+    "permit",
+    "permits",
+    "building activity",
+    "construction permit",
+    "construction permits",
+    "issued permit",
+    "issued permits"
+  ];
+
+  if (normalized.includes("austin") && austinTopicTerms.some((term) => normalized.includes(term))) {
     return demoIntents[1];
   }
-  if (normalized.includes("dallas") && (normalized.includes("311") || normalized.includes("service"))) {
+  if (normalized.includes("dallas") && dallasTopicTerms.some((term) => normalized.includes(term))) {
     return demoIntents[0];
   }
   return null;

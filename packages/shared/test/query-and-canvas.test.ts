@@ -533,6 +533,31 @@ describe("adapter and intent helpers", () => {
     expect(detailedIntent.matchedTerms).toContain("austin");
   });
 
+  it("recognizes supported prompt synonyms without hallucinating unsupported data", () => {
+    const dallas = parsePromptIntent({
+      prompt: "Show Dallas trash complaints by ZIP and top categories for 2024",
+      catalog: catalog()
+    });
+    expect(dallas.datasetCandidates).toContain("dallas_311_requests");
+    expect(dallas.groupBy).toEqual(expect.arrayContaining(["zip_code", "category"]));
+    expect(dallas.matchedTerms).toEqual(expect.arrayContaining(["complaints", "categories"]));
+
+    const austin = parsePromptIntent({
+      prompt: "Show Austin building activity trend for issued permits",
+      catalog: catalog()
+    });
+    expect(austin.datasetCandidates).toContain("austin_building_permits");
+    expect(austin.groupBy).toContain("month");
+    expect(austin.matchedTerms).toEqual(expect.arrayContaining(["building activity", "issued permits", "trend"]));
+
+    const sensitive = parsePromptIntent({
+      prompt: "Show Dallas 311 names, emails, and addresses for all complaints",
+      catalog: catalog()
+    });
+    expect(sensitive.safetyWarnings.join(" ")).toContain("governed dashboards");
+    expect(sensitive.rejectedFields).toEqual(expect.arrayContaining(["name", "email", "address"]));
+  });
+
   it("falls back to static samples when a live Socrata request fails", async () => {
     const dataset = {
       ...catalog().find((item) => item.id === "dallas_311_requests")!,

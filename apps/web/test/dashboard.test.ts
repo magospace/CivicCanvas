@@ -50,6 +50,16 @@ describe("dashboard generation", () => {
     expect(generation.canvas.title).toContain("Choose");
   });
 
+  it("routes supported synonym prompts through governed deterministic dashboards", async () => {
+    const dallas = await generateCanvasForPrompt("Show Dallas trash complaints by ZIP and top categories for 2024.");
+    expect(dallas.canvas.sources[0].datasetId).toBe("dallas_311_requests");
+    expect(dallas.intent?.matchedTerms).toEqual(expect.arrayContaining(["complaints", "categories"]));
+
+    const austin = await generateCanvasForPrompt("Show Austin building activity trend for issued permits.");
+    expect(austin.canvas.sources[0].datasetId).toBe("austin_building_permits");
+    expect(austin.intent?.matchedTerms).toEqual(expect.arrayContaining(["building activity", "issued permits", "trend"]));
+  });
+
   it("respects explicit dashboard data-mode preferences", async () => {
     const dallasSample = await generateCanvasForPrompt(
       "Show Dallas 311 service requests by category for 2024.",
