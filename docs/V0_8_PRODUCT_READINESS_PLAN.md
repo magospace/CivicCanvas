@@ -35,16 +35,46 @@ No auth, hosted database, LLM dependency, arbitrary HTML/JavaScript/SQL/SoQL, ex
 
 ## Remaining Work
 
-- Run full local gates after this pass:
-  - `pnpm lint`
-  - `pnpm typecheck`
-  - `pnpm test`
-  - `pnpm build`
-  - `pnpm verify`
-- Run local browser smoke and screenshot review for `/explore`, `/sources`, `/saved`, and `/gallery`.
+- Public hosted verification remains blocked because no public URL, Git remote, or Vercel project linkage is available in this repo context.
 - When a public URL exists, run hosted smoke and remote Playwright with the matching expected version.
 - Do not tag v0.7 or v0.8 until the public hosted checks pass.
 - Optional post-hosting work: choose exactly one third dataset candidate only after Dallas/Austin hosted reliability is settled.
+
+## Local Verification Result
+
+Local product-readiness verification passed on May 9, 2026:
+
+- `pnpm lint`
+- `pnpm typecheck`
+- `pnpm test` — 46 unit/API/MCP tests passed.
+- `pnpm build`
+- `pnpm verify` — includes preflight, live smoke, and 11 Playwright tests.
+- `pnpm smoke:deploy -- --url http://localhost:3006`
+
+Browser QA was performed with the Codex in-app Browser for the `/explore` shell and with Playwright for the responsive screenshot pass. The in-app Browser confirmed the page identity and rendered header/logo; Playwright was used for desktop/laptop/mobile screenshot capture because the Browser tab runtime did not expose viewport resizing in this session.
+
+## Screenshot Evidence
+
+Captured screenshots are checked in under `docs/screenshots/v0.8/`:
+
+- `explore-shell-desktop.png`
+- `dallas-dashboard-desktop.png`
+- `austin-dashboard-laptop.png`
+- `gallery-desktop.png`
+- `miro-preview-desktop.png`
+- `saved-share-workflow-desktop.png`
+- `explore-mobile-390.png`
+
+The screenshot pass covers `/explore`, Dallas generation, Austin generation, `/gallery`, Miro preview cards, `/saved`, and a 390px mobile viewport.
+
+## Hosted Release Blocker
+
+- No public Vercel URL is available yet.
+- No Git remote is configured in this repo context.
+- Do not tag `v0.7.0-public-hardening` or `v0.8.0-product-readiness` until the hosted checks pass:
+  - `pnpm smoke:deploy -- --url <public-url> --expect-version v0.8.0-product-readiness`
+  - `PLAYWRIGHT_BASE_URL=<public-url> pnpm test:e2e:remote`
+- When a public URL exists, run hosted smoke and remote Playwright with the matching expected version.
 
 ## Release Checklist
 

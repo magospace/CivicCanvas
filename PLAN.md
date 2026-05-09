@@ -2,7 +2,7 @@
 
 Last updated: May 9, 2026
 
-This plan tracks the active `feat/v0.7-public-hardening` branch. The v0.6 hosted-beta and v0.7 public-hardening code work remain locally complete but untagged because no public deployment URL is available. The current pass starts v0.8 product-readiness work in place: CivicCanvas brand polish, no-backend sharing, curated demo canvases, richer Miro preview, catalog-confidence copy, and release-closeout documentation without adding auth, hosted persistence, LLM parsing, arbitrary generated UI, arbitrary SQL/SoQL, external map layers, or live Miro writes.
+This plan tracks the active `feat/v0.7-public-hardening` branch. The v0.6 hosted-beta and v0.7 public-hardening code work remain locally complete but untagged because no public deployment URL is available. v0.8 product-readiness is now locally closed out: CivicCanvas brand polish, no-backend sharing, curated demo canvases, richer Miro preview, catalog-confidence copy, screenshot evidence, and local verification are complete without adding auth, hosted persistence, LLM parsing, arbitrary generated UI, arbitrary SQL/SoQL, external map layers, or live Miro writes.
 
 ## Current State
 
@@ -10,6 +10,7 @@ This plan tracks the active `feat/v0.7-public-hardening` branch. The v0.6 hosted
 - Active branch: `feat/v0.7-public-hardening`.
 - v0.6 local hosted-beta work is implemented, including the external review hardening backlog listed below.
 - v0.7 local public-hardening work is implemented and verified locally, but v0.6/v0.7 are not tagged because there is no public Vercel URL, no Git remote, and no Vercel credential environment in this repo context.
+- v0.8 product-readiness work is locally closed out on the same branch with screenshots and release-gate documentation.
 - All dashboard output must remain validated `CanvasDocument` JSON rendered through the allowlisted React block registry.
 
 ## Implemented v0.6 Review Hardening
@@ -117,13 +118,26 @@ The May 9, 2026 external review was accepted where it applied to the hosted-beta
    - Field badges now distinguish live-capable, sample-only, blocked, mapped/sample, and coming-later statuses.
    - Dallas ZIP sample fallback and Austin live monthly aggregation blockers remain visible.
 7. Extended tests for branded header rendering, curated gallery validation, gallery route rendering, and saved share-link output.
+8. Captured screenshot evidence under `docs/screenshots/v0.8/` for `/explore`, Dallas, Austin, `/gallery`, Miro preview, `/saved`, and mobile.
+9. Verified locally on May 9, 2026 with `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm verify`, and `pnpm smoke:deploy -- --url http://localhost:3006`.
 
 ## Remaining v0.8 Backlog
 
-- Re-run full local release gates after final documentation changes.
-- Capture/update demo screenshots after browser verification if a README or demo deck needs them.
+- Run hosted smoke and remote Playwright when a public URL exists.
+- Record public verification results before tagging.
 - Add a third verified dataset only after Dallas/Austin hosted reliability is solid.
 - Keep `v0.7.0-public-hardening` and future `v0.8.0-product-readiness` tags blocked until the required hosted public URL checks pass.
+
+## v0.9 Public Reliability Next
+
+The next branch should focus on public reliability rather than infrastructure expansion:
+
+1. Add `docs/V0_9_PUBLIC_RELIABILITY_PLAN.md`.
+2. Add clearer degraded-health UI and utility-focused demo readiness copy.
+3. Improve deploy smoke JSON output for CI dashboards.
+4. Document known Dallas/Austin sample/live boundaries in the README.
+5. Extend CSV export affordances to gallery and saved canvases.
+6. Keep Houston transportation as the default third-dataset candidate, but do not wire it into dashboard generation until catalog metadata, field classification, local fallback sample, source caveats, adapter mapping, and bounded query tests are complete.
 
 ## Release Gate
 

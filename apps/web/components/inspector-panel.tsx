@@ -121,8 +121,8 @@ export function InspectorPanel({
           Filter state
         </div>
         <div className="space-y-2 text-xs text-slate-600">
-          {source.filtersApplied.map((filter) => (
-            <div key={filter} className="rounded-md bg-civic-50 px-3 py-2">
+          {source.filtersApplied.map((filter, index) => (
+            <div key={`${filter}-${index}`} className="rounded-md bg-civic-50 px-3 py-2">
               {filter}
             </div>
           ))}
@@ -216,8 +216,8 @@ export function InspectorPanel({
             <div>Reasons: {intent.reasonCodes.join(", ") || "none"}</div>
             <div>Rejected fields: {intent.rejectedFields.join(", ") || "none"}</div>
             <div>Confidence: {Math.round(intent.confidence * 100)}%</div>
-            {intent.safetyWarnings.map((warning) => (
-              <div key={warning} className="rounded-md bg-signal/10 px-3 py-2 text-signal">
+            {intent.safetyWarnings.map((warning, index) => (
+              <div key={`${warning}-${index}`} className="rounded-md bg-signal/10 px-3 py-2 text-signal">
                 {warning}
               </div>
             ))}
@@ -251,8 +251,8 @@ export function InspectorPanel({
             <div>
               <div className="mb-1 font-semibold text-ink">Safety decisions</div>
               <ul className="list-disc space-y-1 pl-4">
-                {(audits ?? []).flatMap((audit) => audit.safetyDecisions).slice(0, 8).map((decision) => (
-                  <li key={decision}>{decision}</li>
+                {(audits ?? []).flatMap((audit) => audit.safetyDecisions).slice(0, 8).map((decision, index) => (
+                  <li key={`${decision}-${index}`}>{decision}</li>
                 ))}
               </ul>
             </div>

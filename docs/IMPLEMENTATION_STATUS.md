@@ -90,7 +90,7 @@ Completed locally on branch `feat/v0.7-public-hardening`:
 
 ## v0.8 Product Readiness Status
 
-Started locally on branch `feat/v0.7-public-hardening`:
+Locally closed out on branch `feat/v0.7-public-hardening`:
 
 - Cleaned CivicCanvas logo assets are committed under `apps/web/public/brand/`, with the duplicate dark head overlay removed and an explicit white person mark added.
 - The web header and app icon now use the CivicCanvas mark while keeping the app named `Texas Data Canvas`.
@@ -99,5 +99,13 @@ Started locally on branch `feat/v0.7-public-hardening`:
 - The main canvas toolbar exposes save, share link, CSV, Canvas JSON, active query spec, and Miro preview actions.
 - Miro preview now shows frame cards with item chips and a highlighted required Source & Method frame.
 - `/sources` field badges show live-capable, sample-only, blocked, mapped/sample, and coming-later statuses.
+- Demo screenshots are captured under `docs/screenshots/v0.8/` for `/explore`, Dallas, Austin, `/gallery`, Miro preview, `/saved`, and mobile.
+- Local verification passed on May 9, 2026:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test`
+  - `pnpm build`
+  - `pnpm verify`
+  - `pnpm smoke:deploy -- --url http://localhost:3006`
 
 Release remains blocked on public hosted verification. No `v0.7.0-public-hardening` or `v0.8.0-product-readiness` tag has been created in this repo context.

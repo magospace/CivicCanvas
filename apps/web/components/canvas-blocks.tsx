@@ -33,9 +33,9 @@ export function SummaryBlockView({ props }: SummaryBlock) {
       <p className="mt-2 text-sm leading-6 text-slate-600">{props.text}</p>
       {props.bullets.length > 0 ? (
         <div className="mt-4 grid gap-2 md:grid-cols-3">
-          {props.bullets.map((bullet) => (
+          {props.bullets.map((bullet, index) => (
             <div
-              key={bullet}
+              key={`${bullet}-${index}`}
               className="rounded-md border border-slate-200 bg-white px-3 py-2 text-xs leading-5 text-slate-600"
             >
               {bullet}
@@ -80,12 +80,12 @@ export function ChartBlockView({ props }: ChartBlock) {
       </div>
       {props.data.length > 0 ? (
         <div className="flex h-56 items-end gap-2 border-b border-l border-slate-200 px-2 pb-2">
-          {props.data.map((item) => {
+          {props.data.map((item, index) => {
             const value = asNumber(item[props.yField]);
             const label = String(item[props.xField]);
 
             return (
-              <div key={label} className="flex min-w-0 flex-1 flex-col items-center gap-2">
+              <div key={`${label}-${index}`} className="flex min-w-0 flex-1 flex-col items-center gap-2">
                 <div
                   className="w-full rounded-t-md bg-civic-700"
                   style={{ height: `${Math.max((value / max) * 100, 8)}%` }}
@@ -140,7 +140,7 @@ export function MapBlockView({ props }: MapBlock) {
               strokeDasharray="4 5"
               strokeWidth="1.5"
             />
-            {props.data.map((item) => {
+            {props.data.map((item, index) => {
               const zip = String(item[props.geographyField]);
               const feature = props.features.find((candidate) => candidate.id === zip);
               if (!feature) {
@@ -149,7 +149,7 @@ export function MapBlockView({ props }: MapBlock) {
               const value = asNumber(item[props.metricField]);
               const radius = 8 + (value / max) * 20;
               return (
-                <g key={zip}>
+                <g key={`${zip}-${index}`}>
                   <circle
                     cx={xFor(feature.longitude)}
                     cy={yFor(feature.latitude)}
@@ -190,13 +190,13 @@ export function MapBlockView({ props }: MapBlock) {
         </div>
       ) : (
         <div className="mt-4 grid grid-cols-2 gap-2 md:grid-cols-3">
-          {props.data.map((item) => {
+          {props.data.map((item, index) => {
             const value = asNumber(item[props.metricField]);
             const opacity = 0.72 + (value / max) * 0.28;
 
             return (
               <div
-                key={String(item[props.geographyField])}
+                key={`${String(item[props.geographyField])}-${index}`}
                 className="rounded-md border border-civic-100 p-3"
                 style={{ backgroundColor: `rgba(16, 43, 58, ${opacity})` }}
               >
@@ -352,8 +352,8 @@ export function FilterBlockView({
                 onChange={(event) => onChange?.(filter.field, event.target.value)}
                 className="rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-sm text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
               >
-                {(filter.options ?? []).map((option) => (
-                  <option key={option}>{option}</option>
+                {(filter.options ?? []).map((option, index) => (
+                  <option key={`${option}-${index}`}>{option}</option>
                 ))}
               </select>
             ) : (
@@ -394,8 +394,8 @@ export function DatasetCardBlockView({ props }: DatasetCardBlock) {
       </div>
       <p className="mt-3 text-xs leading-5 text-slate-600">{props.dataset.description}</p>
       <div className="mt-3 flex flex-wrap gap-2">
-        {props.dataset.recommendedVisuals.map((visual) => (
-          <span key={visual} className="rounded-md bg-civic-100 px-2 py-1 text-xs text-civic-700">
+        {props.dataset.recommendedVisuals.map((visual, index) => (
+          <span key={`${visual}-${index}`} className="rounded-md bg-civic-100 px-2 py-1 text-xs text-civic-700">
             {visual}
           </span>
         ))}
@@ -419,6 +419,8 @@ export function SourceMethodBlockView({ props }: SourceMethodBlock) {
           href={props.attribution.sourceUrl}
           className="rounded-md border border-white/20 p-2 text-white/80 transition hover:text-white focus:outline-none focus:ring-2 focus:ring-white/30"
           aria-label={`Open source for ${props.attribution.datasetTitle}`}
+          target="_blank"
+          rel="noopener noreferrer"
         >
           <ExternalLink className="h-4 w-4" />
         </a>
@@ -447,8 +449,8 @@ export function SourceMethodBlockView({ props }: SourceMethodBlock) {
         </div>
       </dl>
       <div className="mt-4 space-y-2">
-        {props.attribution.caveats.map((caveat) => (
-          <p key={caveat} className="rounded-md bg-white/10 px-3 py-2 text-xs leading-5 text-civic-100">
+        {props.attribution.caveats.map((caveat, index) => (
+          <p key={`${caveat}-${index}`} className="rounded-md bg-white/10 px-3 py-2 text-xs leading-5 text-civic-100">
             {caveat}
           </p>
         ))}
