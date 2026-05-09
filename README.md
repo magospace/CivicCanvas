@@ -48,9 +48,13 @@ pnpm test
 pnpm build
 pnpm preflight
 pnpm smoke:live
+pnpm smoke:live:json
+pnpm test:e2e
+pnpm verify
 ```
 
 `pnpm smoke:live` is optional and only checks catalog entries with `liveAvailable: true`.
+`pnpm verify` runs the local release gate: preflight, live smoke, and Playwright browser smoke.
 
 ## MVP demo prompts
 
@@ -72,6 +76,8 @@ pnpm --filter @texas-data-canvas/mcp-server inspect
 
 The MCP server exposes safe catalog, query, source attribution, audit, canvas, visualization, and Miro export-spec tools. All dataset queries are bounded and catalog-validated.
 
+Production-pilot health surfaces are available at `/api/health`, `/api/catalog/health`, and MCP tools `get_server_status`, `validate_catalog`, and `list_live_sources`.
+
 ## Deployment
 
 The web app is ready for Vercel-style deployment from `apps/web` after the root quality gate passes.
@@ -82,6 +88,8 @@ pnpm --filter @texas-data-canvas/web build
 ```
 
 Sample mode requires no secrets. Live Socrata adapters use verified catalog field mappings and keep sample fallbacks for demos.
+
+Saved canvases remain browser-local. Use `/saved` to export/import portable saved-canvas bundles for demos and handoffs.
 
 ## Workspace packages
 

@@ -9,10 +9,12 @@
 - Raw row limits and aggregate row limits are enforced centrally.
 - Sensitive and unknown-review fields are blocked by default.
 - Miro export is preview-only and includes a required Source & Method frame.
+- Portable saved-canvas bundles must validate before import and render.
 
 ## Review Checklist
 
 - API routes validate request bodies with Zod or shared schemas.
+- API errors use structured envelopes with request IDs and no raw stack traces.
 - MCP tools validate inputs before invoking query/canvas helpers.
 - Live adapters generate requests from validated specs only.
 - Live adapters translate canonical fields through catalog-owned `liveFieldMap`; raw SoQL is never accepted.

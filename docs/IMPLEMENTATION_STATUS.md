@@ -28,7 +28,8 @@ Last updated: May 9, 2026
 - ZIP geography uses bundled approximate centroid/bubble features, not full ZCTA boundaries or live tile layers.
 - Saved canvases persist only in browser `localStorage`; no auth or hosted database is wired.
 - Miro export generates a safe spec only; it does not write to Miro.
+- v0.4 work is in progress on branch `feat/v0.4-production-pilot`, focused on production pilot health, structured errors, saved-canvas bundles, prompt transparency, and browser smoke tests.
 
 ## Current Milestone
 
-`v0.3.0-product-demo` is complete and tagged. The next target is `v0.4.0-production-pilot`: production readiness without adding auth, hosted persistence, arbitrary generated code, or live Miro board writes.
+`v0.3.0-product-demo` is complete and tagged. The active target is `v0.4.0-production-pilot`: production readiness without adding auth, hosted persistence, arbitrary generated code, or live Miro board writes.
