@@ -89,7 +89,7 @@ Production-pilot health surfaces are available at `/api/health`, `/api/catalog/h
 
 ## Deployment
 
-The web app is ready for Vercel-style deployment with the project root set to `apps/web` and the monorepo installed from the repository root.
+The web app is ready for Vercel-style deployment from this monorepo. For v0.6 hosted-beta deployment, use the manual runbook in `docs/HOSTED_BETA_DEPLOYMENT.md`; this repo has no configured Git remote, so Git-integrated Vercel workflows are intentionally not committed yet.
 
 ```bash
 pnpm preflight
@@ -102,13 +102,16 @@ Recommended Vercel settings:
 - Build command: `pnpm --filter @texas-data-canvas/web build`
 - Output framework: Next.js
 - Required secrets: none for sample mode
+- Hosted beta env: `NEXT_PUBLIC_APP_ENV=hosted-beta`
+- Hosted beta version: `NEXT_PUBLIC_APP_VERSION=v0.6.0-hosted-beta`
+- Optional site URL: `NEXT_PUBLIC_SITE_URL=https://your-public-beta.example`
 
 Sample mode requires no secrets. Live Socrata adapters use verified catalog field mappings and keep sample fallbacks for demos.
 
 After deploying, smoke-check the public URL:
 
 ```bash
-pnpm smoke:deploy -- --url https://your-deployment.example
+pnpm smoke:deploy -- --url https://your-deployment.example --expect-version v0.6.0-hosted-beta
 ```
 
 Saved canvases remain browser-local. Use `/saved` to export/import portable saved-canvas bundles for demos and handoffs.

@@ -5,6 +5,8 @@ out
 .turbo
 .env
 .env.local
+.env.*.local
+.vercel
 *.tsbuildinfo
 pnpm-debug.log*
 playwright-report
