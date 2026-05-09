@@ -1,4 +1,4 @@
-import { governanceLimits } from "../constants.js";
+import { governanceLimits, runtimeLimits } from "../constants.js";
 import {
   boundedQuerySpecSchema,
   queryAuditSchema,
@@ -207,12 +207,14 @@ export function createSocrataAdapter({
   catalog,
   fallback,
   fetcher = fetch,
-  accessedAt = new Date().toISOString()
+  accessedAt = new Date().toISOString(),
+  timeoutMs = runtimeLimits.liveFetchTimeoutMs
 }: {
   catalog: DatasetMetadata[];
   fallback: DatasetAdapter;
   fetcher?: typeof fetch;
   accessedAt?: string;
+  timeoutMs?: number;
 }): DatasetAdapter {
   return {
     kind: "socrata",
@@ -234,7 +236,9 @@ export function createSocrataAdapter({
 
       try {
         const url = buildSocrataQueryUrl({ dataset, spec: parsedSpec });
-        const response = await fetcher(url);
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), timeoutMs);
+        const response = await fetcher(url, { signal: controller.signal }).finally(() => clearTimeout(timeout));
         if (!response.ok) {
           throw new Error(`Socrata request failed with ${response.status}`);
         }
@@ -273,15 +277,17 @@ export function createAdapterRouter({
   catalog,
   samples,
   fetcher,
-  accessedAt
+  accessedAt,
+  timeoutMs
 }: {
   catalog: DatasetMetadata[];
   samples: DatasetSamples;
   fetcher?: typeof fetch;
   accessedAt?: string;
+  timeoutMs?: number;
 }): DatasetAdapter {
   const staticAdapter = createStaticJsonAdapter({ catalog, samples, accessedAt });
-  const socrataAdapter = createSocrataAdapter({ catalog, fallback: staticAdapter, fetcher, accessedAt });
+  const socrataAdapter = createSocrataAdapter({ catalog, fallback: staticAdapter, fetcher, accessedAt, timeoutMs });
 
   return {
     kind: "router",

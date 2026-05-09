@@ -23,7 +23,8 @@
     },
     "liveQueryNotes": [
       "Verified against City of Austin Socrata view quv8-5ckq.",
-      "Live access remains disabled until demo owners approve the permit source swap from the original sample scaffold."
+      "Live permit_type and zip_code aggregate checks pass, but date_trunc_ym(issue_date) currently fails against the portal timestamp type.",
+      "Live access remains disabled until the generated month grouping has an approved live expression."
     ],
     "fallbackSampleFile": "austin-building-permits.sample.json",
     "description": "Public building permit records used for permit trend and geography analysis.",

@@ -7,8 +7,10 @@ import {
   buildSocrataQueryUrl,
   createSocrataAdapter,
   createStaticJsonAdapter,
+  createSavedCanvasBundle,
   deleteCanvasFromStorage,
   executeBoundedQuery,
+  parseSavedCanvasImport,
   parseSavedCanvases,
   parsePromptIntent,
   safeValidateCanvasDocument,
@@ -377,6 +379,42 @@ describe("adapter and intent helpers", () => {
     ).toThrow();
   });
 
+  it("builds safe Austin Socrata URLs for verified field mappings without network", () => {
+    const dataset = catalog().find((item) => item.id === "austin_building_permits")!;
+    const baseSpec = {
+      datasetId: "austin_building_permits",
+      filters: [{ field: "issued_date", operator: "between" as const, value: ["2024-01-01", "2024-12-31"] }],
+      metrics: [{ type: "count" as const, alias: "permit_count" }],
+      limit: 10
+    };
+
+    const permitTypeUrl = decodeURIComponent(buildSocrataQueryUrl({
+      dataset,
+      spec: { ...baseSpec, groupBy: ["permit_type"] }
+    })).replace(/\+/g, " ");
+    const zipUrl = decodeURIComponent(buildSocrataQueryUrl({
+      dataset,
+      spec: { ...baseSpec, groupBy: ["zip_code"] }
+    })).replace(/\+/g, " ");
+    const monthUrl = decodeURIComponent(buildSocrataQueryUrl({
+      dataset,
+      spec: { ...baseSpec, groupBy: ["month"] }
+    })).replace(/\+/g, " ");
+    const valueUrl = decodeURIComponent(buildSocrataQueryUrl({
+      dataset,
+      spec: {
+        ...baseSpec,
+        groupBy: ["permit_type"],
+        metrics: [{ type: "sum" as const, field: "estimated_value", alias: "total_estimated_value" }]
+      }
+    })).replace(/\+/g, " ");
+
+    expect(permitTypeUrl).toContain("$select=permit_type as permit_type");
+    expect(zipUrl).toContain("$select=zip_code as zip_code");
+    expect(monthUrl).toContain("date_trunc_ym(issue_date) as month");
+    expect(valueUrl).toContain("sum(total_job_valuation) as total_estimated_value");
+  });
+
   it("parses governed prompt intent", () => {
     const intent = parsePromptIntent({
       prompt: "Show Dallas 311 service requests by category and ZIP code for 2024.",
@@ -387,9 +425,19 @@ describe("adapter and intent helpers", () => {
     expect(intent.groupBy).toContain("zip_code");
     expect(intent.dateRange).toEqual(["2024-01-01", "2024-12-31"]);
     expect(parsePromptIntent({
-      prompt: "Show Austin permit applicant phone numbers by status",
-      catalog: catalog()
+      prompt: "Show top 5 Austin permit applicant phone numbers by status using sample data last year",
+      catalog: catalog(),
+      referenceDate: new Date("2026-05-09T00:00:00.000Z")
     }).safetyWarnings.join(" ")).toContain("phone");
+    const detailedIntent = parsePromptIntent({
+      prompt: "Show top 5 Austin permits by status using sample data last year",
+      catalog: catalog(),
+      referenceDate: new Date("2026-05-09T00:00:00.000Z")
+    });
+    expect(detailedIntent.dateRange).toEqual(["2025-01-01", "2025-12-31"]);
+    expect(detailedIntent.reasonCodes).toContain("mode_sample_requested");
+    expect(detailedIntent.reasonCodes).toContain("top_n:5");
+    expect(detailedIntent.matchedTerms).toContain("austin");
   });
 
   it("falls back to static samples when a live Socrata request fails", async () => {
@@ -423,6 +471,39 @@ describe("adapter and intent helpers", () => {
     expect(execution.result.caveats.join(" ")).toContain("static sample fallback");
     expect(execution.result.dataMode).toBe("fallback");
     expect(execution.audit.safetyDecisions.join(" ")).toContain("static fallback");
+  });
+
+  it("falls back when a live Socrata request times out", async () => {
+    const dataset = {
+      ...catalog().find((item) => item.id === "dallas_311_requests")!,
+      liveAvailable: true,
+      externalDatasetId: "abcd-1234",
+      apiBaseUrl: "https://www.dallasopendata.com"
+    };
+    const fallback = createStaticJsonAdapter({
+      catalog: [dataset],
+      samples: { dallas_311_requests: rows("dallas-311.sample.json") },
+      accessedAt: "2026-05-09T00:00:00.000Z"
+    });
+    const adapter = createSocrataAdapter({
+      catalog: [dataset],
+      fallback,
+      fetcher: async (_url, init) => new Promise<Response>((_resolve, reject) => {
+        init?.signal?.addEventListener("abort", () => reject(new Error("aborted by test timeout")));
+      }),
+      accessedAt: "2026-05-09T00:00:00.000Z",
+      timeoutMs: 1
+    });
+
+    const execution = await adapter.queryDataset({
+      datasetId: "dallas_311_requests",
+      groupBy: ["category"],
+      metrics: [{ type: "count", alias: "request_count" }],
+      limit: 10
+    });
+
+    expect(execution.result.dataMode).toBe("fallback");
+    expect(execution.result.caveats.join(" ")).toContain("aborted by test timeout");
   });
 
   it("falls back when a live dashboard asks for an unmapped field", async () => {
@@ -505,5 +586,9 @@ describe("local saved canvas persistence", () => {
     expect(saveCanvasToStorage(storage, saved)).toHaveLength(1);
     expect(deleteCanvasFromStorage(storage, saved.canvasId)).toHaveLength(0);
     expect(() => parseSavedCanvases(JSON.stringify([{ ...saved, canvas: { blocks: [] } }]))).toThrow();
+    const bundle = createSavedCanvasBundle({ canvases: [saved], appVersion: "test" });
+    expect(parseSavedCanvasImport(JSON.stringify(bundle))).toHaveLength(1);
+    expect(parseSavedCanvasImport(JSON.stringify(saved))).toHaveLength(1);
+    expect(() => parseSavedCanvasImport(JSON.stringify({ ...bundle, canvases: [{ ...saved, canvas: { blocks: [] } }] }))).toThrow();
   });
 });

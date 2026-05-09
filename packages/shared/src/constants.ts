@@ -6,3 +6,8 @@ export const governanceLimits = {
   maxSampleRows: 25,
   maxDashboardBlocks: 10
 } as const;
+
+export const runtimeLimits = {
+  maxJsonBodyBytes: 64 * 1024,
+  liveFetchTimeoutMs: 8000
+} as const;

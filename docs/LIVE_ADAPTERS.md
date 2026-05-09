@@ -32,4 +32,4 @@ No secrets are required for sample mode. To enable a live Socrata source later, 
 ## Verified v0.3 Sources
 
 - Dallas 311: `https://www.dallasopendata.com/resource/d7e7-envw.json`, live enabled for mapped non-ZIP aggregates.
-- Austin issued building permits: `https://data.austintexas.gov/resource/quv8-5ckq.json`, mapping verified but live disabled pending source approval.
+- Austin issued building permits: `https://data.austintexas.gov/resource/quv8-5ckq.json`, metadata plus `permit_type` and `zip_code` aggregate checks verified; live remains disabled because the generated month expression does not pass against the portal timestamp type.

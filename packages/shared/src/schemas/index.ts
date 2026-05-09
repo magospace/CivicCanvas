@@ -23,6 +23,22 @@ export const datasetAdapterSchema = z.enum(["static_json", "socrata", "ckan"]);
 export const dataModeSchema = z.enum(["live", "sample", "fallback"]);
 export const queryModeSchema = z.enum(["auto", "sample_only", "live_if_available"]);
 
+export const apiValidationIssueSchema = z.object({
+  path: z.array(z.string()).default([]),
+  code: z.string().min(1),
+  message: z.string().min(1)
+});
+
+export const apiErrorResponseSchema = z.object({
+  ok: z.literal(false),
+  error: z.object({
+    code: z.string().min(1),
+    message: z.string().min(1),
+    requestId: z.string().min(1),
+    issues: z.array(apiValidationIssueSchema).optional()
+  })
+});
+
 export const datasetFieldSchema = z.object({
   name: z.string().min(1),
   type: fieldTypeSchema,
@@ -60,6 +76,34 @@ export const datasetMetadataSchema = z.object({
 });
 
 export const approvedDatasetCatalogSchema = z.array(datasetMetadataSchema);
+
+export const catalogHealthReportSchema = z.object({
+  schemaVersion: schemaVersionSchema,
+  status: z.enum(["ok", "degraded", "failed"]),
+  checkedAt: z.string().datetime(),
+  datasetCount: z.number().int().nonnegative(),
+  liveEnabledDatasets: z.array(z.string().min(1)),
+  sampleFallbacks: z.array(
+    z.object({
+      datasetId: z.string().min(1),
+      file: z.string().min(1),
+      available: z.boolean()
+    })
+  ),
+  issues: z.array(apiValidationIssueSchema).default([])
+});
+
+export const liveSmokeResultSchema = z.object({
+  schemaVersion: schemaVersionSchema,
+  checkedAt: z.string().datetime(),
+  datasetId: z.string().min(1),
+  externalDatasetId: z.string().min(1).optional(),
+  url: z.string().url().optional(),
+  dataMode: dataModeSchema,
+  ok: z.boolean(),
+  rowCount: z.number().int().nonnegative().optional(),
+  reason: z.string().min(1)
+});
 
 export const queryOperatorSchema = z.enum([
   "eq",
@@ -392,6 +436,9 @@ export const promptIntentSchema = z.object({
   filters: z.array(boundedQueryFilterSchema).default([]),
   requestedVisuals: z.array(z.string().min(1)).default([]),
   safetyWarnings: z.array(z.string().min(1)).default([]),
+  matchedTerms: z.array(z.string().min(1)).default([]),
+  reasonCodes: z.array(z.string().min(1)).default([]),
+  rejectedFields: z.array(z.string().min(1)).default([]),
   confidence: z.number().min(0).max(1),
   unresolvedQuestions: z.array(z.string().min(1)).default([])
 });
@@ -407,14 +454,25 @@ export const savedCanvasSchema = z.object({
   savedAt: z.string().datetime()
 });
 
+export const savedCanvasBundleSchema = z.object({
+  schemaVersion: schemaVersionSchema,
+  exportedAt: z.string().datetime(),
+  appVersion: z.string().min(1),
+  canvases: z.array(savedCanvasSchema)
+});
+
 export type FieldType = z.infer<typeof fieldTypeSchema>;
 export type FieldClassification = z.infer<typeof fieldClassificationSchema>;
 export type DatasetAdapterKind = z.infer<typeof datasetAdapterSchema>;
 export type DataMode = z.infer<typeof dataModeSchema>;
 export type QueryMode = z.infer<typeof queryModeSchema>;
+export type ApiValidationIssue = z.infer<typeof apiValidationIssueSchema>;
+export type ApiErrorResponse = z.infer<typeof apiErrorResponseSchema>;
 export type DatasetField = z.infer<typeof datasetFieldSchema>;
 export type DatasetSource = z.infer<typeof datasetSourceSchema>;
 export type DatasetMetadata = z.infer<typeof datasetMetadataSchema>;
+export type CatalogHealthReport = z.infer<typeof catalogHealthReportSchema>;
+export type LiveSmokeResult = z.infer<typeof liveSmokeResultSchema>;
 export type BoundedQuerySpec = z.infer<typeof boundedQuerySpecSchema>;
 export type QueryResult = z.infer<typeof queryResultSchema>;
 export type SourceAttribution = z.infer<typeof sourceAttributionSchema>;
@@ -426,6 +484,7 @@ export type MiroExportSpec = z.infer<typeof miroExportSpecSchema>;
 export type QueryAudit = z.infer<typeof queryAuditSchema>;
 export type PromptIntent = z.infer<typeof promptIntentSchema>;
 export type SavedCanvas = z.infer<typeof savedCanvasSchema>;
+export type SavedCanvasBundle = z.infer<typeof savedCanvasBundleSchema>;
 export type QueryExecution = {
   result: QueryResult;
   audit: QueryAudit;
