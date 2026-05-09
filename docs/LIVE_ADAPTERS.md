@@ -7,13 +7,15 @@ Texas Data Canvas supports live public-data adapters only behind the same `Bound
 - `static_json`: reads approved local sample files and is always available as demo fallback.
 - `socrata`: builds allowlisted SoQL requests from validated dataset metadata and query specs.
 - `adapterRouter`: chooses live adapters only when catalog metadata marks `liveAvailable: true`; otherwise it uses static fallback.
+- `liveFieldMap`: maps canonical app fields to verified portal fields or approved generated expressions such as `date_trunc_ym(created_date)`.
 
 ## Safety Rules
 
 - Do not accept raw SQL, SoQL, URLs, or JavaScript from prompts or model output.
 - Dataset IDs, fields, metrics, filters, grouping, ordering, and limits must validate against the approved catalog.
-- Generated Socrata URLs may use only allowlisted identifiers.
+- Generated Socrata URLs may use only allowlisted identifiers and approved date truncation expressions from the catalog.
 - Network failures must fall back to static samples with a visible caveat.
+- Missing live field mappings must fall back to static samples with a visible caveat.
 - Sample mode remains the default for reliable demos.
 
 ## Optional Live Configuration
@@ -25,3 +27,9 @@ No secrets are required for sample mode. To enable a live Socrata source later, 
 - `apiBaseUrl`
 - `liveAvailable: true`
 - `fallbackSampleFile`
+- `liveFieldMap`
+
+## Verified v0.3 Sources
+
+- Dallas 311: `https://www.dallasopendata.com/resource/d7e7-envw.json`, live enabled for mapped non-ZIP aggregates.
+- Austin issued building permits: `https://data.austintexas.gov/resource/quv8-5ckq.json`, mapping verified but live disabled pending source approval.

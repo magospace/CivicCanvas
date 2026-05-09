@@ -7,6 +7,7 @@ pnpm install
 pnpm typecheck
 pnpm test
 pnpm build
+pnpm smoke:live
 pnpm dev
 ```
 
@@ -19,7 +20,7 @@ Open `http://localhost:3000/explore`.
 3. Point out:
    - Summary and metric blocks.
    - Monthly trend chart.
-   - ZIP-code geography placeholder.
+   - ZIP-code geography bubble renderer.
    - Grouped detail table.
    - Filter definitions.
    - Required Source & Method card.
@@ -28,7 +29,8 @@ Open `http://localhost:3000/explore`.
 Narration:
 
 - The app found the Dallas 311 dataset from the approved catalog.
-- It ran bounded sample-data queries with validated fields, operators, metrics, and row limits.
+- It ran bounded governed queries with validated fields, operators, metrics, and row limits.
+- The data-mode badge explains when live public data is used and when sample fallback is active.
 - It generated a CanvasDocument and rendered only allowlisted React blocks.
 - Source, method, filters, fields, and caveats stay visible.
 
@@ -59,7 +61,7 @@ Narration:
 ## Demo 5 - Miro stretch preview
 
 1. Generate the Dallas dashboard.
-2. Click the export icon in the inspector.
+2. Choose a Miro template in the inspector and click the export icon.
 3. Explain that the app generates a preview-only MiroExportSpec with a required Source & Method frame.
 4. No Miro board write occurs in the MVP.
 

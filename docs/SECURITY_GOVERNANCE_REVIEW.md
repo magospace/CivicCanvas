@@ -15,6 +15,8 @@
 - API routes validate request bodies with Zod or shared schemas.
 - MCP tools validate inputs before invoking query/canvas helpers.
 - Live adapters generate requests from validated specs only.
+- Live adapters translate canonical fields through catalog-owned `liveFieldMap`; raw SoQL is never accepted.
+- Missing live mappings, network failures, and portal errors fall back to approved samples with explicit caveats.
 - No model output is executed as code.
 - No arbitrary external data URLs or map layers are accepted from generated specs.
 - Public-data summaries remain descriptive and avoid unsupported causation.
@@ -22,5 +24,6 @@
 ## Known Residual Risks
 
 - Current sample datasets are synthetic development samples aligned to public schemas.
-- Live Socrata dataset IDs are configured as disabled until verified.
+- Dallas live 311 is enabled only for verified mapped fields; ZIP views fall back to samples.
+- Austin live permit metadata is verified but disabled until final source approval.
 - ZIP geography uses approximate bundled centroids, not authoritative boundaries.

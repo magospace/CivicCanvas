@@ -18,10 +18,12 @@ Last updated: May 9, 2026
 - Geography: `MapBlock` supports governed ZIP bubble feature data with an SVG renderer and fallback placeholder.
 - Saved canvases: `/saved` reads browser-local saved canvases, validates imported specs, and supports open, duplicate, delete, and JSON preview actions.
 - CI and quality gates: ESLint, GitHub Actions, and a preflight script validate lint, typecheck, tests, build, catalog, and fallback sample files.
+- v0.3 product-demo pass: Dallas 311 live Socrata metadata verified and enabled for mapped fields, Austin permit live metadata verified but left sample-first, data-mode indicators added, inspector filters derive from `FilterBlock`, saved-canvas import validation added, and Miro export templates expanded.
 
 ## Current Limitations
 
-- Socrata/Tyler live adapter support is scaffolded and tested at the URL/fallback boundary, but current catalog entries keep `liveAvailable` disabled and use local samples for reliable demos.
+- Dallas live 311 queries work for verified mapped fields, but ZIP-level Dallas dashboards still use sample fallback because the verified live view does not expose ZIP.
+- Austin live permit metadata is verified against `quv8-5ckq`, but `liveAvailable` remains disabled pending final source approval.
 - Prompt interpretation is deterministic with a typed `PromptIntent` layer for supported city/topic/date/grouping requests.
 - ZIP geography uses bundled approximate centroid/bubble features, not full ZCTA boundaries or live tile layers.
 - Saved canvases persist only in browser `localStorage`; no auth or hosted database is wired.
@@ -29,4 +31,4 @@ Last updated: May 9, 2026
 
 ## Next Target
 
-Verify the new adapter/filter/save/export flows in browser QA, then promote selected catalog entries to `liveAvailable` only after their portal metadata and field mappings are confirmed.
+Finish browser QA on desktop/mobile, then tag `v0.3.0-product-demo` after preflight and live smoke pass.

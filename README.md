@@ -42,11 +42,15 @@ Open `http://localhost:3000/explore` for the main app shell.
 ## Verification
 
 ```bash
+pnpm lint
 pnpm typecheck
 pnpm test
 pnpm build
 pnpm preflight
+pnpm smoke:live
 ```
+
+`pnpm smoke:live` is optional and only checks catalog entries with `liveAvailable: true`.
 
 ## MVP demo prompts
 
@@ -77,12 +81,12 @@ pnpm preflight
 pnpm --filter @texas-data-canvas/web build
 ```
 
-Sample mode requires no secrets. Live public-data adapters are disabled by default until each source is verified in `data/catalog/approved-datasets.json`.
+Sample mode requires no secrets. Live Socrata adapters use verified catalog field mappings and keep sample fallbacks for demos.
 
 ## Workspace packages
 
 - `apps/web` - Next.js App Router frontend shell.
-- `apps/mcp-server` - typed MCP server scaffold for later phases.
+- `apps/mcp-server` - typed MCP server for safe catalog, query, audit, canvas, and export tools.
 - `packages/shared` - Zod schemas and TypeScript types shared across the app.
 
 ## Data files
