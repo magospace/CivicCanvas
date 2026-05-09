@@ -120,6 +120,8 @@ pnpm smoke:deploy -- --url https://your-deployment.example --expect-version v0.6
 
 Saved canvases remain browser-local. Use `/saved` to export/import portable saved-canvas bundles for demos and handoffs.
 
+The `/explore` inspector includes a "Why this dashboard?" section with matched prompt terms, reason codes, safety decisions, selected data mode, and active bounded query JSON. Dashboard exports stay client-side and governed: current table CSV, validated `CanvasDocument` JSON, and active `BoundedQuerySpec` JSON.
+
 ## Workspace packages
 
 - `apps/web` - Next.js App Router frontend shell.

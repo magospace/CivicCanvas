@@ -74,3 +74,16 @@ Remaining release work is operational: obtain a public Vercel URL, run deploymen
 - Expand deterministic prompt synonyms without adding an LLM dependency.
 - Add a collapsible "Why this dashboard?" inspector section and client-side governed exports.
 - Add browser accessibility smoke coverage and fix discovered accessibility issues.
+
+## v0.7 Implementation Status
+
+Completed locally on branch `feat/v0.7-public-hardening`:
+
+- Shared typed governed errors for unsupported datasets, unsupported fields, row-limit failures, unsafe canvas specs, live adapter failures, and validation errors.
+- MCP query-related tool inputs use structured shared query schemas instead of permissive `z.any()` arrays.
+- Shared Miro export generation is used by both web and MCP.
+- Socrata adapter success-path tests cover live aggregate normalization without network.
+- Deterministic prompt synonyms cover Dallas service-request/complaint phrasing and Austin permit/building-activity phrasing.
+- `/explore` inspector includes a collapsible "Why this dashboard?" section with matched terms, reason codes, selected mode, safety decisions, and active `BoundedQuerySpec` JSON.
+- Client-side exports support table CSV, validated `CanvasDocument` JSON, and active `BoundedQuerySpec` copy.
+- Playwright includes axe-powered serious/critical accessibility smoke checks, with contrast and keyboard-scroll fixes applied.

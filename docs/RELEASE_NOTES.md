@@ -3,7 +3,9 @@
 ## v0.7.0-public-hardening (in progress)
 
 - Starts from the completed local v0.6 hosted-beta hardening branch while v0.6 tagging remains blocked on a public deployment URL.
-- Planned: typed governed errors, stricter MCP query input schemas, shared Miro export generation, deterministic prompt synonym expansion, dashboard reasoning inspector, client-side governed exports, and accessibility browser coverage.
+- Added typed governed errors, stricter MCP query input schemas, shared Miro export generation, deterministic prompt synonym expansion, dashboard reasoning inspector, client-side governed exports, and accessibility browser coverage.
+- Added Socrata adapter success-path coverage with a mocked live aggregate response.
+- Improved visual accessibility by darkening secondary/accent colors and making scrollable JSON previews keyboard focusable.
 - Continues the no-auth, no-database, no-LLM, no arbitrary generated UI/query execution, and preview-only Miro model.
 
 ## v0.6.0-hosted-beta (in progress)

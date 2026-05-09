@@ -83,18 +83,22 @@ The May 9, 2026 external review was accepted where it applied to the hosted-beta
 - **CORS:** no change required unless the app deliberately exposes cross-origin API access.
 - **Commit SHA in health:** acceptable for hosted smoke diagnostics, but reconsider if branch names or commit metadata become sensitive.
 
-## v0.7 Active Backlog
+## v0.7 Completed In This Pass
 
-1. Replace MCP regex-based error categorization with typed query/domain errors.
-2. Mirror structured shared query schemas in MCP tool input schemas instead of `z.any()` arrays.
-3. Move Miro export generation into `packages/shared` so web and MCP produce identical export specs.
-4. Add Socrata adapter success-path tests with a fake fetcher returning realistic aggregate rows.
-5. Expand rule-based prompt synonyms while continuing to reject unsupported/sensitive prompts.
-6. Add "Why this dashboard?" UI that shows parsed `PromptIntent` and the chosen `BoundedQuerySpec`.
-7. Add client-side CSV export for the current table, JSON export for the current `CanvasDocument`, and copy current `BoundedQuerySpec`.
-8. Add accessibility testing with axe or equivalent browser checks.
-9. Improve Miro preview from raw JSON into frame cards if time remains after safety hardening.
-10. Add a third verified dataset only after Dallas/Austin hosted reliability is solid.
+1. Replaced MCP regex-based error categorization with shared typed governed errors.
+2. Mirrored structured shared query schemas in MCP query-related tool inputs.
+3. Moved Miro export generation into `packages/shared` so web and MCP produce identical export specs.
+4. Added Socrata adapter success-path tests with a fake fetcher returning realistic aggregate rows.
+5. Expanded rule-based prompt synonyms while continuing to reject unsupported/sensitive prompts.
+6. Added a collapsible "Why this dashboard?" inspector section with prompt intent, selected mode, safety decisions, and the active `BoundedQuerySpec`.
+7. Added client-side CSV export for the current table, JSON export for the current `CanvasDocument`, and copy current `BoundedQuerySpec`.
+8. Added axe-powered accessibility smoke coverage and fixed discovered contrast/keyboard-scroll issues.
+
+## Remaining v0.7 Backlog
+
+- Improve Miro preview from raw JSON into richer frame cards if more demo polish is needed.
+- Add a third verified dataset only after Dallas/Austin hosted reliability is solid.
+- Run the full release gate and tag `v0.7.0-public-hardening` only after the required hosted public URL checks pass.
 
 ## Release Gate
 
