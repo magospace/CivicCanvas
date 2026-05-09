@@ -1,5 +1,15 @@
 # Release Notes
 
+## v0.5.0-public-beta (planned)
+
+- Mark v0.4 production-pilot complete and prepare a no-auth public beta milestone.
+- Add deployment smoke checks and production-safe web response headers.
+- Deepen Dallas/Austin live verification metadata and public catalog transparency.
+- Add explicit dashboard data-mode controls for Auto, Live public API, and Sample fallback.
+- Improve portable saved-canvas bundle sharing and validation messaging.
+- Align MCP status/query behavior with web API data-mode and fallback reporting.
+- Expand unit, API, MCP, and browser coverage for public-beta flows.
+
 ## v0.4.0-production-pilot
 
 - Added structured live smoke output, `pnpm smoke:live:json`, and documented Austin live promotion blocker.

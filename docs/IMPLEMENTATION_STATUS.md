@@ -32,4 +32,6 @@ Last updated: May 9, 2026
 
 ## Current Milestone
 
-`v0.4.0-production-pilot` is ready to tag after final git status verification. The next target should be chosen from deployment, broader live adapter coverage, or hosted collaboration.
+`v0.4.0-production-pilot` is complete and tagged from a clean `main`.
+
+The active target is `v0.5.0-public-beta` on `feat/v0.5-public-beta`. This milestone keeps the scope no-auth and Dallas/Austin-focused while improving deployability, explicit data-mode controls, live-source verification transparency, portable saved-canvas sharing, and public-beta QA.
