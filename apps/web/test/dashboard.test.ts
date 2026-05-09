@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { GET as catalogHealthGET } from "../app/api/catalog/health/route";
@@ -99,12 +100,64 @@ describe("production API contracts", () => {
     const health = await healthGET();
     const healthBody = await health.json();
     expect(healthBody.ok).toBe(true);
+    expect(healthBody.appVersion).toBe("v0.6.0-hosted-beta-dev");
     expect(healthBody.catalogCount).toBeGreaterThan(0);
 
     const catalogHealth = await catalogHealthGET();
     const catalogBody = await catalogHealth.json();
     expect(catalogBody.health.status).toBe("ok");
     expect(catalogBody.health.sampleFallbacks.length).toBeGreaterThan(0);
+  });
+
+  it("adds hosted deployment metadata to health when env vars are present", async () => {
+    const previous = {
+      NEXT_PUBLIC_APP_ENV: process.env.NEXT_PUBLIC_APP_ENV,
+      NEXT_PUBLIC_APP_VERSION: process.env.NEXT_PUBLIC_APP_VERSION,
+      NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
+      VERCEL: process.env.VERCEL,
+      VERCEL_GIT_COMMIT_SHA: process.env.VERCEL_GIT_COMMIT_SHA,
+      VERCEL_GIT_COMMIT_REF: process.env.VERCEL_GIT_COMMIT_REF
+    };
+
+    process.env.NEXT_PUBLIC_APP_ENV = "hosted-beta";
+    process.env.NEXT_PUBLIC_APP_VERSION = "v0.6.0-hosted-beta";
+    process.env.NEXT_PUBLIC_SITE_URL = "https://texas-data-canvas.example";
+    process.env.VERCEL = "1";
+    process.env.VERCEL_GIT_COMMIT_SHA = "abc123";
+    process.env.VERCEL_GIT_COMMIT_REF = "feat/v0.6-hosted-beta";
+
+    try {
+      const health = await healthGET();
+      const body = await health.json();
+      expect(body.appEnvironment).toBe("hosted-beta");
+      expect(body.appVersion).toBe("v0.6.0-hosted-beta");
+      expect(body.deploymentProvider).toBe("vercel");
+      expect(body.deploymentUrl).toBe("https://texas-data-canvas.example");
+      expect(body.gitCommitSha).toBe("abc123");
+      expect(body.gitBranch).toBe("feat/v0.6-hosted-beta");
+    } finally {
+      for (const [key, value] of Object.entries(previous)) {
+        if (value === undefined) {
+          delete process.env[key];
+        } else {
+          process.env[key] = value;
+        }
+      }
+    }
+  });
+
+  it("rejects deployment smoke runs without a base URL", () => {
+    try {
+      execFileSync("node", ["scripts/smoke-deploy.mjs"], {
+        cwd: process.cwd(),
+        encoding: "utf8",
+        stdio: "pipe"
+      });
+      throw new Error("Expected smoke-deploy to fail without --url.");
+    } catch (error) {
+      const stderr = String((error as { stderr?: string }).stderr ?? "");
+      expect(stderr).toContain("Usage: pnpm smoke:deploy");
+    }
   });
 
   it("returns structured API errors for invalid query fields", async () => {

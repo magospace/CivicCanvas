@@ -50,6 +50,7 @@ pnpm preflight
 pnpm smoke:live
 pnpm smoke:live:json
 pnpm smoke:deploy -- --url http://localhost:3000
+pnpm smoke:deploy:json -- --url http://localhost:3000
 pnpm test:e2e
 pnpm verify
 ```

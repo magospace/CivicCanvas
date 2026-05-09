@@ -1,13 +1,40 @@
 import { NextResponse } from "next/server";
 import { getCatalogHealth } from "../../../lib/data";
 
+function deploymentUrl() {
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL;
+  }
+
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+
+  return undefined;
+}
+
+function deploymentProvider() {
+  if (process.env.VERCEL || process.env.VERCEL_URL) {
+    return "vercel";
+  }
+
+  return "local";
+}
+
 export function GET() {
   const catalog = getCatalogHealth();
+  const gitRef = process.env.VERCEL_GIT_COMMIT_REF ?? process.env.GITHUB_REF_NAME;
 
   return NextResponse.json({
     ok: catalog.status !== "failed",
-    appVersion: process.env.NEXT_PUBLIC_APP_VERSION ?? "v0.5.0-public-beta-dev",
+    appEnvironment: process.env.NEXT_PUBLIC_APP_ENV ?? process.env.VERCEL_ENV ?? "local",
+    appVersion: process.env.NEXT_PUBLIC_APP_VERSION ?? "v0.6.0-hosted-beta-dev",
     runtime: "nextjs",
+    deploymentProvider: deploymentProvider(),
+    deploymentUrl: deploymentUrl(),
+    gitCommitSha: process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.GITHUB_SHA,
+    gitBranch: gitRef,
+    gitRef,
     checkedAt: catalog.checkedAt,
     catalogCount: catalog.datasetCount,
     liveEnabledDatasets: catalog.liveEnabledDatasets,

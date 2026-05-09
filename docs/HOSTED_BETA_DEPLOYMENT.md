@@ -86,6 +86,7 @@ After deployment, run:
 
 ```bash
 pnpm smoke:deploy -- --url https://your-public-beta.example --expect-version v0.6.0-hosted-beta
+pnpm smoke:deploy:json -- --url https://your-public-beta.example --expect-version v0.6.0-hosted-beta
 PLAYWRIGHT_BASE_URL=https://your-public-beta.example pnpm test:e2e:remote
 ```
 

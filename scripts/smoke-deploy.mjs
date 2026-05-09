@@ -1,10 +1,17 @@
 const args = process.argv.slice(2);
 const urlArgIndex = args.indexOf("--url");
+const expectedVersionIndex = args.indexOf("--expect-version");
 const jsonMode = args.includes("--json");
 const checkedAt = new Date().toISOString();
 
 if (urlArgIndex === -1 || !args[urlArgIndex + 1]) {
-  console.error("Usage: pnpm smoke:deploy -- --url <base-url> [--json]");
+  console.error("Usage: pnpm smoke:deploy -- --url <base-url> [--expect-version <version>] [--json]");
+  process.exit(1);
+}
+
+const expectedVersion = expectedVersionIndex === -1 ? undefined : args[expectedVersionIndex + 1];
+if (expectedVersionIndex !== -1 && !expectedVersion) {
+  console.error("Usage: --expect-version requires a value.");
   process.exit(1);
 }
 
@@ -13,37 +20,126 @@ baseUrl.pathname = baseUrl.pathname.replace(/\/$/, "");
 baseUrl.search = "";
 baseUrl.hash = "";
 
+const headerExpectations = [
+  ["x-content-type-options", "nosniff"],
+  ["referrer-policy", "strict-origin-when-cross-origin"],
+  ["x-frame-options", "DENY"],
+  ["permissions-policy", "camera=()"]
+];
+
+const dashboardPromptChecks = [
+  {
+    name: "dallas_canvas_generation",
+    prompt: "Show Dallas 311 service requests by category and ZIP code for 2024.",
+    expect: (body) => {
+      const blockTypes = body?.canvas?.blocks?.map((block) => block.type) ?? [];
+      return {
+        ok: Boolean(body?.canvas?.title?.includes("Dallas 311")) && blockTypes.includes("SourceMethodBlock"),
+        reason: "Expected Dallas dashboard with required SourceMethodBlock."
+      };
+    }
+  },
+  {
+    name: "austin_canvas_generation",
+    prompt: "Show Austin building permits by month and ZIP code.",
+    expect: (body) => {
+      const blockTypes = body?.canvas?.blocks?.map((block) => block.type) ?? [];
+      return {
+        ok: Boolean(body?.canvas?.title?.includes("Austin Building Permits")) &&
+          blockTypes.includes("SourceMethodBlock"),
+        reason: "Expected Austin dashboard with required SourceMethodBlock."
+      };
+    }
+  },
+  {
+    name: "unsupported_prompt_suggestions",
+    prompt: "Show private phone numbers for bridge repairs on Mars.",
+    expect: (body) => ({
+      ok: Boolean(body?.canvas?.title?.includes("Choose") && body?.suggestedDatasets?.length > 0),
+      reason: "Expected unsupported sensitive prompt to return dataset suggestions."
+    })
+  }
+];
+
 const checks = [
   {
     name: "health",
     path: "/api/health",
     kind: "json",
-    expect: (body) => body && body.ok === true && typeof body.catalogCount === "number"
+    expect: (body) => {
+      const versionOk = expectedVersion ? body?.appVersion === expectedVersion : true;
+      return {
+        ok: body?.ok === true && typeof body?.catalogCount === "number" && versionOk,
+        reason: expectedVersion && body?.appVersion !== expectedVersion
+          ? `Expected appVersion ${expectedVersion}, received ${body?.appVersion ?? "missing"}.`
+          : "Expected healthy runtime metadata."
+      };
+    }
   },
   {
     name: "catalog_health",
     path: "/api/catalog/health",
     kind: "json",
-    expect: (body) => body?.health && body.health.status !== "failed"
+    expect: (body) => ({
+      ok: Boolean(body?.health && body.health.status !== "failed"),
+      reason: "Expected catalog health to be ok or degraded, not failed."
+    })
   },
   {
     name: "explore_page",
     path: "/explore",
     kind: "text",
-    expect: (body) => body.includes("Texas Data Canvas") && body.includes("Ask about Texas public data")
+    expect: (body) => ({
+      ok: body.includes("Texas Data Canvas") && body.includes("Ask about Texas public data"),
+      reason: "Expected explore shell copy."
+    })
   },
   {
     name: "sources_page",
     path: "/sources",
     kind: "text",
-    expect: (body) => body.includes("Texas public data sources") && body.includes("Approved catalog")
+    expect: (body) => ({
+      ok: body.includes("Texas public data sources") && body.includes("Approved catalog"),
+      reason: "Expected sources catalog copy."
+    })
   },
   {
     name: "saved_page",
     path: "/saved",
     kind: "text",
-    expect: (body) => body.includes("Saved canvases") && body.includes("Import saved canvas")
-  }
+    expect: (body) => ({
+      ok: body.includes("Saved canvases") && body.includes("Import saved canvas"),
+      reason: "Expected saved canvases copy."
+    })
+  },
+  {
+    name: "production_headers",
+    path: "/explore",
+    kind: "text",
+    expect: (_body, response) => {
+      const missing = headerExpectations.filter(([key, expected]) => {
+        const value = response.headers.get(key) ?? "";
+        return !value.includes(expected);
+      });
+      return {
+        ok: missing.length === 0,
+        reason: missing.length === 0
+          ? "Expected production-safe headers are present."
+          : `Missing or unexpected headers: ${missing.map(([key]) => key).join(", ")}.`
+      };
+    }
+  },
+  ...dashboardPromptChecks.map((promptCheck) => ({
+    name: promptCheck.name,
+    path: "/api/canvas/generate",
+    method: "POST",
+    kind: "json",
+    body: {
+      prompt: promptCheck.prompt,
+      dataModePreference: "sample"
+    },
+    expect: promptCheck.expect
+  }))
 ];
 
 function checkUrl(path) {
@@ -52,14 +148,37 @@ function checkUrl(path) {
   return url.toString();
 }
 
-async function fetchWithTimeout(url, timeoutMs = 8000) {
+async function fetchWithTimeout(url, init = {}, timeoutMs = 8000) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    return await fetch(url, { signal: controller.signal });
+    return await fetch(url, { ...init, signal: controller.signal });
   } finally {
     clearTimeout(timeout);
   }
+}
+
+function fetchInit(check) {
+  if (!check.body) {
+    return { method: check.method ?? "GET" };
+  }
+
+  return {
+    method: check.method ?? "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(check.body)
+  };
+}
+
+function normalizeOutcome(outcome, defaultReason) {
+  if (typeof outcome === "boolean") {
+    return { ok: outcome, reason: defaultReason };
+  }
+
+  return {
+    ok: Boolean(outcome?.ok),
+    reason: outcome?.reason ?? defaultReason
+  };
 }
 
 const results = [];
@@ -67,19 +186,23 @@ const results = [];
 for (const check of checks) {
   const url = checkUrl(check.path);
   try {
-    const response = await fetchWithTimeout(url);
+    const response = await fetchWithTimeout(url, fetchInit(check));
     const contentType = response.headers.get("content-type") ?? "";
     const body = check.kind === "json" || contentType.includes("application/json")
       ? await response.json()
       : await response.text();
-    const ok = response.ok && check.expect(body);
+    const outcome = normalizeOutcome(
+      check.expect(body, response),
+      "Deployment smoke check returned unexpected content."
+    );
+    const ok = response.ok && outcome.ok;
     results.push({
       checkedAt,
       name: check.name,
       url,
       status: response.status,
       ok,
-      reason: ok ? "Deployment smoke check passed." : "Deployment smoke check returned unexpected content."
+      reason: ok ? "Deployment smoke check passed." : outcome.reason
     });
   } catch (error) {
     results.push({
