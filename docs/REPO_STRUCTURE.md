@@ -1,0 +1,58 @@
+# Recommended Repo Structure
+
+```text
+texas-data-canvas/
+  AGENTS.md
+  README.md
+  package.json
+  apps/
+    web/
+      app/
+        explore/
+        sources/
+        saved/
+      components/
+        canvas/
+        blocks/
+        datasets/
+        filters/
+      lib/
+    mcp-server/
+      src/
+        tools/
+        adapters/
+        safety/
+        index.ts
+      README.md
+  packages/
+    shared/
+      src/
+        schemas/
+        types/
+        query/
+        canvas/
+        miro/
+  data/
+    catalog/
+      approved-datasets.json
+    samples/
+      dallas-311.sample.json
+      austin-building-permits.sample.json
+  docs/
+    PRD.md
+    ARCHITECTURE.md
+    MVP_BUILD_BRIEF.md
+    AGENT_DEVELOPMENT_PLAN.md
+    MCP_SERVER_SPEC.md
+    DATA_GOVERNANCE.md
+    CANVAS_SPEC.md
+    MIRO_EXPORT_SPEC.md
+    ACCEPTANCE_CRITERIA.md
+    DEMO_SCRIPT.md
+    CODEX_PROMPTS.md
+  .agents/
+    skills/
+      texas-public-data-explorer/
+        SKILL.md
+        references/
+```

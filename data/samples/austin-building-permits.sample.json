@@ -1,0 +1,1086 @@
+{
+  "datasetId": "austin_building_permits",
+  "note": "Synthetic development sample aligned to public building-permit schema. Replace/supplement with live public data for final demo.",
+  "rows": [
+    {
+      "permit_id": "BP-2024-00001",
+      "issued_date": "2024-09-14",
+      "month": "2024-09",
+      "zip_code": "78731",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 455164,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00002",
+      "issued_date": "2024-04-09",
+      "month": "2024-04",
+      "zip_code": "78702",
+      "permit_type": "Electrical",
+      "estimated_value": 311571,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00003",
+      "issued_date": "2024-10-01",
+      "month": "2024-10",
+      "zip_code": "78712",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 160997,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00004",
+      "issued_date": "2024-06-09",
+      "month": "2024-06",
+      "zip_code": "78712",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 837005,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00005",
+      "issued_date": "2024-01-03",
+      "month": "2024-01",
+      "zip_code": "78704",
+      "permit_type": "Commercial",
+      "estimated_value": 92907,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00006",
+      "issued_date": "2024-04-23",
+      "month": "2024-04",
+      "zip_code": "78745",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 153732,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00007",
+      "issued_date": "2024-04-10",
+      "month": "2024-04",
+      "zip_code": "78704",
+      "permit_type": "Multi Family Residential",
+      "estimated_value": 227370,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00008",
+      "issued_date": "2024-06-18",
+      "month": "2024-06",
+      "zip_code": "78748",
+      "permit_type": "Multi Family Residential",
+      "estimated_value": 78223,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00009",
+      "issued_date": "2024-05-07",
+      "month": "2024-05",
+      "zip_code": "78748",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 64665,
+      "status": "Pending"
+    },
+    {
+      "permit_id": "BP-2024-00010",
+      "issued_date": "2024-12-24",
+      "month": "2024-12",
+      "zip_code": "78704",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 151173,
+      "status": "Pending"
+    },
+    {
+      "permit_id": "BP-2024-00011",
+      "issued_date": "2024-09-27",
+      "month": "2024-09",
+      "zip_code": "78702",
+      "permit_type": "Commercial",
+      "estimated_value": 97786,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00012",
+      "issued_date": "2024-01-09",
+      "month": "2024-01",
+      "zip_code": "78703",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 333557,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00013",
+      "issued_date": "2024-01-16",
+      "month": "2024-01",
+      "zip_code": "78731",
+      "permit_type": "Commercial",
+      "estimated_value": 148166,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00014",
+      "issued_date": "2024-08-13",
+      "month": "2024-08",
+      "zip_code": "78702",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 158719,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00015",
+      "issued_date": "2024-03-10",
+      "month": "2024-03",
+      "zip_code": "78741",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 80023,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00016",
+      "issued_date": "2024-07-20",
+      "month": "2024-07",
+      "zip_code": "78749",
+      "permit_type": "Commercial",
+      "estimated_value": 77709,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00017",
+      "issued_date": "2024-08-14",
+      "month": "2024-08",
+      "zip_code": "78741",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 84056,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00018",
+      "issued_date": "2024-12-07",
+      "month": "2024-12",
+      "zip_code": "78749",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 202726,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00019",
+      "issued_date": "2024-04-06",
+      "month": "2024-04",
+      "zip_code": "78702",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 192972,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00020",
+      "issued_date": "2024-12-15",
+      "month": "2024-12",
+      "zip_code": "78750",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 79241,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00021",
+      "issued_date": "2024-11-07",
+      "month": "2024-11",
+      "zip_code": "78749",
+      "permit_type": "Commercial",
+      "estimated_value": 131730,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00022",
+      "issued_date": "2024-05-02",
+      "month": "2024-05",
+      "zip_code": "78702",
+      "permit_type": "Electrical",
+      "estimated_value": 87482,
+      "status": "Finaled"
+    },
+    {
+      "permit_id": "BP-2024-00023",
+      "issued_date": "2024-10-04",
+      "month": "2024-10",
+      "zip_code": "78731",
+      "permit_type": "Plumbing",
+      "estimated_value": 153602,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00024",
+      "issued_date": "2024-05-15",
+      "month": "2024-05",
+      "zip_code": "78731",
+      "permit_type": "Commercial",
+      "estimated_value": 143049,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00025",
+      "issued_date": "2024-02-27",
+      "month": "2024-02",
+      "zip_code": "78745",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 500556,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00026",
+      "issued_date": "2024-11-02",
+      "month": "2024-11",
+      "zip_code": "78741",
+      "permit_type": "Electrical",
+      "estimated_value": 245347,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00027",
+      "issued_date": "2024-08-19",
+      "month": "2024-08",
+      "zip_code": "78703",
+      "permit_type": "Plumbing",
+      "estimated_value": 104391,
+      "status": "Pending"
+    },
+    {
+      "permit_id": "BP-2024-00028",
+      "issued_date": "2024-08-11",
+      "month": "2024-08",
+      "zip_code": "78712",
+      "permit_type": "Multi Family Residential",
+      "estimated_value": 758174,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00029",
+      "issued_date": "2024-12-13",
+      "month": "2024-12",
+      "zip_code": "78745",
+      "permit_type": "Commercial",
+      "estimated_value": 399011,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00030",
+      "issued_date": "2024-06-25",
+      "month": "2024-06",
+      "zip_code": "78702",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 126247,
+      "status": "Pending"
+    },
+    {
+      "permit_id": "BP-2024-00031",
+      "issued_date": "2024-11-14",
+      "month": "2024-11",
+      "zip_code": "78731",
+      "permit_type": "Electrical",
+      "estimated_value": 49459,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00032",
+      "issued_date": "2024-08-02",
+      "month": "2024-08",
+      "zip_code": "78749",
+      "permit_type": "Commercial",
+      "estimated_value": 69834,
+      "status": "Pending"
+    },
+    {
+      "permit_id": "BP-2024-00033",
+      "issued_date": "2024-08-04",
+      "month": "2024-08",
+      "zip_code": "78731",
+      "permit_type": "Plumbing",
+      "estimated_value": 613523,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00034",
+      "issued_date": "2024-01-08",
+      "month": "2024-01",
+      "zip_code": "78702",
+      "permit_type": "Commercial",
+      "estimated_value": 153859,
+      "status": "Finaled"
+    },
+    {
+      "permit_id": "BP-2024-00035",
+      "issued_date": "2024-08-17",
+      "month": "2024-08",
+      "zip_code": "78705",
+      "permit_type": "Plumbing",
+      "estimated_value": 255802,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00036",
+      "issued_date": "2024-08-05",
+      "month": "2024-08",
+      "zip_code": "78735",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 23931,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00037",
+      "issued_date": "2024-03-25",
+      "month": "2024-03",
+      "zip_code": "78705",
+      "permit_type": "Electrical",
+      "estimated_value": 307975,
+      "status": "Pending"
+    },
+    {
+      "permit_id": "BP-2024-00038",
+      "issued_date": "2024-09-10",
+      "month": "2024-09",
+      "zip_code": "78701",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 974389,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00039",
+      "issued_date": "2024-11-15",
+      "month": "2024-11",
+      "zip_code": "78703",
+      "permit_type": "Commercial",
+      "estimated_value": 175571,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00040",
+      "issued_date": "2024-09-11",
+      "month": "2024-09",
+      "zip_code": "78753",
+      "permit_type": "Multi Family Residential",
+      "estimated_value": 94405,
+      "status": "Finaled"
+    },
+    {
+      "permit_id": "BP-2024-00041",
+      "issued_date": "2024-07-16",
+      "month": "2024-07",
+      "zip_code": "78748",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 660101,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00042",
+      "issued_date": "2024-11-05",
+      "month": "2024-11",
+      "zip_code": "78745",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 161742,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00043",
+      "issued_date": "2024-10-28",
+      "month": "2024-10",
+      "zip_code": "78702",
+      "permit_type": "Multi Family Residential",
+      "estimated_value": 266421,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00044",
+      "issued_date": "2024-07-11",
+      "month": "2024-07",
+      "zip_code": "78750",
+      "permit_type": "Commercial",
+      "estimated_value": 129841,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00045",
+      "issued_date": "2024-08-20",
+      "month": "2024-08",
+      "zip_code": "78701",
+      "permit_type": "Electrical",
+      "estimated_value": 285194,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00046",
+      "issued_date": "2024-11-15",
+      "month": "2024-11",
+      "zip_code": "78702",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 88187,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00047",
+      "issued_date": "2024-06-12",
+      "month": "2024-06",
+      "zip_code": "78705",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 134797,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00048",
+      "issued_date": "2024-10-06",
+      "month": "2024-10",
+      "zip_code": "78703",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 55793,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00049",
+      "issued_date": "2024-11-19",
+      "month": "2024-11",
+      "zip_code": "78753",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 69414,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00050",
+      "issued_date": "2024-05-26",
+      "month": "2024-05",
+      "zip_code": "78753",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 152854,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00051",
+      "issued_date": "2024-02-19",
+      "month": "2024-02",
+      "zip_code": "78712",
+      "permit_type": "Multi Family Residential",
+      "estimated_value": 255458,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00052",
+      "issued_date": "2024-07-08",
+      "month": "2024-07",
+      "zip_code": "78702",
+      "permit_type": "Electrical",
+      "estimated_value": 128268,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00053",
+      "issued_date": "2024-12-22",
+      "month": "2024-12",
+      "zip_code": "78750",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 142179,
+      "status": "Finaled"
+    },
+    {
+      "permit_id": "BP-2024-00054",
+      "issued_date": "2024-12-20",
+      "month": "2024-12",
+      "zip_code": "78753",
+      "permit_type": "Other",
+      "estimated_value": 1074214,
+      "status": "Finaled"
+    },
+    {
+      "permit_id": "BP-2024-00055",
+      "issued_date": "2024-04-08",
+      "month": "2024-04",
+      "zip_code": "78712",
+      "permit_type": "Commercial",
+      "estimated_value": 258761,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00056",
+      "issued_date": "2024-12-27",
+      "month": "2024-12",
+      "zip_code": "78745",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 193053,
+      "status": "Finaled"
+    },
+    {
+      "permit_id": "BP-2024-00057",
+      "issued_date": "2024-01-05",
+      "month": "2024-01",
+      "zip_code": "78748",
+      "permit_type": "Commercial",
+      "estimated_value": 77023,
+      "status": "Finaled"
+    },
+    {
+      "permit_id": "BP-2024-00058",
+      "issued_date": "2024-03-18",
+      "month": "2024-03",
+      "zip_code": "78749",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 349347,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00059",
+      "issued_date": "2024-05-27",
+      "month": "2024-05",
+      "zip_code": "78705",
+      "permit_type": "Electrical",
+      "estimated_value": 21295,
+      "status": "Finaled"
+    },
+    {
+      "permit_id": "BP-2024-00060",
+      "issued_date": "2024-08-25",
+      "month": "2024-08",
+      "zip_code": "78703",
+      "permit_type": "Other",
+      "estimated_value": 71320,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00061",
+      "issued_date": "2024-09-22",
+      "month": "2024-09",
+      "zip_code": "78712",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 251255,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00062",
+      "issued_date": "2024-11-22",
+      "month": "2024-11",
+      "zip_code": "78702",
+      "permit_type": "Plumbing",
+      "estimated_value": 502415,
+      "status": "Finaled"
+    },
+    {
+      "permit_id": "BP-2024-00063",
+      "issued_date": "2024-04-27",
+      "month": "2024-04",
+      "zip_code": "78745",
+      "permit_type": "Commercial",
+      "estimated_value": 139552,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00064",
+      "issued_date": "2024-02-10",
+      "month": "2024-02",
+      "zip_code": "78701",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 77820,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00065",
+      "issued_date": "2024-06-23",
+      "month": "2024-06",
+      "zip_code": "78748",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 437066,
+      "status": "Finaled"
+    },
+    {
+      "permit_id": "BP-2024-00066",
+      "issued_date": "2024-03-04",
+      "month": "2024-03",
+      "zip_code": "78745",
+      "permit_type": "Plumbing",
+      "estimated_value": 497362,
+      "status": "Pending"
+    },
+    {
+      "permit_id": "BP-2024-00067",
+      "issued_date": "2024-05-07",
+      "month": "2024-05",
+      "zip_code": "78712",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 37299,
+      "status": "Finaled"
+    },
+    {
+      "permit_id": "BP-2024-00068",
+      "issued_date": "2024-02-18",
+      "month": "2024-02",
+      "zip_code": "78712",
+      "permit_type": "Other",
+      "estimated_value": 697445,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00069",
+      "issued_date": "2024-05-28",
+      "month": "2024-05",
+      "zip_code": "78702",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 257613,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00070",
+      "issued_date": "2024-11-02",
+      "month": "2024-11",
+      "zip_code": "78701",
+      "permit_type": "Commercial",
+      "estimated_value": 265089,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00071",
+      "issued_date": "2024-10-25",
+      "month": "2024-10",
+      "zip_code": "78750",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 192649,
+      "status": "Finaled"
+    },
+    {
+      "permit_id": "BP-2024-00072",
+      "issued_date": "2024-04-26",
+      "month": "2024-04",
+      "zip_code": "78703",
+      "permit_type": "Multi Family Residential",
+      "estimated_value": 279051,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00073",
+      "issued_date": "2024-05-22",
+      "month": "2024-05",
+      "zip_code": "78702",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 280146,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00074",
+      "issued_date": "2024-04-06",
+      "month": "2024-04",
+      "zip_code": "78701",
+      "permit_type": "Commercial",
+      "estimated_value": 115184,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00075",
+      "issued_date": "2024-02-15",
+      "month": "2024-02",
+      "zip_code": "78731",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 339379,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00076",
+      "issued_date": "2024-09-02",
+      "month": "2024-09",
+      "zip_code": "78741",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 218110,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00077",
+      "issued_date": "2024-01-28",
+      "month": "2024-01",
+      "zip_code": "78731",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 108742,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00078",
+      "issued_date": "2024-08-11",
+      "month": "2024-08",
+      "zip_code": "78702",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 188930,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00079",
+      "issued_date": "2024-11-11",
+      "month": "2024-11",
+      "zip_code": "78748",
+      "permit_type": "Commercial",
+      "estimated_value": 111234,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00080",
+      "issued_date": "2024-09-26",
+      "month": "2024-09",
+      "zip_code": "78702",
+      "permit_type": "Commercial",
+      "estimated_value": 949439,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00081",
+      "issued_date": "2024-09-14",
+      "month": "2024-09",
+      "zip_code": "78704",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 150122,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00082",
+      "issued_date": "2024-08-04",
+      "month": "2024-08",
+      "zip_code": "78748",
+      "permit_type": "Multi Family Residential",
+      "estimated_value": 114596,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00083",
+      "issued_date": "2024-03-03",
+      "month": "2024-03",
+      "zip_code": "78731",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 115476,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00084",
+      "issued_date": "2024-03-18",
+      "month": "2024-03",
+      "zip_code": "78741",
+      "permit_type": "Commercial",
+      "estimated_value": 207007,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00085",
+      "issued_date": "2024-11-28",
+      "month": "2024-11",
+      "zip_code": "78724",
+      "permit_type": "Plumbing",
+      "estimated_value": 109379,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00086",
+      "issued_date": "2024-09-16",
+      "month": "2024-09",
+      "zip_code": "78745",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 109332,
+      "status": "Finaled"
+    },
+    {
+      "permit_id": "BP-2024-00087",
+      "issued_date": "2024-06-19",
+      "month": "2024-06",
+      "zip_code": "78705",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 87800,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00088",
+      "issued_date": "2024-10-18",
+      "month": "2024-10",
+      "zip_code": "78745",
+      "permit_type": "Commercial",
+      "estimated_value": 290297,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00089",
+      "issued_date": "2024-12-11",
+      "month": "2024-12",
+      "zip_code": "78753",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 128777,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00090",
+      "issued_date": "2024-11-24",
+      "month": "2024-11",
+      "zip_code": "78703",
+      "permit_type": "Multi Family Residential",
+      "estimated_value": 194223,
+      "status": "Finaled"
+    },
+    {
+      "permit_id": "BP-2024-00091",
+      "issued_date": "2024-04-11",
+      "month": "2024-04",
+      "zip_code": "78731",
+      "permit_type": "Multi Family Residential",
+      "estimated_value": 85789,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00092",
+      "issued_date": "2024-10-02",
+      "month": "2024-10",
+      "zip_code": "78753",
+      "permit_type": "Commercial",
+      "estimated_value": 143332,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00093",
+      "issued_date": "2024-07-17",
+      "month": "2024-07",
+      "zip_code": "78749",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 68078,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00094",
+      "issued_date": "2024-11-22",
+      "month": "2024-11",
+      "zip_code": "78735",
+      "permit_type": "Commercial",
+      "estimated_value": 118630,
+      "status": "Pending"
+    },
+    {
+      "permit_id": "BP-2024-00095",
+      "issued_date": "2024-01-07",
+      "month": "2024-01",
+      "zip_code": "78705",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 699803,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00096",
+      "issued_date": "2024-02-14",
+      "month": "2024-02",
+      "zip_code": "78748",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 83014,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00097",
+      "issued_date": "2024-09-26",
+      "month": "2024-09",
+      "zip_code": "78745",
+      "permit_type": "Commercial",
+      "estimated_value": 119228,
+      "status": "Finaled"
+    },
+    {
+      "permit_id": "BP-2024-00098",
+      "issued_date": "2024-07-03",
+      "month": "2024-07",
+      "zip_code": "78753",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 488070,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00099",
+      "issued_date": "2024-12-04",
+      "month": "2024-12",
+      "zip_code": "78705",
+      "permit_type": "Commercial",
+      "estimated_value": 137942,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00100",
+      "issued_date": "2024-07-14",
+      "month": "2024-07",
+      "zip_code": "78704",
+      "permit_type": "Electrical",
+      "estimated_value": 206944,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00101",
+      "issued_date": "2024-05-11",
+      "month": "2024-05",
+      "zip_code": "78704",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 240103,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00102",
+      "issued_date": "2024-09-25",
+      "month": "2024-09",
+      "zip_code": "78753",
+      "permit_type": "Commercial",
+      "estimated_value": 79947,
+      "status": "Finaled"
+    },
+    {
+      "permit_id": "BP-2024-00103",
+      "issued_date": "2024-03-09",
+      "month": "2024-03",
+      "zip_code": "78703",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 61105,
+      "status": "Finaled"
+    },
+    {
+      "permit_id": "BP-2024-00104",
+      "issued_date": "2024-11-21",
+      "month": "2024-11",
+      "zip_code": "78749",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 157814,
+      "status": "Finaled"
+    },
+    {
+      "permit_id": "BP-2024-00105",
+      "issued_date": "2024-08-19",
+      "month": "2024-08",
+      "zip_code": "78753",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 106696,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00106",
+      "issued_date": "2024-11-19",
+      "month": "2024-11",
+      "zip_code": "78705",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 51066,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00107",
+      "issued_date": "2024-08-27",
+      "month": "2024-08",
+      "zip_code": "78712",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 75283,
+      "status": "Pending"
+    },
+    {
+      "permit_id": "BP-2024-00108",
+      "issued_date": "2024-02-13",
+      "month": "2024-02",
+      "zip_code": "78735",
+      "permit_type": "Commercial",
+      "estimated_value": 146144,
+      "status": "Finaled"
+    },
+    {
+      "permit_id": "BP-2024-00109",
+      "issued_date": "2024-01-19",
+      "month": "2024-01",
+      "zip_code": "78749",
+      "permit_type": "Multi Family Residential",
+      "estimated_value": 217062,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00110",
+      "issued_date": "2024-03-04",
+      "month": "2024-03",
+      "zip_code": "78731",
+      "permit_type": "Other",
+      "estimated_value": 197930,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00111",
+      "issued_date": "2024-08-06",
+      "month": "2024-08",
+      "zip_code": "78741",
+      "permit_type": "Commercial",
+      "estimated_value": 19265,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00112",
+      "issued_date": "2024-06-26",
+      "month": "2024-06",
+      "zip_code": "78701",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 209631,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00113",
+      "issued_date": "2024-09-09",
+      "month": "2024-09",
+      "zip_code": "78705",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 376319,
+      "status": "Finaled"
+    },
+    {
+      "permit_id": "BP-2024-00114",
+      "issued_date": "2024-03-22",
+      "month": "2024-03",
+      "zip_code": "78741",
+      "permit_type": "Multi Family Residential",
+      "estimated_value": 80051,
+      "status": "Pending"
+    },
+    {
+      "permit_id": "BP-2024-00115",
+      "issued_date": "2024-12-20",
+      "month": "2024-12",
+      "zip_code": "78703",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 218287,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00116",
+      "issued_date": "2024-11-05",
+      "month": "2024-11",
+      "zip_code": "78750",
+      "permit_type": "Addition / Remodel",
+      "estimated_value": 585189,
+      "status": "Finaled"
+    },
+    {
+      "permit_id": "BP-2024-00117",
+      "issued_date": "2024-11-21",
+      "month": "2024-11",
+      "zip_code": "78702",
+      "permit_type": "Plumbing",
+      "estimated_value": 254284,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00118",
+      "issued_date": "2024-05-11",
+      "month": "2024-05",
+      "zip_code": "78704",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 499416,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00119",
+      "issued_date": "2024-03-28",
+      "month": "2024-03",
+      "zip_code": "78705",
+      "permit_type": "Single Family Residential",
+      "estimated_value": 345586,
+      "status": "Issued"
+    },
+    {
+      "permit_id": "BP-2024-00120",
+      "issued_date": "2024-12-22",
+      "month": "2024-12",
+      "zip_code": "78701",
+      "permit_type": "Plumbing",
+      "estimated_value": 66255,
+      "status": "Issued"
+    }
+  ]
+}

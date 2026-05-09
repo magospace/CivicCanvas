@@ -1,0 +1,158 @@
+[
+  {
+    "id": "austin_building_permits",
+    "title": "Austin Building Permits",
+    "city": "Austin",
+    "topic": "Building Permits",
+    "sourceName": "City of Austin Open Data",
+    "sourceUrl": "https://data.austintexas.gov/",
+    "dataAccess": "sample_first_then_api_adapter",
+    "description": "Public building permit records used for permit trend and geography analysis.",
+    "fields": [
+      {
+        "name": "permit_id",
+        "type": "string",
+        "classification": "safe_public"
+      },
+      {
+        "name": "issued_date",
+        "type": "date",
+        "classification": "safe_public"
+      },
+      {
+        "name": "month",
+        "type": "string",
+        "classification": "safe_public"
+      },
+      {
+        "name": "zip_code",
+        "type": "string",
+        "classification": "safe_public"
+      },
+      {
+        "name": "permit_type",
+        "type": "string",
+        "classification": "safe_public"
+      },
+      {
+        "name": "estimated_value",
+        "type": "number",
+        "classification": "safe_public"
+      },
+      {
+        "name": "status",
+        "type": "string",
+        "classification": "safe_public"
+      }
+    ],
+    "recommendedVisuals": [
+      "line_chart",
+      "bar_chart",
+      "map",
+      "table",
+      "metric"
+    ],
+    "caveats": [
+      "Permit records reflect administrative data and may not represent construction start dates.",
+      "Sample file is for development scaffolding; replace or supplement with live public data for final demo."
+    ]
+  },
+  {
+    "id": "dallas_311_requests",
+    "title": "Dallas 311 Service Requests",
+    "city": "Dallas",
+    "topic": "311 Requests",
+    "sourceName": "City of Dallas Open Data",
+    "sourceUrl": "https://www.dallasopendata.com/",
+    "dataAccess": "sample_first_then_api_adapter",
+    "description": "Public 311 service request records used for category, status, trend, and geography analysis.",
+    "fields": [
+      {
+        "name": "request_id",
+        "type": "string",
+        "classification": "safe_public"
+      },
+      {
+        "name": "created_date",
+        "type": "date",
+        "classification": "safe_public"
+      },
+      {
+        "name": "month",
+        "type": "string",
+        "classification": "safe_public"
+      },
+      {
+        "name": "category",
+        "type": "string",
+        "classification": "safe_public"
+      },
+      {
+        "name": "status",
+        "type": "string",
+        "classification": "safe_public"
+      },
+      {
+        "name": "zip_code",
+        "type": "string",
+        "classification": "safe_public"
+      },
+      {
+        "name": "response_days",
+        "type": "number",
+        "classification": "safe_public"
+      }
+    ],
+    "recommendedVisuals": [
+      "line_chart",
+      "bar_chart",
+      "map",
+      "table",
+      "metric"
+    ],
+    "caveats": [
+      "311 data reflects reported service requests and may not represent all neighborhood conditions.",
+      "Sample file is for development scaffolding; replace or supplement with live public data for final demo."
+    ]
+  },
+  {
+    "id": "houston_transportation_incidents",
+    "title": "Houston Transportation Incidents and Road Projects",
+    "city": "Houston",
+    "topic": "Transportation",
+    "sourceName": "City of Houston Open Data",
+    "sourceUrl": "https://data.houstontx.gov/",
+    "dataAccess": "stretch_adapter",
+    "description": "Transportation incident and road project data for map-heavy analysis.",
+    "fields": [],
+    "recommendedVisuals": [
+      "map",
+      "line_chart",
+      "bar_chart",
+      "table"
+    ],
+    "caveats": [
+      "Stretch dataset; confirm exact schema before implementation."
+    ]
+  },
+  {
+    "id": "texas_government_spending",
+    "title": "Texas Government Spending Explorer",
+    "city": "State of Texas",
+    "topic": "Government Spending",
+    "sourceName": "Texas Open Data Portal / Texas Comptroller",
+    "sourceUrl": "https://data.texas.gov/",
+    "dataAccess": "stretch_adapter",
+    "description": "State spending/budget/contract data for public finance exploration.",
+    "fields": [],
+    "recommendedVisuals": [
+      "treemap",
+      "bar_chart",
+      "line_chart",
+      "table"
+    ],
+    "caveats": [
+      "Stretch dataset; confirm exact schema and source terms before implementation."
+    ]
+  }
+]

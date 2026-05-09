@@ -1,0 +1,15 @@
+{
+  "name": "texas-data-canvas",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Open-source MCP-powered visual explorer for Texas public datasets.",
+  "packageManager": "pnpm@10.14.0",
+  "scripts": {
+    "dev": "pnpm --filter @texas-data-canvas/web dev",
+    "typecheck": "pnpm -r --sort typecheck",
+    "build": "pnpm -r --sort build"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}
