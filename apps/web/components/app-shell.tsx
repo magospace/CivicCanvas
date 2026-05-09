@@ -267,7 +267,11 @@ export function AppShell({
                   </div>
                 ))}
               </div>
-              <pre className="mt-4 max-h-72 overflow-auto rounded-md bg-civic-900 p-3 text-xs text-civic-50">
+              <pre
+                aria-label="Miro export JSON preview"
+                tabIndex={0}
+                className="mt-4 max-h-72 overflow-auto rounded-md bg-civic-900 p-3 text-xs text-civic-50"
+              >
                 {JSON.stringify(miroSpec, null, 2)}
               </pre>
             </section>

@@ -257,7 +257,11 @@ export function InspectorPanel({
               </ul>
             </div>
             {querySpec ? (
-              <pre className="max-h-52 overflow-auto rounded-md bg-civic-900 p-3 text-[11px] leading-5 text-civic-50">
+              <pre
+                aria-label="Active BoundedQuerySpec JSON"
+                tabIndex={0}
+                className="max-h-52 overflow-auto rounded-md bg-civic-900 p-3 text-[11px] leading-5 text-civic-50"
+              >
                 {JSON.stringify(querySpec, null, 2)}
               </pre>
             ) : (

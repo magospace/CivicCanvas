@@ -13,8 +13,11 @@ const config: Config = {
           700: "#17445a",
           900: "#102b3a"
         },
-        signal: "#c9862d",
-        mint: "#5aa085"
+        slate: {
+          500: "#475569"
+        },
+        signal: "#8a5310",
+        mint: "#2f765f"
       },
       boxShadow: {
         panel: "0 18px 48px rgba(16, 43, 58, 0.08)"

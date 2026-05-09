@@ -1,9 +1,22 @@
+import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
 async function generate(page: Page, prompt: string) {
   await page.getByLabel("Dashboard prompt").fill(prompt);
   await page.getByRole("button", { name: "Generate View" }).click();
   await expect(page.getByText("Validated CanvasSpec")).toBeVisible();
+}
+
+async function expectNoSeriousAccessibilityViolations(page: Page) {
+  const results = await new AxeBuilder({ page })
+    .include("main")
+    .withTags(["wcag2a", "wcag2aa"])
+    .analyze();
+  const violations = results.violations.filter((violation) =>
+    violation.impact === "serious" || violation.impact === "critical"
+  );
+
+  expect(violations).toEqual([]);
 }
 
 test("explore route loads the governed shell", async ({ page }) => {
@@ -87,6 +100,29 @@ test("Miro preview always includes Source & Method", async ({ page }) => {
 
   await expect(page.getByText("Miro export preview")).toBeVisible();
   await expect(page.getByText("Source & Method").first()).toBeVisible();
+});
+
+test("key public-beta flows have no serious accessibility violations", async ({ page }) => {
+  await page.goto("/explore");
+  await expectNoSeriousAccessibilityViolations(page);
+
+  await generate(page, "Show Dallas 311 service requests by category and ZIP code for 2024.");
+  await expect(page.getByText("Why this dashboard?")).toBeVisible();
+  await expectNoSeriousAccessibilityViolations(page);
+
+  await page.getByLabel("Generate Miro export preview").click();
+  await expect(page.getByText("Miro export preview")).toBeVisible();
+  await expectNoSeriousAccessibilityViolations(page);
+
+  await page.goto("/sources");
+  await expect(page.getByText("Live verification").first()).toBeVisible();
+  await expectNoSeriousAccessibilityViolations(page);
+
+  await page.goto("/saved");
+  await page.getByLabel("Saved canvas JSON import").fill("{\"canvas\":{\"blocks\":[{\"type\":\"UnknownBlock\",\"props\":{\"html\":\"<script>alert(1)</script>\"}}]}}");
+  await page.getByRole("button", { name: "Import" }).click();
+  await expect(page.getByText("Import rejected")).toBeVisible();
+  await expectNoSeriousAccessibilityViolations(page);
 });
 
 test("mobile viewport has no horizontal overflow", async ({ page }) => {

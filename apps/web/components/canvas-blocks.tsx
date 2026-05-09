@@ -192,13 +192,13 @@ export function MapBlockView({ props }: MapBlock) {
         <div className="mt-4 grid grid-cols-2 gap-2 md:grid-cols-3">
           {props.data.map((item) => {
             const value = asNumber(item[props.metricField]);
-            const opacity = 0.2 + (value / max) * 0.8;
+            const opacity = 0.72 + (value / max) * 0.28;
 
             return (
               <div
                 key={String(item[props.geographyField])}
                 className="rounded-md border border-civic-100 p-3"
-                style={{ backgroundColor: `rgba(43, 107, 127, ${opacity})` }}
+                style={{ backgroundColor: `rgba(16, 43, 58, ${opacity})` }}
               >
                 <div className="text-xs font-semibold text-white">
                   {String(item[props.geographyField])}
