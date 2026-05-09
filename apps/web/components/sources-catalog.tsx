@@ -58,6 +58,11 @@ export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
                 : dataset.liveAvailable
                   ? "live verified"
                   : dataset.dataAccess;
+          const hostedBetaNote = dataset.id === "dallas_311_requests"
+            ? "Hosted beta: verified Dallas live aggregates do not expose ZIP, so ZIP geography dashboards use sample fallback."
+            : dataset.id === "austin_building_permits"
+              ? "Hosted beta: Austin live metadata is verified, but monthly live aggregation remains sample-first until source-owned month grouping is approved."
+              : null;
           return (
           <article
             key={dataset.id}
@@ -107,6 +112,11 @@ export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
                   <p key={note} className="text-xs leading-5 text-slate-500">{note}</p>
                 ))}
               </div>
+            ) : null}
+            {hostedBetaNote ? (
+              <p className="mt-3 rounded-md bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-800">
+                {hostedBetaNote}
+              </p>
             ) : null}
             {verification ? (
               <div className="mt-4 rounded-md border border-slate-200 bg-civic-50 p-3">
