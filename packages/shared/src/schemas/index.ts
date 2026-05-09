@@ -21,6 +21,7 @@ export const fieldClassificationSchema = z.enum([
 
 export const datasetAdapterSchema = z.enum(["static_json", "socrata", "ckan"]);
 export const dataModeSchema = z.enum(["live", "sample", "fallback"]);
+export const dataModePreferenceSchema = z.enum(["auto", "live", "sample"]);
 export const queryModeSchema = z.enum(["auto", "sample_only", "live_if_available"]);
 
 export const apiValidationIssueSchema = z.object({
@@ -53,6 +54,27 @@ export const datasetSourceSchema = z.object({
   adapter: z.string().min(1)
 });
 
+export const liveVerificationCheckSchema = z.object({
+  label: z.string().min(1),
+  queryShape: z.string().min(1),
+  fields: z.array(z.string().min(1)),
+  status: z.enum(["passed", "blocked", "failed", "skipped"]),
+  dataMode: dataModeSchema,
+  url: z.string().url().optional(),
+  rowCount: z.number().int().nonnegative().optional(),
+  reason: z.string().min(1)
+});
+
+export const datasetLiveVerificationSchema = z.object({
+  promotionStatus: z.enum(["promoted", "sample_first", "blocked"]),
+  externalDatasetId: z.string().min(1).optional(),
+  lastCheckedAt: z.string().datetime(),
+  testedFields: z.array(z.string().min(1)),
+  liveCapableFields: z.array(z.string().min(1)),
+  sampleOnlyFields: z.array(z.string().min(1)).default([]),
+  checks: z.array(liveVerificationCheckSchema).default([])
+});
+
 export const datasetMetadataSchema = z.object({
   id: z.string().min(1),
   title: z.string().min(1),
@@ -68,6 +90,7 @@ export const datasetMetadataSchema = z.object({
   liveAvailable: z.boolean().default(false),
   liveFieldMap: z.record(z.string().min(1)).default({}),
   liveQueryNotes: z.array(z.string().min(1)).default([]),
+  liveVerification: datasetLiveVerificationSchema.optional(),
   fallbackSampleFile: z.string().min(1).optional(),
   description: z.string().min(1),
   fields: z.array(datasetFieldSchema),
@@ -98,11 +121,29 @@ export const liveSmokeResultSchema = z.object({
   checkedAt: z.string().datetime(),
   datasetId: z.string().min(1),
   externalDatasetId: z.string().min(1).optional(),
+  checkName: z.string().min(1).optional(),
+  testedFields: z.array(z.string().min(1)).default([]),
   url: z.string().url().optional(),
   dataMode: dataModeSchema,
   ok: z.boolean(),
   rowCount: z.number().int().nonnegative().optional(),
   reason: z.string().min(1)
+});
+
+export const deploymentSmokeResultSchema = z.object({
+  schemaVersion: schemaVersionSchema,
+  checkedAt: z.string().datetime(),
+  baseUrl: z.string().url(),
+  results: z.array(
+    z.object({
+      checkedAt: z.string().datetime(),
+      name: z.string().min(1),
+      url: z.string().url(),
+      status: z.number().int().nonnegative(),
+      ok: z.boolean(),
+      reason: z.string().min(1)
+    })
+  )
 });
 
 export const queryOperatorSchema = z.enum([
@@ -465,14 +506,18 @@ export type FieldType = z.infer<typeof fieldTypeSchema>;
 export type FieldClassification = z.infer<typeof fieldClassificationSchema>;
 export type DatasetAdapterKind = z.infer<typeof datasetAdapterSchema>;
 export type DataMode = z.infer<typeof dataModeSchema>;
+export type DataModePreference = z.infer<typeof dataModePreferenceSchema>;
 export type QueryMode = z.infer<typeof queryModeSchema>;
 export type ApiValidationIssue = z.infer<typeof apiValidationIssueSchema>;
 export type ApiErrorResponse = z.infer<typeof apiErrorResponseSchema>;
 export type DatasetField = z.infer<typeof datasetFieldSchema>;
 export type DatasetSource = z.infer<typeof datasetSourceSchema>;
+export type LiveVerificationCheck = z.infer<typeof liveVerificationCheckSchema>;
+export type DatasetLiveVerification = z.infer<typeof datasetLiveVerificationSchema>;
 export type DatasetMetadata = z.infer<typeof datasetMetadataSchema>;
 export type CatalogHealthReport = z.infer<typeof catalogHealthReportSchema>;
 export type LiveSmokeResult = z.infer<typeof liveSmokeResultSchema>;
+export type DeploymentSmokeResult = z.infer<typeof deploymentSmokeResultSchema>;
 export type BoundedQuerySpec = z.infer<typeof boundedQuerySpecSchema>;
 export type QueryResult = z.infer<typeof queryResultSchema>;
 export type SourceAttribution = z.infer<typeof sourceAttributionSchema>;

@@ -415,6 +415,53 @@ describe("adapter and intent helpers", () => {
     expect(valueUrl).toContain("sum(total_job_valuation) as total_estimated_value");
   });
 
+  it("records Dallas and Austin live verification decisions in catalog metadata", () => {
+    const datasets = catalog();
+    const dallas = datasets.find((item) => item.id === "dallas_311_requests")!;
+    const austin = datasets.find((item) => item.id === "austin_building_permits")!;
+
+    expect(dallas.liveVerification?.promotionStatus).toBe("promoted");
+    expect(dallas.liveVerification?.liveCapableFields).toEqual(expect.arrayContaining(["created_date", "category"]));
+    expect(dallas.liveVerification?.sampleOnlyFields).toContain("zip_code");
+    expect(dallas.liveVerification?.checks.some((check) => check.status === "blocked" && check.fields.includes("zip_code"))).toBe(true);
+
+    expect(austin.liveVerification?.promotionStatus).toBe("blocked");
+    expect(austin.liveVerification?.liveCapableFields).toEqual(expect.arrayContaining(["issued_date", "permit_type", "zip_code"]));
+    expect(austin.liveVerification?.sampleOnlyFields).toContain("month");
+    expect(austin.liveVerification?.checks.some((check) => check.status === "blocked" && check.fields.includes("month"))).toBe(true);
+
+    for (const dataset of [dallas, austin]) {
+      for (const field of dataset.liveVerification?.liveCapableFields ?? []) {
+        expect(dataset.liveFieldMap[field], `${dataset.id}.${field}`).toBeTruthy();
+      }
+      for (const check of dataset.liveVerification?.checks.filter((item) => item.status === "passed") ?? []) {
+        expect(check.url).toContain(dataset.externalDatasetId);
+      }
+    }
+  });
+
+  it("rejects unsafe live field mappings before URL generation", () => {
+    const dataset = {
+      ...catalog().find((item) => item.id === "dallas_311_requests")!,
+      liveFieldMap: {
+        ...catalog().find((item) => item.id === "dallas_311_requests")!.liveFieldMap,
+        category: "service_request_type;drop"
+      }
+    };
+
+    expect(() =>
+      buildSocrataQueryUrl({
+        dataset,
+        spec: {
+          datasetId: "dallas_311_requests",
+          groupBy: ["category"],
+          metrics: [{ type: "count", alias: "request_count" }],
+          limit: 10
+        }
+      })
+    ).toThrow(/Unsafe Socrata expression/);
+  });
+
   it("parses governed prompt intent", () => {
     const intent = parsePromptIntent({
       prompt: "Show Dallas 311 service requests by category and ZIP code for 2024.",

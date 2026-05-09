@@ -47,6 +47,50 @@ if (liveDatasets.length === 0) {
 }
 
 for (const dataset of liveDatasets) {
+  const verificationChecks = dataset.liveVerification?.checks?.filter((check) =>
+    check.status === "passed" && check.dataMode === "live" && check.url
+  ) ?? [];
+
+  if (verificationChecks.length > 0) {
+    for (const check of verificationChecks) {
+      try {
+        const response = await fetch(check.url);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const rows = await response.json();
+        if (!Array.isArray(rows)) {
+          throw new Error("Response was not an array.");
+        }
+
+        printHuman(record({
+          datasetId: dataset.id,
+          externalDatasetId: dataset.externalDatasetId,
+          checkName: check.label,
+          testedFields: check.fields,
+          url: check.url,
+          dataMode: "live",
+          ok: true,
+          rowCount: rows.length,
+          reason: "Verified live registry check returned an array response."
+        }));
+      } catch (error) {
+        printHuman(record({
+          datasetId: dataset.id,
+          externalDatasetId: dataset.externalDatasetId,
+          checkName: check.label,
+          testedFields: check.fields,
+          url: check.url,
+          dataMode: "fallback",
+          ok: false,
+          reason: error instanceof Error ? error.message : "Unknown live smoke failure."
+        }));
+      }
+    }
+    continue;
+  }
+
   const groupField = ["category", "permit_type", "status", "month"].find((field) => dataset.liveFieldMap?.[field]);
   const dateField = ["created_date", "issued_date"].find((field) => dataset.liveFieldMap?.[field]);
 
@@ -54,6 +98,7 @@ for (const dataset of liveDatasets) {
     printHuman(record({
       datasetId: dataset.id,
       externalDatasetId: dataset.externalDatasetId,
+      testedFields: [],
       dataMode: "sample",
       ok: true,
       reason: "Skipped: missing safe field mapping."
@@ -67,6 +112,7 @@ for (const dataset of liveDatasets) {
     printHuman(record({
       datasetId: dataset.id,
       externalDatasetId: dataset.externalDatasetId,
+      testedFields: [groupField, dateField],
       dataMode: "sample",
       ok: true,
       reason: "Skipped: selected mapping is not a direct identifier."
@@ -96,6 +142,7 @@ for (const dataset of liveDatasets) {
     printHuman(record({
       datasetId: dataset.id,
       externalDatasetId: dataset.externalDatasetId,
+      testedFields: [groupField, dateField],
       url,
       dataMode: "live",
       ok: true,
@@ -106,6 +153,7 @@ for (const dataset of liveDatasets) {
     printHuman(record({
       datasetId: dataset.id,
       externalDatasetId: dataset.externalDatasetId,
+      testedFields: [groupField, dateField],
       url,
       dataMode: "fallback",
       ok: false,

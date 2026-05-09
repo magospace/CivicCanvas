@@ -19,6 +19,21 @@ for (const dataset of catalog) {
     }
   }
 
+  if (dataset.liveVerification) {
+    if (!dataset.liveVerification.lastCheckedAt || !dataset.liveVerification.promotionStatus) {
+      throw new Error(`Live verification missing status metadata: ${dataset.id}`);
+    }
+    if (dataset.liveVerification.externalDatasetId && dataset.externalDatasetId &&
+      dataset.liveVerification.externalDatasetId !== dataset.externalDatasetId) {
+      throw new Error(`Live verification external ID mismatch: ${dataset.id}`);
+    }
+    for (const field of dataset.liveVerification.liveCapableFields ?? []) {
+      if (!dataset.liveFieldMap?.[field]) {
+        throw new Error(`Live-capable field lacks liveFieldMap entry: ${dataset.id}.${field}`);
+      }
+    }
+  }
+
   if (dataset.fallbackSampleFile) {
     const samplePath = join(root, "data/samples", dataset.fallbackSampleFile);
     if (!existsSync(samplePath)) {

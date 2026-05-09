@@ -26,6 +26,68 @@
       "Live permit_type and zip_code aggregate checks pass, but date_trunc_ym(issue_date) currently fails against the portal timestamp type.",
       "Live access remains disabled until the generated month grouping has an approved live expression."
     ],
+    "liveVerification": {
+      "promotionStatus": "blocked",
+      "externalDatasetId": "quv8-5ckq",
+      "lastCheckedAt": "2026-05-09T21:12:13.000Z",
+      "testedFields": [
+        "issued_date",
+        "month",
+        "zip_code",
+        "permit_type",
+        "estimated_value",
+        "status"
+      ],
+      "liveCapableFields": [
+        "issued_date",
+        "zip_code",
+        "permit_type",
+        "estimated_value",
+        "status"
+      ],
+      "sampleOnlyFields": [
+        "month"
+      ],
+      "checks": [
+        {
+          "label": "2024 permits by permit type",
+          "queryShape": "group by permit_type, count permits, 2024 date filter",
+          "fields": [
+            "issued_date",
+            "permit_type"
+          ],
+          "status": "passed",
+          "dataMode": "live",
+          "url": "https://data.austintexas.gov/resource/quv8-5ckq.json?$select=permit_type%20as%20permit_type,count(*)%20as%20permit_count&$where=issue_date%20between%20%272024-01-01%27%20and%20%272024-12-31%27&$group=permit_type&$order=permit_count%20DESC&$limit=3",
+          "rowCount": 1,
+          "reason": "City of Austin live endpoint returned aggregate permit_type rows."
+        },
+        {
+          "label": "2024 permits by ZIP",
+          "queryShape": "group by zip_code, count permits, 2024 date filter",
+          "fields": [
+            "issued_date",
+            "zip_code"
+          ],
+          "status": "passed",
+          "dataMode": "live",
+          "url": "https://data.austintexas.gov/resource/quv8-5ckq.json?$select=zip_code%20as%20zip_code,count(*)%20as%20permit_count&$where=issue_date%20between%20%272024-01-01%27%20and%20%272024-12-31%27&$group=zip_code&$order=permit_count%20DESC&$limit=3",
+          "rowCount": 3,
+          "reason": "City of Austin live endpoint returned ZIP aggregate rows."
+        },
+        {
+          "label": "2024 permits by generated month",
+          "queryShape": "group by date_trunc_ym(issue_date), count permits, 2024 date filter",
+          "fields": [
+            "issued_date",
+            "month"
+          ],
+          "status": "blocked",
+          "dataMode": "sample",
+          "reason": "The generated month expression currently returns HTTP 400 on the live portal, so Austin remains sample-first for dashboards that need monthly trends."
+        }
+      ]
+    },
     "fallbackSampleFile": "austin-building-permits.sample.json",
     "description": "Public building permit records used for permit trend and geography analysis.",
     "fields": [
@@ -101,6 +163,53 @@
       "Verified against City of Dallas Socrata view d7e7-envw.",
       "The verified live 311 view does not expose ZIP code, so ZIP dashboards intentionally use the approved sample fallback."
     ],
+    "liveVerification": {
+      "promotionStatus": "promoted",
+      "externalDatasetId": "d7e7-envw",
+      "lastCheckedAt": "2026-05-09T21:12:13.000Z",
+      "testedFields": [
+        "created_date",
+        "month",
+        "category",
+        "status",
+        "zip_code"
+      ],
+      "liveCapableFields": [
+        "created_date",
+        "month",
+        "category",
+        "status"
+      ],
+      "sampleOnlyFields": [
+        "zip_code",
+        "response_days"
+      ],
+      "checks": [
+        {
+          "label": "2024 requests by category",
+          "queryShape": "group by category, count requests, 2024 date filter",
+          "fields": [
+            "created_date",
+            "category"
+          ],
+          "status": "passed",
+          "dataMode": "live",
+          "url": "https://www.dallasopendata.com/resource/d7e7-envw.json?$select=service_request_type%20as%20category,count(*)%20as%20request_count&$where=created_date%20between%20%272024-01-01%27%20and%20%272024-12-31%27&$group=service_request_type&$order=request_count%20DESC&$limit=3",
+          "rowCount": 3,
+          "reason": "City of Dallas live endpoint returned aggregate category rows."
+        },
+        {
+          "label": "ZIP aggregate dashboard",
+          "queryShape": "group by zip_code for neighborhood geography",
+          "fields": [
+            "zip_code"
+          ],
+          "status": "blocked",
+          "dataMode": "sample",
+          "reason": "The verified Dallas 311 live view does not expose ZIP code, so ZIP dashboards intentionally use approved sample fallback data."
+        }
+      ]
+    },
     "fallbackSampleFile": "dallas-311.sample.json",
     "description": "Public 311 service request records used for category, status, trend, and geography analysis.",
     "fields": [
