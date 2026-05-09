@@ -19,6 +19,7 @@ Open `http://localhost:3000/explore`.
 1. Enter: `Show Dallas 311 service requests by category and ZIP code for 2024.`
 2. Click Generate View.
 3. Point out:
+   - CivicCanvas mark in the header and the Texas Data Canvas product label.
    - Summary and metric blocks.
    - Monthly trend chart.
    - ZIP-code geography bubble renderer.
@@ -63,22 +64,29 @@ Narration:
 ## Demo 5 - Miro stretch preview
 
 1. Generate the Dallas dashboard.
-2. Choose a Miro template in the inspector and click the export icon.
-3. Explain that the app generates a preview-only MiroExportSpec with a required Source & Method frame.
+2. Choose a Miro template in the inspector or use the main canvas toolbar.
+3. Explain that the app generates frame cards plus preview-only MiroExportSpec JSON with a required Source & Method frame.
 4. No Miro board write occurs in the MVP.
 
 ## Demo 6 - Saved bundle workflow
 
 1. Save the Dallas dashboard.
 2. Open `/saved`.
-3. Export the portable saved-canvas bundle.
-4. Paste invalid JSON containing an unknown block and show the friendly rejection message.
+3. Export the portable saved-canvas bundle and copy a no-backend share link.
+4. Explain that the share link stores the bundle in the URL hash and validates before import.
+5. Paste invalid JSON containing an unknown block and show the friendly rejection message.
 
 Narration:
 
 - Saved canvases remain browser-local.
 - Portable bundles are validated on import.
 - Unsafe CanvasSpec JSON is rejected before render.
+
+## Demo 7 - Curated gallery
+
+1. Open `/gallery`.
+2. Show the checked-in Dallas, Austin, and unsupported-sensitive prompt examples.
+3. Explain that the gallery is static validated CanvasDocument JSON rendered through the same allowlisted registry.
 
 ## MCP server check
 

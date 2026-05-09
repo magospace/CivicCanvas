@@ -1,10 +1,12 @@
 import Link from "next/link";
-import { Database, LayoutDashboard, Search, UserCircle } from "lucide-react";
+import Image from "next/image";
+import { Database, GalleryHorizontalEnd, LayoutDashboard, Search, UserCircle } from "lucide-react";
 
 const navItems = [
   { href: "/explore", label: "Explore", icon: Search },
   { href: "/saved", label: "Saved Canvases", icon: LayoutDashboard },
-  { href: "/sources", label: "Sources", icon: Database }
+  { href: "/sources", label: "Sources", icon: Database },
+  { href: "/gallery", label: "Gallery", icon: GalleryHorizontalEnd }
 ];
 
 export function Header() {
@@ -20,8 +22,15 @@ export function Header() {
     <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/90 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between px-5">
         <Link href="/explore" className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-civic-900 text-white">
-            <LayoutDashboard className="h-5 w-5" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white shadow-sm">
+            <Image
+              src="/brand/civiccanvas-mark.svg"
+              alt="CivicCanvas logo"
+              width={32}
+              height={32}
+              className="h-8 w-8 object-contain"
+              priority
+            />
           </div>
           <div>
             <div className="text-base font-semibold leading-5 text-ink">Texas Data Canvas</div>

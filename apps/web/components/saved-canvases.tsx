@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Copy, ExternalLink, FileJson, Trash2 } from "lucide-react";
+import { Copy, ExternalLink, FileJson, Link2, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { SavedCanvas } from "@texas-data-canvas/shared";
 import {
@@ -10,6 +10,8 @@ import {
   duplicateSavedCanvas,
   exportSavedCanvasesBundleJson,
   exportSavedCanvasJson,
+  createSavedCanvasShareLink,
+  importSavedCanvasHash,
   importSavedCanvasJson,
   listSavedCanvases,
   queueCanvasForOpen,
@@ -23,6 +25,19 @@ export function SavedCanvases() {
   const [importError, setImportError] = useState("");
 
   useEffect(() => {
+    if (window.location.hash.includes("canvasBundle=")) {
+      try {
+        const imported = importSavedCanvasHash(window.location.hash);
+        if (imported) {
+          setItems(imported);
+          window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+          return;
+        }
+      } catch (error) {
+        const detail = error instanceof Error ? ` ${error.message}` : "";
+        setImportError(`Shared link rejected.${detail}`);
+      }
+    }
     setItems(listSavedCanvases());
   }, []);
 
@@ -39,6 +54,17 @@ export function SavedCanvases() {
     } catch (error) {
       const detail = error instanceof Error ? ` ${error.message}` : "";
       setImportError(`Import rejected. Saved bundles must contain valid canvases with allowlisted blocks and a SourceMethodBlock.${detail}`);
+    }
+  }
+
+  async function copyShareLink(canvases: SavedCanvas[]) {
+    try {
+      const share = createSavedCanvasShareLink(canvases, "/saved");
+      setExportText(share.url);
+      await navigator.clipboard?.writeText(share.url);
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : "Could not create share link.";
+      setImportError(detail);
     }
   }
 
@@ -72,6 +98,12 @@ export function SavedCanvases() {
           className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
         >
           Export bundle
+        </button>
+        <button
+          onClick={() => copyShareLink(items)}
+          className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+        >
+          Copy share link
         </button>
         <button
           onClick={async () => {
@@ -109,7 +141,7 @@ export function SavedCanvases() {
               </span>
             </div>
             <p className="mt-3 text-sm leading-6 text-slate-600">{item.prompt}</p>
-            <div className="mt-4 grid grid-cols-4 gap-2">
+            <div className="mt-4 grid grid-cols-5 gap-2">
               <Link
                 href="/explore"
                 onClick={() => queueCanvasForOpen(item)}
@@ -119,6 +151,14 @@ export function SavedCanvases() {
               >
                 <ExternalLink className="h-4 w-4" />
               </Link>
+              <button
+                onClick={() => copyShareLink([item])}
+                aria-label={`Copy share link for ${item.title}`}
+                title={`Copy share link for ${item.title}`}
+                className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+              >
+                <Link2 className="h-4 w-4" />
+              </button>
               <button
                 onClick={() => refresh(duplicateSavedCanvas(item))}
                 aria-label={`Duplicate ${item.title}`}

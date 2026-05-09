@@ -1,6 +1,16 @@
 # Release Notes
 
-## v0.7.0-public-hardening (in progress)
+## v0.8.0-product-readiness (planned / locally started)
+
+- Adds cleaned CivicCanvas brand assets, repaired person mark, header integration, and app icon consistency.
+- Adds `/gallery` with checked-in validated CanvasDocument fixtures for Dallas 311, Austin permits, and unsupported-sensitive prompt handling.
+- Adds no-backend URL-hash saved-canvas share links using the existing `SavedCanvasBundle` validation path.
+- Improves Miro preview with frame cards, item chips, excerpts, and a highlighted required Source & Method frame.
+- Adds main canvas toolbar export affordances for save, share, CSV, Canvas JSON, active query spec, and Miro preview.
+- Improves source catalog field-confidence copy for live-capable, sample-only, blocked, sample, mapped, and coming-later fields.
+- Release tag remains blocked until public hosted smoke and remote Playwright pass.
+
+## v0.7.0-public-hardening (locally complete / untagged)
 
 - Starts from the completed local v0.6 hosted-beta hardening branch while v0.6 tagging remains blocked on a public deployment URL.
 - Added typed governed errors, stricter MCP query input schemas, shared Miro export generation, deterministic prompt synonym expansion, dashboard reasoning inspector, client-side governed exports, and accessibility browser coverage.

@@ -22,6 +22,7 @@ async function expectNoSeriousAccessibilityViolations(page: Page) {
 test("explore route loads the governed shell", async ({ page }) => {
   await page.goto("/explore");
   await expect(page).toHaveTitle(/Texas Data Canvas/);
+  await expect(page.getByAltText("CivicCanvas logo").first()).toBeVisible();
   await expect(page.getByText("Texas Data Canvas").first()).toBeVisible();
   await expect(page.getByLabel("Dashboard prompt")).toBeVisible();
 });
@@ -87,6 +88,8 @@ test("saved bundle import rejects unsafe JSON", async ({ page }) => {
   await expect(page.getByText("Dallas 311 Service Requests Explorer")).toBeVisible();
   await page.getByRole("button", { name: "Export bundle" }).click();
   await expect(page.locator("pre")).toContainText("\"canvases\"");
+  await page.getByRole("button", { name: /^Copy share link$/ }).click();
+  await expect(page.locator("pre")).toContainText("#canvasBundle=");
 
   await page.getByLabel("Saved canvas JSON import").fill("{\"canvas\":{\"blocks\":[{\"type\":\"UnknownBlock\",\"props\":{\"html\":\"<script>alert(1)</script>\"}}]}}");
   await page.getByRole("button", { name: "Import" }).click();
@@ -100,6 +103,16 @@ test("Miro preview always includes Source & Method", async ({ page }) => {
 
   await expect(page.getByText("Miro export preview")).toBeVisible();
   await expect(page.getByText("Source & Method").first()).toBeVisible();
+});
+
+test("gallery route renders checked-in validated canvases", async ({ page }) => {
+  await page.goto("/gallery");
+
+  await expect(page.getByAltText("CivicCanvas logo").first()).toBeVisible();
+  await expect(page.getByText("Validated sample canvases")).toBeVisible();
+  await expect(page.getByText("Dallas 311 Sample Dashboard")).toBeVisible();
+  await expect(page.getByText("Austin Permits Sample Dashboard")).toBeVisible();
+  await expect(page.getByText("Unsupported Sensitive Prompt Example")).toBeVisible();
 });
 
 test("key public-beta flows have no serious accessibility violations", async ({ page }) => {
@@ -116,6 +129,10 @@ test("key public-beta flows have no serious accessibility violations", async ({ 
 
   await page.goto("/sources");
   await expect(page.getByText("Live verification").first()).toBeVisible();
+  await expectNoSeriousAccessibilityViolations(page);
+
+  await page.goto("/gallery");
+  await expect(page.getByText("Validated sample canvases")).toBeVisible();
   await expectNoSeriousAccessibilityViolations(page);
 
   await page.goto("/saved");

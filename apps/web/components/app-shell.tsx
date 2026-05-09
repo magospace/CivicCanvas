@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { ClipboardList, Download, FileJson, Save, Share2, Workflow } from "lucide-react";
 import type { BoundedQuerySpec, CanvasDocument, DataMode, DataModePreference, DatasetMetadata, MiroExportSpec, PromptIntent, QueryAudit } from "@texas-data-canvas/shared";
 import { CanvasRenderer } from "./canvas/canvas-renderer";
 import { DatasetSidebar } from "./dataset-sidebar";
@@ -8,7 +9,7 @@ import { Header } from "./header";
 import { InspectorPanel } from "./inspector-panel";
 import { PromptBar } from "./prompt-bar";
 import { boundedQuerySpecJson, canvasDocumentJson, tableCsv } from "../lib/dashboard-exports";
-import { createCanvasShareBundleJson, saveCanvasLocally, takePendingOpenCanvas } from "../lib/saved-canvases";
+import { createCanvasShareBundleLink, importSavedCanvasHash, saveCanvasLocally, takePendingOpenCanvas } from "../lib/saved-canvases";
 
 export function AppShell({
   canvas,
@@ -32,17 +33,39 @@ export function AppShell({
   const [miroTemplate, setMiroTemplate] = useState<MiroExportSpec["template"]>("briefing_board");
 
   useEffect(() => {
-    const pending = takePendingOpenCanvas();
-    if (pending) {
-      setPrompt(pending.prompt);
-      setActiveCanvas(pending.canvas);
-      setAudits(pending.audits);
-      setIntent(pending.intent ?? null);
+    function openSavedCanvas(saved: ReturnType<typeof takePendingOpenCanvas>) {
+      if (!saved) {
+        return;
+      }
+      setPrompt(saved.prompt);
+      setActiveCanvas(saved.canvas);
+      setAudits(saved.audits);
+      setIntent(saved.intent ?? null);
       setQuerySpec(null);
-      setDataMode(pending.canvas.sources[0]?.dataMode ?? "sample");
+      setDataMode(saved.canvas.sources[0]?.dataMode ?? "sample");
       setDataModePreference("auto");
       setFallbackReason(null);
-      setStatus(`Opened saved canvas: ${pending.title}`);
+      setStatus(`Opened saved canvas: ${saved.title}`);
+    }
+
+    const pending = takePendingOpenCanvas();
+    if (pending) {
+      openSavedCanvas(pending);
+      return;
+    }
+
+    if (window.location.hash.includes("canvasBundle=")) {
+      try {
+        const imported = importSavedCanvasHash(window.location.hash);
+        const shared = imported?.[0];
+        if (shared) {
+          openSavedCanvas(shared);
+          setStatus(`Imported shared canvas link: ${shared.title}`);
+          window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+        }
+      } catch (error) {
+        setStatus(error instanceof Error ? error.message : "Shared canvas link was rejected.");
+      }
     }
   }, []);
 
@@ -114,16 +137,16 @@ export function AppShell({
 
   async function shareCurrentCanvas() {
     try {
-      const bundle = createCanvasShareBundleJson({
+      const share = createCanvasShareBundleLink({
         canvas: activeCanvas,
         audits,
         prompt,
         intent: intent ?? undefined
       });
-      await navigator.clipboard?.writeText(bundle);
-      setStatus("Portable saved-canvas bundle copied to clipboard.");
+      await navigator.clipboard?.writeText(share.url);
+      setStatus("No-backend share link copied. The hash bundle is validated before import.");
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Could not copy saved-canvas bundle.");
+      setStatus(error instanceof Error ? error.message : "Could not copy saved-canvas share link.");
     }
   }
 
@@ -193,6 +216,58 @@ export function AppShell({
               {status}
             </div>
           ) : null}
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm">
+            <div>
+              <div className="text-sm font-semibold text-ink">Canvas tools</div>
+              <p className="text-xs text-slate-500">
+                Export only validated canvas, query, and table data. No generated HTML or scripts.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={saveCurrentCanvas}
+                className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+              >
+                <Save className="h-4 w-4" />
+                Save
+              </button>
+              <button
+                onClick={shareCurrentCanvas}
+                className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+              >
+                <Share2 className="h-4 w-4" />
+                Share link
+              </button>
+              <button
+                onClick={downloadTableCsv}
+                className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+              >
+                <Download className="h-4 w-4" />
+                CSV
+              </button>
+              <button
+                onClick={copyCanvasJson}
+                className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+              >
+                <FileJson className="h-4 w-4" />
+                Canvas JSON
+              </button>
+              <button
+                onClick={copyQuerySpec}
+                className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+              >
+                <ClipboardList className="h-4 w-4" />
+                Query spec
+              </button>
+              <button
+                onClick={exportMiroSpec}
+                className="inline-flex items-center gap-2 rounded-md bg-civic-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-civic-700 focus:outline-none focus:ring-2 focus:ring-civic-100"
+              >
+                <Workflow className="h-4 w-4" />
+                Miro preview
+              </button>
+            </div>
+          </div>
           {isGenerating ? (
             <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-panel">
               <div className="h-4 w-48 animate-pulse rounded bg-civic-100" />
@@ -262,8 +337,27 @@ export function AppShell({
                         : "rounded-md border border-slate-200 bg-civic-50 p-3 text-sm"
                     }
                   >
-                    <div className="font-semibold text-ink">{frame.title}</div>
-                    <div className="mt-1 text-xs text-slate-500">{frame.items.length} item(s)</div>
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="font-semibold text-ink">{frame.title}</div>
+                      {frame.title === "Source & Method" ? (
+                        <span className="rounded bg-civic-900 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
+                          Required
+                        </span>
+                      ) : null}
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-1">
+                      {frame.items.map((item, itemIndex) => (
+                        <span
+                          key={`${item.type}-${itemIndex}`}
+                          className="rounded bg-white px-2 py-0.5 text-[11px] font-semibold text-slate-600"
+                        >
+                          {item.type.replace("_", " ")}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="mt-2 line-clamp-3 text-xs leading-5 text-slate-500">
+                      {frame.items[0]?.content.slice(0, 180)}
+                    </p>
                   </div>
                 ))}
               </div>

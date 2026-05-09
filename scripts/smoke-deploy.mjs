@@ -162,6 +162,15 @@ const checks = [
     })
   },
   {
+    name: "gallery_page",
+    path: "/gallery",
+    kind: "text",
+    expect: (body) => ({
+      ok: body.includes("Validated sample canvases") && body.includes("Dallas 311 Sample Dashboard"),
+      reason: "Expected curated gallery canvases to render."
+    })
+  },
+  {
     name: "production_headers",
     path: "/explore",
     kind: "text",

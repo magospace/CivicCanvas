@@ -23,6 +23,7 @@ const nextConfig = {
   experimental: {
     outputFileTracingRoot: repoRoot,
     outputFileTracingIncludes: {
+      "/*": ["../../data/**/*"],
       "/api/**/*": ["../../data/**/*"]
     }
   },

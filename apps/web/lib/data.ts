@@ -6,6 +6,8 @@ import {
   approvedDatasetCatalogSchema,
   catalogHealthReportSchema,
   createAdapterRouter,
+  validateCanvasDocument,
+  type CanvasDocument,
   type DatasetMetadata,
   type DatasetSamples
 } from "@texas-data-canvas/shared";
@@ -20,6 +22,12 @@ const sampleFiles: Record<string, string> = {
   austin_building_permits: "austin-building-permits.sample.json",
   dallas_311_requests: "dallas-311.sample.json"
 };
+
+const galleryCanvasFiles = [
+  "dallas-311-sample.canvas.json",
+  "austin-permits-sample.canvas.json",
+  "unsupported-sensitive-prompt.canvas.json"
+];
 
 function repoRoot() {
   const cwd = process.cwd();
@@ -49,6 +57,12 @@ export function getSampleRows(datasetId: string) {
 export function getDatasetSamples(): DatasetSamples {
   return Object.fromEntries(
     Object.keys(sampleFiles).map((datasetId) => [datasetId, getSampleRows(datasetId)])
+  );
+}
+
+export function getCuratedGalleryCanvases(): CanvasDocument[] {
+  return galleryCanvasFiles.map((fileName) =>
+    validateCanvasDocument(readJson(`data/gallery/${fileName}`))
   );
 }
 

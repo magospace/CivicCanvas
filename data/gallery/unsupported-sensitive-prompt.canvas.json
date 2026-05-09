@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "1.0",
+  "id": "gallery_unsupported_sensitive_prompt",
+  "title": "Unsupported Sensitive Prompt Example",
+  "description": "Curated refusal/suggestion canvas showing how unsafe or unsupported prompts stay out of dashboard generation.",
+  "prompt": "Show names and personal contact details for every complaint.",
+  "createdAt": "2026-05-09T00:00:00.000Z",
+  "updatedAt": "2026-05-09T00:00:00.000Z",
+  "sources": [
+    {
+      "datasetId": "catalog_suggestions",
+      "datasetTitle": "Approved Dataset Catalog",
+      "sourceName": "Texas Data Canvas catalog",
+      "sourceUrl": "https://example.com/texas-data-canvas/catalog",
+      "accessedAt": "2026-05-09T00:00:00.000Z",
+      "fieldsUsed": [],
+      "filtersApplied": ["prompt rejected before data access"],
+      "queryMethod": "Rule-based intent parser returned suggestions instead of a generated dashboard.",
+      "dataMode": "sample",
+      "caveats": [
+        "Prompts requesting raw personal fields are refused or forced into aggregate-safe views.",
+        "Unknown prompts return approved dataset suggestions rather than hallucinated dashboards."
+      ]
+    }
+  ],
+  "queries": [],
+  "blocks": [
+    {
+      "id": "sensitive_summary",
+      "type": "SummaryBlock",
+      "props": {
+        "heading": "This prompt is not turned into a dashboard.",
+        "text": "Texas Data Canvas keeps sensitive or unsupported requests in suggestion mode so the interface never renders unsafe generated content.",
+        "bullets": [
+          "No raw personal fields are queried.",
+          "No arbitrary SQL, SoQL, HTML, or JavaScript is accepted.",
+          "The user is guided back to approved aggregate datasets."
+        ]
+      }
+    },
+    {
+      "id": "sensitive_metric",
+      "type": "MetricBlock",
+      "props": {
+        "label": "Unsafe data requests executed",
+        "value": 0,
+        "helperText": "The prompt is stopped before data access.",
+        "tone": "good"
+      }
+    },
+    {
+      "id": "sensitive_source",
+      "type": "SourceMethodBlock",
+      "props": {
+        "attribution": {
+          "datasetId": "catalog_suggestions",
+          "datasetTitle": "Approved Dataset Catalog",
+          "sourceName": "Texas Data Canvas catalog",
+          "sourceUrl": "https://example.com/texas-data-canvas/catalog",
+          "accessedAt": "2026-05-09T00:00:00.000Z",
+          "fieldsUsed": [],
+          "filtersApplied": ["prompt rejected before data access"],
+          "queryMethod": "Rule-based intent parser returned suggestions instead of a generated dashboard.",
+          "dataMode": "sample",
+          "caveats": [
+            "Prompts requesting raw personal fields are refused or forced into aggregate-safe views.",
+            "Unknown prompts return approved dataset suggestions rather than hallucinated dashboards."
+          ]
+        },
+        "methodology": "This checked-in CanvasDocument fixture demonstrates the guarded refusal path for unsafe public-data prompts."
+      }
+    }
+  ]
+}

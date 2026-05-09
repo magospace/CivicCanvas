@@ -2,14 +2,14 @@
 
 Last updated: May 9, 2026
 
-This plan tracks the active `feat/v0.7-public-hardening` branch. The v0.6 hosted-beta code hardening work remains complete but untagged because no public deployment URL is available. v0.7 focuses on public-surface hardening, MCP parity, deterministic prompt resilience, governed exports, explainability, and accessibility without adding auth, hosted persistence, LLM parsing, arbitrary generated UI, arbitrary SQL/SoQL, external map layers, or live Miro writes.
+This plan tracks the active `feat/v0.7-public-hardening` branch. The v0.6 hosted-beta and v0.7 public-hardening code work remain locally complete but untagged because no public deployment URL is available. The current pass starts v0.8 product-readiness work in place: CivicCanvas brand polish, no-backend sharing, curated demo canvases, richer Miro preview, catalog-confidence copy, and release-closeout documentation without adding auth, hosted persistence, LLM parsing, arbitrary generated UI, arbitrary SQL/SoQL, external map layers, or live Miro writes.
 
 ## Current State
 
 - `main` has been fast-forwarded to `v0.5.0-public-beta`.
 - Active branch: `feat/v0.7-public-hardening`.
 - v0.6 local hosted-beta work is implemented, including the external review hardening backlog listed below.
-- v0.6 is not tagged because there is no public Vercel URL, no Git remote, and no Vercel credential environment in this repo context.
+- v0.7 local public-hardening work is implemented and verified locally, but v0.6/v0.7 are not tagged because there is no public Vercel URL, no Git remote, and no Vercel credential environment in this repo context.
 - All dashboard output must remain validated `CanvasDocument` JSON rendered through the allowlisted React block registry.
 
 ## Implemented v0.6 Review Hardening
@@ -83,7 +83,7 @@ The May 9, 2026 external review was accepted where it applied to the hosted-beta
 - **CORS:** no change required unless the app deliberately exposes cross-origin API access.
 - **Commit SHA in health:** acceptable for hosted smoke diagnostics, but reconsider if branch names or commit metadata become sensitive.
 
-## v0.7 Completed In This Pass
+## v0.7 Completed Before This Pass
 
 1. Replaced MCP regex-based error categorization with shared typed governed errors.
 2. Mirrored structured shared query schemas in MCP query-related tool inputs.
@@ -94,19 +94,44 @@ The May 9, 2026 external review was accepted where it applied to the hosted-beta
 7. Added client-side CSV export for the current table, JSON export for the current `CanvasDocument`, and copy current `BoundedQuerySpec`.
 8. Added axe-powered accessibility smoke coverage and fixed discovered contrast/keyboard-scroll issues.
 
-## Remaining v0.7 Backlog
+## v0.8 Product Readiness Implemented In This Pass
 
-- Improve Miro preview from raw JSON into richer frame cards if more demo polish is needed.
+1. Added cleaned CivicCanvas brand assets under `apps/web/public/brand/`.
+   - The source download was left unchanged.
+   - The duplicate dark head path was removed.
+   - The person mark now has explicit white head and body geometry.
+   - The compact mark is used in the app header and `apps/web/app/icon.svg`.
+2. Added a curated demo gallery route at `/gallery`.
+   - Gallery canvases live as checked-in JSON fixtures under `data/gallery/`.
+   - Dallas, Austin, and unsupported-sensitive prompt examples validate as `CanvasDocument` and render through the existing allowlisted registry.
+3. Added no-backend saved-canvas share links.
+   - Share links encode the existing `SavedCanvasBundle` shape in a URL hash.
+   - Hash imports are decoded, size-capped, and schema-validated before storage/rendering.
+   - `/saved` still supports portable JSON bundle import/export.
+4. Improved main canvas export affordances.
+   - The main dashboard toolbar now exposes save, share link, CSV, Canvas JSON, active query spec, and Miro preview actions.
+   - Exports remain client-side and schema-backed.
+5. Improved Miro preview cards.
+   - Frame cards now show item-type chips, content excerpts, and a highlighted required Source & Method frame, while keeping JSON preview available.
+6. Improved source catalog confidence copy.
+   - Field badges now distinguish live-capable, sample-only, blocked, mapped/sample, and coming-later statuses.
+   - Dallas ZIP sample fallback and Austin live monthly aggregation blockers remain visible.
+7. Extended tests for branded header rendering, curated gallery validation, gallery route rendering, and saved share-link output.
+
+## Remaining v0.8 Backlog
+
+- Re-run full local release gates after final documentation changes.
+- Capture/update demo screenshots after browser verification if a README or demo deck needs them.
 - Add a third verified dataset only after Dallas/Austin hosted reliability is solid.
-- Run the full release gate and tag `v0.7.0-public-hardening` only after the required hosted public URL checks pass.
+- Keep `v0.7.0-public-hardening` and future `v0.8.0-product-readiness` tags blocked until the required hosted public URL checks pass.
 
 ## Release Gate
 
-Do not tag `v0.6.0-hosted-beta` until:
+Do not tag `v0.6.0-hosted-beta`, `v0.7.0-public-hardening`, or a future `v0.8.0-product-readiness` milestone until:
 
 - v0.6 must-fix items above are resolved or explicitly waived in docs.
 - `pnpm verify` passes.
 - A public hosted URL exists.
-- `pnpm smoke:deploy -- --url <public-url> --expect-version v0.6.0-hosted-beta` passes.
+- `pnpm smoke:deploy -- --url <public-url> --expect-version <release-version>` passes.
 - `PLAYWRIGHT_BASE_URL=<public-url> pnpm test:e2e:remote` passes.
 - `git status --short` is clean.

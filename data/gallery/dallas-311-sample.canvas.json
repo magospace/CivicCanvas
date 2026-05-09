@@ -1,0 +1,133 @@
+{
+  "schemaVersion": "1.0",
+  "id": "gallery_dallas_311_sample",
+  "title": "Dallas 311 Sample Dashboard",
+  "description": "Curated sample dashboard showing how Dallas 311 service requests can be explored through governed aggregate blocks.",
+  "prompt": "Show Dallas 311 service requests by category and ZIP code for 2024.",
+  "createdAt": "2026-05-09T00:00:00.000Z",
+  "updatedAt": "2026-05-09T00:00:00.000Z",
+  "sources": [
+    {
+      "datasetId": "dallas_311_requests",
+      "datasetTitle": "Dallas 311 Service Requests",
+      "sourceName": "City of Dallas Open Data",
+      "sourceUrl": "https://www.dallasopendata.com/Services/311-Service-Requests-October-1-2020-to-Present/d7e7-envw",
+      "accessedAt": "2026-05-09T00:00:00.000Z",
+      "fieldsUsed": ["category", "zip_code", "month", "status"],
+      "filtersApplied": ["created_date in 2024"],
+      "queryMethod": "Curated gallery sample rendered from a validated CanvasDocument fixture.",
+      "dataMode": "sample",
+      "caveats": [
+        "Gallery canvases use checked-in sample data for repeatable demos.",
+        "Dallas ZIP-level views remain sample fallback until a live non-sensitive ZIP aggregate is verified."
+      ]
+    }
+  ],
+  "queries": [],
+  "blocks": [
+    {
+      "id": "dallas_summary",
+      "type": "SummaryBlock",
+      "props": {
+        "heading": "Dallas 311 requests concentrate in a few service categories.",
+        "text": "This curated example demonstrates the governed canvas format with aggregate counts, ZIP context, and source/method attribution.",
+        "bullets": [
+          "Sample fallback keeps the demo deterministic.",
+          "Only allowlisted aggregate fields are shown.",
+          "The source/method block is required."
+        ]
+      }
+    },
+    {
+      "id": "dallas_metric_total",
+      "type": "MetricBlock",
+      "props": {
+        "label": "Sample records",
+        "value": 100,
+        "helperText": "Rows in the local fallback sample",
+        "tone": "neutral"
+      }
+    },
+    {
+      "id": "dallas_category_chart",
+      "type": "ChartBlock",
+      "props": {
+        "title": "Top request categories",
+        "subtitle": "Sample counts by category",
+        "chartType": "bar",
+        "xField": "category",
+        "yField": "count",
+        "data": [
+          { "category": "Sanitation", "count": 34 },
+          { "category": "Streets", "count": 26 },
+          { "category": "Code compliance", "count": 18 },
+          { "category": "Animal services", "count": 12 }
+        ]
+      }
+    },
+    {
+      "id": "dallas_zip_map",
+      "type": "MapBlock",
+      "props": {
+        "title": "ZIP-level request context",
+        "geographyMode": "zip_bubble",
+        "geographyField": "zip_code",
+        "metricField": "count",
+        "legend": "Bubble size reflects sample request count.",
+        "note": "ZIP geography is approximate and for context only.",
+        "features": [
+          { "id": "75201", "label": "75201", "longitude": -96.799, "latitude": 32.787 },
+          { "id": "75204", "label": "75204", "longitude": -96.783, "latitude": 32.806 },
+          { "id": "75208", "label": "75208", "longitude": -96.839, "latitude": 32.748 }
+        ],
+        "data": [
+          { "zip_code": "75201", "count": 24 },
+          { "zip_code": "75204", "count": 18 },
+          { "zip_code": "75208", "count": 15 }
+        ]
+      }
+    },
+    {
+      "id": "dallas_table",
+      "type": "TableBlock",
+      "props": {
+        "title": "Sample request detail",
+        "caption": "Aggregate-safe table excerpt for the curated gallery.",
+        "pageSize": 5,
+        "sortBy": "count",
+        "columns": [
+          { "field": "category", "label": "Category" },
+          { "field": "zip_code", "label": "ZIP" },
+          { "field": "count", "label": "Requests" }
+        ],
+        "rows": [
+          { "category": "Sanitation", "zip_code": "75201", "count": 14 },
+          { "category": "Streets", "zip_code": "75204", "count": 10 },
+          { "category": "Code compliance", "zip_code": "75208", "count": 8 }
+        ]
+      }
+    },
+    {
+      "id": "dallas_source",
+      "type": "SourceMethodBlock",
+      "props": {
+        "attribution": {
+          "datasetId": "dallas_311_requests",
+          "datasetTitle": "Dallas 311 Service Requests",
+          "sourceName": "City of Dallas Open Data",
+          "sourceUrl": "https://www.dallasopendata.com/Services/311-Service-Requests-October-1-2020-to-Present/d7e7-envw",
+          "accessedAt": "2026-05-09T00:00:00.000Z",
+          "fieldsUsed": ["category", "zip_code", "month", "status"],
+          "filtersApplied": ["created_date in 2024"],
+          "queryMethod": "Curated gallery sample rendered from a validated CanvasDocument fixture.",
+          "dataMode": "sample",
+          "caveats": [
+            "Gallery canvases use checked-in sample data for repeatable demos.",
+            "Dallas ZIP-level views remain sample fallback until a live non-sensitive ZIP aggregate is verified."
+          ]
+        },
+        "methodology": "The gallery fixture is checked in as validated CanvasDocument JSON and rendered only through the allowlisted block registry."
+      }
+    }
+  ]
+}

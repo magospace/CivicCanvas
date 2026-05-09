@@ -33,7 +33,7 @@ Last updated: May 9, 2026
 
 ## Current Milestone
 
-`v0.7.0-public-hardening` is in progress on branch `feat/v0.7-public-hardening`.
+`v0.7.0-public-hardening` is locally complete on branch `feat/v0.7-public-hardening`. The same branch now includes early `v0.8.0-product-readiness` work for brand polish, no-backend sharing, curated gallery fixtures, and demo confidence.
 
 The v0.6 release gate is a verified public deployment. The repo has no configured Git remote today, so the first supported deployment path is manual Vercel CLI deployment. Do not tag `v0.6.0-hosted-beta` until a public URL passes deployment smoke checks and remote browser smoke tests.
 
@@ -87,3 +87,17 @@ Completed locally on branch `feat/v0.7-public-hardening`:
 - `/explore` inspector includes a collapsible "Why this dashboard?" section with matched terms, reason codes, selected mode, safety decisions, and active `BoundedQuerySpec` JSON.
 - Client-side exports support table CSV, validated `CanvasDocument` JSON, and active `BoundedQuerySpec` copy.
 - Playwright includes axe-powered serious/critical accessibility smoke checks, with contrast and keyboard-scroll fixes applied.
+
+## v0.8 Product Readiness Status
+
+Started locally on branch `feat/v0.7-public-hardening`:
+
+- Cleaned CivicCanvas logo assets are committed under `apps/web/public/brand/`, with the duplicate dark head overlay removed and an explicit white person mark added.
+- The web header and app icon now use the CivicCanvas mark while keeping the app named `Texas Data Canvas`.
+- `/gallery` renders checked-in validated `CanvasDocument` fixtures for Dallas 311, Austin permits, and an unsupported/sensitive prompt example.
+- Saved-canvas sharing now supports URL-hash bundles using the existing `SavedCanvasBundle` shape and validation path.
+- The main canvas toolbar exposes save, share link, CSV, Canvas JSON, active query spec, and Miro preview actions.
+- Miro preview now shows frame cards with item chips and a highlighted required Source & Method frame.
+- `/sources` field badges show live-capable, sample-only, blocked, mapped/sample, and coming-later statuses.
+
+Release remains blocked on public hosted verification. No `v0.7.0-public-hardening` or `v0.8.0-product-readiness` tag has been created in this repo context.

@@ -4,6 +4,23 @@ import { useMemo, useState } from "react";
 import { Database, ExternalLink } from "lucide-react";
 import type { DatasetMetadata } from "@texas-data-canvas/shared";
 
+function fieldStatus(dataset: DatasetMetadata, fieldName: string) {
+  const verification = dataset.liveVerification;
+  if (verification?.liveCapableFields.includes(fieldName)) {
+    return { label: "live-capable", className: "border-mint/30 bg-mint/10 text-mint" };
+  }
+  if (verification?.sampleOnlyFields.includes(fieldName)) {
+    return { label: "sample-only", className: "border-amber-200 bg-amber-50 text-amber-800" };
+  }
+  if (verification?.testedFields.includes(fieldName)) {
+    return { label: "blocked", className: "border-signal/30 bg-signal/10 text-signal" };
+  }
+  if (dataset.fields.length === 0) {
+    return { label: "coming later", className: "border-slate-200 bg-slate-100 text-slate-500" };
+  }
+  return { label: dataset.liveAvailable ? "mapped" : "sample", className: "border-slate-200 bg-white text-slate-600" };
+}
+
 export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
   const [city, setCity] = useState("All");
   const [topic, setTopic] = useState("All");
@@ -49,6 +66,9 @@ export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
       <div className="grid gap-4 md:grid-cols-2">
         {filtered.map((dataset) => {
           const verification = dataset.liveVerification;
+          const fields = dataset.fields.length > 0
+            ? dataset.fields.slice(0, 9).map((field) => ({ name: field.name, status: fieldStatus(dataset, field.name) }))
+            : [{ name: "Approved metadata pending", status: fieldStatus(dataset, "pending") }];
           const promotionLabel = verification?.promotionStatus === "promoted"
             ? "live promoted"
             : verification?.promotionStatus === "blocked"
@@ -78,6 +98,8 @@ export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
               </div>
               <a
                 href={dataset.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="rounded-md border border-slate-200 p-2 text-slate-500 transition hover:border-civic-500 hover:text-civic-700"
                 aria-label={`Open source for ${dataset.title}`}
               >
@@ -134,15 +156,20 @@ export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
                 </div>
               </div>
             ) : null}
-            <div className="mt-4 flex flex-wrap gap-2">
-              {dataset.fields.slice(0, 7).map((field) => (
+            <div className="mt-4">
+              <div className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
+                Field confidence
+              </div>
+              <div className="flex flex-wrap gap-2">
+              {fields.map((field) => (
                 <span
                   key={field.name}
-                  className="rounded-md border border-slate-200 px-2.5 py-1 text-xs font-medium text-slate-600"
+                  className={`rounded-md border px-2.5 py-1 text-xs font-medium ${field.status.className}`}
                 >
-                  {field.name}
+                  {field.name} · {field.status.label}
                 </span>
               ))}
+              </div>
             </div>
             <p className="mt-4 text-xs leading-5 text-slate-500">{dataset.caveats[0]}</p>
           </article>

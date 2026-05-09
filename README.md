@@ -21,15 +21,6 @@ Optional stretch: export dashboards to Miro as briefing boards, slide-like frame
 - Use BoundedQuerySpec + approved dataset catalog.
 - Always include SourceMethodBlock.
 
-## Suggested commands once implemented
-
-```bash
-pnpm install
-pnpm dev
-pnpm typecheck
-pnpm build
-```
-
 ## Setup
 
 ```bash
@@ -38,6 +29,13 @@ pnpm dev
 ```
 
 Open `http://localhost:3000/explore` for the main app shell.
+
+Useful routes:
+
+- `/explore` - prompt-to-dashboard canvas shell.
+- `/sources` - approved catalog and live/sample confidence notes.
+- `/saved` - browser-local saved canvases, portable JSON bundles, and URL-hash share links.
+- `/gallery` - checked-in validated demo canvases rendered through the allowlisted block registry.
 
 ## Verification
 
@@ -118,7 +116,7 @@ After deploying, smoke-check the public URL:
 pnpm smoke:deploy -- --url https://your-deployment.example --expect-version v0.6.0-hosted-beta
 ```
 
-Saved canvases remain browser-local. Use `/saved` to export/import portable saved-canvas bundles for demos and handoffs.
+Saved canvases remain browser-local. Use `/saved` to export/import portable saved-canvas bundles for demos and handoffs. Share links place the validated bundle in the URL hash and import only after schema validation; they are not public database-backed URLs.
 
 The `/explore` inspector includes a "Why this dashboard?" section with matched prompt terms, reason codes, safety decisions, selected data mode, and active bounded query JSON. Dashboard exports stay client-side and governed: current table CSV, validated `CanvasDocument` JSON, and active `BoundedQuerySpec` JSON.
 
@@ -133,8 +131,11 @@ The `/explore` inspector includes a "Why this dashboard?" section with matched p
 - `data/catalog/approved-datasets.json`
 - `data/samples/dallas-311.sample.json`
 - `data/samples/austin-building-permits.sample.json`
+- `data/gallery/*.canvas.json`
 
 The frontend validates catalog data and renders dashboards through a trusted React block registry. It does not execute AI-generated HTML, JavaScript, external scripts, SQL, or arbitrary components.
+
+Brand assets live under `apps/web/public/brand/`. The header uses the compact CivicCanvas mark while the product label remains `Texas Data Canvas`.
 
 ## Key docs
 

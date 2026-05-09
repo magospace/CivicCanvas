@@ -11,6 +11,7 @@ import { middleware } from "../middleware";
 import { apiError, parseJsonRequest } from "../lib/api";
 import { boundedQuerySpecJson, canvasDocumentJson, tableCsv } from "../lib/dashboard-exports";
 import { generateCanvasForPrompt } from "../lib/dashboard";
+import { getCuratedGalleryCanvases } from "../lib/data";
 import { generateMiroExportSpec } from "../lib/miro";
 
 describe("dashboard generation", () => {
@@ -127,6 +128,18 @@ describe("dashboard generation", () => {
     expect(JSON.parse(specJson ?? "{}").datasetId).toBe("dallas_311_requests");
     expect(csv).toContain("request count");
     expect(csv).toContain("Sanitation");
+  });
+
+  it("loads curated gallery canvases from checked-in validated JSON", () => {
+    const canvases = getCuratedGalleryCanvases();
+
+    expect(canvases.map((canvas) => canvas.id)).toEqual([
+      "gallery_dallas_311_sample",
+      "gallery_austin_permits_sample",
+      "gallery_unsupported_sensitive_prompt"
+    ]);
+    expect(canvases.every((canvas) => canvas.blocks.some((block) => block.type === "SourceMethodBlock"))).toBe(true);
+    expect(canvases.map((canvas) => canvas.prompt).join(" ")).toContain("personal contact details");
   });
 });
 

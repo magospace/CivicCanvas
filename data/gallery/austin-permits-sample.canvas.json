@@ -1,0 +1,133 @@
+{
+  "schemaVersion": "1.0",
+  "id": "gallery_austin_permits_sample",
+  "title": "Austin Permits Sample Dashboard",
+  "description": "Curated sample dashboard for Austin building permits with month, ZIP, type, and source caveats.",
+  "prompt": "Show Austin building permits by month and ZIP code.",
+  "createdAt": "2026-05-09T00:00:00.000Z",
+  "updatedAt": "2026-05-09T00:00:00.000Z",
+  "sources": [
+    {
+      "datasetId": "austin_building_permits",
+      "datasetTitle": "Austin Building Permits",
+      "sourceName": "City of Austin Open Data",
+      "sourceUrl": "https://data.austintexas.gov/Building-and-Development/Issued-Building-Permits/quv8-5ckq",
+      "accessedAt": "2026-05-09T00:00:00.000Z",
+      "fieldsUsed": ["month", "zip_code", "permit_type", "status", "estimated_value"],
+      "filtersApplied": ["issued_date in 2024"],
+      "queryMethod": "Curated gallery sample rendered from a validated CanvasDocument fixture.",
+      "dataMode": "sample",
+      "caveats": [
+        "Austin live monthly aggregation remains blocked until a source-owned month expression is safely verified.",
+        "Sample mode may not represent complete public records."
+      ]
+    }
+  ],
+  "queries": [],
+  "blocks": [
+    {
+      "id": "austin_summary",
+      "type": "SummaryBlock",
+      "props": {
+        "heading": "Austin permit activity is shown as sample-backed aggregate context.",
+        "text": "This curated example keeps the Austin dashboard honest about sample fallback while still demonstrating month, type, ZIP, and source/method blocks.",
+        "bullets": [
+          "No live Austin monthly aggregation is promoted yet.",
+          "The dashboard avoids raw personal fields.",
+          "Every block is governed CanvasDocument JSON."
+        ]
+      }
+    },
+    {
+      "id": "austin_metric_total",
+      "type": "MetricBlock",
+      "props": {
+        "label": "Sample permits",
+        "value": 100,
+        "helperText": "Rows in the local fallback sample",
+        "tone": "warning"
+      }
+    },
+    {
+      "id": "austin_month_chart",
+      "type": "ChartBlock",
+      "props": {
+        "title": "Monthly permit trend",
+        "subtitle": "Sample counts by issued month",
+        "chartType": "line",
+        "xField": "month",
+        "yField": "count",
+        "data": [
+          { "month": "2024-01", "count": 16 },
+          { "month": "2024-02", "count": 19 },
+          { "month": "2024-03", "count": 22 },
+          { "month": "2024-04", "count": 18 }
+        ]
+      }
+    },
+    {
+      "id": "austin_zip_map",
+      "type": "MapBlock",
+      "props": {
+        "title": "ZIP-level permit context",
+        "geographyMode": "zip_bubble",
+        "geographyField": "zip_code",
+        "metricField": "count",
+        "legend": "Bubble size reflects sample permit count.",
+        "note": "ZIP aggregation is approximate and not parcel-level analysis.",
+        "features": [
+          { "id": "78701", "label": "78701", "longitude": -97.743, "latitude": 30.272 },
+          { "id": "78704", "label": "78704", "longitude": -97.763, "latitude": 30.245 },
+          { "id": "78745", "label": "78745", "longitude": -97.795, "latitude": 30.206 }
+        ],
+        "data": [
+          { "zip_code": "78701", "count": 17 },
+          { "zip_code": "78704", "count": 21 },
+          { "zip_code": "78745", "count": 13 }
+        ]
+      }
+    },
+    {
+      "id": "austin_table",
+      "type": "TableBlock",
+      "props": {
+        "title": "Sample permit aggregates",
+        "caption": "Aggregate-safe table excerpt for the curated gallery.",
+        "pageSize": 5,
+        "sortBy": "count",
+        "columns": [
+          { "field": "permit_type", "label": "Permit type" },
+          { "field": "zip_code", "label": "ZIP" },
+          { "field": "count", "label": "Permits" }
+        ],
+        "rows": [
+          { "permit_type": "Residential remodel", "zip_code": "78704", "count": 12 },
+          { "permit_type": "Commercial finish-out", "zip_code": "78701", "count": 9 },
+          { "permit_type": "New construction", "zip_code": "78745", "count": 7 }
+        ]
+      }
+    },
+    {
+      "id": "austin_source",
+      "type": "SourceMethodBlock",
+      "props": {
+        "attribution": {
+          "datasetId": "austin_building_permits",
+          "datasetTitle": "Austin Building Permits",
+          "sourceName": "City of Austin Open Data",
+          "sourceUrl": "https://data.austintexas.gov/Building-and-Development/Issued-Building-Permits/quv8-5ckq",
+          "accessedAt": "2026-05-09T00:00:00.000Z",
+          "fieldsUsed": ["month", "zip_code", "permit_type", "status", "estimated_value"],
+          "filtersApplied": ["issued_date in 2024"],
+          "queryMethod": "Curated gallery sample rendered from a validated CanvasDocument fixture.",
+          "dataMode": "sample",
+          "caveats": [
+            "Austin live monthly aggregation remains blocked until a source-owned month expression is safely verified.",
+            "Sample mode may not represent complete public records."
+          ]
+        },
+        "methodology": "The gallery fixture is checked in as validated CanvasDocument JSON and rendered only through the allowlisted block registry."
+      }
+    }
+  ]
+}
