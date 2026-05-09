@@ -8,6 +8,7 @@ MCP stdio server for safe Texas public dataset discovery, bounded queries, sourc
 pnpm --filter @texas-data-canvas/mcp-server typecheck
 pnpm --filter @texas-data-canvas/mcp-server build
 pnpm --filter @texas-data-canvas/mcp-server inspect
+pnpm smoke:live
 ```
 
 ## Tools
@@ -30,6 +31,7 @@ pnpm --filter @texas-data-canvas/mcp-server inspect
 ```json
 {
   "datasetId": "dallas_311_requests",
+  "mode": "sample_only",
   "filters": [
     { "field": "created_date", "operator": "between", "value": ["2024-01-01", "2024-12-31"] }
   ],
@@ -47,7 +49,8 @@ The server does not execute arbitrary SQL, generated JavaScript, generated HTML,
 - All tool inputs are validated with Zod before execution.
 - Dataset access is routed through the approved catalog and adapter router.
 - Current catalog entries keep live access disabled unless `liveAvailable` is explicitly true.
-- Live Socrata/Tyler calls are generated from allowlisted `BoundedQuerySpec` fields and operators; callers never provide raw SQL or SoQL.
+- Live Socrata/Tyler calls are generated from allowlisted `BoundedQuerySpec` fields, operators, and catalog `liveFieldMap` entries; callers never provide raw SQL or SoQL.
 - Network or live adapter failures fall back to approved sample JSON with an explicit caveat.
+- Tool errors are returned with validation categories when invoked through the MCP server.
 - Canvas outputs are JSON only, use allowlisted block types, and require a `SourceMethodBlock`.
 - Miro output is a preview-only `MiroExportSpec`; this server does not write to boards.

@@ -27,8 +27,34 @@ function jsonContent(value: unknown) {
   };
 }
 
+function toolError(error: unknown) {
+  const message = error instanceof Error ? error.message : "Tool execution failed.";
+  const category = /not approved|Unknown approved dataset/i.test(message)
+    ? "unsupported_dataset"
+    : /not allowlisted|not available|Field/i.test(message)
+      ? "unsupported_field"
+      : /limit/i.test(message)
+        ? "row_limit_exceeded"
+        : /Socrata|live adapter|fetch/i.test(message)
+          ? "live_adapter_unavailable"
+          : "validation_error";
+
+  return { ok: false, error: { category, message } };
+}
+
+function handled<T>(callback: (args: T) => unknown | Promise<unknown>) {
+  return async (args: T) => {
+    try {
+      return jsonContent(await callback(args));
+    } catch (error) {
+      return jsonContent(toolError(error));
+    }
+  };
+}
+
 const boundedQueryInput = {
   datasetId: z.string(),
+  mode: z.enum(["auto", "sample_only", "live_if_available"]).default("auto"),
   filters: z.array(z.any()).default([]),
   groupBy: z.array(z.string()).default([]),
   metrics: z.array(z.any()),
@@ -45,7 +71,7 @@ export function createServer() {
   server.registerTool("list_supported_sources", {
     title: "List supported sources",
     description: "Return allowlisted Texas public data portals and static adapters."
-  }, () => jsonContent(listSupportedSources()));
+  }, handled(() => listSupportedSources()));
 
   server.registerTool("search_datasets", {
     title: "Search datasets",
@@ -56,61 +82,61 @@ export function createServer() {
       topic: z.string().optional(),
       limit: z.number().int().positive().max(25).default(10)
     }
-  }, (args) => jsonContent(searchDatasets(args)));
+  }, handled((args) => searchDatasets(args)));
 
   server.registerTool("get_dataset_metadata", {
     title: "Get dataset metadata",
     description: "Return schema, source details, caveats, and recommended visuals.",
     inputSchema: { datasetId: z.string() }
-  }, (args) => jsonContent(getDatasetMetadata(args)));
+  }, handled((args) => getDatasetMetadata(args)));
 
   server.registerTool("query_dataset", {
     title: "Query dataset",
     description: "Run a validated BoundedQuerySpec against approved sample data.",
     inputSchema: boundedQueryInput
-  }, async (args) => jsonContent(await queryDataset(args)));
+  }, handled((args) => queryDataset(args)));
 
   server.registerTool("get_sample_rows", {
     title: "Get sample rows",
     description: "Return a safe preview of an approved dataset.",
     inputSchema: { datasetId: z.string(), limit: z.number().int().positive().max(25).default(10) }
-  }, async (args) => jsonContent(await getSampleRows(args)));
+  }, handled((args) => getSampleRows(args)));
 
   server.registerTool("summarize_query_result", {
     title: "Summarize query result",
     description: "Create a descriptive summary with caveats.",
     inputSchema: { result: z.any() }
-  }, (args) => jsonContent(summarizeQueryResult(args.result)));
+  }, handled((args) => summarizeQueryResult(args.result)));
 
   server.registerTool("recommend_visualization", {
     title: "Recommend visualization",
     description: "Recommend allowlisted canvas blocks.",
     inputSchema: { result: z.any() }
-  }, (args) => jsonContent(recommendVisualization(args.result)));
+  }, handled((args) => recommendVisualization(args.result)));
 
   server.registerTool("generate_canvas_spec", {
     title: "Generate CanvasSpec",
     description: "Generate safe CanvasDocument JSON from an approved dataset.",
     inputSchema: { datasetId: z.string() }
-  }, async (args) => jsonContent(await generateCanvasSpec(args)));
+  }, handled((args) => generateCanvasSpec(args)));
 
   server.registerTool("validate_canvas_spec", {
     title: "Validate CanvasSpec",
     description: "Validate CanvasDocument JSON and reject unsafe block specs.",
     inputSchema: { canvas: z.any() }
-  }, (args) => jsonContent(validateCanvasSpec(args.canvas)));
+  }, handled((args) => validateCanvasSpec(args.canvas)));
 
   server.registerTool("get_source_attribution", {
     title: "Get source attribution",
     description: "Return source and method attribution for a bounded query.",
     inputSchema: boundedQueryInput
-  }, (args) => jsonContent(getSourceAttribution(args)));
+  }, handled((args) => getSourceAttribution(args)));
 
   server.registerTool("audit_query", {
     title: "Audit query",
     description: "Return query safety/audit metadata.",
     inputSchema: boundedQueryInput
-  }, async (args) => jsonContent(await auditQuery(args)));
+  }, handled((args) => auditQuery(args)));
 
   server.registerTool("generate_miro_export_spec", {
     title: "Generate Miro export spec",
@@ -119,7 +145,7 @@ export function createServer() {
       canvas: z.any(),
       template: z.enum(["briefing_board", "slide_deck", "community_workshop"]).default("briefing_board")
     }
-  }, (args) => jsonContent(generateMiroExportSpec(args)));
+  }, handled((args) => generateMiroExportSpec(args)));
 
   return server;
 }

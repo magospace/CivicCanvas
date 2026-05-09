@@ -26,6 +26,7 @@ describe("MCP tool handlers", () => {
 
     const result = await queryDataset({
       datasetId: "dallas_311_requests",
+      mode: "sample_only",
       filters: [{ field: "created_date", operator: "between", value: ["2024-01-01", "2024-12-31"] }],
       groupBy: ["category"],
       metrics: [{ type: "count", alias: "request_count" }],
@@ -57,6 +58,7 @@ describe("MCP tool handlers", () => {
 
     const result = await queryDataset({
       datasetId: "dallas_311_requests",
+      mode: "sample_only",
       groupBy: ["month"],
       metrics: [{ type: "count", alias: "request_count" }],
       orderBy: [{ field: "month", direction: "asc" }],
@@ -66,13 +68,14 @@ describe("MCP tool handlers", () => {
     expect(recommendVisualization(result).recommendedBlocks).toContain("ChartBlock");
     expect(getSourceAttribution({
       datasetId: "dallas_311_requests",
+      mode: "sample_only",
       groupBy: ["month"],
       metrics: [{ type: "count", alias: "request_count" }],
       orderBy: [{ field: "month", direction: "asc" }],
       limit: 12
     }).datasetId).toBe("dallas_311_requests");
 
-    const canvas = (await generateCanvasSpec({ datasetId: "dallas_311_requests" })).canvas;
+    const canvas = (await generateCanvasSpec({ datasetId: "austin_building_permits" })).canvas;
     expect(validateCanvasSpec(canvas).ok).toBe(true);
     const miro = generateMiroExportSpec({ canvas, template: "briefing_board" });
     expect(miro.sourceMethodFrameRequired).toBe(true);
