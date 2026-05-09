@@ -1,5 +1,14 @@
 # Release Notes
 
+## v0.6.0-hosted-beta (planned)
+
+- Merge the tagged v0.5 public beta onto `main` and prepare a hosted beta branch.
+- Add manual Vercel deployment documentation for the current no-remote repo state.
+- Extend runtime health metadata for hosted deployments without exposing secrets.
+- Expand deployment smoke checks to cover health, catalog health, pages, response headers, Dallas/Austin dashboard generation, unsupported prompt behavior, and expected app version.
+- Support remote Playwright browser smoke tests through `PLAYWRIGHT_BASE_URL`.
+- Add hosted-beta runtime copy while preserving the no-auth, no-database, no-LLM, validated-JSON product model.
+
 ## v0.5.0-public-beta
 
 - Marked v0.4 production-pilot complete and prepared the no-auth public beta milestone.

@@ -29,10 +29,18 @@ Last updated: May 9, 2026
 - Saved canvases persist only in browser `localStorage`; no auth or hosted database is wired.
 - Miro export generates a safe spec only; it does not write to Miro.
 - v0.4 production-pilot hardening is complete on branch `feat/v0.4-production-pilot`: health routes, structured errors, saved-canvas bundles, prompt transparency, MCP status tools, and Playwright smoke tests.
-- v0.5 public-beta hardening is complete on branch `feat/v0.5-public-beta`: deployment smoke, production-safe headers, Dallas/Austin live verification registry, explicit data-mode controls, saved bundle migration, source-card transparency, MCP alignment, and expanded Playwright smoke tests.
+- v0.5 public-beta hardening is complete and tagged `v0.5.0-public-beta`: deployment smoke, production-safe headers, Dallas/Austin live verification registry, explicit data-mode controls, saved bundle migration, source-card transparency, MCP alignment, and expanded Playwright smoke tests.
 
 ## Current Milestone
 
-`v0.5.0-public-beta` is ready to tag after final verification.
+`v0.6.0-hosted-beta` is in progress on branch `feat/v0.6-hosted-beta`.
 
-The next target should be chosen after deployment feedback. Recommended options are a hosted public beta deployment, deeper Austin live-month resolution, or a broader dataset expansion phase.
+The v0.6 release gate is a verified public deployment. The repo has no configured Git remote today, so the first supported deployment path is manual Vercel CLI deployment. Do not tag `v0.6.0-hosted-beta` until a public URL passes deployment smoke checks and remote browser smoke tests.
+
+## v0.6 Target
+
+- Merge the v0.5 public beta onto `main` and keep the existing `v0.5.0-public-beta` tag intact.
+- Add hosted-beta deployment documentation for manual Vercel CLI deployment without committing `.vercel` project metadata, tokens, organization IDs, project IDs, or secret deployment URLs.
+- Extend health and smoke checks for public hosted validation.
+- Make Playwright smoke tests reusable against an already deployed public URL.
+- Add subtle hosted-beta runtime copy while keeping the app no-auth, no-database, no-LLM, and governed by validated `CanvasDocument` JSON rendered through the allowlisted block registry.
