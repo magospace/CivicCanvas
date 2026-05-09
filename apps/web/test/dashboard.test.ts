@@ -1,4 +1,5 @@
 import { execFileSync } from "node:child_process";
+import { NextRequest } from "next/server";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { GET as catalogHealthGET } from "../app/api/catalog/health/route";
@@ -6,6 +7,7 @@ import { POST as canvasGeneratePOST } from "../app/api/canvas/generate/route";
 import { POST as miroExportPOST } from "../app/api/export/miro-spec/route";
 import { GET as healthGET } from "../app/api/health/route";
 import { POST as queryPOST } from "../app/api/query/route";
+import { middleware } from "../middleware";
 import { apiError, parseJsonRequest } from "../lib/api";
 import { generateCanvasForPrompt } from "../lib/dashboard";
 import { generateMiroExportSpec } from "../lib/miro";
@@ -187,6 +189,21 @@ describe("production API contracts", () => {
 
     expect(body.error.message).toBe("Request failed.");
     expect(JSON.stringify(body)).not.toContain("/Users/example");
+  });
+
+  it("rate-limits repeated public POST requests in middleware", () => {
+    const ip = `203.0.113.${Math.floor(Math.random() * 200)}`;
+    let response: Response | undefined;
+
+    for (let index = 0; index < 21; index += 1) {
+      response = middleware(new NextRequest("http://localhost/api/canvas/generate", {
+        method: "POST",
+        headers: { "x-forwarded-for": ip }
+      }));
+    }
+
+    expect(response?.status).toBe(429);
+    expect(response?.headers.get("X-RateLimit-Limit")).toBe("20");
   });
 
   it("returns fallback mode when live query is requested for a sample-first dataset", async () => {

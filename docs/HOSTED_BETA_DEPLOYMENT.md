@@ -11,6 +11,7 @@ This runbook supports the first `v0.6.0-hosted-beta` deployment path while the r
 - Do not commit `.env.local` or any `.env.*.local` file.
 - Keep the app usable without secrets; sample fallback must remain available.
 - Keep dashboards as validated `CanvasDocument` JSON rendered through the allowlisted React block registry.
+- Keep Vercel-native firewall or rate-limit controls enabled for broad public sharing. The repo includes lightweight middleware throttling as a best-effort no-database guard, not as a replacement for platform controls.
 
 ## Hosted-Beta Environment
 
