@@ -1,5 +1,11 @@
 # Release Notes
 
+## v0.7.0-public-hardening (in progress)
+
+- Starts from the completed local v0.6 hosted-beta hardening branch while v0.6 tagging remains blocked on a public deployment URL.
+- Planned: typed governed errors, stricter MCP query input schemas, shared Miro export generation, deterministic prompt synonym expansion, dashboard reasoning inspector, client-side governed exports, and accessibility browser coverage.
+- Continues the no-auth, no-database, no-LLM, no arbitrary generated UI/query execution, and preview-only Miro model.
+
 ## v0.6.0-hosted-beta (in progress)
 
 - Merge the tagged v0.5 public beta onto `main` and prepare a hosted beta branch.

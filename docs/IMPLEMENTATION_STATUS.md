@@ -33,9 +33,11 @@ Last updated: May 9, 2026
 
 ## Current Milestone
 
-`v0.6.0-hosted-beta` is in progress on branch `feat/v0.6-hosted-beta`.
+`v0.7.0-public-hardening` is in progress on branch `feat/v0.7-public-hardening`.
 
 The v0.6 release gate is a verified public deployment. The repo has no configured Git remote today, so the first supported deployment path is manual Vercel CLI deployment. Do not tag `v0.6.0-hosted-beta` until a public URL passes deployment smoke checks and remote browser smoke tests.
+
+Because no public URL is available in this repo context, v0.7 starts from the completed local v0.6 hardening branch while preserving the v0.6 tag blocker in release docs.
 
 ## v0.6 Target
 
@@ -63,3 +65,12 @@ Release remains blocked until a public Vercel URL is available and the same host
 The May 9, 2026 external review was triaged into `PLAN.md`. The code-level v0.6 hardening items have been implemented locally: hosted data bundling, no-auth POST abuse controls, CSP/HSTS headers, runtime timestamps instead of frozen demo timestamps, MCP version metadata, broader deploy smoke coverage, deploy verification workflow setup, generated canvas ID collision fixes, saved-bundle import size limits, public API error sanitization, and small UX caveats/tooltips.
 
 Remaining release work is operational: obtain a public Vercel URL, run deployment smoke and remote Playwright against it, verify platform-level firewall/rate limiting for broad sharing, and then tag `v0.6.0-hosted-beta`.
+
+## v0.7 Target
+
+- Add typed governed errors and use them for MCP error categorization.
+- Tighten MCP query input schemas while preserving tool names and valid-input behavior.
+- Share Miro export generation between web and MCP.
+- Expand deterministic prompt synonyms without adding an LLM dependency.
+- Add a collapsible "Why this dashboard?" inspector section and client-side governed exports.
+- Add browser accessibility smoke coverage and fix discovered accessibility issues.
