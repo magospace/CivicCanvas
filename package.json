@@ -16,6 +16,7 @@
     "smoke:deploy:json": "node scripts/smoke-deploy.mjs --json",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "test:e2e:remote": "node scripts/require-playwright-base-url.mjs && playwright test",
     "verify": "pnpm preflight && pnpm smoke:live && pnpm test:e2e",
     "test:watch": "vitest"
   },

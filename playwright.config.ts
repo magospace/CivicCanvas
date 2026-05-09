@@ -1,16 +1,20 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const remoteBaseURL = process.env.PLAYWRIGHT_BASE_URL;
+const localBaseURL = "http://localhost:3002";
+const baseURL = remoteBaseURL ?? localBaseURL;
+
 export default defineConfig({
   testDir: "tests/e2e",
   timeout: 30_000,
   expect: { timeout: 10_000 },
   use: {
-    baseURL: "http://localhost:3002",
+    baseURL,
     trace: "retain-on-failure"
   },
-  webServer: {
+  webServer: remoteBaseURL ? undefined : {
     command: "pnpm --dir apps/web exec next dev -p 3002",
-    url: "http://localhost:3002/explore",
+    url: `${localBaseURL}/explore`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000
   },

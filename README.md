@@ -52,6 +52,7 @@ pnpm smoke:live:json
 pnpm smoke:deploy -- --url http://localhost:3000
 pnpm smoke:deploy:json -- --url http://localhost:3000
 pnpm test:e2e
+PLAYWRIGHT_BASE_URL=https://your-deployment.example pnpm test:e2e:remote
 pnpm verify
 ```
 
