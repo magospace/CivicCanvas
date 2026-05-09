@@ -91,7 +91,7 @@ Production-pilot health surfaces are available at `/api/health`, `/api/catalog/h
 
 ## Deployment
 
-The web app is ready for Vercel-style deployment from this monorepo. For v0.6 hosted-beta deployment, use the manual runbook in `docs/HOSTED_BETA_DEPLOYMENT.md`; this repo has no configured Git remote, so Git-integrated Vercel workflows are intentionally not committed yet.
+The web app is ready for Vercel-style deployment from this monorepo. For v0.6 hosted-beta deployment, use the manual runbook in `docs/HOSTED_BETA_DEPLOYMENT.md`; this repo has no configured Git remote, so Git-integrated Vercel deployment workflows are intentionally not committed yet. A manual hosted verification workflow is present for checking an already-deployed URL.
 
 ```bash
 pnpm preflight
@@ -107,6 +107,8 @@ Recommended Vercel settings:
 - Hosted beta env: `NEXT_PUBLIC_APP_ENV=hosted-beta`
 - Hosted beta version: `NEXT_PUBLIC_APP_VERSION=v0.6.0-hosted-beta`
 - Optional site URL: `NEXT_PUBLIC_SITE_URL=https://your-public-beta.example`
+
+Set hosted beta `NEXT_PUBLIC_*` values before building; Next.js captures them into the production bundle.
 
 Sample mode requires no secrets. Live Socrata adapters use verified catalog field mappings and keep sample fallbacks for demos.
 

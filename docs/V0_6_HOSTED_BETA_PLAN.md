@@ -138,6 +138,8 @@ Passed locally:
 - `pnpm smoke:deploy -- --url http://localhost:3004 --expect-version v0.6.0-hosted-beta`
 - `PLAYWRIGHT_BASE_URL=http://localhost:3004 pnpm test:e2e:remote`
 
+Local production-style smoke used a web build created with `NEXT_PUBLIC_APP_ENV=hosted-beta` and `NEXT_PUBLIC_APP_VERSION=v0.6.0-hosted-beta`, because Next.js public env metadata is captured at build time.
+
 Blocked:
 
 - No Git remote is configured.

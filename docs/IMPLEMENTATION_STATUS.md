@@ -54,6 +54,8 @@ Local hosted-beta implementation checks passed on May 9, 2026:
 - `pnpm smoke:deploy -- --url http://localhost:3004 --expect-version v0.6.0-hosted-beta`
 - `PLAYWRIGHT_BASE_URL=http://localhost:3004 pnpm test:e2e:remote`
 
+The local hosted-style production smoke rebuilt `apps/web` with `NEXT_PUBLIC_APP_ENV=hosted-beta` and `NEXT_PUBLIC_APP_VERSION=v0.6.0-hosted-beta` before `next start`, matching how Next public env metadata is captured for hosted builds.
+
 Release remains blocked until a public Vercel URL is available and the same hosted checks pass against that URL. No `v0.6.0-hosted-beta` tag has been created.
 
 ## External Review Backlog

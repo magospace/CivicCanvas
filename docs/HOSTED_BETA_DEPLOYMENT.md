@@ -30,6 +30,8 @@ NEXT_PUBLIC_SITE_URL=https://your-public-beta.example
 
 `NEXT_PUBLIC_SITE_URL` is used only for public runtime metadata and smoke-test diagnostics. It is not a secret.
 
+Next.js reads `NEXT_PUBLIC_*` values into the production client/server bundle at build time. For version-sensitive smoke checks, build the web app with the hosted-beta environment values set, not only `next start`.
+
 ## Local Preflight
 
 From the repository root:
@@ -41,6 +43,25 @@ pnpm typecheck
 pnpm test
 pnpm build
 pnpm verify
+```
+
+For a local production-style hosted smoke check after `pnpm build`, rebuild the web app with hosted-beta public metadata and run `next start` from `apps/web`:
+
+```bash
+NEXT_PUBLIC_APP_ENV=hosted-beta \
+NEXT_PUBLIC_APP_VERSION=v0.6.0-hosted-beta \
+pnpm --dir apps/web exec next build
+
+NEXT_PUBLIC_APP_ENV=hosted-beta \
+NEXT_PUBLIC_APP_VERSION=v0.6.0-hosted-beta \
+pnpm --dir apps/web exec next start -p 3004
+```
+
+Then, from another shell:
+
+```bash
+pnpm smoke:deploy -- --url http://localhost:3004 --expect-version v0.6.0-hosted-beta
+PLAYWRIGHT_BASE_URL=http://localhost:3004 pnpm test:e2e:remote
 ```
 
 ## Manual Vercel CLI Path
@@ -95,9 +116,9 @@ Do not tag `v0.6.0-hosted-beta` until the hosted deployment smoke and remote bro
 
 If a Git remote is available, the same checks can be run from GitHub Actions through the manual `Hosted Deploy Verify` workflow. Provide the public deployment URL and expected version when dispatching the workflow.
 
-## GitHub Workflow Blocker
+## GitHub Deployment Workflow Blocker
 
-A manual `workflow_dispatch` deploy workflow should be added only after all of the following are true:
+A manual `workflow_dispatch` workflow that performs Vercel deployment should be added only after all of the following are true:
 
 - A Git remote is configured.
 - `VERCEL_TOKEN` is available as a GitHub Actions secret.
