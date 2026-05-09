@@ -3,7 +3,26 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 
 const root = process.cwd();
-const catalog = JSON.parse(readFileSync(join(root, "data/catalog/approved-datasets.json"), "utf8"));
+const catalogPath = join(root, "data/catalog/approved-datasets.json");
+const sampleDir = join(root, "data/samples");
+
+function webRuntimeRepoRoot(cwd) {
+  return cwd.endsWith("apps/web") ? join(cwd, "../..") : cwd;
+}
+
+for (const cwd of [root, join(root, "apps/web")]) {
+  const runtimeRoot = webRuntimeRepoRoot(cwd);
+  const runtimeCatalogPath = join(runtimeRoot, "data/catalog/approved-datasets.json");
+  const runtimeSampleDir = join(runtimeRoot, "data/samples");
+  if (!existsSync(runtimeCatalogPath)) {
+    throw new Error(`Runtime catalog path is unavailable from ${cwd}: ${runtimeCatalogPath}`);
+  }
+  if (!existsSync(runtimeSampleDir)) {
+    throw new Error(`Runtime sample directory is unavailable from ${cwd}: ${runtimeSampleDir}`);
+  }
+}
+
+const catalog = JSON.parse(readFileSync(catalogPath, "utf8"));
 
 for (const dataset of catalog) {
   if (!dataset.id || !dataset.title || !dataset.sourceUrl) {
@@ -35,7 +54,7 @@ for (const dataset of catalog) {
   }
 
   if (dataset.fallbackSampleFile) {
-    const samplePath = join(root, "data/samples", dataset.fallbackSampleFile);
+    const samplePath = join(sampleDir, dataset.fallbackSampleFile);
     if (!existsSync(samplePath)) {
       throw new Error(`Missing fallback sample for ${dataset.id}: ${dataset.fallbackSampleFile}`);
     }
