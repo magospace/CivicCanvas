@@ -7,6 +7,12 @@
     "sourceName": "City of Austin Open Data",
     "sourceUrl": "https://data.austintexas.gov/",
     "dataAccess": "sample_first_then_api_adapter",
+    "adapter": "socrata",
+    "externalDatasetId": "austin_building_permits",
+    "apiBaseUrl": "https://data.austintexas.gov",
+    "lastVerifiedAt": "2026-05-09T00:00:00.000Z",
+    "liveAvailable": false,
+    "fallbackSampleFile": "austin-building-permits.sample.json",
     "description": "Public building permit records used for permit trend and geography analysis.",
     "fields": [
       {
@@ -65,6 +71,12 @@
     "sourceName": "City of Dallas Open Data",
     "sourceUrl": "https://www.dallasopendata.com/",
     "dataAccess": "sample_first_then_api_adapter",
+    "adapter": "socrata",
+    "externalDatasetId": "dallas_311_requests",
+    "apiBaseUrl": "https://www.dallasopendata.com",
+    "lastVerifiedAt": "2026-05-09T00:00:00.000Z",
+    "liveAvailable": false,
+    "fallbackSampleFile": "dallas-311.sample.json",
     "description": "Public 311 service request records used for category, status, trend, and geography analysis.",
     "fields": [
       {
@@ -123,6 +135,10 @@
     "sourceName": "City of Houston Open Data",
     "sourceUrl": "https://data.houstontx.gov/",
     "dataAccess": "stretch_adapter",
+    "adapter": "socrata",
+    "apiBaseUrl": "https://data.houstontx.gov",
+    "lastVerifiedAt": "2026-05-09T00:00:00.000Z",
+    "liveAvailable": false,
     "description": "Transportation incident and road project data for map-heavy analysis.",
     "fields": [],
     "recommendedVisuals": [
@@ -143,6 +159,10 @@
     "sourceName": "Texas Open Data Portal / Texas Comptroller",
     "sourceUrl": "https://data.texas.gov/",
     "dataAccess": "stretch_adapter",
+    "adapter": "socrata",
+    "apiBaseUrl": "https://data.texas.gov",
+    "lastVerifiedAt": "2026-05-09T00:00:00.000Z",
+    "liveAvailable": false,
     "description": "State spending/budget/contract data for public finance exploration.",
     "fields": [],
     "recommendedVisuals": [

@@ -45,6 +45,7 @@ Open `http://localhost:3000/explore` for the main app shell.
 pnpm typecheck
 pnpm test
 pnpm build
+pnpm preflight
 ```
 
 ## MVP demo prompts
@@ -66,6 +67,17 @@ pnpm --filter @texas-data-canvas/mcp-server inspect
 ```
 
 The MCP server exposes safe catalog, query, source attribution, audit, canvas, visualization, and Miro export-spec tools. All dataset queries are bounded and catalog-validated.
+
+## Deployment
+
+The web app is ready for Vercel-style deployment from `apps/web` after the root quality gate passes.
+
+```bash
+pnpm preflight
+pnpm --filter @texas-data-canvas/web build
+```
+
+Sample mode requires no secrets. Live public-data adapters are disabled by default until each source is verified in `data/catalog/approved-datasets.json`.
 
 ## Workspace packages
 

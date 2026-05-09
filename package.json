@@ -8,6 +8,8 @@
     "dev": "pnpm --filter @texas-data-canvas/web dev",
     "typecheck": "pnpm -r --sort typecheck",
     "build": "pnpm -r --sort build",
+    "lint": "pnpm --filter @texas-data-canvas/web lint",
+    "preflight": "node scripts/preflight.mjs && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "test": "vitest run",
     "test:watch": "vitest"
   },
