@@ -6,12 +6,14 @@ export function InspectorPanel({
   datasets,
   audits,
   onExportMiro,
+  onSave,
   onApplyFilters
 }: {
   canvas: CanvasDocument;
   datasets: DatasetMetadata[];
   audits?: QueryAudit[];
   onExportMiro?: () => void;
+  onSave?: () => void;
   onApplyFilters?: () => void;
 }) {
   const source = canvas.sources[0];
@@ -71,14 +73,22 @@ export function InspectorPanel({
       <section className="rounded-lg border border-slate-200 p-4">
         <div className="mb-3 text-sm font-semibold text-ink">Save / share / export</div>
         <div className="grid grid-cols-3 gap-2">
-          <button className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700">
+          <button
+            onClick={onSave}
+            aria-label="Save canvas locally"
+            className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700"
+          >
             <Save className="h-4 w-4" />
           </button>
-          <button className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700">
+          <button
+            aria-label="Share canvas placeholder"
+            className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700"
+          >
             <Share2 className="h-4 w-4" />
           </button>
           <button
             onClick={onExportMiro}
+            aria-label="Generate Miro export preview"
             className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700"
           >
             <Download className="h-4 w-4" />

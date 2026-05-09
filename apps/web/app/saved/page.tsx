@@ -1,6 +1,7 @@
 import { Bookmark, Share2 } from "lucide-react";
 import Link from "next/link";
 import { Header } from "../../components/header";
+import { SavedCanvases } from "../../components/saved-canvases";
 
 export default function SavedPage() {
   return (
@@ -33,6 +34,7 @@ export default function SavedPage() {
             </Link>
           ))}
         </div>
+        <SavedCanvases />
       </section>
     </main>
   );

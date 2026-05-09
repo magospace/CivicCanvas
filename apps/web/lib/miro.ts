@@ -73,6 +73,7 @@ export function generateMiroExportSpec({
   ];
 
   return miroExportSpecSchema.parse({
+    schemaVersion: "1.0",
     title: `${validCanvas.title} ${template.replace(/_/g, " ")}`,
     template,
     sourceMethodFrameRequired: true,

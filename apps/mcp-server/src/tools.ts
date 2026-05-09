@@ -2,14 +2,13 @@ import { z } from "zod";
 import {
   boundedQuerySpecSchema,
   createSourceAttribution,
-  executeBoundedQuery,
   safeValidateCanvasDocument,
   validateCanvasDocument,
   type CanvasDocument,
   type DatasetMetadata,
   type QueryResult
 } from "@texas-data-canvas/shared";
-import { getCatalog, getRows } from "./data.js";
+import { getAdapter, getCatalog } from "./data.js";
 
 export function listSupportedSources() {
   const sources = new Map<string, { id: string; name: string; url: string; adapter: string }>();
@@ -73,24 +72,19 @@ export function getDatasetMetadata(input: unknown) {
   };
 }
 
-export function queryDataset(input: unknown) {
+export async function queryDataset(input: unknown) {
   const spec = boundedQuerySpecSchema.parse(input);
-  return executeBoundedQuery({
-    catalog: getCatalog(),
-    rows: getRows(spec.datasetId),
-    spec,
-    accessedAt: "2026-05-09T00:00:00.000Z"
-  }).result;
+  return (await getAdapter().queryDataset(spec)).result;
 }
 
-export function getSampleRows(input: unknown) {
+export async function getSampleRows(input: unknown) {
   const { datasetId, limit } = z
     .object({ datasetId: z.string(), limit: z.number().int().positive().max(25).default(10) })
     .parse(input);
 
   return {
     datasetId,
-    rows: getRows(datasetId).slice(0, limit)
+    rows: await getAdapter().getSampleRows(datasetId, limit)
   };
 }
 
@@ -124,29 +118,25 @@ export function recommendVisualization(input: unknown) {
   };
 }
 
-export function generateCanvasSpec(input: unknown) {
+export async function generateCanvasSpec(input: unknown) {
   const { datasetId } = z.object({ datasetId: z.string() }).parse(input);
   const dataset = findDataset(datasetId);
   const dateField = dataset.fields.find((field) => field.type === "date")?.name ?? "month";
   const categoryField = dataset.fields.find((field) => field.name.includes("category") || field.name.includes("type"))?.name ?? "status";
   const countAlias = datasetId.includes("permit") ? "permit_count" : "request_count";
-  const execution = executeBoundedQuery({
-    catalog: getCatalog(),
-    rows: getRows(datasetId),
-    spec: {
-      datasetId,
-      filters: [{ field: dateField, operator: "between", value: ["2024-01-01", "2024-12-31"] }],
-      groupBy: [categoryField],
-      metrics: [{ type: "count", alias: countAlias }],
-      orderBy: [{ field: countAlias, direction: "desc" }],
-      limit: 10
-    },
-    accessedAt: "2026-05-09T00:00:00.000Z"
+  const execution = await getAdapter().queryDataset({
+    datasetId,
+    filters: [{ field: dateField, operator: "between", value: ["2024-01-01", "2024-12-31"] }],
+    groupBy: [categoryField],
+    metrics: [{ type: "count", alias: countAlias }],
+    orderBy: [{ field: countAlias, direction: "desc" }],
+    limit: 10
   });
   const source = execution.result.source;
 
   return {
     canvas: validateCanvasDocument({
+      schemaVersion: "1.0",
       id: `canvas_${datasetId}`,
       title: `${dataset.title} Dashboard`,
       createdAt: "2026-05-09T00:00:00.000Z",
@@ -194,14 +184,9 @@ export function getSourceAttribution(input: unknown) {
   return createSourceAttribution(findDataset(spec.datasetId), spec, "2026-05-09T00:00:00.000Z");
 }
 
-export function auditQuery(input: unknown) {
+export async function auditQuery(input: unknown) {
   const spec = boundedQuerySpecSchema.parse(input);
-  return executeBoundedQuery({
-    catalog: getCatalog(),
-    rows: getRows(spec.datasetId),
-    spec,
-    accessedAt: "2026-05-09T00:00:00.000Z"
-  }).audit;
+  return (await getAdapter().queryDataset(spec)).audit;
 }
 
 export function generateMiroExportSpec(input: unknown) {
@@ -214,6 +199,7 @@ export function generateMiroExportSpec(input: unknown) {
   const validCanvas = validateCanvasDocument(canvas);
 
   return {
+    schemaVersion: "1.0",
     title: `${validCanvas.title} ${template.replace(/_/g, " ")}`,
     template,
     sourceMethodFrameRequired: true,

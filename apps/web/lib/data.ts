@@ -3,7 +3,9 @@ import { join } from "node:path";
 import { z } from "zod";
 import {
   approvedDatasetCatalogSchema,
-  type DatasetMetadata
+  createAdapterRouter,
+  type DatasetMetadata,
+  type DatasetSamples
 } from "@texas-data-canvas/shared";
 
 const sampleFileSchema = z.object({
@@ -37,6 +39,20 @@ export function getSampleRows(datasetId: string) {
 
   const sample = sampleFileSchema.parse(readJson(`data/samples/${fileName}`));
   return sample.rows;
+}
+
+export function getDatasetSamples(): DatasetSamples {
+  return Object.fromEntries(
+    Object.keys(sampleFiles).map((datasetId) => [datasetId, getSampleRows(datasetId)])
+  );
+}
+
+export function getDatasetAdapter() {
+  return createAdapterRouter({
+    catalog: getDatasetCatalog(),
+    samples: getDatasetSamples(),
+    accessedAt: "2026-05-09T00:00:00.000Z"
+  });
 }
 
 export function findDataset(datasets: DatasetMetadata[], datasetId: string): DatasetMetadata {

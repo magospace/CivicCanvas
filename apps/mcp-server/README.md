@@ -1,6 +1,6 @@
 # Texas Public Data MCP Server
 
-MCP stdio server for safe Texas public dataset discovery, bounded sample-data queries, source attribution, audit records, and validated CanvasSpec generation.
+MCP stdio server for safe Texas public dataset discovery, bounded queries, source attribution, audit records, and validated CanvasSpec generation.
 
 ## Commands
 
@@ -41,3 +41,13 @@ pnpm --filter @texas-data-canvas/mcp-server inspect
 ```
 
 The server does not execute arbitrary SQL, generated JavaScript, generated HTML, or unapproved dataset access.
+
+## Safety model
+
+- All tool inputs are validated with Zod before execution.
+- Dataset access is routed through the approved catalog and adapter router.
+- Current catalog entries keep live access disabled unless `liveAvailable` is explicitly true.
+- Live Socrata/Tyler calls are generated from allowlisted `BoundedQuerySpec` fields and operators; callers never provide raw SQL or SoQL.
+- Network or live adapter failures fall back to approved sample JSON with an explicit caveat.
+- Canvas outputs are JSON only, use allowlisted block types, and require a `SourceMethodBlock`.
+- Miro output is a preview-only `MiroExportSpec`; this server does not write to boards.

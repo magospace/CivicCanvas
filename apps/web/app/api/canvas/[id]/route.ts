@@ -6,12 +6,12 @@ const savedCanvases = {
   canvas_austin_permits_seed: "Show Austin building permits by month and ZIP code."
 };
 
-export function GET(_request: Request, { params }: { params: { id: keyof typeof savedCanvases } }) {
+export async function GET(_request: Request, { params }: { params: { id: keyof typeof savedCanvases } }) {
   const prompt = savedCanvases[params.id];
 
   if (!prompt) {
     return NextResponse.json({ error: "Canvas not found." }, { status: 404 });
   }
 
-  return NextResponse.json(generateCanvasForPrompt(prompt));
+  return NextResponse.json(await generateCanvasForPrompt(prompt));
 }

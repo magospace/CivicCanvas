@@ -53,7 +53,17 @@ function renderBlock(block: CanvasBlock) {
   }
 }
 
-export function CanvasRenderer({ document }: { document: CanvasDocument }) {
+export function CanvasRenderer({
+  document,
+  filterValues = {},
+  onFilterChange,
+  onApplyFilters
+}: {
+  document: CanvasDocument;
+  filterValues?: Record<string, string>;
+  onFilterChange?: (field: string, value: string) => void;
+  onApplyFilters?: () => void;
+}) {
   const validation = safeValidateCanvasDocument(document);
 
   if (!validation.ok) {
@@ -108,7 +118,16 @@ export function CanvasRenderer({ document }: { document: CanvasDocument }) {
                 : undefined
             }
           >
-            {renderBlock(block)}
+            {block.type === "FilterBlock" ? (
+              <FilterBlockView
+                {...block}
+                values={filterValues}
+                onChange={onFilterChange}
+                onApply={onApplyFilters}
+              />
+            ) : (
+              renderBlock(block)
+            )}
           </div>
         ))}
       </div>

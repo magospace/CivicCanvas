@@ -2,10 +2,16 @@ import { describe, expect, it } from "vitest";
 import {
   auditQuery,
   generateCanvasSpec,
+  generateMiroExportSpec,
   getDatasetMetadata,
+  getSampleRows,
+  getSourceAttribution,
   listSupportedSources,
   queryDataset,
-  searchDatasets
+  recommendVisualization,
+  searchDatasets,
+  summarizeQueryResult,
+  validateCanvasSpec
 } from "../src/tools";
 
 describe("MCP tool handlers", () => {
@@ -14,11 +20,11 @@ describe("MCP tool handlers", () => {
     expect(searchDatasets({ query: "Dallas 311" }).datasets[0].datasetId).toBe("dallas_311_requests");
   });
 
-  it("returns metadata and bounded query results", () => {
+  it("returns metadata and bounded query results", async () => {
     const metadata = getDatasetMetadata({ datasetId: "dallas_311_requests" });
     expect(metadata.fields.map((field) => field.name)).toContain("category");
 
-    const result = queryDataset({
+    const result = await queryDataset({
       datasetId: "dallas_311_requests",
       filters: [{ field: "created_date", operator: "between", value: ["2024-01-01", "2024-12-31"] }],
       groupBy: ["category"],
@@ -31,11 +37,11 @@ describe("MCP tool handlers", () => {
     expect(result.source.datasetTitle).toContain("Dallas");
   });
 
-  it("generates canvas spec and query audit", () => {
-    const canvas = generateCanvasSpec({ datasetId: "austin_building_permits" }).canvas;
+  it("generates canvas spec and query audit", async () => {
+    const canvas = (await generateCanvasSpec({ datasetId: "austin_building_permits" })).canvas;
     expect(canvas.blocks.map((block) => block.type)).toContain("SourceMethodBlock");
 
-    const audit = auditQuery({
+    const audit = await auditQuery({
       datasetId: "austin_building_permits",
       groupBy: ["month"],
       metrics: [{ type: "count", alias: "permit_count" }],
@@ -43,5 +49,32 @@ describe("MCP tool handlers", () => {
       limit: 12
     });
     expect(audit.safetyDecisions.join(" ")).toContain("Fields and operators");
+  });
+
+  it("covers sample, summary, visualization, attribution, validation, and Miro tools", async () => {
+    const sample = await getSampleRows({ datasetId: "dallas_311_requests", limit: 5 });
+    expect(sample.rows).toHaveLength(5);
+
+    const result = await queryDataset({
+      datasetId: "dallas_311_requests",
+      groupBy: ["month"],
+      metrics: [{ type: "count", alias: "request_count" }],
+      orderBy: [{ field: "month", direction: "asc" }],
+      limit: 12
+    });
+    expect(summarizeQueryResult(result).summary).toContain("bounded rows");
+    expect(recommendVisualization(result).recommendedBlocks).toContain("ChartBlock");
+    expect(getSourceAttribution({
+      datasetId: "dallas_311_requests",
+      groupBy: ["month"],
+      metrics: [{ type: "count", alias: "request_count" }],
+      orderBy: [{ field: "month", direction: "asc" }],
+      limit: 12
+    }).datasetId).toBe("dallas_311_requests");
+
+    const canvas = (await generateCanvasSpec({ datasetId: "dallas_311_requests" })).canvas;
+    expect(validateCanvasSpec(canvas).ok).toBe(true);
+    const miro = generateMiroExportSpec({ canvas, template: "briefing_board" });
+    expect(miro.sourceMethodFrameRequired).toBe(true);
   });
 });

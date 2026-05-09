@@ -12,15 +12,21 @@ Last updated: May 9, 2026
 - P5 prompt flow: deterministic Dallas 311 and Austin permits prompt matching, API routes, generated dashboard rendering.
 - P6 stretch preview: `MiroExportSpec` generation with required source/method frame and no board writes.
 - P7 demo hardening: route smoke tests, source catalog filters, saved demo placeholders, tests, docs.
+- Post-MVP hardening: shared package split into focused schema, query, canvas, adapter, prompt, persistence, and Miro modules while preserving the package export surface.
+- Live adapter boundary: dataset adapter interface, static JSON adapter, Socrata URL builder, adapter router, catalog live metadata, and mandatory sample fallback.
+- Dashboard state: prompt, filters, generated canvas, query audit, save action, and Miro preview are wired in the `/explore` client shell.
+- Geography: `MapBlock` supports governed ZIP bubble feature data with an SVG renderer and fallback placeholder.
+- Saved canvases: `/saved` reads browser-local saved canvases, validates imported specs, and supports open, duplicate, delete, and JSON preview actions.
+- CI and quality gates: ESLint, GitHub Actions, and a preflight script validate lint, typecheck, tests, build, catalog, and fallback sample files.
 
 ## Current Limitations
 
-- Live public API adapters are not implemented; MVP uses local sample JSON for reliability.
-- Prompt interpretation is deterministic and supports the two demo workflows.
-- ZIP geography is a static visual placeholder rather than MapLibre/GeoJSON.
-- Saved canvases are preview placeholders; no persistent database is wired.
+- Socrata/Tyler live adapter support is scaffolded and tested at the URL/fallback boundary, but current catalog entries keep `liveAvailable` disabled and use local samples for reliable demos.
+- Prompt interpretation is deterministic with a typed `PromptIntent` layer for supported city/topic/date/grouping requests.
+- ZIP geography uses bundled approximate centroid/bubble features, not full ZCTA boundaries or live tile layers.
+- Saved canvases persist only in browser `localStorage`; no auth or hosted database is wired.
 - Miro export generates a safe spec only; it does not write to Miro.
 
 ## Next Target
 
-After MVP review, add live Socrata/Tyler adapters behind the same `BoundedQuerySpec` validation and replace the ZIP placeholder with a real aggregate geography layer.
+Verify the new adapter/filter/save/export flows in browser QA, then promote selected catalog entries to `liveAvailable` only after their portal metadata and field mappings are confirmed.

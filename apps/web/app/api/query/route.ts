@@ -1,17 +1,12 @@
 import { NextResponse } from "next/server";
-import { boundedQuerySpecSchema, executeBoundedQuery } from "@texas-data-canvas/shared";
-import { getDatasetCatalog, getSampleRows } from "../../../lib/data";
+import { boundedQuerySpecSchema } from "@texas-data-canvas/shared";
+import { getDatasetAdapter } from "../../../lib/data";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     const spec = boundedQuerySpecSchema.parse(body);
-    const execution = executeBoundedQuery({
-      catalog: getDatasetCatalog(),
-      rows: getSampleRows(spec.datasetId),
-      spec,
-      accessedAt: "2026-05-09T00:00:00.000Z"
-    });
+    const execution = await getDatasetAdapter().queryDataset(spec);
 
     return NextResponse.json(execution);
   } catch (error) {

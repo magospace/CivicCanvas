@@ -1,7 +1,13 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { approvedDatasetCatalogSchema, type DatasetMetadata, type SampleRow } from "@texas-data-canvas/shared";
+import {
+  approvedDatasetCatalogSchema,
+  createAdapterRouter,
+  type DatasetMetadata,
+  type DatasetSamples,
+  type SampleRow
+} from "@texas-data-canvas/shared";
 
 const sampleFiles: Record<string, string> = {
   austin_building_permits: "austin-building-permits.sample.json",
@@ -29,4 +35,16 @@ export function getRows(datasetId: string): SampleRow[] {
 
   const sample = readJson(`data/samples/${fileName}`) as { rows: SampleRow[] };
   return sample.rows;
+}
+
+export function getSamples(): DatasetSamples {
+  return Object.fromEntries(Object.keys(sampleFiles).map((datasetId) => [datasetId, getRows(datasetId)]));
+}
+
+export function getAdapter() {
+  return createAdapterRouter({
+    catalog: getCatalog(),
+    samples: getSamples(),
+    accessedAt: "2026-05-09T00:00:00.000Z"
+  });
 }

@@ -1,20 +1,27 @@
 import {
-  executeBoundedQuery,
+  parsePromptIntent,
   safeValidateCanvasDocument,
   validateCanvasDocument,
   type BoundedQuerySpec,
   type CanvasDocument,
+  type DatasetAdapter,
   type DatasetMetadata,
+  type PromptIntent,
   type QueryAudit,
   type QueryResult,
   type SampleRow,
   type SourceAttribution
 } from "@texas-data-canvas/shared";
-import { findDataset, getDatasetCatalog, getSampleRows } from "./data";
+import { findDataset, getDatasetAdapter, getDatasetCatalog } from "./data";
+import { zipFeaturesForRows } from "./geography";
+
+export type DashboardFilterValues = Record<string, string>;
 
 export type DashboardGeneration = {
   canvas: CanvasDocument;
   audits: QueryAudit[];
+  intent?: PromptIntent;
+  querySpec?: BoundedQuerySpec;
   suggestedDatasets?: DatasetMetadata[];
 };
 
@@ -27,57 +34,49 @@ type DemoIntent = {
   dateField: string;
   geographyField: string;
   categoryField: string;
+  statusField: string;
   topLabel: string;
   caveatLead: string;
 };
 
-const dallasIntent: DemoIntent = {
-  datasetId: "dallas_311_requests",
-  title: "Dallas 311 Service Requests Explorer",
-  summaryHeading: "Dallas 311 requests by category and ZIP",
-  metricLabel: "Sample requests",
-  countAlias: "request_count",
-  dateField: "created_date",
-  geographyField: "zip_code",
-  categoryField: "category",
-  topLabel: "Top request category",
-  caveatLead: "311 records reflect reported service requests, not every neighborhood condition."
-};
-
-const austinIntent: DemoIntent = {
-  datasetId: "austin_building_permits",
-  title: "Austin Building Permits Explorer",
-  summaryHeading: "Austin permits by month and ZIP",
-  metricLabel: "Sample permits",
-  countAlias: "permit_count",
-  dateField: "issued_date",
-  geographyField: "zip_code",
-  categoryField: "permit_type",
-  topLabel: "Top permit type",
-  caveatLead: "Permit records are administrative data and may not represent construction starts."
-};
+const demoIntents: DemoIntent[] = [
+  {
+    datasetId: "dallas_311_requests",
+    title: "Dallas 311 Service Requests Explorer",
+    summaryHeading: "Dallas 311 requests by category and ZIP",
+    metricLabel: "Sample requests",
+    countAlias: "request_count",
+    dateField: "created_date",
+    geographyField: "zip_code",
+    categoryField: "category",
+    statusField: "status",
+    topLabel: "Top request category",
+    caveatLead: "311 records reflect reported service requests, not every neighborhood condition."
+  },
+  {
+    datasetId: "austin_building_permits",
+    title: "Austin Building Permits Explorer",
+    summaryHeading: "Austin permits by month and ZIP",
+    metricLabel: "Sample permits",
+    countAlias: "permit_count",
+    dateField: "issued_date",
+    geographyField: "zip_code",
+    categoryField: "permit_type",
+    statusField: "status",
+    topLabel: "Top permit type",
+    caveatLead: "Permit records are administrative data and may not represent construction starts."
+  }
+];
 
 function detectIntent(prompt: string): DemoIntent | null {
   const normalized = prompt.toLowerCase();
-
   if (normalized.includes("austin") && normalized.includes("permit")) {
-    return austinIntent;
+    return demoIntents[1];
   }
-
   if (normalized.includes("dallas") && (normalized.includes("311") || normalized.includes("service"))) {
-    return dallasIntent;
+    return demoIntents[0];
   }
-
   return null;
-}
-
-function runQuery(catalog: DatasetMetadata[], rows: SampleRow[], spec: BoundedQuerySpec) {
-  return executeBoundedQuery({
-    catalog,
-    rows,
-    spec,
-    accessedAt: "2026-05-09T00:00:00.000Z"
-  });
 }
 
 function numeric(row: Record<string, unknown>, field: string) {
@@ -89,7 +88,7 @@ function stringify(row: Record<string, unknown>, field: string) {
   return String(row[field] ?? "Unknown");
 }
 
-function chartRows(result: QueryResult, xField: string, yField: string) {
+function chartRows(result: QueryResult, xField: string, yField: string): SampleRow[] {
   return result.rows.map((row) => ({
     [xField]: stringify(row, xField),
     [yField]: numeric(row, yField)
@@ -99,6 +98,41 @@ function chartRows(result: QueryResult, xField: string, yField: string) {
 function topValue(result: QueryResult, labelField: string, valueField: string) {
   const top = result.rows[0];
   return top ? `${stringify(top, labelField)} (${numeric(top, valueField)})` : "No records";
+}
+
+function defaultDateRange(prompt: string) {
+  const year = prompt.match(/\b(20\d{2})\b/)?.[1] ?? "2024";
+  return [`${year}-01-01`, `${year}-12-31`];
+}
+
+function parseDateRange(value: string | undefined, prompt: string) {
+  if (!value || value === "All") {
+    return defaultDateRange(prompt);
+  }
+  const parts = value.split(/\s+to\s+|,/i).map((part) => part.trim()).filter(Boolean);
+  if (parts.length === 2) {
+    return [parts[0], parts[1]];
+  }
+  return defaultDateRange(prompt);
+}
+
+function buildFilters(prompt: string, intent: DemoIntent, filterValues: DashboardFilterValues = {}) {
+  const filters: BoundedQuerySpec["filters"] = [
+    {
+      field: intent.dateField,
+      operator: "between",
+      value: parseDateRange(filterValues[intent.dateField], prompt)
+    }
+  ];
+
+  for (const field of [intent.categoryField, intent.statusField, intent.geographyField]) {
+    const value = filterValues[field];
+    if (value && value !== "All") {
+      filters.push({ field, operator: "eq", value });
+    }
+  }
+
+  return filters;
 }
 
 function createCombinedSource(
@@ -117,68 +151,87 @@ function createCombinedSource(
     accessedAt: "2026-05-09T00:00:00.000Z",
     fieldsUsed,
     filtersApplied,
-    queryMethod: `Deterministic MVP prompt match for: "${prompt}"`,
+    queryMethod: `Rule-based prompt intent for: "${prompt}"`,
     caveats: dataset.caveats,
     license: "Refer to source portal terms"
   };
 }
 
-function createDashboardForIntent(prompt: string, intent: DemoIntent): DashboardGeneration {
+async function runQuery(adapter: DatasetAdapter, spec: BoundedQuerySpec) {
+  return adapter.queryDataset(spec);
+}
+
+async function createDashboardForIntent({
+  prompt,
+  intent,
+  filterValues = {}
+}: {
+  prompt: string;
+  intent: DemoIntent;
+  filterValues?: DashboardFilterValues;
+}): Promise<DashboardGeneration> {
   const catalog = getDatasetCatalog();
+  const adapter = getDatasetAdapter();
   const dataset = findDataset(catalog, intent.datasetId);
-  const rows = getSampleRows(intent.datasetId);
+  const promptIntent = parsePromptIntent({ prompt, catalog });
+  const filters = buildFilters(prompt, intent, filterValues);
 
-  const dateFilter = {
-    field: intent.dateField,
-    operator: "between" as const,
-    value: ["2024-01-01", "2024-12-31"]
-  };
-
-  const total = runQuery(catalog, rows, {
+  const monthlySpec: BoundedQuerySpec = {
+    schemaVersion: "1.0",
     datasetId: intent.datasetId,
-    filters: [dateFilter],
+    filters,
     groupBy: ["month"],
     metrics: [{ type: "count", alias: intent.countAlias }],
     orderBy: [{ field: "month", direction: "asc" }],
     limit: 12
-  });
-
-  const byCategory = runQuery(catalog, rows, {
+  };
+  const categorySpec: BoundedQuerySpec = {
+    schemaVersion: "1.0",
     datasetId: intent.datasetId,
-    filters: [dateFilter],
+    filters,
     groupBy: [intent.categoryField],
     metrics: [{ type: "count", alias: intent.countAlias }],
     orderBy: [{ field: intent.countAlias, direction: "desc" }],
     limit: 8
-  });
-
-  const byZip = runQuery(catalog, rows, {
+  };
+  const zipSpec: BoundedQuerySpec = {
+    schemaVersion: "1.0",
     datasetId: intent.datasetId,
-    filters: [dateFilter],
+    filters,
     groupBy: [intent.geographyField],
     metrics: [{ type: "count", alias: intent.countAlias }],
     orderBy: [{ field: intent.countAlias, direction: "desc" }],
     limit: 8
-  });
-
-  const table = runQuery(catalog, rows, {
+  };
+  const tableSpec: BoundedQuerySpec = {
+    schemaVersion: "1.0",
     datasetId: intent.datasetId,
-    filters: [dateFilter],
-    groupBy: [intent.categoryField, intent.geographyField],
+    filters,
+    groupBy: [intent.categoryField, intent.statusField, intent.geographyField],
     metrics: [{ type: "count", alias: intent.countAlias }],
     orderBy: [{ field: intent.countAlias, direction: "desc" }],
     limit: 20
-  });
+  };
 
-  const results = [total.result, byCategory.result, byZip.result, table.result];
-  const audits = [total.audit, byCategory.audit, byZip.audit, table.audit];
+  const [monthly, byCategory, byZip, table] = await Promise.all([
+    runQuery(adapter, monthlySpec),
+    runQuery(adapter, categorySpec),
+    runQuery(adapter, zipSpec),
+    runQuery(adapter, tableSpec)
+  ]);
+
+  const results = [monthly.result, byCategory.result, byZip.result, table.result];
+  const audits = [monthly.audit, byCategory.audit, byZip.audit, table.audit];
   const source = createCombinedSource(dataset, results, prompt);
-  const totalCount = total.result.rows.reduce((sum, row) => sum + numeric(row, intent.countAlias), 0);
+  const totalCount = monthly.result.rows.reduce((sum, row) => sum + numeric(row, intent.countAlias), 0);
+  const zipRows = chartRows(byZip.result, intent.geographyField, intent.countAlias);
 
   const canvas = validateCanvasDocument({
+    schemaVersion: "1.0",
     id: `canvas_${intent.datasetId}`,
     title: intent.title,
-    description: "Generated from a validated CanvasDocument returned by the local MVP API.",
+    prompt,
+    description: "Generated from validated CanvasDocument JSON returned by the governed local API.",
     createdAt: "2026-05-09T00:00:00.000Z",
     updatedAt: "2026-05-09T00:00:00.000Z",
     sources: [source],
@@ -193,11 +246,13 @@ function createDashboardForIntent(prompt: string, intent: DemoIntent): Dashboard
         type: "SummaryBlock",
         props: {
           heading: intent.summaryHeading,
-          text: `This dashboard summarizes ${totalCount.toLocaleString("en-US")} local sample records from ${dataset.title}. ${intent.caveatLead}`,
+          text: `This dashboard summarizes ${totalCount.toLocaleString("en-US")} records from ${dataset.title}. ${intent.caveatLead}`,
           bullets: [
             "Dataset, fields, filters, and row limits were validated before querying.",
             "Visuals are rendered through the allowlisted React block registry.",
-            "Source and method details are required and remain visible."
+            dataset.liveAvailable
+              ? "Live adapter is configured for this source."
+              : "Static sample fallback is active for demo reliability."
           ]
         }
       },
@@ -207,7 +262,7 @@ function createDashboardForIntent(prompt: string, intent: DemoIntent): Dashboard
         props: {
           label: intent.metricLabel,
           value: totalCount.toLocaleString("en-US"),
-          helperText: "Count from bounded sample query",
+          helperText: "Count from bounded query",
           tone: "neutral"
         }
       },
@@ -217,7 +272,7 @@ function createDashboardForIntent(prompt: string, intent: DemoIntent): Dashboard
         props: {
           label: intent.topLabel,
           value: topValue(byCategory.result, intent.categoryField, intent.countAlias),
-          helperText: "Highest count in sample aggregate",
+          helperText: "Highest count in aggregate",
           tone: "good"
         }
       },
@@ -230,18 +285,22 @@ function createDashboardForIntent(prompt: string, intent: DemoIntent): Dashboard
           chartType: "line",
           xField: "month",
           yField: intent.countAlias,
-          data: chartRows(total.result, "month", intent.countAlias)
+          data: chartRows(monthly.result, "month", intent.countAlias)
         }
       },
       {
         id: "zip-geography",
         type: "MapBlock",
         props: {
-          title: "ZIP-code geography placeholder",
+          title: "ZIP-code aggregate geography",
+          geographyMode: "zip_bubble",
           geographyField: intent.geographyField,
           metricField: intent.countAlias,
-          data: chartRows(byZip.result, intent.geographyField, intent.countAlias),
-          note: "This MVP uses a ZIP-level geography placeholder, not live map tiles."
+          data: zipRows,
+          features: zipFeaturesForRows(zipRows, intent.geographyField),
+          legend: `${intent.countAlias.replace(/_/g, " ")} by ZIP code`,
+          note:
+            "ZIP-level coordinates are approximate centroids for aggregate context. Sample mode may not represent full live public records."
         }
       },
       {
@@ -275,21 +334,27 @@ function createDashboardForIntent(prompt: string, intent: DemoIntent): Dashboard
         id: "filters",
         type: "FilterBlock",
         props: {
-          title: "Filter definitions",
+          title: "Dashboard filters",
           filters: [
-            { field: dataset.city, label: "City", type: "select", options: [dataset.city] },
+            { field: "city", label: "City", type: "select", options: ["All", dataset.city] },
             { field: intent.dateField, label: "Date range", type: "dateRange" },
             {
               field: intent.categoryField,
               label: intent.categoryField.replace(/_/g, " "),
               type: "select",
-              options: byCategory.result.rows.map((row) => stringify(row, intent.categoryField))
+              options: ["All", ...byCategory.result.rows.map((row) => stringify(row, intent.categoryField))]
+            },
+            {
+              field: intent.statusField,
+              label: "Status",
+              type: "select",
+              options: ["All", ...new Set(table.result.rows.map((row) => stringify(row, intent.statusField)))]
             },
             {
               field: intent.geographyField,
               label: "ZIP code",
               type: "select",
-              options: byZip.result.rows.map((row) => stringify(row, intent.geographyField))
+              options: ["All", ...byZip.result.rows.map((row) => stringify(row, intent.geographyField))]
             }
           ]
         }
@@ -297,9 +362,7 @@ function createDashboardForIntent(prompt: string, intent: DemoIntent): Dashboard
       {
         id: "dataset-card",
         type: "DatasetCardBlock",
-        props: {
-          dataset
-        }
+        props: { dataset }
       },
       {
         id: "source-method",
@@ -307,27 +370,31 @@ function createDashboardForIntent(prompt: string, intent: DemoIntent): Dashboard
         props: {
           attribution: source,
           methodology:
-            "Generated through deterministic prompt matching, approved catalog lookup, BoundedQuerySpec validation, local sample query execution, and CanvasDocument validation. No arbitrary SQL, HTML, JavaScript, or external scripts are executed."
+            "Generated through rule-based prompt intent, approved catalog lookup, adapter-routed BoundedQuerySpec execution, and CanvasDocument validation. No arbitrary SQL, HTML, JavaScript, or external scripts are executed."
         }
       }
     ]
   });
 
-  return { canvas, audits };
+  return { canvas, audits, intent: promptIntent, querySpec: tableSpec };
 }
 
-export function generateCanvasForPrompt(prompt: string): DashboardGeneration {
+export async function generateCanvasForPrompt(
+  prompt: string,
+  filterValues: DashboardFilterValues = {}
+): Promise<DashboardGeneration> {
   const intent = detectIntent(prompt);
 
   if (!intent) {
     return {
       canvas: createDatasetSuggestionCanvas(prompt),
       audits: [],
+      intent: parsePromptIntent({ prompt, catalog: getDatasetCatalog() }),
       suggestedDatasets: getDatasetCatalog().filter((dataset) => dataset.fields.length > 0)
     };
   }
 
-  return createDashboardForIntent(prompt, intent);
+  return createDashboardForIntent({ prompt, intent, filterValues });
 }
 
 export function createDatasetSuggestionCanvas(prompt: string): CanvasDocument {
@@ -341,17 +408,19 @@ export function createDatasetSuggestionCanvas(prompt: string): CanvasDocument {
     accessedAt: "2026-05-09T00:00:00.000Z",
     fieldsUsed: [],
     filtersApplied: [],
-    queryMethod: `No deterministic MVP prompt match for: "${prompt}"`,
+    queryMethod: `No supported rule-based prompt match for: "${prompt}"`,
     caveats: [
-      "The MVP only generates dashboards for the Dallas 311 and Austin permits demo prompts."
+      "The current parser only generates dashboards for approved Dallas 311 and Austin permits workflows."
     ],
     license: "Refer to source portal terms"
   };
 
   return validateCanvasDocument({
+    schemaVersion: "1.0",
     id: "canvas_dataset_suggestions",
     title: "Choose an approved dataset",
-    description: "The prompt did not match a supported MVP workflow.",
+    prompt,
+    description: "The prompt did not match a supported workflow.",
     createdAt: "2026-05-09T00:00:00.000Z",
     updatedAt: "2026-05-09T00:00:00.000Z",
     sources: [source],
@@ -361,7 +430,7 @@ export function createDatasetSuggestionCanvas(prompt: string): CanvasDocument {
         id: "summary",
         type: "SummaryBlock",
         props: {
-          heading: "Unsupported prompt for MVP",
+          heading: "Unsupported prompt for governed generation",
           text: "Try the Dallas 311 or Austin building permit demo prompt. Unknown prompts return suggestions instead of hallucinated dashboards.",
           bullets: [
             "Show Dallas 311 service requests by category and ZIP code for 2024.",
@@ -380,7 +449,7 @@ export function createDatasetSuggestionCanvas(prompt: string): CanvasDocument {
         props: {
           attribution: source,
           methodology:
-            "The app declined to generate a dashboard because the prompt did not match an implemented deterministic workflow."
+            "The app declined to generate a dashboard because the prompt did not match an implemented governed workflow."
         }
       }
     ]

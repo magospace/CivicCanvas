@@ -68,13 +68,13 @@ export function createServer() {
     title: "Query dataset",
     description: "Run a validated BoundedQuerySpec against approved sample data.",
     inputSchema: boundedQueryInput
-  }, (args) => jsonContent(queryDataset(args)));
+  }, async (args) => jsonContent(await queryDataset(args)));
 
   server.registerTool("get_sample_rows", {
     title: "Get sample rows",
     description: "Return a safe preview of an approved dataset.",
     inputSchema: { datasetId: z.string(), limit: z.number().int().positive().max(25).default(10) }
-  }, (args) => jsonContent(getSampleRows(args)));
+  }, async (args) => jsonContent(await getSampleRows(args)));
 
   server.registerTool("summarize_query_result", {
     title: "Summarize query result",
@@ -92,7 +92,7 @@ export function createServer() {
     title: "Generate CanvasSpec",
     description: "Generate safe CanvasDocument JSON from an approved dataset.",
     inputSchema: { datasetId: z.string() }
-  }, (args) => jsonContent(generateCanvasSpec(args)));
+  }, async (args) => jsonContent(await generateCanvasSpec(args)));
 
   server.registerTool("validate_canvas_spec", {
     title: "Validate CanvasSpec",
@@ -110,7 +110,7 @@ export function createServer() {
     title: "Audit query",
     description: "Return query safety/audit metadata.",
     inputSchema: boundedQueryInput
-  }, (args) => jsonContent(auditQuery(args)));
+  }, async (args) => jsonContent(await auditQuery(args)));
 
   server.registerTool("generate_miro_export_spec", {
     title: "Generate Miro export spec",
