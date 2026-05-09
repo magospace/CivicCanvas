@@ -30,13 +30,30 @@ test("Dallas prompt generates fallback ZIP dashboard and filter changes table st
   await expect(page.getByRole("columnheader", { name: /Sort by status/i })).toBeVisible();
 });
 
+test("explicit sample data mode is visible in the dashboard flow", async ({ page }) => {
+  await page.goto("/explore");
+  await page.getByLabel("Data mode", { exact: true }).selectOption("sample");
+  await generate(page, "Show Dallas 311 service requests by category and ZIP code for 2024.");
+
+  await expect(page.locator("aside").getByText("Sample fallback").first()).toBeVisible();
+  await expect(page.getByText("Data mode control requested sample fallback.").first()).toBeVisible();
+});
+
 test("Austin prompt generates a governed permits dashboard", async ({ page }) => {
   await page.goto("/explore");
   await generate(page, "Show Austin building permits by month and ZIP code for 2024.");
 
   await expect(page.getByText("Austin Building Permits Explorer")).toBeVisible();
   await expect(page.getByText("City: Austin")).toBeVisible();
-  await expect(page.getByText("Sample fallback").first()).toBeVisible();
+  await expect(page.locator("aside").getByText("Sample fallback").first()).toBeVisible();
+});
+
+test("sources route shows live verification status", async ({ page }) => {
+  await page.goto("/sources");
+
+  await expect(page.getByText("Live verification").first()).toBeVisible();
+  await expect(page.getByText("live promoted").first()).toBeVisible();
+  await expect(page.getByText("sample fallback required").first()).toBeVisible();
 });
 
 test("unsupported sensitive prompt returns suggestions instead of a dashboard", async ({ page }) => {
@@ -60,7 +77,7 @@ test("saved bundle import rejects unsafe JSON", async ({ page }) => {
 
   await page.getByLabel("Saved canvas JSON import").fill("{\"canvas\":{\"blocks\":[{\"type\":\"UnknownBlock\",\"props\":{\"html\":\"<script>alert(1)</script>\"}}]}}");
   await page.getByRole("button", { name: "Import" }).click();
-  await expect(page.getByText("Invalid saved canvas bundle or JSON")).toBeVisible();
+  await expect(page.getByText("Import rejected")).toBeVisible();
 });
 
 test("Miro preview always includes Source & Method", async ({ page }) => {

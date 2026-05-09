@@ -78,25 +78,31 @@ export function ChartBlockView({ props }: ChartBlock) {
           {props.chartType}
         </span>
       </div>
-      <div className="flex h-56 items-end gap-2 border-b border-l border-slate-200 px-2 pb-2">
-        {props.data.map((item) => {
-          const value = asNumber(item[props.yField]);
-          const label = String(item[props.xField]);
+      {props.data.length > 0 ? (
+        <div className="flex h-56 items-end gap-2 border-b border-l border-slate-200 px-2 pb-2">
+          {props.data.map((item) => {
+            const value = asNumber(item[props.yField]);
+            const label = String(item[props.xField]);
 
-          return (
-            <div key={label} className="flex min-w-0 flex-1 flex-col items-center gap-2">
-              <div
-                className="w-full rounded-t-md bg-civic-700"
-                style={{ height: `${Math.max((value / max) * 100, 8)}%` }}
-                title={`${label}: ${value}`}
-              />
-              <span className="w-full truncate text-center text-[11px] font-medium text-slate-500">
-                {label.replace("2024-", "")}
-              </span>
-            </div>
-          );
-        })}
-      </div>
+            return (
+              <div key={label} className="flex min-w-0 flex-1 flex-col items-center gap-2">
+                <div
+                  className="w-full rounded-t-md bg-civic-700"
+                  style={{ height: `${Math.max((value / max) * 100, 8)}%` }}
+                  title={`${label}: ${value}`}
+                />
+                <span className="w-full truncate text-center text-[11px] font-medium text-slate-500">
+                  {label.replace("2024-", "")}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="flex h-56 items-center justify-center rounded-md border border-dashed border-slate-200 bg-civic-50 px-4 text-center text-sm text-slate-500">
+          No matching rows for this chart after the current filters.
+        </div>
+      )}
     </article>
   );
 }
@@ -278,7 +284,7 @@ export function TableBlockView({ props }: TableBlock) {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 bg-white">
-            {visibleRows.map((row, index) => (
+            {visibleRows.length > 0 ? visibleRows.map((row, index) => (
               <tr key={`${props.title}-${index}`}>
                 {props.columns.map((column) => (
                   <td key={column.field} className="px-4 py-3 text-slate-700">
@@ -286,7 +292,13 @@ export function TableBlockView({ props }: TableBlock) {
                   </td>
                 ))}
               </tr>
-            ))}
+            )) : (
+              <tr>
+                <td colSpan={Math.max(props.columns.length, 1)} className="px-4 py-8 text-center text-sm text-slate-500">
+                  No matching rows for the current filters.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
@@ -336,7 +348,7 @@ export function FilterBlockView({
             {filter.type === "select" ? (
               <select
                 aria-label={filter.label}
-                value={values[filter.field] ?? "All"}
+                value={values[filter.field] ?? filter.options?.[0] ?? ""}
                 onChange={(event) => onChange?.(filter.field, event.target.value)}
                 className="rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-sm text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
               >
