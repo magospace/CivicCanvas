@@ -1,6 +1,11 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "rootDir": "src",
+    "paths": {
+      "@texas-data-canvas/shared": ["../../packages/shared/dist/index.d.ts"]
+    },
+    "tsBuildInfoFile": "dist/tsconfig.build.tsbuildinfo",
     "noEmit": false,
     "emitDeclarationOnly": false
   }

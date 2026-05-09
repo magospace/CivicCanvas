@@ -1,5 +1,5 @@
 import type { CanvasBlock, CanvasDocument } from "@texas-data-canvas/shared";
-import { validateCanvasDocument } from "@texas-data-canvas/shared";
+import { safeValidateCanvasDocument } from "@texas-data-canvas/shared";
 import {
   ChartBlockView,
   DatasetCardBlockView,
@@ -54,7 +54,22 @@ function renderBlock(block: CanvasBlock) {
 }
 
 export function CanvasRenderer({ document }: { document: CanvasDocument }) {
-  const validatedDocument = validateCanvasDocument(document);
+  const validation = safeValidateCanvasDocument(document);
+
+  if (!validation.ok) {
+    return (
+      <section className="rounded-lg border border-signal/30 bg-signal/10 p-5 text-signal">
+        <h2 className="text-sm font-semibold text-ink">Canvas validation failed</h2>
+        <ul className="mt-3 space-y-2 text-sm">
+          {validation.errors.map((error) => (
+            <li key={error}>{error}</li>
+          ))}
+        </ul>
+      </section>
+    );
+  }
+
+  const validatedDocument = validation.data;
   const metricBlocks = validatedDocument.blocks.filter((block) => block.type === "MetricBlock");
   const otherBlocks = validatedDocument.blocks.filter((block) => block.type !== "MetricBlock");
 

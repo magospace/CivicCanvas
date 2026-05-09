@@ -18,7 +18,9 @@ const sampleFiles: Record<string, string> = {
 };
 
 function readJson(pathFromRepoRoot: string): unknown {
-  const absolutePath = join(process.cwd(), "../..", pathFromRepoRoot);
+  const cwd = process.cwd();
+  const repoRoot = cwd.endsWith("apps/web") ? join(cwd, "../..") : cwd;
+  const absolutePath = join(repoRoot, pathFromRepoRoot);
   return JSON.parse(readFileSync(absolutePath, "utf8"));
 }
 

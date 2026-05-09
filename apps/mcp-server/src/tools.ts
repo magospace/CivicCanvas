@@ -1,0 +1,238 @@
+import { z } from "zod";
+import {
+  boundedQuerySpecSchema,
+  createSourceAttribution,
+  executeBoundedQuery,
+  safeValidateCanvasDocument,
+  validateCanvasDocument,
+  type CanvasDocument,
+  type DatasetMetadata,
+  type QueryResult
+} from "@texas-data-canvas/shared";
+import { getCatalog, getRows } from "./data.js";
+
+export function listSupportedSources() {
+  const sources = new Map<string, { id: string; name: string; url: string; adapter: string }>();
+
+  for (const dataset of getCatalog()) {
+    sources.set(dataset.sourceName, {
+      id: dataset.sourceName.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, ""),
+      name: dataset.sourceName,
+      url: dataset.sourceUrl,
+      adapter: dataset.dataAccess
+    });
+  }
+
+  return { sources: [...sources.values()] };
+}
+
+export function searchDatasets(input: unknown) {
+  const args = z
+    .object({
+      query: z.string().default(""),
+      city: z.string().optional(),
+      topic: z.string().optional(),
+      limit: z.number().int().positive().max(25).default(10)
+    })
+    .parse(input);
+  const normalized = `${args.query} ${args.city ?? ""} ${args.topic ?? ""}`.toLowerCase();
+
+  const datasets = getCatalog()
+    .map((dataset) => {
+      const haystack = `${dataset.title} ${dataset.city} ${dataset.topic} ${dataset.description}`.toLowerCase();
+      const confidence = normalized
+        .split(/\s+/)
+        .filter(Boolean)
+        .reduce((score, term) => score + (haystack.includes(term) ? 0.15 : 0), 0.25);
+
+      return {
+        datasetId: dataset.id,
+        title: dataset.title,
+        sourceName: dataset.sourceName,
+        city: dataset.city,
+        topic: dataset.topic,
+        confidence: Math.min(confidence, 0.95),
+        recommendedUse: dataset.recommendedVisuals
+      };
+    })
+    .filter((dataset) => dataset.confidence > 0.25)
+    .sort((a, b) => b.confidence - a.confidence)
+    .slice(0, args.limit);
+
+  return { datasets };
+}
+
+export function getDatasetMetadata(input: unknown) {
+  const { datasetId } = z.object({ datasetId: z.string() }).parse(input);
+  const dataset = findDataset(datasetId);
+
+  return {
+    ...dataset,
+    dateFields: dataset.fields.filter((field) => field.type === "date").map((field) => field.name),
+    geoFields: dataset.fields.filter((field) => field.name.includes("zip") || field.type === "geography").map((field) => field.name)
+  };
+}
+
+export function queryDataset(input: unknown) {
+  const spec = boundedQuerySpecSchema.parse(input);
+  return executeBoundedQuery({
+    catalog: getCatalog(),
+    rows: getRows(spec.datasetId),
+    spec,
+    accessedAt: "2026-05-09T00:00:00.000Z"
+  }).result;
+}
+
+export function getSampleRows(input: unknown) {
+  const { datasetId, limit } = z
+    .object({ datasetId: z.string(), limit: z.number().int().positive().max(25).default(10) })
+    .parse(input);
+
+  return {
+    datasetId,
+    rows: getRows(datasetId).slice(0, limit)
+  };
+}
+
+export function summarizeQueryResult(input: unknown) {
+  const result = z.custom<QueryResult>((value) => Boolean(value && typeof value === "object")).parse(input);
+
+  return {
+    summary: `${result.source.datasetTitle} returned ${result.rows.length} bounded rows for ${result.resultType}. ${result.caveats.join(" ")}`,
+    caveats: result.caveats
+  };
+}
+
+export function recommendVisualization(input: unknown) {
+  const result = z.custom<QueryResult>((value) => Boolean(value && typeof value === "object")).parse(input);
+  const fields = result.columns.map((column) => column.field);
+  const blocks = ["SummaryBlock", "MetricBlock", "TableBlock", "SourceMethodBlock"];
+
+  if (fields.some((field) => field.includes("month") || field.includes("date"))) {
+    blocks.splice(2, 0, "ChartBlock");
+  }
+
+  if (fields.some((field) => field.includes("zip"))) {
+    blocks.splice(2, 0, "MapBlock");
+  }
+
+  return {
+    datasetId: result.datasetId,
+    resultType: result.resultType,
+    recommendedBlocks: [...new Set(blocks)],
+    rationale: "Recommendation based on date, geography, grouped rows, and required attribution."
+  };
+}
+
+export function generateCanvasSpec(input: unknown) {
+  const { datasetId } = z.object({ datasetId: z.string() }).parse(input);
+  const dataset = findDataset(datasetId);
+  const dateField = dataset.fields.find((field) => field.type === "date")?.name ?? "month";
+  const categoryField = dataset.fields.find((field) => field.name.includes("category") || field.name.includes("type"))?.name ?? "status";
+  const countAlias = datasetId.includes("permit") ? "permit_count" : "request_count";
+  const execution = executeBoundedQuery({
+    catalog: getCatalog(),
+    rows: getRows(datasetId),
+    spec: {
+      datasetId,
+      filters: [{ field: dateField, operator: "between", value: ["2024-01-01", "2024-12-31"] }],
+      groupBy: [categoryField],
+      metrics: [{ type: "count", alias: countAlias }],
+      orderBy: [{ field: countAlias, direction: "desc" }],
+      limit: 10
+    },
+    accessedAt: "2026-05-09T00:00:00.000Z"
+  });
+  const source = execution.result.source;
+
+  return {
+    canvas: validateCanvasDocument({
+      id: `canvas_${datasetId}`,
+      title: `${dataset.title} Dashboard`,
+      createdAt: "2026-05-09T00:00:00.000Z",
+      updatedAt: "2026-05-09T00:00:00.000Z",
+      sources: [source],
+      queries: [{ queryId: execution.result.queryId, datasetId, label: `${dataset.title} aggregate` }],
+      blocks: [
+        {
+          id: "summary",
+          type: "SummaryBlock",
+          props: {
+            heading: dataset.title,
+            text: `Generated safe aggregate view for ${dataset.title}.`,
+            bullets: dataset.caveats
+          }
+        },
+        {
+          id: "table",
+          type: "TableBlock",
+          props: {
+            title: "Aggregate rows",
+            columns: execution.result.columns.map((column) => ({ field: column.field, label: column.label })),
+            rows: execution.result.rows
+          }
+        },
+        {
+          id: "source-method",
+          type: "SourceMethodBlock",
+          props: {
+            attribution: source,
+            methodology: "Generated by MCP tool from approved catalog, bounded query, and allowlisted blocks."
+          }
+        }
+      ]
+    })
+  };
+}
+
+export function validateCanvasSpec(input: unknown) {
+  return safeValidateCanvasDocument(input);
+}
+
+export function getSourceAttribution(input: unknown) {
+  const spec = boundedQuerySpecSchema.parse(input);
+  return createSourceAttribution(findDataset(spec.datasetId), spec, "2026-05-09T00:00:00.000Z");
+}
+
+export function auditQuery(input: unknown) {
+  const spec = boundedQuerySpecSchema.parse(input);
+  return executeBoundedQuery({
+    catalog: getCatalog(),
+    rows: getRows(spec.datasetId),
+    spec,
+    accessedAt: "2026-05-09T00:00:00.000Z"
+  }).audit;
+}
+
+export function generateMiroExportSpec(input: unknown) {
+  const { canvas, template } = z
+    .object({
+      canvas: z.custom<CanvasDocument>((value) => Boolean(value && typeof value === "object")),
+      template: z.enum(["briefing_board", "slide_deck", "community_workshop"]).default("briefing_board")
+    })
+    .parse(input);
+  const validCanvas = validateCanvasDocument(canvas);
+
+  return {
+    title: `${validCanvas.title} ${template.replace(/_/g, " ")}`,
+    template,
+    sourceMethodFrameRequired: true,
+    frames: [
+      { title: validCanvas.title, items: [{ type: "text", content: validCanvas.description ?? validCanvas.title }] },
+      {
+        title: "Source & Method",
+        items: [{ type: "source_method", content: JSON.stringify(validCanvas.sources) }]
+      }
+    ]
+  };
+}
+
+function findDataset(datasetId: string): DatasetMetadata {
+  const dataset = getCatalog().find((candidate) => candidate.id === datasetId);
+
+  if (!dataset) {
+    throw new Error(`Dataset is not approved: ${datasetId}`);
+  }
+
+  return dataset;
+}

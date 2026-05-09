@@ -172,6 +172,7 @@ const chartBlockSchema = z.object({
   type: z.literal("ChartBlock"),
   props: z.object({
     title: z.string().min(1),
+    subtitle: z.string().optional(),
     chartType: z.enum(["bar", "line"]),
     xField: z.string().min(1),
     yField: z.string().min(1),
@@ -196,6 +197,9 @@ const tableBlockSchema = z.object({
   type: z.literal("TableBlock"),
   props: z.object({
     title: z.string().min(1),
+    caption: z.string().optional(),
+    pageSize: z.number().int().positive().max(100).optional(),
+    sortBy: z.string().min(1).optional(),
     columns: z.array(
       z.object({
         field: z.string().min(1),
@@ -311,6 +315,18 @@ export const miroExportSpecSchema = z.object({
   )
 });
 
+export const queryAuditSchema = z.object({
+  auditId: z.string().min(1),
+  queryId: z.string().min(1),
+  datasetId: z.string().min(1),
+  fieldsUsed: z.array(z.string().min(1)),
+  filtersApplied: z.array(z.string().min(1)),
+  rowLimit: z.number().int().positive(),
+  aggregation: z.boolean(),
+  executedAt: z.string().datetime(),
+  safetyDecisions: z.array(z.string().min(1))
+});
+
 export type FieldType = z.infer<typeof fieldTypeSchema>;
 export type FieldClassification = z.infer<typeof fieldClassificationSchema>;
 export type DatasetField = z.infer<typeof datasetFieldSchema>;
@@ -324,7 +340,324 @@ export type QueryReference = z.infer<typeof queryReferenceSchema>;
 export type CanvasBlock = z.infer<typeof canvasBlockSchema>;
 export type CanvasDocument = z.infer<typeof canvasDocumentSchema>;
 export type MiroExportSpec = z.infer<typeof miroExportSpecSchema>;
+export type QueryAudit = z.infer<typeof queryAuditSchema>;
+export type QueryExecution = {
+  result: QueryResult;
+  audit: QueryAudit;
+};
+export type SampleRow = Record<string, string | number | boolean | null>;
 
 export function validateCanvasDocument(input: unknown): CanvasDocument {
   return canvasDocumentSchema.parse(input);
+}
+
+export function safeValidateCanvasDocument(input: unknown):
+  | { ok: true; data: CanvasDocument; errors: [] }
+  | { ok: false; data?: never; errors: string[] } {
+  const result = canvasDocumentSchema.safeParse(input);
+
+  if (result.success) {
+    return { ok: true, data: result.data, errors: [] };
+  }
+
+  return {
+    ok: false,
+    errors: result.error.issues.map((issue) => {
+      const path = issue.path.length > 0 ? `${issue.path.join(".")}: ` : "";
+      return `${path}${issue.message}`;
+    })
+  };
+}
+
+const maxRawRows = 100;
+const maxAggregateRows = 1000;
+
+function createId(prefix: string, parts: string[]) {
+  const body = parts
+    .join("_")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .slice(0, 80);
+  return `${prefix}_${body || "default"}`;
+}
+
+function getDataset(catalog: DatasetMetadata[], datasetId: string) {
+  const dataset = catalog.find((candidate) => candidate.id === datasetId);
+
+  if (!dataset) {
+    throw new Error(`Dataset is not approved: ${datasetId}`);
+  }
+
+  return dataset;
+}
+
+function getDatasetField(dataset: DatasetMetadata, fieldName: string) {
+  const field = dataset.fields.find((candidate) => candidate.name === fieldName);
+
+  if (!field) {
+    throw new Error(`Field "${fieldName}" is not allowlisted for ${dataset.id}.`);
+  }
+
+  return field;
+}
+
+function validateFieldUse(dataset: DatasetMetadata, fieldName: string, aggregation: boolean) {
+  const field = getDatasetField(dataset, fieldName);
+
+  if (field.classification === "sensitive_hide" || field.classification === "unknown_review") {
+    throw new Error(`Field "${fieldName}" is not available for safe querying.`);
+  }
+
+  if (field.classification === "safe_with_aggregation" && !aggregation) {
+    throw new Error(`Field "${fieldName}" requires aggregation.`);
+  }
+}
+
+function compareValues(
+  left: string | number | boolean | null,
+  right: string | number | boolean | null
+) {
+  if (typeof left === "number" && typeof right === "number") {
+    return left - right;
+  }
+
+  return String(left ?? "").localeCompare(String(right));
+}
+
+function matchesFilter(row: SampleRow, filter: BoundedQuerySpec["filters"][number]) {
+  const rowValue = row[filter.field];
+
+  switch (filter.operator) {
+    case "eq":
+      return rowValue === filter.value;
+    case "neq":
+      return rowValue !== filter.value;
+    case "in":
+      return Array.isArray(filter.value) && filter.value.some((value) => value === rowValue);
+    case "between":
+      if (!Array.isArray(filter.value) || filter.value.length !== 2) {
+        return false;
+      }
+      return compareValues(rowValue, filter.value[0]) >= 0 && compareValues(rowValue, filter.value[1]) <= 0;
+    case "gte":
+      return !Array.isArray(filter.value) && compareValues(rowValue, filter.value) >= 0;
+    case "lte":
+      return !Array.isArray(filter.value) && compareValues(rowValue, filter.value) <= 0;
+    case "contains":
+      return !Array.isArray(filter.value) && String(rowValue ?? "").toLowerCase().includes(String(filter.value).toLowerCase());
+    default:
+      return false;
+  }
+}
+
+function formatFilter(filter: BoundedQuerySpec["filters"][number]) {
+  const value = Array.isArray(filter.value) ? filter.value.join(" and ") : String(filter.value);
+  return `${filter.field} ${filter.operator} ${value}`;
+}
+
+function fieldsUsedBySpec(spec: BoundedQuerySpec) {
+  const fields = new Set<string>();
+
+  for (const filter of spec.filters) {
+    fields.add(filter.field);
+  }
+
+  for (const field of spec.groupBy) {
+    fields.add(field);
+  }
+
+  for (const metric of spec.metrics) {
+    if (metric.field) {
+      fields.add(metric.field);
+    }
+  }
+
+  for (const order of spec.orderBy) {
+    fields.add(order.field);
+  }
+
+  return [...fields];
+}
+
+function metricValue(rows: SampleRow[], metric: BoundedQuerySpec["metrics"][number]) {
+  if (metric.type === "count") {
+    return rows.length;
+  }
+
+  const values = rows
+    .map((row) => row[metric.field ?? ""])
+    .filter((value): value is number => typeof value === "number");
+
+  if (values.length === 0) {
+    return 0;
+  }
+
+  if (metric.type === "sum") {
+    return values.reduce((sum, value) => sum + value, 0);
+  }
+
+  if (metric.type === "avg") {
+    return values.reduce((sum, value) => sum + value, 0) / values.length;
+  }
+
+  if (metric.type === "min") {
+    return Math.min(...values);
+  }
+
+  return Math.max(...values);
+}
+
+function sortRows(rows: SampleRow[], spec: BoundedQuerySpec) {
+  if (spec.orderBy.length === 0) {
+    return rows;
+  }
+
+  return [...rows].sort((a, b) => {
+    for (const order of spec.orderBy) {
+      const comparison = compareValues(a[order.field], b[order.field]);
+      if (comparison !== 0) {
+        return order.direction === "asc" ? comparison : -comparison;
+      }
+    }
+
+    return 0;
+  });
+}
+
+export function createSourceAttribution(
+  dataset: DatasetMetadata,
+  spec: BoundedQuerySpec,
+  accessedAt = new Date().toISOString()
+): SourceAttribution {
+  const fieldsUsed = fieldsUsedBySpec(spec);
+
+  return sourceAttributionSchema.parse({
+    datasetId: dataset.id,
+    datasetTitle: dataset.title,
+    sourceName: dataset.sourceName,
+    sourceUrl: dataset.sourceUrl,
+    accessedAt,
+    fieldsUsed,
+    filtersApplied: spec.filters.map(formatFilter),
+    queryMethod: "Validated BoundedQuerySpec executed against approved local sample data.",
+    caveats: dataset.caveats,
+    license: "Refer to source portal terms"
+  });
+}
+
+export function executeBoundedQuery({
+  catalog,
+  rows,
+  spec,
+  accessedAt = new Date().toISOString()
+}: {
+  catalog: DatasetMetadata[];
+  rows: SampleRow[];
+  spec: unknown;
+  accessedAt?: string;
+}): QueryExecution {
+  const parsedSpec = boundedQuerySpecSchema.parse(spec);
+  const dataset = getDataset(catalog, parsedSpec.datasetId);
+  const aggregation = parsedSpec.groupBy.length > 0 || parsedSpec.metrics.some((metric) => metric.type !== "count");
+  const fieldsUsed = fieldsUsedBySpec(parsedSpec);
+
+  for (const field of fieldsUsed) {
+    const isMetricAlias = parsedSpec.metrics.some((metric) => metric.alias === field);
+    if (!isMetricAlias) {
+      validateFieldUse(dataset, field, aggregation);
+    }
+  }
+
+  for (const metric of parsedSpec.metrics) {
+    if (metric.type !== "count" && !metric.field) {
+      throw new Error(`Metric "${metric.alias}" requires a numeric field.`);
+    }
+  }
+
+  const maxRows = aggregation ? maxAggregateRows : maxRawRows;
+  if (parsedSpec.limit > maxRows) {
+    throw new Error(`Query limit ${parsedSpec.limit} exceeds max ${maxRows} for this query type.`);
+  }
+
+  const filteredRows = rows.filter((row) => parsedSpec.filters.every((filter) => matchesFilter(row, filter)));
+  let resultRows: SampleRow[];
+
+  if (parsedSpec.groupBy.length > 0) {
+    const groups = new Map<string, SampleRow[]>();
+
+    for (const row of filteredRows) {
+      const key = parsedSpec.groupBy.map((field) => String(row[field] ?? "Unknown")).join("\u001f");
+      const existing = groups.get(key) ?? [];
+      existing.push(row);
+      groups.set(key, existing);
+    }
+
+    resultRows = [...groups.entries()].map(([key, groupRows]) => {
+      const keyParts = key.split("\u001f");
+      const groupedRow: SampleRow = {};
+
+      parsedSpec.groupBy.forEach((field, index) => {
+        groupedRow[field] = keyParts[index] ?? "Unknown";
+      });
+
+      for (const metric of parsedSpec.metrics) {
+        groupedRow[metric.alias] = metricValue(groupRows, metric);
+      }
+
+      return groupedRow;
+    });
+  } else {
+    resultRows = filteredRows.map((row) => {
+      const projected: SampleRow = {};
+      for (const field of fieldsUsed) {
+        projected[field] = row[field] ?? null;
+      }
+      return projected;
+    });
+  }
+
+  resultRows = sortRows(resultRows, parsedSpec).slice(0, parsedSpec.limit);
+  const source = createSourceAttribution(dataset, parsedSpec, accessedAt);
+  const queryId = createId("q", [parsedSpec.datasetId, ...parsedSpec.groupBy, ...parsedSpec.metrics.map((metric) => metric.alias)]);
+  const columns = [
+    ...parsedSpec.groupBy.map((field) => {
+      const datasetField = getDatasetField(dataset, field);
+      return { field, label: field.replace(/_/g, " "), type: datasetField.type };
+    }),
+    ...parsedSpec.metrics.map((metric) => ({
+      field: metric.alias,
+      label: metric.alias.replace(/_/g, " "),
+      type: "number" as const
+    }))
+  ];
+
+  const result = queryResultSchema.parse({
+    queryId,
+    datasetId: parsedSpec.datasetId,
+    resultType: parsedSpec.groupBy.some((field) => field.includes("zip")) ? "geo_aggregate" : aggregation ? "aggregate" : "sample",
+    rows: resultRows,
+    columns,
+    source,
+    caveats: dataset.caveats
+  });
+
+  const audit = queryAuditSchema.parse({
+    auditId: createId("audit", [queryId]),
+    queryId,
+    datasetId: parsedSpec.datasetId,
+    fieldsUsed,
+    filtersApplied: parsedSpec.filters.map(formatFilter),
+    rowLimit: parsedSpec.limit,
+    aggregation,
+    executedAt: accessedAt,
+    safetyDecisions: [
+      "Dataset ID matched approved catalog.",
+      "Fields and operators validated before execution.",
+      `Row limit enforced at ${parsedSpec.limit}.`,
+      aggregation ? "Aggregate result returned." : "Raw sample result returned within raw row limit."
+    ]
+  });
+
+  return { result, audit };
 }

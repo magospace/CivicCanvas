@@ -43,8 +43,29 @@ Open `http://localhost:3000/explore` for the main app shell.
 
 ```bash
 pnpm typecheck
+pnpm test
 pnpm build
 ```
+
+## MVP demo prompts
+
+Use `/explore` and run:
+
+```text
+Show Dallas 311 service requests by category and ZIP code for 2024.
+Show Austin building permits by month and ZIP code.
+```
+
+Unsupported prompts return approved dataset suggestions instead of hallucinated dashboards.
+
+## MCP server
+
+```bash
+pnpm --filter @texas-data-canvas/mcp-server build
+pnpm --filter @texas-data-canvas/mcp-server inspect
+```
+
+The MCP server exposes safe catalog, query, source attribution, audit, canvas, visualization, and Miro export-spec tools. All dataset queries are bounded and catalog-validated.
 
 ## Workspace packages
 
@@ -58,7 +79,7 @@ pnpm build
 - `data/samples/dallas-311.sample.json`
 - `data/samples/austin-building-permits.sample.json`
 
-The P1 frontend validates catalog data and renders the seed dashboard through a trusted React block registry. It does not execute AI-generated HTML, JavaScript, external scripts, SQL, or arbitrary components.
+The frontend validates catalog data and renders dashboards through a trusted React block registry. It does not execute AI-generated HTML, JavaScript, external scripts, SQL, or arbitrary components.
 
 ## Key docs
 

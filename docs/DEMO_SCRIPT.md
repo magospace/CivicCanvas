@@ -2,93 +2,76 @@
 
 ## Setup
 
-1. Start the web app.
-2. Start or show the MCP server.
-3. Open `/explore`.
-4. Confirm dataset catalog includes Dallas 311 and Austin permits.
+```bash
+pnpm install
+pnpm typecheck
+pnpm test
+pnpm build
+pnpm dev
+```
+
+Open `http://localhost:3000/explore`.
 
 ## Demo 1 - Dallas 311 dashboard
 
-Prompt:
-
-> Show Dallas 311 service requests by category and ZIP code for 2024.
+1. Enter: `Show Dallas 311 service requests by category and ZIP code for 2024.`
+2. Click Generate View.
+3. Point out:
+   - Summary and metric blocks.
+   - Monthly trend chart.
+   - ZIP-code geography placeholder.
+   - Grouped detail table.
+   - Filter definitions.
+   - Required Source & Method card.
+   - Query audit section in the inspector.
 
 Narration:
 
-- The app found the Dallas 311 dataset from an approved public source.
-- It inspected metadata and selected safe fields.
-- It ran a bounded aggregate query.
-- It generated a dashboard from trusted blocks.
-- Source and method are visible.
-
-Show:
-
-- Summary
-- Requests over time
-- Requests by ZIP code
-- Top request categories
-- Detailed table
-- Source/method card
-- Filters
+- The app found the Dallas 311 dataset from the approved catalog.
+- It ran bounded sample-data queries with validated fields, operators, metrics, and row limits.
+- It generated a CanvasDocument and rendered only allowlisted React blocks.
+- Source, method, filters, fields, and caveats stay visible.
 
 ## Demo 2 - Austin permits dashboard
 
-Prompt:
-
-> Show Austin building permits by month and ZIP code.
+1. Enter: `Show Austin building permits by month and ZIP code.`
+2. Click Generate View.
+3. Point out the same governed CanvasSpec rendering and source/caveat behavior.
 
 Narration:
 
-- This shows the same workflow over a different city/topic.
-- Permit trends are grouped by month and geography.
-- Users can switch chart type, filter, and inspect sources.
+- The same safe workflow runs over a different city/topic.
+- Permit records are presented as administrative public data with caveats.
+- The app does not imply construction starts or causation.
 
 ## Demo 3 - Sources browser
 
-Open `/sources`.
+1. Open `/sources`.
+2. Filter by city or topic.
+3. Show source, city, topic, update/access status, fields, caveats, and recommended visual types.
 
-Show:
+## Demo 4 - Unsupported prompt safety
 
-- Dataset search
-- City/topic filters
-- Dataset cards
-- Field metadata
-- Recommended questions
+1. Return to `/explore`.
+2. Enter: `Compare tax abatements across El Paso.`
+3. Show that the app returns approved dataset suggestions instead of inventing a dashboard.
 
-## Demo 4 - Saved canvases
+## Demo 5 - Miro stretch preview
 
-Open `/saved`.
+1. Generate the Dallas dashboard.
+2. Click the export icon in the inspector.
+3. Explain that the app generates a preview-only MiroExportSpec with a required Source & Method frame.
+4. No Miro board write occurs in the MVP.
 
-Show:
+## MCP server check
 
-- Canvas previews
-- Duplicate/share/export controls
-- Source dataset list
+```bash
+pnpm --filter @texas-data-canvas/mcp-server build
+pnpm --filter @texas-data-canvas/mcp-server inspect
+```
 
-## Demo 5 - Miro export stretch
-
-From a dashboard, click Export > Miro.
-
-Choose Council Briefing Board.
-
-Show generated frames:
-
-- Title/question
-- Executive summary
-- Key metrics
-- Map
-- Chart
-- Table/highlights
-- Source and method
-- Discussion questions
-- Action plan
-
-Narration:
-
-- Miro is not the query engine.
-- Texas Data Canvas already validated and cited the data.
-- Miro export turns the dashboard into a collaborative board or slide-like deck.
+Show tools such as `search_datasets`, `get_dataset_metadata`, `query_dataset`, `generate_canvas_spec`, `validate_canvas_spec`, and `audit_query`.
 
 ## Closing pitch
 
-Texas Data Canvas is the missing interaction layer for Texas open data. It helps residents, civic teams, businesses, researchers, journalists, and nonprofits move from raw public data to safe, visual, source-cited insight.
+Texas Data Canvas is a safe interaction layer for Texas open data. It helps residents, civic teams, businesses, researchers, journalists, and nonprofits move from raw public datasets to visual, source-cited insight without arbitrary code generation.

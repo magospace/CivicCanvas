@@ -1,4 +1,5 @@
 import { Bookmark, Share2 } from "lucide-react";
+import Link from "next/link";
 import { Header } from "../../components/header";
 
 export default function SavedPage() {
@@ -11,12 +12,26 @@ export default function SavedPage() {
         </div>
         <h1 className="mt-6 text-3xl font-semibold text-ink">Saved canvases</h1>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
-          Saving and sharing are reserved for a later phase. The P1 shell keeps the controls
-          visible so the demo shape is honest about where the product is headed.
+          Persistent saved canvases are reserved for a later phase. For the MVP demo, use the
+          deterministic Dallas and Austin workflows from the explorer.
         </p>
-        <div className="mt-8 flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600 shadow-panel">
-          <Share2 className="h-4 w-4 text-civic-700" />
-          Share/export controls are present in the explorer inspector.
+        <div className="mt-8 grid w-full max-w-3xl gap-3 md:grid-cols-2">
+          {[
+            "Show Dallas 311 service requests by category and ZIP code for 2024.",
+            "Show Austin building permits by month and ZIP code."
+          ].map((prompt) => (
+            <Link
+              key={prompt}
+              href="/explore"
+              className="rounded-lg border border-slate-200 bg-white p-4 text-left text-sm text-slate-600 shadow-panel transition hover:border-civic-500"
+            >
+              <div className="mb-2 flex items-center gap-2 font-semibold text-ink">
+                <Share2 className="h-4 w-4 text-civic-700" />
+                Demo canvas
+              </div>
+              {prompt}
+            </Link>
+          ))}
         </div>
       </section>
     </main>
