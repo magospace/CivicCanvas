@@ -9,6 +9,7 @@ import { GET as healthGET } from "../app/api/health/route";
 import { POST as queryPOST } from "../app/api/query/route";
 import { middleware } from "../middleware";
 import { apiError, parseJsonRequest } from "../lib/api";
+import { boundedQuerySpecJson, canvasDocumentJson, tableCsv } from "../lib/dashboard-exports";
 import { generateCanvasForPrompt } from "../lib/dashboard";
 import { generateMiroExportSpec } from "../lib/miro";
 
@@ -114,6 +115,18 @@ describe("dashboard generation", () => {
     if (table?.type === "TableBlock") {
       expect(table.props.columns.map((column) => column.field)).toEqual(["status", "permit_count"]);
     }
+  });
+
+  it("exports governed dashboard artifacts from validated JSON", async () => {
+    const generation = await generateCanvasForPrompt("Show Dallas 311 service requests by category and ZIP code for 2024.");
+    const canvasJson = canvasDocumentJson(generation.canvas);
+    const specJson = boundedQuerySpecJson(generation.querySpec);
+    const csv = tableCsv(generation.canvas);
+
+    expect(JSON.parse(canvasJson).blocks.map((block: { type: string }) => block.type)).toContain("SourceMethodBlock");
+    expect(JSON.parse(specJson ?? "{}").datasetId).toBe("dallas_311_requests");
+    expect(csv).toContain("request count");
+    expect(csv).toContain("Sanitation");
   });
 });
 

@@ -1,5 +1,5 @@
 import { Download, Filter, Save, Share2, SlidersHorizontal } from "lucide-react";
-import type { CanvasBlock, CanvasDocument, DataMode, DataModePreference, MiroExportSpec, PromptIntent, QueryAudit } from "@texas-data-canvas/shared";
+import type { BoundedQuerySpec, CanvasBlock, CanvasDocument, DataMode, DataModePreference, MiroExportSpec, PromptIntent, QueryAudit } from "@texas-data-canvas/shared";
 
 type FilterBlock = Extract<CanvasBlock, { type: "FilterBlock" }>;
 
@@ -7,6 +7,7 @@ export function InspectorPanel({
   canvas,
   audits,
   intent,
+  querySpec,
   dataMode,
   dataModePreference,
   fallbackReason,
@@ -16,6 +17,9 @@ export function InspectorPanel({
   onDataModePreferenceChange,
   onMiroTemplateChange,
   onExportMiro,
+  onCopyCanvasJson,
+  onCopyQuerySpec,
+  onExportCsv,
   onSave,
   onShare,
   onApplyFilters
@@ -23,6 +27,7 @@ export function InspectorPanel({
   canvas: CanvasDocument;
   audits?: QueryAudit[];
   intent?: PromptIntent | null;
+  querySpec?: BoundedQuerySpec | null;
   dataMode?: DataMode;
   dataModePreference?: DataModePreference;
   fallbackReason?: string | null;
@@ -32,6 +37,9 @@ export function InspectorPanel({
   onDataModePreferenceChange?: (mode: DataModePreference) => void;
   onMiroTemplateChange?: (template: MiroExportSpec["template"]) => void;
   onExportMiro?: () => void;
+  onCopyCanvasJson?: () => void;
+  onCopyQuerySpec?: () => void;
+  onExportCsv?: () => void;
   onSave?: () => void;
   onShare?: () => void;
   onApplyFilters?: () => void;
@@ -161,6 +169,26 @@ export function InspectorPanel({
             <Download className="h-4 w-4" />
           </button>
         </div>
+        <div className="mt-3 grid gap-2">
+          <button
+            onClick={onExportCsv}
+            className="rounded-md border border-slate-200 px-3 py-2 text-left text-xs font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+          >
+            Export table CSV
+          </button>
+          <button
+            onClick={onCopyCanvasJson}
+            className="rounded-md border border-slate-200 px-3 py-2 text-left text-xs font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+          >
+            Copy CanvasDocument JSON
+          </button>
+          <button
+            onClick={onCopyQuerySpec}
+            className="rounded-md border border-slate-200 px-3 py-2 text-left text-xs font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+          >
+            Copy BoundedQuerySpec
+          </button>
+        </div>
       </section>
       {audits && audits.length > 0 ? (
         <section className="rounded-lg border border-slate-200 p-4">
@@ -196,6 +224,48 @@ export function InspectorPanel({
           </div>
         </section>
       ) : null}
+      <section className="rounded-lg border border-slate-200 p-4">
+        <details>
+          <summary className="cursor-pointer text-sm font-semibold text-ink">
+            Why this dashboard?
+          </summary>
+          <div className="mt-3 space-y-3 text-xs leading-5 text-slate-600">
+            <div>
+              <span className="font-semibold text-ink">Matched dataset:</span>{" "}
+              {intent?.datasetCandidates[0] ?? source.datasetId}
+            </div>
+            <div>
+              <span className="font-semibold text-ink">Matched terms:</span>{" "}
+              {intent?.matchedTerms.join(", ") || "none"}
+            </div>
+            <div>
+              <span className="font-semibold text-ink">Reason codes:</span>{" "}
+              {intent?.reasonCodes.join(", ") || "none"}
+            </div>
+            <div>
+              <span className="font-semibold text-ink">Selected mode:</span> {modeLabel}
+            </div>
+            {fallbackReason ? (
+              <div className="rounded-md bg-signal/10 px-3 py-2 text-signal">{fallbackReason}</div>
+            ) : null}
+            <div>
+              <div className="mb-1 font-semibold text-ink">Safety decisions</div>
+              <ul className="list-disc space-y-1 pl-4">
+                {(audits ?? []).flatMap((audit) => audit.safetyDecisions).slice(0, 8).map((decision) => (
+                  <li key={decision}>{decision}</li>
+                ))}
+              </ul>
+            </div>
+            {querySpec ? (
+              <pre className="max-h-52 overflow-auto rounded-md bg-civic-900 p-3 text-[11px] leading-5 text-civic-50">
+                {JSON.stringify(querySpec, null, 2)}
+              </pre>
+            ) : (
+              <p className="rounded-md bg-civic-50 px-3 py-2">No active BoundedQuerySpec is available for this canvas.</p>
+            )}
+          </div>
+        </details>
+      </section>
       <section className="rounded-lg bg-civic-900 p-4 text-white">
         <div className="text-sm font-semibold">Source & method</div>
         <p className="mt-2 text-xs leading-5 text-civic-100">

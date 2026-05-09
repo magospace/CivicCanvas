@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { CanvasDocument, DataMode, DataModePreference, DatasetMetadata, MiroExportSpec, PromptIntent, QueryAudit } from "@texas-data-canvas/shared";
+import type { BoundedQuerySpec, CanvasDocument, DataMode, DataModePreference, DatasetMetadata, MiroExportSpec, PromptIntent, QueryAudit } from "@texas-data-canvas/shared";
 import { CanvasRenderer } from "./canvas/canvas-renderer";
 import { DatasetSidebar } from "./dataset-sidebar";
 import { Header } from "./header";
 import { InspectorPanel } from "./inspector-panel";
 import { PromptBar } from "./prompt-bar";
+import { boundedQuerySpecJson, canvasDocumentJson, tableCsv } from "../lib/dashboard-exports";
 import { createCanvasShareBundleJson, saveCanvasLocally, takePendingOpenCanvas } from "../lib/saved-canvases";
 
 export function AppShell({
@@ -20,6 +21,7 @@ export function AppShell({
   const [activeCanvas, setActiveCanvas] = useState(canvas);
   const [audits, setAudits] = useState<QueryAudit[]>([]);
   const [intent, setIntent] = useState<PromptIntent | null>(null);
+  const [querySpec, setQuerySpec] = useState<BoundedQuerySpec | null>(null);
   const [dataMode, setDataMode] = useState<DataMode>(canvas.sources[0]?.dataMode ?? "sample");
   const [dataModePreference, setDataModePreference] = useState<DataModePreference>("auto");
   const [fallbackReason, setFallbackReason] = useState<string | null>(null);
@@ -36,6 +38,7 @@ export function AppShell({
       setActiveCanvas(pending.canvas);
       setAudits(pending.audits);
       setIntent(pending.intent ?? null);
+      setQuerySpec(null);
       setDataMode(pending.canvas.sources[0]?.dataMode ?? "sample");
       setDataModePreference("auto");
       setFallbackReason(null);
@@ -63,6 +66,7 @@ export function AppShell({
       setActiveCanvas(payload.canvas);
       setAudits(payload.audits ?? []);
       setIntent(payload.intent ?? null);
+      setQuerySpec(payload.querySpec ?? null);
       setDataMode(payload.dataMode ?? payload.canvas?.sources?.[0]?.dataMode ?? "sample");
       setFallbackReason(payload.fallbackReason ?? null);
       setStatus(
@@ -120,6 +124,49 @@ export function AppShell({
       setStatus("Portable saved-canvas bundle copied to clipboard.");
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "Could not copy saved-canvas bundle.");
+    }
+  }
+
+  async function copyCanvasJson() {
+    try {
+      await navigator.clipboard?.writeText(canvasDocumentJson(activeCanvas));
+      setStatus("Validated CanvasDocument JSON copied to clipboard.");
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Could not copy canvas JSON.");
+    }
+  }
+
+  async function copyQuerySpec() {
+    try {
+      const json = boundedQuerySpecJson(querySpec);
+      if (!json) {
+        setStatus("No active BoundedQuerySpec is available for this canvas.");
+        return;
+      }
+      await navigator.clipboard?.writeText(json);
+      setStatus("Active BoundedQuerySpec copied to clipboard.");
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Could not copy query spec.");
+    }
+  }
+
+  function downloadTableCsv() {
+    try {
+      const csv = tableCsv(activeCanvas);
+      if (!csv) {
+        setStatus("No table block is available for CSV export.");
+        return;
+      }
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `${activeCanvas.title.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}-table.csv`;
+      anchor.click();
+      URL.revokeObjectURL(url);
+      setStatus("Current table exported as CSV.");
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Could not export table CSV.");
     }
   }
 
@@ -230,6 +277,7 @@ export function AppShell({
           canvas={activeCanvas}
           audits={audits}
           intent={intent}
+          querySpec={querySpec}
           dataMode={dataMode}
           dataModePreference={dataModePreference}
           fallbackReason={fallbackReason}
@@ -239,6 +287,9 @@ export function AppShell({
           onDataModePreferenceChange={setDataModePreference}
           onMiroTemplateChange={setMiroTemplate}
           onExportMiro={exportMiroSpec}
+          onCopyCanvasJson={copyCanvasJson}
+          onCopyQuerySpec={copyQuerySpec}
+          onExportCsv={downloadTableCsv}
           onSave={saveCurrentCanvas}
           onShare={shareCurrentCanvas}
           onApplyFilters={generateDashboard}
