@@ -6,7 +6,7 @@ import { POST as canvasGeneratePOST } from "../app/api/canvas/generate/route";
 import { POST as miroExportPOST } from "../app/api/export/miro-spec/route";
 import { GET as healthGET } from "../app/api/health/route";
 import { POST as queryPOST } from "../app/api/query/route";
-import { parseJsonRequest } from "../lib/api";
+import { apiError, parseJsonRequest } from "../lib/api";
 import { generateCanvasForPrompt } from "../lib/dashboard";
 import { generateMiroExportSpec } from "../lib/miro";
 
@@ -176,6 +176,17 @@ describe("production API contracts", () => {
     expect(body.ok).toBe(false);
     expect(body.error.code).toBe("query_failed");
     expect(JSON.stringify(body)).not.toContain("at ");
+  });
+
+  it("hides internal details from unexpected API errors", async () => {
+    const response = apiError(new Error("Failed to read /Users/example/private/data.json"), {
+      code: "internal_failure",
+      requestId: "req_test"
+    });
+    const body = await response.json();
+
+    expect(body.error.message).toBe("Request failed.");
+    expect(JSON.stringify(body)).not.toContain("/Users/example");
   });
 
   it("returns fallback mode when live query is requested for a sample-first dataset", async () => {

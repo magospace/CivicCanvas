@@ -16,6 +16,23 @@ function zodIssues(error: ZodError): ApiValidationIssue[] {
   }));
 }
 
+function isSafeInputErrorMessage(message: string) {
+  return message === "Request body must be valid JSON." ||
+    /^Request body exceeds \d+ bytes\.$/.test(message);
+}
+
+function publicErrorMessage(error: unknown) {
+  if (error instanceof ZodError) {
+    return "Request validation failed.";
+  }
+
+  if (error instanceof Error && isSafeInputErrorMessage(error.message)) {
+    return error.message;
+  }
+
+  return "Request failed.";
+}
+
 export async function parseJsonRequest<T>(
   request: Request,
   schema: ZodSchema<T>,
@@ -54,7 +71,7 @@ export function apiError(
   } = {}
 ) {
   const issues = error instanceof ZodError ? zodIssues(error) : undefined;
-  const message = error instanceof Error ? error.message : "Request failed.";
+  const message = publicErrorMessage(error);
   const response = apiErrorResponseSchema.parse({
     ok: false,
     error: {
