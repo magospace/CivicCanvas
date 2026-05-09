@@ -18,7 +18,7 @@ export function getServerStatus() {
   return {
     ok: true,
     name: "texas-public-data-mcp",
-    version: "0.4.0-production-pilot",
+    version: "0.5.0-public-beta",
     datasetCount: catalog.length,
     liveEnabledDatasets: catalog.filter((dataset) => dataset.liveAvailable).map((dataset) => dataset.id),
     dataModeControls: ["auto", "live_if_available", "sample_only"],

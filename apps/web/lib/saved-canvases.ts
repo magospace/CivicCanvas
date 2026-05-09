@@ -73,7 +73,7 @@ export function exportSavedCanvasJson(saved: SavedCanvas) {
 export function exportSavedCanvasesBundleJson(canvases: SavedCanvas[]) {
   return JSON.stringify(createSavedCanvasBundle({
     canvases,
-    appVersion: "v0.4.0-production-pilot"
+    appVersion: "v0.5.0-public-beta"
   }), null, 2);
 }
 

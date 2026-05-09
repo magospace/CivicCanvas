@@ -6,7 +6,7 @@ export function GET() {
 
   return NextResponse.json({
     ok: catalog.status !== "failed",
-    appVersion: process.env.NEXT_PUBLIC_APP_VERSION ?? "v0.4.0-production-pilot-dev",
+    appVersion: process.env.NEXT_PUBLIC_APP_VERSION ?? "v0.5.0-public-beta-dev",
     runtime: "nextjs",
     checkedAt: catalog.checkedAt,
     catalogCount: catalog.datasetCount,

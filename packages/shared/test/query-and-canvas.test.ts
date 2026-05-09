@@ -659,6 +659,8 @@ describe("local saved canvas persistence", () => {
     const bundle = createSavedCanvasBundle({ canvases: [saved], appVersion: "test" });
     expect(parseSavedCanvasImport(JSON.stringify(bundle))).toHaveLength(1);
     expect(parseSavedCanvasImport(JSON.stringify(saved))).toHaveLength(1);
+    expect(parseSavedCanvasImport(JSON.stringify(canvas))[0].canvasId).toBe("canvas_saved");
+    expect(parseSavedCanvasImport(JSON.stringify({ canvas, prompt: "Legacy saved canvas" }))[0].prompt).toBe("Legacy saved canvas");
     expect(() => parseSavedCanvasImport(JSON.stringify({ ...bundle, canvases: [{ ...saved, canvas: { blocks: [] } }] }))).toThrow();
   });
 });

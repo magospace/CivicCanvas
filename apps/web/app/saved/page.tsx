@@ -13,8 +13,8 @@ export default function SavedPage() {
         </div>
         <h1 className="mt-6 text-3xl font-semibold text-ink">Saved canvases</h1>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
-          Persistent saved canvases are reserved for a later phase. For the MVP demo, use the
-          deterministic Dallas and Austin workflows from the explorer.
+          Saved canvases stay browser-local for public beta. Export or copy a portable JSON bundle
+          to move dashboards between demos without adding accounts or a hosted database.
         </p>
         <div className="mt-8 grid w-full max-w-3xl gap-3 md:grid-cols-2">
           {[

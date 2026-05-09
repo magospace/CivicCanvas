@@ -47,7 +47,18 @@ export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
         </label>
       </div>
       <div className="grid gap-4 md:grid-cols-2">
-        {filtered.map((dataset) => (
+        {filtered.map((dataset) => {
+          const verification = dataset.liveVerification;
+          const promotionLabel = verification?.promotionStatus === "promoted"
+            ? "live promoted"
+            : verification?.promotionStatus === "blocked"
+              ? "sample fallback required"
+              : verification?.promotionStatus === "sample_first"
+                ? "sample first"
+                : dataset.liveAvailable
+                  ? "live verified"
+                  : dataset.dataAccess;
+          return (
           <article
             key={dataset.id}
             className="rounded-lg border border-slate-200 bg-white p-5 shadow-panel"
@@ -71,11 +82,16 @@ export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
             <p className="mt-3 text-sm leading-6 text-slate-600">{dataset.description}</p>
             <div className="mt-4 flex flex-wrap gap-2">
               <span className="rounded-md bg-mint/10 px-2.5 py-1 text-xs font-medium text-mint">
-                {dataset.liveAvailable ? "live verified" : dataset.dataAccess}
+                {promotionLabel}
               </span>
               <span className="rounded-md bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
                 {dataset.externalDatasetId ? `external ${dataset.externalDatasetId}` : "schema pending"}
               </span>
+              {verification ? (
+                <span className="rounded-md bg-civic-100 px-2.5 py-1 text-xs font-medium text-civic-700">
+                  checked {new Date(verification.lastCheckedAt).toLocaleDateString("en-US")}
+                </span>
+              ) : null}
               {dataset.recommendedVisuals.map((visual) => (
                 <span
                   key={visual}
@@ -92,6 +108,22 @@ export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
                 ))}
               </div>
             ) : null}
+            {verification ? (
+              <div className="mt-4 rounded-md border border-slate-200 bg-civic-50 p-3">
+                <div className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
+                  Live verification
+                </div>
+                <div className="mt-2 grid gap-2 text-xs leading-5 text-slate-600">
+                  <div>Live-capable fields: {verification.liveCapableFields.join(", ") || "none"}</div>
+                  <div>Sample-only fields: {verification.sampleOnlyFields.join(", ") || "none"}</div>
+                  {verification.checks.slice(0, 3).map((check) => (
+                    <div key={check.label} className="rounded bg-white px-2 py-1">
+                      <span className="font-semibold text-ink">{check.label}</span>: {check.status} / {check.reason}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
             <div className="mt-4 flex flex-wrap gap-2">
               {dataset.fields.slice(0, 7).map((field) => (
                 <span
@@ -104,7 +136,8 @@ export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
             </div>
             <p className="mt-4 text-xs leading-5 text-slate-500">{dataset.caveats[0]}</p>
           </article>
-        ))}
+          );
+        })}
       </div>
     </>
   );

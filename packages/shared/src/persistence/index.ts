@@ -1,4 +1,5 @@
 import {
+  canvasDocumentSchema,
   savedCanvasBundleSchema,
   savedCanvasSchema,
   type CanvasDocument,
@@ -93,6 +94,32 @@ export function parseSavedCanvasImport(value: string): SavedCanvas[] {
   const bundle = savedCanvasBundleSchema.safeParse(parsed);
   if (bundle.success) {
     return bundle.data.canvases;
+  }
+  const saved = savedCanvasSchema.safeParse(parsed);
+  if (saved.success) {
+    return [saved.data];
+  }
+  const canvas = canvasDocumentSchema.safeParse(parsed);
+  if (canvas.success) {
+    return [
+      createSavedCanvas({
+        canvas: canvas.data,
+        prompt: canvas.data.prompt ?? canvas.data.title,
+        savedAt: new Date().toISOString()
+      })
+    ];
+  }
+  const partialSaved = savedCanvasSchema.partial().safeParse(parsed);
+  if (partialSaved.success && partialSaved.data.canvas) {
+    return [
+      createSavedCanvas({
+        canvas: canvasDocumentSchema.parse(partialSaved.data.canvas),
+        audits: partialSaved.data.audits ?? [],
+        prompt: partialSaved.data.prompt ?? partialSaved.data.canvas.prompt ?? partialSaved.data.canvas.title,
+        intent: partialSaved.data.intent,
+        savedAt: partialSaved.data.savedAt ?? new Date().toISOString()
+      })
+    ];
   }
   return [savedCanvasSchema.parse(parsed)];
 }

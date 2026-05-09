@@ -35,8 +35,9 @@ export function SavedCanvases() {
     try {
       refresh(importSavedCanvasJson(importText));
       setImportText("");
-    } catch {
-      setImportError("Invalid saved canvas bundle or JSON. Import requires valid saved canvases with allowlisted blocks and a SourceMethodBlock.");
+    } catch (error) {
+      const detail = error instanceof Error ? ` ${error.message}` : "";
+      setImportError(`Import rejected. Saved bundles must contain valid canvases with allowlisted blocks and a SourceMethodBlock.${detail}`);
     }
   }
 
@@ -44,7 +45,7 @@ export function SavedCanvases() {
     return (
       <section className="mt-8 w-full max-w-3xl space-y-4">
         <div className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600 shadow-panel">
-          Save a generated dashboard from `/explore` or import a validated saved-canvas bundle.
+          Save a generated dashboard from /explore or import a validated saved-canvas bundle.
         </div>
         <ImportPanel
           importText={importText}
@@ -70,6 +71,16 @@ export function SavedCanvases() {
           className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
         >
           Export bundle
+        </button>
+        <button
+          onClick={async () => {
+            const bundle = exportSavedCanvasesBundleJson(items);
+            setExportText(bundle);
+            await navigator.clipboard?.writeText(bundle);
+          }}
+          className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+        >
+          Copy share bundle
         </button>
         <button
           onClick={() => {

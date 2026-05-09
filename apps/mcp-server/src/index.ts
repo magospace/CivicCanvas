@@ -68,7 +68,7 @@ const boundedQueryInput = {
 export function createServer() {
   const server = new McpServer({
     name: "texas-public-data-mcp",
-    version: "0.4.0-production-pilot"
+    version: "0.5.0-public-beta"
   });
 
   server.registerTool("list_supported_sources", {
@@ -135,7 +135,7 @@ export function createServer() {
   server.registerTool("generate_canvas_spec", {
     title: "Generate CanvasSpec",
     description: "Generate safe CanvasDocument JSON from an approved dataset.",
-    inputSchema: { datasetId: z.string() }
+    inputSchema: { datasetId: z.string(), mode: z.enum(["auto", "sample_only", "live_if_available"]).default("auto") }
   }, handled((args) => generateCanvasSpec(args)));
 
   server.registerTool("validate_canvas_spec", {
