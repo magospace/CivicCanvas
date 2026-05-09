@@ -93,6 +93,8 @@ PLAYWRIGHT_BASE_URL=https://your-public-beta.example pnpm test:e2e:remote
 
 Do not tag `v0.6.0-hosted-beta` until the hosted deployment smoke and remote browser smoke pass against a public URL.
 
+If a Git remote is available, the same checks can be run from GitHub Actions through the manual `Hosted Deploy Verify` workflow. Provide the public deployment URL and expected version when dispatching the workflow.
+
 ## GitHub Workflow Blocker
 
 A manual `workflow_dispatch` deploy workflow should be added only after all of the following are true:
@@ -103,3 +105,5 @@ A manual `workflow_dispatch` deploy workflow should be added only after all of t
 - `VERCEL_PROJECT_ID` is available as a GitHub Actions secret.
 
 Until then, manual Vercel CLI deployment is the supported path.
+
+The repository includes a separate manual hosted verification workflow that checks an already deployed URL. It does not deploy, does not require Vercel secrets, and is safe to keep network-free normal CI unchanged.

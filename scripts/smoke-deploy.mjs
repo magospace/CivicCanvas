@@ -88,6 +88,53 @@ const checks = [
     })
   },
   {
+    name: "datasets_api",
+    path: "/api/datasets",
+    kind: "json",
+    expect: (body) => {
+      const datasetIds = body?.datasets?.map((dataset) => dataset.id) ?? [];
+      return {
+        ok: datasetIds.includes("dallas_311_requests") && datasetIds.includes("austin_building_permits"),
+        reason: "Expected datasets API to return Dallas and Austin approved datasets."
+      };
+    }
+  },
+  {
+    name: "dataset_metadata",
+    path: "/api/datasets/dallas_311_requests",
+    kind: "json",
+    expect: (body) => {
+      const fields = body?.dataset?.fields?.map((field) => field.name) ?? [];
+      return {
+        ok: body?.dataset?.id === "dallas_311_requests" && fields.includes("category"),
+        reason: "Expected Dallas dataset metadata with allowlisted category field."
+      };
+    }
+  },
+  {
+    name: "query_endpoint",
+    path: "/api/query",
+    method: "POST",
+    kind: "json",
+    body: {
+      schemaVersion: "1.0",
+      datasetId: "dallas_311_requests",
+      mode: "sample_only",
+      filters: [{ field: "created_date", operator: "between", value: ["2024-01-01", "2024-12-31"] }],
+      groupBy: ["category"],
+      metrics: [{ type: "count", alias: "request_count" }],
+      orderBy: [{ field: "request_count", direction: "desc" }],
+      limit: 5
+    },
+    expect: (body) => ({
+      ok: body?.result?.datasetId === "dallas_311_requests" &&
+        Array.isArray(body?.result?.rows) &&
+        body.result.rows.length > 0 &&
+        Array.isArray(body?.audit?.safetyDecisions),
+      reason: "Expected query endpoint to return bounded Dallas rows and audit decisions."
+    })
+  },
+  {
     name: "explore_page",
     path: "/explore",
     kind: "text",

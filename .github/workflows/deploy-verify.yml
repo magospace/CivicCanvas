@@ -1,0 +1,30 @@
+name: Hosted Deploy Verify
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Public deployment URL to verify"
+        required: true
+        type: string
+      expected_version:
+        description: "Expected /api/health appVersion"
+        required: true
+        default: "v0.6.0-hosted-beta"
+        type: string
+
+jobs:
+  hosted-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.14.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm smoke:deploy -- --url "${{ inputs.base_url }}" --expect-version "${{ inputs.expected_version }}"
+      - run: PLAYWRIGHT_BASE_URL="${{ inputs.base_url }}" pnpm test:e2e:remote
