@@ -29,6 +29,6 @@ Last updated: May 9, 2026
 - Saved canvases persist only in browser `localStorage`; no auth or hosted database is wired.
 - Miro export generates a safe spec only; it does not write to Miro.
 
-## Next Target
+## Current Milestone
 
-Finish browser QA on desktop/mobile, then tag `v0.3.0-product-demo` after preflight and live smoke pass.
+`v0.3.0-product-demo` is complete and tagged. The next target is `v0.4.0-production-pilot`: production readiness without adding auth, hosted persistence, arbitrary generated code, or live Miro board writes.
