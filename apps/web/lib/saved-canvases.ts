@@ -7,6 +7,7 @@ import {
   savedCanvasSchema,
   savedCanvasStorageKey,
   type CanvasDocument,
+  type PromptIntent,
   type QueryAudit,
   type SavedCanvas
 } from "@texas-data-canvas/shared";
@@ -18,13 +19,15 @@ export function listSavedCanvases(): SavedCanvas[] {
 export function saveCanvasLocally({
   canvas,
   audits,
-  prompt
+  prompt,
+  intent
 }: {
   canvas: CanvasDocument;
   audits: QueryAudit[];
   prompt: string;
+  intent?: PromptIntent;
 }) {
-  const saved = createSavedCanvas({ canvas, audits, prompt });
+  const saved = createSavedCanvas({ canvas, audits, prompt, intent });
   return saveCanvasToStorage(window.localStorage, saved);
 }
 
@@ -57,6 +60,11 @@ export function takePendingOpenCanvas(): SavedCanvas | null {
 
 export function exportSavedCanvasJson(saved: SavedCanvas) {
   return JSON.stringify(saved, null, 2);
+}
+
+export function importSavedCanvasJson(value: string) {
+  const saved = savedCanvasSchema.parse(JSON.parse(value));
+  return saveCanvasToStorage(window.localStorage, saved);
 }
 
 export { savedCanvasStorageKey };

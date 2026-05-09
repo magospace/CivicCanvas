@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { CanvasDocument, DatasetMetadata, MiroExportSpec, QueryAudit } from "@texas-data-canvas/shared";
+import type { CanvasDocument, DataMode, DatasetMetadata, MiroExportSpec, PromptIntent, QueryAudit } from "@texas-data-canvas/shared";
 import { CanvasRenderer } from "./canvas/canvas-renderer";
 import { DatasetSidebar } from "./dataset-sidebar";
 import { Header } from "./header";
@@ -19,10 +19,13 @@ export function AppShell({
   const [prompt, setPrompt] = useState("Show Dallas 311 service requests by category and ZIP code for 2024.");
   const [activeCanvas, setActiveCanvas] = useState(canvas);
   const [audits, setAudits] = useState<QueryAudit[]>([]);
+  const [intent, setIntent] = useState<PromptIntent | null>(null);
+  const [dataMode, setDataMode] = useState<DataMode>(canvas.sources[0]?.dataMode ?? "sample");
   const [filterValues, setFilterValues] = useState<Record<string, string>>({});
   const [isGenerating, setIsGenerating] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
   const [miroSpec, setMiroSpec] = useState<MiroExportSpec | null>(null);
+  const [miroTemplate, setMiroTemplate] = useState<MiroExportSpec["template"]>("briefing_board");
 
   useEffect(() => {
     const pending = takePendingOpenCanvas();
@@ -30,6 +33,8 @@ export function AppShell({
       setPrompt(pending.prompt);
       setActiveCanvas(pending.canvas);
       setAudits(pending.audits);
+      setIntent(pending.intent ?? null);
+      setDataMode(pending.canvas.sources[0]?.dataMode ?? "sample");
       setStatus(`Opened saved canvas: ${pending.title}`);
     }
   }, []);
@@ -53,7 +58,9 @@ export function AppShell({
 
       setActiveCanvas(payload.canvas);
       setAudits(payload.audits ?? []);
-      setStatus(payload.suggestedDatasets ? "Prompt not recognized. Showing approved dataset suggestions." : "Dashboard generated from bounded sample queries.");
+      setIntent(payload.intent ?? null);
+      setDataMode(payload.dataMode ?? payload.canvas?.sources?.[0]?.dataMode ?? "sample");
+      setStatus(payload.suggestedDatasets ? "Prompt not recognized. Showing approved dataset suggestions." : "Dashboard generated from bounded governed queries.");
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "Dashboard generation failed.");
     } finally {
@@ -66,7 +73,7 @@ export function AppShell({
       const response = await fetch("/api/export/miro-spec", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ canvas: activeCanvas, template: "briefing_board" })
+        body: JSON.stringify({ canvas: activeCanvas, template: miroTemplate })
       });
       const payload = await response.json();
 
@@ -74,7 +81,7 @@ export function AppShell({
         throw new Error(payload.error ?? "Miro export spec failed.");
       }
 
-      setStatus(`Miro export spec generated with ${payload.spec.frames.length} frames. Preview-only for MVP.`);
+      setStatus(`Miro export spec generated with ${payload.spec.frames.length} frames. Preview-only.`);
       setMiroSpec(payload.spec);
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "Miro export spec failed.");
@@ -83,7 +90,7 @@ export function AppShell({
 
   function saveCurrentCanvas() {
     try {
-      saveCanvasLocally({ canvas: activeCanvas, audits, prompt });
+      saveCanvasLocally({ canvas: activeCanvas, audits, prompt, intent: intent ?? undefined });
       setStatus(`Saved locally: ${activeCanvas.title}`);
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "Could not save canvas.");
@@ -111,12 +118,23 @@ export function AppShell({
               {status}
             </div>
           ) : null}
-          <CanvasRenderer
-            document={activeCanvas}
-            filterValues={filterValues}
-            onFilterChange={updateFilter}
-            onApplyFilters={generateDashboard}
-          />
+          {isGenerating ? (
+            <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-panel">
+              <div className="h-4 w-48 animate-pulse rounded bg-civic-100" />
+              <div className="mt-4 grid gap-3 md:grid-cols-3">
+                <div className="h-24 animate-pulse rounded-md bg-civic-100" />
+                <div className="h-24 animate-pulse rounded-md bg-civic-100" />
+                <div className="h-24 animate-pulse rounded-md bg-civic-100" />
+              </div>
+            </div>
+          ) : (
+            <CanvasRenderer
+              document={activeCanvas}
+              filterValues={filterValues}
+              onFilterChange={updateFilter}
+              onApplyFilters={generateDashboard}
+            />
+          )}
           {miroSpec ? (
             <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-panel">
               <div className="mb-3 flex items-center justify-between gap-3">
@@ -125,10 +143,44 @@ export function AppShell({
                   {miroSpec.frames.length} frames
                 </span>
               </div>
+              <div className="mb-4 grid gap-2 md:grid-cols-[1fr_auto_auto]">
+                <label className="grid gap-1.5 text-xs font-semibold text-slate-500">
+                  Template
+                  <select
+                    value={miroTemplate}
+                    onChange={(event) => setMiroTemplate(event.target.value as MiroExportSpec["template"])}
+                    className="rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-sm font-medium text-slate-700"
+                  >
+                    <option value="briefing_board">Briefing board</option>
+                    <option value="slide_deck">Slide deck</option>
+                    <option value="community_workshop">Community workshop</option>
+                  </select>
+                </label>
+                <button
+                  onClick={() => navigator.clipboard?.writeText(JSON.stringify(miroSpec, null, 2))}
+                  className="self-end rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700"
+                >
+                  Copy JSON
+                </button>
+                <button
+                  onClick={() => {
+                    const blob = new Blob([JSON.stringify(miroSpec, null, 2)], { type: "application/json" });
+                    const url = URL.createObjectURL(blob);
+                    const anchor = document.createElement("a");
+                    anchor.href = url;
+                    anchor.download = `${miroSpec.title.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}.json`;
+                    anchor.click();
+                    URL.revokeObjectURL(url);
+                  }}
+                  className="self-end rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700"
+                >
+                  Download
+                </button>
+              </div>
               <div className="grid gap-2 md:grid-cols-2">
-                {miroSpec.frames.map((frame) => (
+                {miroSpec.frames.map((frame, index) => (
                   <div
-                    key={frame.title}
+                    key={`${frame.title}-${index}`}
                     className={
                       frame.title === "Source & Method"
                         ? "rounded-md border border-mint bg-mint/10 p-3 text-sm"
@@ -148,8 +200,13 @@ export function AppShell({
         </section>
         <InspectorPanel
           canvas={activeCanvas}
-          datasets={datasets}
           audits={audits}
+          intent={intent}
+          dataMode={dataMode}
+          filterValues={filterValues}
+          miroTemplate={miroTemplate}
+          onFilterChange={updateFilter}
+          onMiroTemplateChange={setMiroTemplate}
           onExportMiro={exportMiroSpec}
           onSave={saveCurrentCanvas}
           onApplyFilters={generateDashboard}

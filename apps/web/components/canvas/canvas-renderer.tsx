@@ -84,7 +84,7 @@ export function CanvasRenderer({
   const otherBlocks = validatedDocument.blocks.filter((block) => block.type !== "MetricBlock");
 
   return (
-    <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-panel">
+    <section className="min-w-0 rounded-lg border border-slate-200 bg-white p-4 shadow-panel">
       <div className="mb-5 flex flex-col justify-between gap-3 border-b border-slate-200 pb-4 md:flex-row md:items-end">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-civic-700">
@@ -102,7 +102,7 @@ export function CanvasRenderer({
       {metricBlocks.length > 0 ? (
         <div className="mb-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
           {metricBlocks.map((block) => (
-            <div key={block.id}>{renderBlock(block)}</div>
+            <div key={block.id} className="min-w-0">{renderBlock(block)}</div>
           ))}
         </div>
       ) : null}
@@ -114,8 +114,8 @@ export function CanvasRenderer({
               block.type === "SummaryBlock" ||
               block.type === "SourceMethodBlock" ||
               block.type === "TableBlock"
-                ? "xl:col-span-2"
-                : undefined
+                ? "min-w-0 xl:col-span-2"
+                : "min-w-0"
             }
           >
             {block.type === "FilterBlock" ? (

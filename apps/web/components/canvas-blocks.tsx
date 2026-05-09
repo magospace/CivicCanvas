@@ -1,3 +1,6 @@
+"use client";
+
+import { useMemo, useState } from "react";
 import { ExternalLink, FileText, ShieldCheck } from "lucide-react";
 import type { CanvasBlock } from "@texas-data-canvas/shared";
 
@@ -117,10 +120,17 @@ export function MapBlockView({ props }: MapBlock) {
           <svg viewBox="0 0 368 248" role="img" aria-label={props.title} className="h-64 w-full">
             <rect x="0" y="0" width="368" height="248" fill="#f6f8fb" />
             <path
-              d="M62 38 L312 32 L340 82 L310 206 L88 218 L38 154 Z"
+              d="M70 28 L298 36 L340 92 L318 196 L222 224 L98 214 L42 156 L52 78 Z"
               fill="#e8eef6"
               stroke="#cbd5e1"
               strokeWidth="2"
+            />
+            <path
+              d="M110 50 L244 48 L300 98 L276 178 L190 204 L104 184 L74 124 Z"
+              fill="none"
+              stroke="#94a3b8"
+              strokeDasharray="4 5"
+              strokeWidth="1.5"
             />
             {props.data.map((item) => {
               const zip = String(item[props.geographyField]);
@@ -148,6 +158,14 @@ export function MapBlockView({ props }: MapBlock) {
                     className="fill-white text-[10px] font-semibold"
                   >
                     {zip}
+                  </text>
+                  <text
+                    x={xFor(feature.longitude)}
+                    y={yFor(feature.latitude) + radius + 12}
+                    textAnchor="middle"
+                    className="fill-slate-600 text-[9px] font-semibold"
+                  >
+                    {value}
                   </text>
                 </g>
               );
@@ -186,10 +204,34 @@ export function MapBlockView({ props }: MapBlock) {
 }
 
 export function TableBlockView({ props }: TableBlock) {
-  const rows = props.sortBy
-    ? [...props.rows].sort((a, b) => asNumber(b[props.sortBy ?? ""]) - asNumber(a[props.sortBy ?? ""]))
-    : props.rows;
-  const visibleRows = rows.slice(0, props.pageSize ?? rows.length);
+  const [sortField, setSortField] = useState(props.sortBy ?? props.columns[0]?.field ?? "");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+  const [page, setPage] = useState(0);
+  const pageSize = props.pageSize ?? props.rows.length;
+  const rows = useMemo(() => {
+    if (!sortField) {
+      return props.rows;
+    }
+    return [...props.rows].sort((a, b) => {
+      const left = a[sortField];
+      const right = b[sortField];
+      const comparison = typeof left === "number" && typeof right === "number"
+        ? left - right
+        : String(left ?? "").localeCompare(String(right ?? ""));
+      return sortDirection === "asc" ? comparison : -comparison;
+    });
+  }, [props.rows, sortDirection, sortField]);
+  const pageCount = Math.max(Math.ceil(rows.length / pageSize), 1);
+  const visibleRows = rows.slice(page * pageSize, page * pageSize + pageSize);
+  const changeSort = (field: string) => {
+    setPage(0);
+    if (field === sortField) {
+      setSortDirection((direction) => direction === "asc" ? "desc" : "asc");
+      return;
+    }
+    setSortField(field);
+    setSortDirection("desc");
+  };
 
   return (
     <article className="overflow-hidden rounded-lg border border-slate-200">
@@ -199,14 +241,22 @@ export function TableBlockView({ props }: TableBlock) {
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-slate-200 text-sm">
-          <thead className="bg-white">
+          <thead className="sticky top-0 bg-white">
             <tr>
               {props.columns.map((column) => (
                 <th
                   key={column.field}
                   className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-slate-500"
                 >
-                  {column.label}
+                  <button
+                    type="button"
+                    onClick={() => changeSort(column.field)}
+                    className="flex items-center gap-1 text-left uppercase tracking-[0.12em] transition hover:text-civic-700"
+                    aria-label={`Sort by ${column.label}`}
+                  >
+                    {column.label}
+                    {sortField === column.field ? <span>{sortDirection}</span> : null}
+                  </button>
                 </th>
               ))}
             </tr>
@@ -224,8 +274,27 @@ export function TableBlockView({ props }: TableBlock) {
           </tbody>
         </table>
       </div>
-      <div className="border-t border-slate-200 bg-civic-50 px-4 py-2 text-xs text-slate-500">
-        Showing {visibleRows.length} of {props.rows.length} rows
+      <div className="flex items-center justify-between gap-3 border-t border-slate-200 bg-civic-50 px-4 py-2 text-xs text-slate-500">
+        <span>Showing {visibleRows.length} of {props.rows.length} rows</span>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setPage((value) => Math.max(value - 1, 0))}
+            disabled={page === 0}
+            className="rounded border border-slate-200 px-2 py-1 font-semibold disabled:opacity-40"
+          >
+            Prev
+          </button>
+          <span>{page + 1} / {pageCount}</span>
+          <button
+            type="button"
+            onClick={() => setPage((value) => Math.min(value + 1, pageCount - 1))}
+            disabled={page + 1 >= pageCount}
+            className="rounded border border-slate-200 px-2 py-1 font-semibold disabled:opacity-40"
+          >
+            Next
+          </button>
+        </div>
       </div>
     </article>
   );
@@ -250,9 +319,10 @@ export function FilterBlockView({
             <span className="text-xs font-semibold text-slate-500">{filter.label}</span>
             {filter.type === "select" ? (
               <select
+                aria-label={filter.label}
                 value={values[filter.field] ?? "All"}
                 onChange={(event) => onChange?.(filter.field, event.target.value)}
-                className="rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-sm text-slate-700"
+                className="rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-sm text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
               >
                 {(filter.options ?? []).map((option) => (
                   <option key={option}>{option}</option>
@@ -260,9 +330,10 @@ export function FilterBlockView({
               </select>
             ) : (
               <input
+                aria-label={filter.label}
                 value={values[filter.field] ?? ""}
                 onChange={(event) => onChange?.(filter.field, event.target.value)}
-                className="rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-sm text-slate-700"
+                className="rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-sm text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
                 placeholder={filter.type === "dateRange" ? "2024-01-01 to 2024-12-31" : filter.field}
               />
             )}

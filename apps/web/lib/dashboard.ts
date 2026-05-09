@@ -4,6 +4,7 @@ import {
   validateCanvasDocument,
   type BoundedQuerySpec,
   type CanvasDocument,
+  type DataMode,
   type DatasetAdapter,
   type DatasetMetadata,
   type PromptIntent,
@@ -22,6 +23,7 @@ export type DashboardGeneration = {
   audits: QueryAudit[];
   intent?: PromptIntent;
   querySpec?: BoundedQuerySpec;
+  dataMode?: DataMode;
   suggestedDatasets?: DatasetMetadata[];
 };
 
@@ -117,6 +119,13 @@ function parseDateRange(value: string | undefined, prompt: string) {
 }
 
 function buildFilters(prompt: string, intent: DemoIntent, filterValues: DashboardFilterValues = {}) {
+  const allowedKeys = new Set(["city", "__groupBy", intent.dateField, intent.categoryField, intent.statusField, intent.geographyField]);
+  for (const [field, value] of Object.entries(filterValues)) {
+    if (value && !allowedKeys.has(field)) {
+      throw new Error(`Filter field "${field}" is not allowlisted for this dashboard.`);
+    }
+  }
+
   const filters: BoundedQuerySpec["filters"] = [
     {
       field: intent.dateField,
@@ -135,10 +144,46 @@ function buildFilters(prompt: string, intent: DemoIntent, filterValues: Dashboar
   return filters;
 }
 
+function groupByMode(intent: DemoIntent, filterValues: DashboardFilterValues) {
+  const requested = filterValues.__groupBy;
+  if (requested === "month") {
+    return ["month"];
+  }
+  if (requested === "status") {
+    return [intent.statusField];
+  }
+  if (requested === "zip_code") {
+    return [intent.geographyField];
+  }
+  if (requested === "category") {
+    return [intent.categoryField];
+  }
+  return [intent.categoryField, intent.geographyField];
+}
+
+function dashboardMode(dataset: DatasetMetadata, requiredFields: string[]): { queryMode: BoundedQuerySpec["mode"]; dataMode: DataMode; reason?: string } {
+  if (!dataset.liveAvailable) {
+    return { queryMode: "auto", dataMode: "sample" };
+  }
+
+  const missing = [...new Set(requiredFields.filter((field) => !dataset.liveFieldMap[field]))];
+  if (missing.length > 0) {
+    return {
+      queryMode: "sample_only",
+      dataMode: "fallback",
+      reason: `Verified live source lacks required dashboard field(s): ${missing.join(", ")}.`
+    };
+  }
+
+  return { queryMode: "live_if_available", dataMode: "live" };
+}
+
 function createCombinedSource(
   dataset: DatasetMetadata,
   results: QueryResult[],
-  prompt: string
+  prompt: string,
+  dataMode: DataMode,
+  extraCaveats: string[] = []
 ): SourceAttribution {
   const fieldsUsed = [...new Set(results.flatMap((result) => result.source.fieldsUsed))];
   const filtersApplied = [...new Set(results.flatMap((result) => result.source.filtersApplied))];
@@ -152,7 +197,8 @@ function createCombinedSource(
     fieldsUsed,
     filtersApplied,
     queryMethod: `Rule-based prompt intent for: "${prompt}"`,
-    caveats: dataset.caveats,
+    dataMode,
+    caveats: [...new Set([...dataset.caveats, ...extraCaveats, ...results.flatMap((result) => result.caveats)])],
     license: "Refer to source portal terms"
   };
 }
@@ -175,10 +221,21 @@ async function createDashboardForIntent({
   const dataset = findDataset(catalog, intent.datasetId);
   const promptIntent = parsePromptIntent({ prompt, catalog });
   const filters = buildFilters(prompt, intent, filterValues);
+  const tableGroupBy = groupByMode(intent, filterValues);
+  const primaryGroupField = intent.categoryField;
+  const mode = dashboardMode(dataset, [
+    intent.dateField,
+    "month",
+    intent.categoryField,
+    intent.statusField,
+    intent.geographyField,
+    ...tableGroupBy
+  ]);
 
   const monthlySpec: BoundedQuerySpec = {
     schemaVersion: "1.0",
     datasetId: intent.datasetId,
+    mode: mode.queryMode,
     filters,
     groupBy: ["month"],
     metrics: [{ type: "count", alias: intent.countAlias }],
@@ -188,8 +245,9 @@ async function createDashboardForIntent({
   const categorySpec: BoundedQuerySpec = {
     schemaVersion: "1.0",
     datasetId: intent.datasetId,
+    mode: mode.queryMode,
     filters,
-    groupBy: [intent.categoryField],
+    groupBy: [primaryGroupField],
     metrics: [{ type: "count", alias: intent.countAlias }],
     orderBy: [{ field: intent.countAlias, direction: "desc" }],
     limit: 8
@@ -197,8 +255,19 @@ async function createDashboardForIntent({
   const zipSpec: BoundedQuerySpec = {
     schemaVersion: "1.0",
     datasetId: intent.datasetId,
+    mode: mode.queryMode,
     filters,
     groupBy: [intent.geographyField],
+    metrics: [{ type: "count", alias: intent.countAlias }],
+    orderBy: [{ field: intent.countAlias, direction: "desc" }],
+    limit: 8
+  };
+  const statusSpec: BoundedQuerySpec = {
+    schemaVersion: "1.0",
+    datasetId: intent.datasetId,
+    mode: mode.queryMode,
+    filters,
+    groupBy: [intent.statusField],
     metrics: [{ type: "count", alias: intent.countAlias }],
     orderBy: [{ field: intent.countAlias, direction: "desc" }],
     limit: 8
@@ -206,25 +275,38 @@ async function createDashboardForIntent({
   const tableSpec: BoundedQuerySpec = {
     schemaVersion: "1.0",
     datasetId: intent.datasetId,
+    mode: mode.queryMode,
     filters,
-    groupBy: [intent.categoryField, intent.statusField, intent.geographyField],
+    groupBy: tableGroupBy,
     metrics: [{ type: "count", alias: intent.countAlias }],
     orderBy: [{ field: intent.countAlias, direction: "desc" }],
     limit: 20
   };
 
-  const [monthly, byCategory, byZip, table] = await Promise.all([
+  const [monthly, byCategory, byZip, byStatus, table] = await Promise.all([
     runQuery(adapter, monthlySpec),
     runQuery(adapter, categorySpec),
     runQuery(adapter, zipSpec),
+    runQuery(adapter, statusSpec),
     runQuery(adapter, tableSpec)
   ]);
 
-  const results = [monthly.result, byCategory.result, byZip.result, table.result];
-  const audits = [monthly.audit, byCategory.audit, byZip.audit, table.audit];
-  const source = createCombinedSource(dataset, results, prompt);
+  const results = [monthly.result, byCategory.result, byZip.result, byStatus.result, table.result];
+  const audits = [monthly.audit, byCategory.audit, byZip.audit, byStatus.audit, table.audit];
+  const actualDataMode: DataMode = results.some((result) => result.dataMode === "fallback") || mode.dataMode === "fallback"
+    ? "fallback"
+    : results.every((result) => result.dataMode === "live")
+      ? "live"
+      : "sample";
+  const modeCaveat = mode.reason ? [`${mode.reason} Approved sample fallback is used for this dashboard.`] : [];
+  const source = createCombinedSource(dataset, results, prompt, actualDataMode, modeCaveat);
   const totalCount = monthly.result.rows.reduce((sum, row) => sum + numeric(row, intent.countAlias), 0);
   const zipRows = chartRows(byZip.result, intent.geographyField, intent.countAlias);
+  const dataModeText = actualDataMode === "live"
+    ? "Live public API"
+    : actualDataMode === "fallback"
+      ? "Live unavailable, sample fallback used"
+      : "Sample fallback";
 
   const canvas = validateCanvasDocument({
     schemaVersion: "1.0",
@@ -250,9 +332,7 @@ async function createDashboardForIntent({
           bullets: [
             "Dataset, fields, filters, and row limits were validated before querying.",
             "Visuals are rendered through the allowlisted React block registry.",
-            dataset.liveAvailable
-              ? "Live adapter is configured for this source."
-              : "Static sample fallback is active for demo reliability."
+            dataModeText
           ]
         }
       },
@@ -308,11 +388,11 @@ async function createDashboardForIntent({
         type: "ChartBlock",
         props: {
           title: `Top ${dataset.topic}`,
-          subtitle: `Grouped by ${intent.categoryField.replace(/_/g, " ")}`,
+          subtitle: `Grouped by ${primaryGroupField.replace(/_/g, " ")}`,
           chartType: "bar",
-          xField: intent.categoryField,
+          xField: primaryGroupField,
           yField: intent.countAlias,
-          data: chartRows(byCategory.result, intent.categoryField, intent.countAlias)
+          data: chartRows(byCategory.result, primaryGroupField, intent.countAlias)
         }
       },
       {
@@ -339,6 +419,12 @@ async function createDashboardForIntent({
             { field: "city", label: "City", type: "select", options: ["All", dataset.city] },
             { field: intent.dateField, label: "Date range", type: "dateRange" },
             {
+              field: "__groupBy",
+              label: "Group by",
+              type: "select",
+              options: ["category_zip", "category", "month", "status", "zip_code"]
+            },
+            {
               field: intent.categoryField,
               label: intent.categoryField.replace(/_/g, " "),
               type: "select",
@@ -348,7 +434,7 @@ async function createDashboardForIntent({
               field: intent.statusField,
               label: "Status",
               type: "select",
-              options: ["All", ...new Set(table.result.rows.map((row) => stringify(row, intent.statusField)))]
+              options: ["All", ...new Set(byStatus.result.rows.map((row) => stringify(row, intent.statusField)))]
             },
             {
               field: intent.geographyField,
@@ -376,7 +462,7 @@ async function createDashboardForIntent({
     ]
   });
 
-  return { canvas, audits, intent: promptIntent, querySpec: tableSpec };
+  return { canvas, audits, intent: promptIntent, querySpec: tableSpec, dataMode: actualDataMode };
 }
 
 export async function generateCanvasForPrompt(
@@ -409,6 +495,7 @@ export function createDatasetSuggestionCanvas(prompt: string): CanvasDocument {
     fieldsUsed: [],
     filtersApplied: [],
     queryMethod: `No supported rule-based prompt match for: "${prompt}"`,
+    dataMode: "sample",
     caveats: [
       "The current parser only generates dashboards for approved Dallas 311 and Austin permits workflows."
     ],

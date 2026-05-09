@@ -71,7 +71,10 @@ export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
             <p className="mt-3 text-sm leading-6 text-slate-600">{dataset.description}</p>
             <div className="mt-4 flex flex-wrap gap-2">
               <span className="rounded-md bg-mint/10 px-2.5 py-1 text-xs font-medium text-mint">
-                {dataset.dataAccess}
+                {dataset.liveAvailable ? "live verified" : dataset.dataAccess}
+              </span>
+              <span className="rounded-md bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
+                {dataset.externalDatasetId ? `external ${dataset.externalDatasetId}` : "schema pending"}
               </span>
               {dataset.recommendedVisuals.map((visual) => (
                 <span
@@ -82,6 +85,13 @@ export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
                 </span>
               ))}
             </div>
+            {dataset.liveQueryNotes.length > 0 ? (
+              <div className="mt-3 space-y-1">
+                {dataset.liveQueryNotes.map((note) => (
+                  <p key={note} className="text-xs leading-5 text-slate-500">{note}</p>
+                ))}
+              </div>
+            ) : null}
             <div className="mt-4 flex flex-wrap gap-2">
               {dataset.fields.slice(0, 7).map((field) => (
                 <span

@@ -8,7 +8,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       saved: true,
       canvasId: canvas.id,
-      note: "Saved in-memory placeholder for MVP. Persistent storage is reserved for a later phase."
+      note: "Server route validates CanvasDocument; browser-local persistence is handled by the client saved-canvas workflow."
     });
   } catch (error) {
     return NextResponse.json(

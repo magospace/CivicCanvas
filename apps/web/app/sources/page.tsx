@@ -15,8 +15,8 @@ export default function SourcesPage() {
           </p>
           <h1 className="mt-3 text-3xl font-semibold text-ink">Texas public data sources</h1>
           <p className="mt-3 text-sm leading-6 text-slate-600">
-            P0/P1 uses curated sample data first. Live portal adapters come later, but the
-            catalog already captures the source, fields, caveats, and recommended visual types.
+            The catalog keeps verified source metadata, live adapter mappings, sample fallbacks,
+            caveats, and recommended visual types together so dashboards stay governed.
           </p>
         </div>
         <SourcesCatalog datasets={datasets} />

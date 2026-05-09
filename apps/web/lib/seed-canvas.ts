@@ -48,6 +48,7 @@ export function createSeedCanvasDocument(datasets: DatasetMetadata[]): CanvasDoc
     fieldsUsed: ["created_date", "month", "category", "status", "zip_code"],
     filtersApplied: ["created_date between 2024-01-01 and 2024-12-31"],
     queryMethod: "Static P1 sample aggregate prepared from approved local JSON.",
+    dataMode: "sample",
     caveats: dataset.caveats,
     license: "Refer to source portal terms"
   };

@@ -18,6 +18,12 @@ export function generateMiroExportSpec({
     throw new Error("Miro export requires SourceMethodBlock.");
   }
 
+  const templateFrames = template === "slide_deck"
+    ? [{ title: "Slide Flow", items: [{ type: "text" as const, content: "Use each frame as one briefing slide." }] }]
+    : template === "community_workshop"
+      ? [{ title: "Workshop Prompts", items: [{ type: "text" as const, content: "Invite participants to annotate caveats, missing context, and follow-up questions." }] }]
+      : [{ title: "Briefing Notes", items: [{ type: "text" as const, content: "Use this board to support a civic data briefing." }] }];
+
   const frames = [
     {
       title: validCanvas.title,
@@ -28,6 +34,7 @@ export function generateMiroExportSpec({
         }
       ]
     },
+    ...templateFrames,
     ...validCanvas.blocks
       .filter((block) => block.type !== "SourceMethodBlock")
       .map((block) => ({

@@ -1,4 +1,4 @@
-import { savedCanvasSchema, type CanvasDocument, type QueryAudit, type SavedCanvas } from "../schemas/index.js";
+import { savedCanvasSchema, type CanvasDocument, type PromptIntent, type QueryAudit, type SavedCanvas } from "../schemas/index.js";
 
 export type StorageLike = {
   getItem(key: string): string | null;
@@ -13,11 +13,13 @@ export function createSavedCanvas({
   canvas,
   audits = [],
   prompt,
+  intent,
   savedAt = new Date().toISOString()
 }: {
   canvas: CanvasDocument;
   audits?: QueryAudit[];
   prompt: string;
+  intent?: PromptIntent;
   savedAt?: string;
 }): SavedCanvas {
   return savedCanvasSchema.parse({
@@ -26,6 +28,7 @@ export function createSavedCanvas({
     prompt,
     canvas,
     audits,
+    intent,
     savedAt
   });
 }
