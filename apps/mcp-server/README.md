@@ -9,11 +9,15 @@ pnpm --filter @texas-data-canvas/mcp-server typecheck
 pnpm --filter @texas-data-canvas/mcp-server build
 pnpm --filter @texas-data-canvas/mcp-server inspect
 pnpm smoke:live
+pnpm smoke:live:json
 ```
 
 ## Tools
 
 - `list_supported_sources`
+- `get_server_status`
+- `validate_catalog`
+- `list_live_sources`
 - `search_datasets`
 - `get_dataset_metadata`
 - `query_dataset`
@@ -52,5 +56,6 @@ The server does not execute arbitrary SQL, generated JavaScript, generated HTML,
 - Live Socrata/Tyler calls are generated from allowlisted `BoundedQuerySpec` fields, operators, and catalog `liveFieldMap` entries; callers never provide raw SQL or SoQL.
 - Network or live adapter failures fall back to approved sample JSON with an explicit caveat.
 - Tool errors are returned with validation categories when invoked through the MCP server.
+- Status and catalog-health tools expose live source readiness without returning sample rows.
 - Canvas outputs are JSON only, use allowlisted block types, and require a `SourceMethodBlock`.
 - Miro output is a preview-only `MiroExportSpec`; this server does not write to boards.

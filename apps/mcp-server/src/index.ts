@@ -7,12 +7,15 @@ import {
   generateMiroExportSpec,
   getDatasetMetadata,
   getSampleRows,
+  getServerStatus,
   getSourceAttribution,
+  listLiveSources,
   listSupportedSources,
   queryDataset,
   recommendVisualization,
   searchDatasets,
   summarizeQueryResult,
+  validateCatalog,
   validateCanvasSpec
 } from "./tools.js";
 
@@ -65,13 +68,28 @@ const boundedQueryInput = {
 export function createServer() {
   const server = new McpServer({
     name: "texas-public-data-mcp",
-    version: "0.1.0"
+    version: "0.4.0-production-pilot"
   });
 
   server.registerTool("list_supported_sources", {
     title: "List supported sources",
     description: "Return allowlisted Texas public data portals and static adapters."
   }, handled(() => listSupportedSources()));
+
+  server.registerTool("get_server_status", {
+    title: "Get server status",
+    description: "Return MCP server readiness and safety model metadata."
+  }, handled(() => getServerStatus()));
+
+  server.registerTool("validate_catalog", {
+    title: "Validate catalog",
+    description: "Return approved catalog health and live fallback readiness."
+  }, handled(() => validateCatalog()));
+
+  server.registerTool("list_live_sources", {
+    title: "List live sources",
+    description: "Return live-enabled datasets and verified field mappings."
+  }, handled(() => listLiveSources()));
 
   server.registerTool("search_datasets", {
     title: "Search datasets",

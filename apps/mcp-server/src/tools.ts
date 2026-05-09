@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   boundedQuerySpecSchema,
+  catalogHealthReportSchema,
   createSourceAttribution,
   safeValidateCanvasDocument,
   validateCanvasDocument,
@@ -9,6 +10,75 @@ import {
   type QueryResult
 } from "@texas-data-canvas/shared";
 import { getAdapter, getCatalog } from "./data.js";
+
+export function getServerStatus() {
+  const catalog = getCatalog();
+
+  return {
+    ok: true,
+    name: "texas-public-data-mcp",
+    version: "0.4.0-production-pilot",
+    datasetCount: catalog.length,
+    liveEnabledDatasets: catalog.filter((dataset) => dataset.liveAvailable).map((dataset) => dataset.id),
+    safetyModel: "BoundedQuerySpec plus approved catalog; no raw SQL, SoQL, HTML, JavaScript, or arbitrary components."
+  };
+}
+
+export function validateCatalog() {
+  const catalog = getCatalog();
+  const issues = catalog.flatMap((dataset) => {
+    const datasetIssues = [];
+    if (dataset.liveAvailable && !dataset.fallbackSampleFile) {
+      datasetIssues.push({
+        path: [dataset.id, "fallbackSampleFile"],
+        code: "missing_fallback",
+        message: "Live-enabled datasets must keep fallback sample files."
+      });
+    }
+    if (dataset.liveAvailable && (!dataset.externalDatasetId || !dataset.apiBaseUrl)) {
+      datasetIssues.push({
+        path: [dataset.id, "adapter"],
+        code: "missing_live_adapter_metadata",
+        message: "Live-enabled datasets require externalDatasetId and apiBaseUrl."
+      });
+    }
+    return datasetIssues;
+  });
+
+  return {
+    health: catalogHealthReportSchema.parse({
+      status: issues.length === 0 ? "ok" : "degraded",
+      checkedAt: new Date().toISOString(),
+      datasetCount: catalog.length,
+      liveEnabledDatasets: catalog.filter((dataset) => dataset.liveAvailable).map((dataset) => dataset.id),
+      sampleFallbacks: catalog
+        .filter((dataset) => dataset.fallbackSampleFile)
+        .map((dataset) => ({
+          datasetId: dataset.id,
+          file: dataset.fallbackSampleFile!,
+          available: true
+        })),
+      issues
+    })
+  };
+}
+
+export function listLiveSources() {
+  return {
+    liveSources: getCatalog()
+      .filter((dataset) => dataset.liveAvailable)
+      .map((dataset) => ({
+        datasetId: dataset.id,
+        title: dataset.title,
+        adapter: dataset.adapter,
+        externalDatasetId: dataset.externalDatasetId,
+        apiBaseUrl: dataset.apiBaseUrl,
+        fallbackSampleFile: dataset.fallbackSampleFile,
+        liveFieldMap: dataset.liveFieldMap,
+        caveats: dataset.caveats
+      }))
+  };
+}
 
 export function listSupportedSources() {
   const sources = new Map<string, { id: string; name: string; url: string; adapter: string }>();

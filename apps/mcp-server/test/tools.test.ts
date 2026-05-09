@@ -5,12 +5,15 @@ import {
   generateMiroExportSpec,
   getDatasetMetadata,
   getSampleRows,
+  getServerStatus,
   getSourceAttribution,
+  listLiveSources,
   listSupportedSources,
   queryDataset,
   recommendVisualization,
   searchDatasets,
   summarizeQueryResult,
+  validateCatalog,
   validateCanvasSpec
 } from "../src/tools";
 
@@ -18,6 +21,9 @@ describe("MCP tool handlers", () => {
   it("lists supported sources and searches datasets", () => {
     expect(listSupportedSources().sources.length).toBeGreaterThan(0);
     expect(searchDatasets({ query: "Dallas 311" }).datasets[0].datasetId).toBe("dallas_311_requests");
+    expect(getServerStatus().ok).toBe(true);
+    expect(validateCatalog().health.status).toBe("ok");
+    expect(listLiveSources().liveSources.map((source) => source.datasetId)).toContain("dallas_311_requests");
   });
 
   it("returns metadata and bounded query results", async () => {
@@ -79,5 +85,16 @@ describe("MCP tool handlers", () => {
     expect(validateCanvasSpec(canvas).ok).toBe(true);
     const miro = generateMiroExportSpec({ canvas, template: "briefing_board" });
     expect(miro.sourceMethodFrameRequired).toBe(true);
+  });
+
+  it("returns structured handler data for validation failures", async () => {
+    await expect(queryDataset({
+      datasetId: "dallas_311_requests",
+      mode: "sample_only",
+      groupBy: ["not_a_field"],
+      metrics: [{ type: "count", alias: "request_count" }],
+      limit: 10
+    })).rejects.toThrow(/not allowlisted/);
+    expect(validateCanvasSpec({ blocks: [{ type: "UnknownBlock" }] }).ok).toBe(false);
   });
 });
