@@ -45,6 +45,7 @@ These are current operational handoff docs, but release proof remains gated. Use
 | [`V1_3_HOSTED_LAUNCH_READINESS_PLAN.md`](V1_3_HOSTED_LAUNCH_READINESS_PLAN.md) | Current v1.3 hosted launch-readiness plan. |
 | [`DEMO_SCRIPT.md`](DEMO_SCRIPT.md) | Demo prompts and walkthrough steps. |
 | [`DEMO_VIDEO_CHECKLIST.md`](DEMO_VIDEO_CHECKLIST.md) | Screen-recording checklist for hackathon demo video capture without generated-media claims. |
+| [`VISUAL_UI_UX_AUDIT.md`](VISUAL_UI_UX_AUDIT.md) | Loom-focused visual polish audit with prioritized UI/UX issues and screenshot paths for ignored local artifacts. |
 | [`FAL_LIVE_PROOF_TEMPLATE.md`](FAL_LIVE_PROOF_TEMPLATE.md) | Optional env-gated Fal smoke result template with redaction, artifact, cost, and app-wiring caveats. |
 | [`HACKATHON_SUBMISSION_CHECKLIST.md`](HACKATHON_SUBMISSION_CHECKLIST.md) | Submission metadata and proof checklist that separates local, hosted, live, media, and release-evidence claims. |
 | [`HACKATHON_SUBMISSION_GUIDE.md`](HACKATHON_SUBMISSION_GUIDE.md) | Airtable/Loom submission field guide, write-up draft, demo plan, MCP/agent positioning, and honest boundary reminders. |
