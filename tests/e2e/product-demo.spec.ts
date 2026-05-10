@@ -145,6 +145,15 @@ test("sources route shows live verification status", async ({ page }) => {
   await expect(page.getByText("sample-first").first()).toBeVisible();
   await expect(page.getByText("precise_address · hidden")).toBeVisible();
   await expect(page.getByText(/intentionally excluded from queries, exports, and generated dashboards/i)).toBeVisible();
+
+  await expect(page.getByRole("link", { name: "Open Dallas 311 Service Requests in Explore" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Open Austin Building Permits in Explore" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Open Houston Transportation Incidents and Road Projects in Explore" })).toBeVisible();
+  await expect(page.getByText("Explore prompt support is coming later for this source; metadata remains visible for provenance.")).toBeVisible();
+
+  await page.getByRole("link", { name: "Open Houston Transportation Incidents and Road Projects in Explore" }).click();
+  await expect(page).toHaveURL(/\/explore\?prompt=/);
+  await expect(page.getByLabel("Dashboard prompt")).toHaveValue("Show Houston transportation incidents by ZIP and incident type for 2024.");
 });
 
 test("unsupported sensitive prompt returns exact supported prompts and approved source suggestions", async ({ page }) => {

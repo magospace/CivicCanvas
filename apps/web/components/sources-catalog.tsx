@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Database, ExternalLink } from "lucide-react";
 import type { DatasetMetadata } from "@texas-data-canvas/shared";
@@ -45,6 +46,19 @@ function datasetStatus(dataset: DatasetMetadata) {
   return dataset.liveAvailable
     ? { label: "live verified", className: "bg-mint/10 text-mint" }
     : { label: "sample fallback", className: "bg-slate-100 text-slate-600" };
+}
+
+function explorePromptForDataset(datasetId: string) {
+  switch (datasetId) {
+    case "dallas_311_requests":
+      return "Show Dallas 311 service requests by category and ZIP code for 2024.";
+    case "austin_building_permits":
+      return "Show Austin building permits by month and ZIP code for 2024.";
+    case "houston_transportation_incidents":
+      return "Show Houston transportation incidents by ZIP and incident type for 2024.";
+    default:
+      return null;
+  }
 }
 
 export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
@@ -102,6 +116,7 @@ export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
             : dataset.id === "austin_building_permits"
               ? "Hosted beta: Austin live metadata is verified, but monthly live aggregation remains sample-first until source-owned month grouping is approved."
               : null;
+          const explorePrompt = explorePromptForDataset(dataset.id);
           return (
           <article
             key={dataset.id}
@@ -126,6 +141,19 @@ export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
               </a>
             </div>
             <p className="mt-3 text-sm leading-6 text-slate-600">{dataset.description}</p>
+            {explorePrompt ? (
+              <Link
+                href={`/explore?prompt=${encodeURIComponent(explorePrompt)}`}
+                className="mt-4 inline-flex rounded-md bg-civic-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-civic-800 focus:outline-none focus:ring-2 focus:ring-civic-700 focus:ring-offset-2"
+                aria-label={`Open ${dataset.title} in Explore`}
+              >
+                Open in Explore
+              </Link>
+            ) : (
+              <p className="mt-4 rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-xs leading-5 text-slate-600">
+                Explore prompt support is coming later for this source; metadata remains visible for provenance.
+              </p>
+            )}
             <div className="mt-4 flex flex-wrap gap-2">
               <span className={`rounded-md px-2.5 py-1 text-xs font-semibold ${status.className}`}>
                 {status.label}

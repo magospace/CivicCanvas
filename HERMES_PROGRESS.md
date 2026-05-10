@@ -1895,3 +1895,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: First focused Playwright pass exposed stale test selectors after action labels moved to Canvas Tools; updated the selectors. `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved bundle import|Miro preview"` then passed; due repo script wiring, all 21 product-demo browser tests ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 137, `Add Sources-to-Explore CTA Links`, as a low-risk route-flow improvement that builds on Task 131 prompt prefill.
+
+
+## Task 137 Update - Sources-to-Explore CTA Links
+
+- Task chosen: `TASKS.md` item 137, "Add Sources-to-Explore CTA Links".
+- Why this was next: It improves the Loom/in-person demo route from provenance to generation, while using Task 131's existing prompt-prefill path and avoiding backend/schema risk.
+- Scope: `apps/web/components/sources-catalog.tsx`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Deterministic fallback/prompt-routing only; acceptable because CTAs use the same `/explore?prompt=...` input path normal users use, and unsupported sources are clearly labeled as coming later rather than wired to hardcoded dashboards.
+- Changes: Added `Open in Explore` links for the supported Dallas 311, Austin building permits, and Houston transportation datasets with exact supported prompts. Added a coming-later provenance note for unsupported source cards so they do not imply query readiness. Strengthened `/sources` e2e coverage to assert supported CTA links, unsupported copy, route navigation, and prompt hydration.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "sources route shows"` passed; due repo script wiring, all 21 product-demo browser tests ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 135, `Add Demo-Safe Jargon Copy Pass`, to continue improving public-facing clarity before recording.

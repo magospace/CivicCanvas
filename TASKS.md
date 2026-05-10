@@ -2223,7 +2223,7 @@ Status: Pending.
 
 ## 137. Add Sources-to-Explore CTA Links
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: UI / Demo Flow
 - Goal: Let users jump from a dataset card on `/sources` to a supported Explore prompt.
@@ -2234,6 +2234,8 @@ Status: Pending.
 - Acceptance criteria: Each supported dataset card has an `Open in Explore` link with a prompt query, unsupported/coming-later datasets do not imply query readiness, and the prompt prefill path from Task 131 handles the query.
 - Validation command: focused Playwright for `/sources` CTA, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No if Task 131 prompt-prefill path is being edited.
+- Completed notes: Added supported dataset `Open in Explore` links for Dallas, Austin, and Houston that prefill the normal `/explore?prompt=...` flow, and left unsupported State of Texas spending metadata with a clear coming-later note instead of implying query readiness.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "sources route shows"` passed; due repo script wiring, all 21 product-demo browser tests ran and passed. `pnpm lint` passed; `git diff --check` passed.
 
 ## 138. Improve Focus Ring Contrast
 
