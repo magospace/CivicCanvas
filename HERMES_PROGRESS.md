@@ -1,6 +1,6 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 06:01 CDT
+Last updated: May 10, 2026 06:06 CDT
 
 ## Current Cycle
 
@@ -483,6 +483,31 @@ Last updated: May 10, 2026 06:01 CDT
 ### Recommended Next Task
 
 - Task 61, `Add Optional Remote Hosted Smoke Evidence Template`, is the next safe task. Task 55 remains high-risk and should not start without explicit approval for backend persistence/migrations.
+
+## Task 61 Update
+
+- Task chosen: `TASKS.md` item 61, "Add Optional Remote Hosted Smoke Evidence Template".
+- Why this was next: It was the next safe hosted QA task after Task 60 and improves hosted smoke note-taking without mutating deployment config or release evidence.
+- Scope: `docs/HOSTED_SMOKE_TEMPLATE.md`, `docs/HACKATHON_DEMO_READINESS.md`, `docs/README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Documentation only. No hosted URL was tested, no deployment config changed, no release evidence refreshed, no live API/Fal calls made, no generated media committed, and no secrets/auth/billing/production config touched.
+
+### Files Updated
+
+- `docs/HOSTED_SMOKE_TEMPLATE.md`: New optional hosted smoke template with URL/session metadata, smoke commands, route checks, command-result placeholders, artifact references, caveats, and reviewer sign-off.
+- `docs/HACKATHON_DEMO_READINESS.md`: Points hosted smoke runs to the template and warns notes are not release evidence.
+- `docs/README.md`: Links the template from release/demo docs.
+- `TASKS.md`: Marks item 61 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records item 61 scope, safety notes, validation, and next task.
+
+### Validation
+
+- Manual path/link check via `python3`: Passed.
+- `git diff --check`: Passed.
+- `pnpm lint`: Passed.
+
+### Recommended Next Task
+
+- Task 62, `Add Provider Secret Redaction Regression Test`, is the next safe task.
 
 ## Historical Sequential Progress
 

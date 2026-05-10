@@ -42,6 +42,7 @@ These are current operational handoff docs, but release proof remains gated. Use
 | [`DEMO_VIDEO_CHECKLIST.md`](DEMO_VIDEO_CHECKLIST.md) | Screen-recording checklist for hackathon demo video capture without generated-media claims. |
 | [`HACKATHON_SUBMISSION_CHECKLIST.md`](HACKATHON_SUBMISSION_CHECKLIST.md) | Submission metadata and proof checklist that separates local, hosted, live, media, and release-evidence claims. |
 | [`HACKATHON_DEMO_READINESS.md`](HACKATHON_DEMO_READINESS.md) | Local-first judge-demo checklist that does not refresh release evidence. |
+| [`HOSTED_SMOKE_TEMPLATE.md`](HOSTED_SMOKE_TEMPLATE.md) | Optional hosted smoke evidence template that records URL checks without mutating deployment config or release evidence. |
 | [`ACCEPTANCE_CRITERIA.md`](ACCEPTANCE_CRITERIA.md) | Product acceptance checklist. |
 | [`release-evidence.json`](release-evidence.json) | Historical release evidence consumed by health/demo-readiness/governance checks. It records commit `a5ce07a81ee932bdf7a37724af0e7aab3a3d9f0f`, not the current branch `HEAD`; do not cite it as current proof or refresh it without rerunning the release gate through Task 35. |
 

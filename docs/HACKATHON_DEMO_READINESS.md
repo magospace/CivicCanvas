@@ -83,6 +83,8 @@ PLAYWRIGHT_BASE_URL=<public-url> pnpm test:e2e:remote
 
 These checks are network- or environment-dependent. They should not be required for a local hackathon demo.
 
+If you do run hosted smoke checks for an already-deployed URL, record results with `docs/HOSTED_SMOKE_TEMPLATE.md`. Those notes are not release evidence and must not mutate deployment config or refresh `docs/release-evidence.json`.
+
 ## Hosted Rate-Limit Boundary
 
 Local judge demos can rely on the local gate, Playwright coverage, and the in-repo middleware as defense-in-depth for write-like POST routes. Do not present that middleware as distributed hosted abuse protection.

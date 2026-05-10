@@ -948,6 +948,8 @@ Status: Complete on May 10, 2026 at 06:01 CDT.
 
 ## 61. Add Optional Remote Hosted Smoke Evidence Template
 
+Status: Complete on May 10, 2026 at 06:06 CDT.
+
 - Owner type: Release / Hosted QA
 - Goal: Add a template for recording hosted smoke results without mutating deployment config or release evidence.
 - Scope: Docs only.
@@ -956,6 +958,8 @@ Status: Complete on May 10, 2026 at 06:01 CDT.
 - Acceptance criteria: Template records URL, timestamp, commands, expected version, rate-limit/platform caveat, screenshots path if any, and says it is not release evidence until Task 35 refreshes evidence.
 - Validation commands: manual path/link check, `git diff --check`, `pnpm lint`.
 - Can run in parallel: Yes with code/test tasks.
+- Completed notes: Added `docs/HOSTED_SMOKE_TEMPLATE.md` with hosted URL/session metadata, smoke commands, manual route checks, command-result placeholders, screenshot/artifact references, platform rate-limit caveat, and explicit no-release-evidence/no-deploy-mutation boundaries. Linked it from docs index and local demo readiness notes.
+- Validation: Manual path/link check passed; `git diff --check` passed; `pnpm lint` passed.
 
 ## 62. Add Provider Secret Redaction Regression Test
 
