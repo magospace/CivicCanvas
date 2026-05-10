@@ -10,7 +10,8 @@ import {
   savedCanvasImportLimitBytes,
   savedCanvasShareHashKey,
   savedCanvasShareHashLimitChars,
-  savedCanvasStorageKey
+  savedCanvasStorageKey,
+  updateSavedCanvasMetadata
 } from "../lib/saved-canvases";
 
 class MemoryStorage implements StorageLike {
@@ -135,6 +136,25 @@ describe("saved canvas share hash import and export", () => {
 
     expect(() => importSavedCanvasHash(oversizedHash)).toThrow(/Shared canvas exceeds/);
     expect(storage.getItem(savedCanvasStorageKey)).toBeNull();
+  });
+
+
+  it("updates saved canvas metadata through browser-local storage", () => {
+    const saved = createSavedCanvasFixture();
+    storage.setItem(savedCanvasStorageKey, JSON.stringify([saved]));
+
+    const updated = updateSavedCanvasMetadata({
+      canvasId: saved.canvasId,
+      title: "Edited civic demo title",
+      prompt: "Edited local prompt wording"
+    });
+
+    expect(updated).toHaveLength(1);
+    expect(updated[0].title).toBe("Edited civic demo title");
+    expect(updated[0].prompt).toBe("Edited local prompt wording");
+    expect(updated[0].canvas.title).toBe("Edited civic demo title");
+    expect(updated[0].canvas.prompt).toBe("Edited local prompt wording");
+    expect(JSON.parse(storage.getItem(savedCanvasStorageKey) ?? "[]")[0].title).toBe("Edited civic demo title");
   });
 
   it("surfaces browser-local storage quota failures without masking the local-only boundary", () => {

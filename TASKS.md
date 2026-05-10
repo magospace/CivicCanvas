@@ -1830,7 +1830,7 @@ Status: Complete on May 10, 2026.
 
 ## 114. Add Browser-Local Saved Canvas Edit Proof
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: UI / Data realism
 - Goal: Demonstrate saved demo records are editable/replaceable through normal product flows rather than fake immutable state.
@@ -1841,6 +1841,8 @@ Status: Pending.
 - Acceptance criteria: User can update saved canvas metadata locally or tests prove existing duplicate/delete/import/export flows cover replaceability; UI copy remains browser-local/no-backend.
 - Validation commands: focused saved-canvas Vitest, targeted saved Playwright, `pnpm lint`, `pnpm typecheck`, `git diff --check`.
 - Can run in parallel: No with saved-page edits.
+- Completed notes: Added browser-local saved-canvas metadata editing for title and prompt. Edits update the normal saved-canvas localStorage record, the nested CanvasDocument title/prompt used when opening back into `/explore`, and exported/share bundles; UI copy says this is browser-local and not backend persistence. Added unit and Playwright proof.
+- Validation: `pnpm test -- apps/web/test/saved-canvases.test.ts`, `pnpm typecheck`, `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved bundle"`, `pnpm lint`, and `git diff --check` passed. The first saved-flow Playwright run failed on a stale duplicate-title assertion, then passed after updating the assertion to the edited title.
 
 ## 115. Add OpenAI No-Key And Mocked-Live Route Smoke
 

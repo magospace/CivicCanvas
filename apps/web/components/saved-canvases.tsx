@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Copy, Download, ExternalLink, FileJson, Link2, Trash2 } from "lucide-react";
+import { Copy, Download, ExternalLink, FileJson, Link2, Save, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { SavedCanvas } from "@texas-data-canvas/shared";
 import { tableCsv } from "../lib/dashboard-exports";
@@ -18,7 +18,8 @@ import {
   isSavedCanvasImportOverLimit,
   listSavedCanvases,
   queueCanvasForOpen,
-  savedCanvasImportLimitBytes
+  savedCanvasImportLimitBytes,
+  updateSavedCanvasMetadata
 } from "../lib/saved-canvases";
 
 export function SavedCanvases() {
@@ -26,6 +27,7 @@ export function SavedCanvases() {
   const [exportText, setExportText] = useState("");
   const [importText, setImportText] = useState("");
   const [importError, setImportError] = useState("");
+  const [edits, setEdits] = useState<Record<string, { title: string; prompt: string }>>({});
 
   useEffect(() => {
     if (window.location.hash.includes("canvasBundle=")) {
@@ -46,8 +48,24 @@ export function SavedCanvases() {
 
   function refresh(next: SavedCanvas[]) {
     setItems(next);
+    setEdits(Object.fromEntries(next.map((item) => [item.canvasId, { title: item.title, prompt: item.prompt }])));
     setExportText("");
     setImportError("");
+  }
+
+  function editFor(item: SavedCanvas) {
+    return edits[item.canvasId] ?? { title: item.title, prompt: item.prompt };
+  }
+
+  function updateEdit(canvasId: string, patch: Partial<{ title: string; prompt: string }>) {
+    setEdits((current) => ({
+      ...current,
+      [canvasId]: {
+        title: current[canvasId]?.title ?? items.find((item) => item.canvasId === canvasId)?.title ?? "",
+        prompt: current[canvasId]?.prompt ?? items.find((item) => item.canvasId === canvasId)?.prompt ?? "",
+        ...patch
+      }
+    }));
   }
 
   function importCanvas() {
@@ -170,7 +188,49 @@ export function SavedCanvases() {
                 {item.audits.length} audits
               </span>
             </div>
-            <p className="mt-3 text-sm leading-6 text-slate-600">{item.prompt}</p>
+            <div className="mt-3 space-y-2 rounded-md border border-slate-200 bg-civic-50 p-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-civic-700">
+                Browser-local editable metadata
+              </p>
+              <label className="block text-xs font-semibold text-slate-600">
+                Saved title
+                <input
+                  aria-label={`Edit saved title for ${item.title}`}
+                  value={editFor(item).title}
+                  onChange={(event) => updateEdit(item.canvasId, { title: event.target.value })}
+                  className="mt-1 w-full rounded-md border border-slate-200 bg-white px-2 py-2 text-sm text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+                />
+              </label>
+              <label className="block text-xs font-semibold text-slate-600">
+                Saved prompt
+                <textarea
+                  aria-label={`Edit saved prompt for ${item.title}`}
+                  value={editFor(item).prompt}
+                  onChange={(event) => updateEdit(item.canvasId, { prompt: event.target.value })}
+                  className="mt-1 min-h-20 w-full rounded-md border border-slate-200 bg-white px-2 py-2 text-sm text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+                />
+              </label>
+              <button
+                type="button"
+                onClick={() => {
+                  try {
+                    const edit = editFor(item);
+                    refresh(updateSavedCanvasMetadata({ canvasId: item.canvasId, title: edit.title, prompt: edit.prompt }));
+                  } catch (error) {
+                    const detail = error instanceof Error ? error.message : "Could not update saved canvas metadata.";
+                    setImportError(detail);
+                  }
+                }}
+                aria-label={`Save local edits for ${item.title}`}
+                className="inline-flex items-center gap-2 rounded-md bg-civic-900 px-3 py-2 text-xs font-semibold text-white transition hover:bg-civic-700 focus:outline-none focus:ring-2 focus:ring-civic-100"
+              >
+                <Save className="h-4 w-4" />
+                Save local edits
+              </button>
+              <p className="text-xs leading-5 text-slate-500">
+                Edits update this browser-local saved record and exported/share bundles only; they do not write to a backend database.
+              </p>
+            </div>
             <div className="mt-4 grid grid-cols-6 gap-2">
               <Link
                 href="/explore"

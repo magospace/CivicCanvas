@@ -1654,3 +1654,14 @@ Last updated: May 10, 2026 06:17 CDT
 - Safety notes: Test/durable-state only. No gallery fixture data, catalog data, live API calls, OpenAI calls, Fal/media calls, schema/migrations, backend persistence, deploy config, secrets, or generated artifacts changed. `clauderecommends.md` remains untracked and unstaged.
 - Validation: `pnpm test -- apps/web/test/dashboard.test.ts` passed with 17 files / 118 tests discovered; `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "gallery route"` passed with the project script running 17 browser tests; `git diff --check` passed before commit.
 - Recommended next task: Task 114, `Add Browser-Local Saved Canvas Edit Proof`.
+
+## Task 114 Update - Browser-Local Saved Canvas Edit Proof
+
+- Task chosen: `TASKS.md` item 114, "Add Browser-Local Saved Canvas Edit Proof".
+- Why this was next: It was the next pending data-realism task after gallery read-path proof and improves demo records by making saved canvases locally editable rather than immutable fake state.
+- Scope: `apps/web/lib/saved-canvases.ts`, `apps/web/components/saved-canvases.tsx`, `apps/web/test/saved-canvases.test.ts`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism changes: Saved canvases remain `browser-local persistence / acceptable`. Users can edit saved title and prompt through the normal `/saved` UI; the update writes to the same localStorage saved-canvas record, updates the nested CanvasDocument metadata for `/explore` reopen, and is reflected in exported/share bundles. UI copy states edits are browser-local and do not write to a backend database.
+- Safety notes: No backend persistence, database, schema/migration, live API, OpenAI, Fal/media, deploy, release evidence, secrets, or generated artifacts. `clauderecommends.md` remains untracked and unstaged.
+- Validation: `pnpm test -- apps/web/test/saved-canvases.test.ts` passed with 17 files / 119 tests discovered; `pnpm typecheck` passed; first `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved bundle"` failed on a stale expected duplicate title, then passed with 17 browser tests after updating the assertion; `pnpm lint` passed; `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 115, `Add OpenAI No-Key And Mocked-Live Route Smoke`.

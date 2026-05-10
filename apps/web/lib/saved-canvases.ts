@@ -79,6 +79,50 @@ export function duplicateSavedCanvas(saved: SavedCanvas) {
   }
 }
 
+export function updateSavedCanvasMetadata({
+  canvasId,
+  title,
+  prompt
+}: {
+  canvasId: string;
+  title: string;
+  prompt: string;
+}) {
+  const nextTitle = title.trim();
+  const nextPrompt = prompt.trim();
+  if (!nextTitle || !nextPrompt) {
+    throw new Error("Saved canvas title and prompt are required for local edits.");
+  }
+
+  const savedAt = new Date().toISOString();
+  const existing = listSavedCanvases();
+  const next = existing.map((item) => item.canvasId === canvasId
+    ? savedCanvasSchema.parse({
+      ...item,
+      title: nextTitle,
+      prompt: nextPrompt,
+      savedAt,
+      canvas: {
+        ...item.canvas,
+        title: nextTitle,
+        prompt: nextPrompt,
+        updatedAt: savedAt
+      }
+    })
+    : item);
+
+  if (!existing.some((item) => item.canvasId === canvasId)) {
+    throw new Error(`Saved canvas ${canvasId} was not found in browser-local storage.`);
+  }
+
+  try {
+    window.localStorage.setItem(savedCanvasStorageKey, JSON.stringify(next));
+    return next;
+  } catch (error) {
+    throw localStorageError("updating this saved canvas", error);
+  }
+}
+
 export function deleteSavedCanvas(canvasId: string) {
   try {
     return deleteCanvasFromStorage(window.localStorage, canvasId);

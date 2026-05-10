@@ -152,19 +152,25 @@ test("saved bundle import rejects unsafe JSON and saved-card actions work", asyn
   await expect(page.getByText("Dallas 311 Service Requests Explorer")).toBeVisible();
   await expect(page.getByLabel(/Export Dallas 311 Service Requests Explorer table CSV/)).toBeVisible();
 
-  await page.getByLabel("Open Dallas 311 Service Requests Explorer").click();
+  await page.getByLabel("Edit saved title for Dallas 311 Service Requests Explorer").fill("Edited Dallas local demo");
+  await page.getByLabel("Edit saved prompt for Dallas 311 Service Requests Explorer").fill("Edited prompt stored only in browser local storage.");
+  await page.getByLabel("Save local edits for Dallas 311 Service Requests Explorer").click();
+  await expect(page.getByText("Edited Dallas local demo")).toBeVisible();
+  await expect(page.getByText(/Edits update this browser-local saved record/)).toBeVisible();
+
+  await page.getByLabel("Open Edited Dallas local demo").click();
   await expect(page).toHaveURL(/\/explore/);
-  await expect(page.getByRole("heading", { name: "Dallas 311 Service Requests Explorer" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Edited Dallas local demo" })).toBeVisible();
   await page.goto("/saved");
 
-  await page.getByLabel("Duplicate Dallas 311 Service Requests Explorer").click();
-  await expect(page.getByText("Dallas 311 Service Requests Explorer Copy")).toBeVisible();
+  await page.getByLabel("Duplicate Edited Dallas local demo").click();
+  await expect(page.getByText("Edited Dallas local demo Copy")).toBeVisible();
   page.once("dialog", async (dialog) => {
-    expect(dialog.message()).toContain("Delete Dallas 311 Service Requests Explorer Copy?");
+    expect(dialog.message()).toContain("Delete Edited Dallas local demo Copy?");
     await dialog.accept();
   });
-  await page.getByLabel("Delete Dallas 311 Service Requests Explorer Copy").click();
-  await expect(page.getByText("Dallas 311 Service Requests Explorer Copy")).not.toBeVisible();
+  await page.getByLabel("Delete Edited Dallas local demo Copy").click();
+  await expect(page.getByText("Edited Dallas local demo Copy")).not.toBeVisible();
 
   await page.getByRole("button", { name: "Export bundle" }).click();
   await expect(page.locator("pre")).toContainText("\"canvases\"");
