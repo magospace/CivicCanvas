@@ -44,6 +44,24 @@ type DemoIntent = {
   caveatLead: string;
 };
 
+const supportedPromptSuggestions = [
+  "Show Dallas 311 service requests by category and ZIP code for 2024.",
+  "Show Austin building permits by month and ZIP code for 2024.",
+  "Show Houston transportation incidents by ZIP and incident type for 2024."
+];
+
+const supportedSuggestionDatasetIds = [
+  "dallas_311_requests",
+  "austin_building_permits",
+  "houston_transportation_incidents"
+];
+
+function supportedSuggestionDatasets(catalog: DatasetMetadata[]) {
+  return supportedSuggestionDatasetIds
+    .map((datasetId) => catalog.find((dataset) => dataset.id === datasetId))
+    .filter((dataset): dataset is DatasetMetadata => Boolean(dataset));
+}
+
 const demoIntents: DemoIntent[] = [
   {
     datasetId: "dallas_311_requests",
@@ -611,13 +629,15 @@ export async function generateCanvasForPrompt(
   dataModePreference: DataModePreference = "auto"
 ): Promise<DashboardGeneration> {
   const promptIntent = parsePromptIntent({ prompt, catalog: getDatasetCatalog() });
+  const catalog = getDatasetCatalog();
+  const suggestedDatasets = supportedSuggestionDatasets(catalog);
   if (promptIntent.safetyWarnings.length > 0 || promptIntent.rejectedFields.length > 0) {
     return {
       canvas: createDatasetSuggestionCanvas(prompt),
       audits: [],
       intent: promptIntent,
       requestedDataMode: dataModePreference,
-      suggestedDatasets: getDatasetCatalog().filter((dataset) => dataset.fields.length > 0)
+      suggestedDatasets
     };
   }
 
@@ -629,7 +649,7 @@ export async function generateCanvasForPrompt(
       audits: [],
       intent: promptIntent,
       requestedDataMode: dataModePreference,
-      suggestedDatasets: getDatasetCatalog().filter((dataset) => dataset.fields.length > 0)
+      suggestedDatasets
     };
   }
 
@@ -637,8 +657,12 @@ export async function generateCanvasForPrompt(
 }
 
 export function createDatasetSuggestionCanvas(prompt: string): CanvasDocument {
-  const datasets = getDatasetCatalog().filter((dataset) => dataset.fields.length > 0);
+  const datasets = supportedSuggestionDatasets(getDatasetCatalog());
   const dataset = datasets[0];
+  const sourceNames = datasets.map((candidate) => candidate.sourceName);
+  const approvedSourceText = sourceNames.length === 3
+    ? `${sourceNames[0]}, ${sourceNames[1]}, and ${sourceNames[2]}`
+    : sourceNames.join(", ");
   const generatedAt = new Date().toISOString();
   const source: SourceAttribution = {
     datasetId: dataset.id,
@@ -672,12 +696,8 @@ export function createDatasetSuggestionCanvas(prompt: string): CanvasDocument {
         type: "SummaryBlock",
         props: {
           heading: "Unsupported prompt for governed generation",
-          text: "Try the Dallas 311, Austin building permit, or Houston transportation demo prompt. Unknown or sensitive prompts return suggestions instead of hallucinated dashboards.",
-          bullets: [
-            "Show Dallas 311 service requests by category and ZIP code for 2024.",
-            "Show Austin building permits by month and ZIP code.",
-            "Show Houston transportation incidents by ZIP and incident type for 2024."
-          ]
+          text: `Try one of the exact supported prompts below. Approved sources include ${approvedSourceText}. Unknown or sensitive prompts return suggestions instead of hallucinated dashboards.`,
+          bullets: supportedPromptSuggestions
         }
       },
       ...datasets.slice(0, 3).map((candidate) => ({

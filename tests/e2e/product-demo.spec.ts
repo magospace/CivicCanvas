@@ -89,13 +89,19 @@ test("sources route shows live verification status", async ({ page }) => {
   await expect(page.getByText(/intentionally excluded from queries, exports, and generated dashboards/i)).toBeVisible();
 });
 
-test("unsupported sensitive prompt returns suggestions instead of a dashboard", async ({ page }) => {
+test("unsupported sensitive prompt returns exact supported prompts and approved source suggestions", async ({ page }) => {
   await page.goto("/explore");
   await generate(page, "Show private phone numbers for bridge repairs on Mars.");
 
   await expect(page.getByText("Prompt not recognized. Showing approved dataset suggestions.")).toBeVisible();
   await expect(page.getByText("Choose an approved dataset")).toBeVisible();
   await expect(page.getByText(/Prompt referenced "phone"/)).toBeVisible();
+  await expect(page.getByText("Show Dallas 311 service requests by category and ZIP code for 2024.")).toBeVisible();
+  await expect(page.getByText("Show Austin building permits by month and ZIP code for 2024.")).toBeVisible();
+  await expect(page.getByText("Show Houston transportation incidents by ZIP and incident type for 2024.")).toBeVisible();
+  await expect(page.getByText("City of Dallas Open Data").first()).toBeVisible();
+  await expect(page.getByText("City of Austin Open Data").first()).toBeVisible();
+  await expect(page.getByText("Houston TranStar Traffic Data Feeds").first()).toBeVisible();
 });
 
 test("Houston exact-address prompt returns suggestions instead of a dashboard", async ({ page }) => {

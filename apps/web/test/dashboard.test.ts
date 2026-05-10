@@ -63,12 +63,34 @@ describe("dashboard generation", () => {
     expect(JSON.stringify(generation.canvas)).not.toContain("precise_address");
   });
 
-  it("returns dataset suggestions for unsupported prompts", async () => {
+  it("returns exact supported prompt and approved source suggestions for unsupported prompts", async () => {
     const generation = await generateCanvasForPrompt("Compare tax abatements across El Paso.");
 
     expect(generation.suggestedDatasets?.length).toBeGreaterThan(0);
     expect(generation.audits).toEqual([]);
     expect(generation.canvas.title).toContain("Choose");
+
+    const summary = generation.canvas.blocks.find((block) => block.id === "summary");
+    expect(summary?.type).toBe("SummaryBlock");
+    if (summary?.type === "SummaryBlock") {
+      expect(summary.props.bullets).toEqual([
+        "Show Dallas 311 service requests by category and ZIP code for 2024.",
+        "Show Austin building permits by month and ZIP code for 2024.",
+        "Show Houston transportation incidents by ZIP and incident type for 2024."
+      ]);
+      expect(summary.props.text).toContain(
+        "Approved sources include City of Dallas Open Data, City of Austin Open Data, and Houston TranStar Traffic Data Feeds."
+      );
+    }
+
+    const sourceNames = generation.canvas.blocks
+      .filter((block) => block.type === "DatasetCardBlock")
+      .map((block) => block.props.dataset.sourceName);
+    expect(sourceNames).toEqual([
+      "City of Dallas Open Data",
+      "City of Austin Open Data",
+      "Houston TranStar Traffic Data Feeds"
+    ]);
   });
 
   it("refuses Houston exact-location prompts before dashboard generation", async () => {
