@@ -654,3 +654,107 @@ Status: Complete on May 10, 2026 at 04:52 CDT.
 - Can run in parallel: Yes with non-demo-doc tasks.
 - Completed notes: Updated `README.md`, `docs/DEMO_SCRIPT.md`, `CODEBASE_OVERVIEW.md`, `ARCHITECTURE_MAP.md`, and `REALNESS_AUDIT.md` to explain that plain-English prompts are parsed locally by deterministic TypeScript rules; there is no LLM/model provider SDK, hidden prompt API key, paid inference path, or model-generated dashboard execution in the current app. Also corrected the codebase overview lint command description to the current ESLint CLI.
 - Validation: `git diff --check` passed; `pnpm lint` passed.
+
+---
+
+# Replenished Safe Hackathon-Stabilization Queue
+
+Last replenished: May 10, 2026 at 05:03 CDT.
+
+This queue was added because all safe non-release realness-audit follow-up tasks were complete and the only prior remaining item was the high-risk gated release-evidence refresh. These tasks are deliberately scoped to docs/tests/local validation and must not refresh release evidence, change deploy scripts, add auth/persistence/provider integrations, touch secrets/billing/migrations/production config, run paid APIs, or perform destructive cleanup.
+
+## 43. Add Demo-Readiness Page Copy Test For Historical Release Evidence
+
+- Owner type: QA / Docs
+- Goal: Add focused coverage proving `/demo-readiness` presents checked-in release evidence as historical when it does not match the current commit.
+- Why it matters: The demo handoff warns not to cite stale release evidence; the utility page should preserve the same honest boundary.
+- Likely files: `apps/web/app/demo-readiness/page.tsx`, `apps/web/test/*` or a focused Playwright spec if route-level rendering is easier.
+- Risk level: Low to Medium.
+- Dependencies: Current release metadata and historical `docs/release-evidence.json`; do not refresh that evidence.
+- Acceptance criteria: Test asserts the page shows a historical/stale evidence warning or equivalent wording when evidence commit differs from current metadata, and does not instruct users to refresh evidence casually.
+- Validation commands: focused test for the touched file/spec, `git diff --check`, `pnpm lint`, `pnpm test` if unit/API coverage changes, or targeted `pnpm test:e2e` if Playwright coverage is used.
+- Can run in parallel: Yes with docs-only tasks. Avoid parallel edits to `demo-readiness` tests or page copy.
+
+## 44. Add No-Provider/No-Persistence Contract Tests For Public Metadata
+
+- Owner type: QA / API honesty
+- Goal: Add tests that public metadata surfaces do not imply LLM providers, server-side saved-canvas persistence, or Miro board writes.
+- Why it matters: Recent docs made these boundaries explicit; small contract tests can prevent future copy or route metadata drift.
+- Likely files: `apps/web/test/api-contracts.test.ts`, `apps/web/test/canvas-save-route.test.ts`, `apps/web/test/miro-export-route.test.ts`, possibly `apps/mcp-server/test/tools.test.ts`.
+- Risk level: Low.
+- Dependencies: Existing route/MCP tests.
+- Acceptance criteria: Tests assert `/api/canvas/save` remains a validation stub, Miro output remains preview-only/no OAuth/no board ID, and health/status metadata does not advertise model-provider requirements.
+- Validation commands: focused Vitest command for changed tests, `git diff --check`, `pnpm lint`, `pnpm test`.
+- Can run in parallel: Yes with docs-only tasks. Avoid parallel edits to the same test files.
+
+## 45. Add Sample Provenance Regression Test
+
+- Owner type: QA / Data governance
+- Goal: Add a focused local test or script assertion that sample files remain synthetic/schema-aligned fallback data and do not expose hidden fields such as Houston precise addresses.
+- Why it matters: The sample/persistence realness matrix is only useful if future sample edits preserve the documented boundaries.
+- Likely files: `scripts/data-quality.mjs`, `apps/web/test/*`, `packages/shared/test/*`, or a new focused test under `packages/shared/test`.
+- Risk level: Low to Medium.
+- Dependencies: Existing sample files and data-quality script.
+- Acceptance criteria: Automated check covers Dallas/Austin/Houston sample row counts or minimum shape, confirms Houston precise-address fields are absent, and keeps existing `pnpm data:quality` behavior green.
+- Validation commands: focused test or `pnpm data:quality`, `git diff --check`, `pnpm lint`, `pnpm test` if Vitest coverage is added.
+- Can run in parallel: Yes with docs-only tasks. Do not parallelize with catalog/sample edits.
+
+## 46. Add Current Docs Cross-Link Consistency Check
+
+- Owner type: Docs / QA
+- Goal: Add a lightweight docs consistency test or script check for current-doc links in `README.md`, `docs/README.md`, `DEVELOPMENT_GUIDE.md`, and `CODEBASE_OVERVIEW.md`.
+- Why it matters: The repo has many historical docs; current-doc pointers reduce future agent and demo confusion.
+- Likely files: `scripts/*`, `apps/web/test/release-scripts.test.ts`, `README.md`, `docs/README.md`, `DEVELOPMENT_GUIDE.md`, `CODEBASE_OVERVIEW.md`.
+- Risk level: Low.
+- Dependencies: Current docs index.
+- Acceptance criteria: Check verifies referenced current docs exist and historical docs are not presented as the first-stop architecture source. If implemented as docs-only, manually verify referenced paths instead.
+- Validation commands: focused script/test if added, `git diff --check`, `pnpm lint`, `pnpm test` if Vitest coverage changes.
+- Can run in parallel: Yes with code/test tasks that do not edit current docs.
+
+## 47. Add Platform Rate-Limit Readiness Note To Demo Checklist
+
+- Owner type: Docs / Release coordination
+- Goal: Ensure local demo checklist and public docs distinguish in-repo middleware throttling from required platform firewall/rate limiting before broad hosted sharing.
+- Why it matters: Hosted rate limiting remains the main active QA finding besides release evidence.
+- Likely files: `docs/HACKATHON_DEMO_READINESS.md`, `README.md`, `DEVELOPMENT_GUIDE.md`, `QA_FINDINGS.md`.
+- Risk level: Low.
+- Dependencies: Existing active QA finding; do not edit deployment config.
+- Acceptance criteria: Docs say local judge demos can use in-repo checks, but public hosted sharing needs platform controls; no Vercel/firewall config is claimed as implemented.
+- Validation commands: `git diff --check`, `pnpm lint`; optionally manual path/link check.
+- Can run in parallel: Yes with test-only tasks. Avoid parallel edits to the same docs.
+
+## 48. Add MCP Realness Smoke For Preview-Only And Local-Only Boundaries
+
+- Owner type: QA / MCP
+- Goal: Strengthen MCP tests so tool outputs keep the same no-provider, preview-only Miro, and local/static data boundaries as the web docs.
+- Why it matters: MCP is a demo/integration surface and should not overclaim storage, live data, or third-party side effects.
+- Likely files: `apps/mcp-server/test/tools.test.ts`, optionally `apps/mcp-server/src/tools.ts` only if a test exposes misleading output.
+- Risk level: Low to Medium.
+- Dependencies: Current MCP tool handlers.
+- Acceptance criteria: Tests cover status/source/canvas or Miro tool output and assert preview/local/static wording or JSON fields do not imply OAuth, board writes, database persistence, or model-provider execution.
+- Validation commands: `pnpm test -- apps/mcp-server/test/tools.test.ts`, `git diff --check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`.
+- Can run in parallel: Yes with web-only docs/tests. Do not parallelize with another MCP task.
+
+## 49. Add Saved-Canvas Share-Link Size Boundary E2E Or Component Coverage
+
+- Owner type: QA / Browser-local persistence
+- Goal: Add focused coverage for the user-facing oversized or malformed share/import boundary on `/saved` or in saved-canvas helpers.
+- Why it matters: Share links are URL-hash based and browser-local; demos should fail safely instead of implying public hosted storage.
+- Likely files: `tests/e2e/product-demo.spec.ts`, `apps/web/test/saved-canvases.test.ts`, or `apps/web/components/saved-canvases.tsx` if accessible error copy needs improvement.
+- Risk level: Low to Medium.
+- Dependencies: Existing saved-canvas helper and e2e coverage.
+- Acceptance criteria: Test proves malformed or oversized import/share data shows a safe local validation error and does not call a backend persistence path.
+- Validation commands: focused Vitest or targeted Playwright command, `git diff --check`, `pnpm lint`, `pnpm test`; add targeted `pnpm test:e2e` if browser coverage changes.
+- Can run in parallel: Yes, but not with another task editing saved-canvas tests/components.
+
+## 50. Consolidate Remaining Historical-Doc Warnings Into Docs Index
+
+- Owner type: Docs
+- Goal: Make `docs/README.md` the single clear entry point for current versus historical docs, including release evidence, Miro, live/fallback, and sample/persistence realness notes.
+- Why it matters: Many milestone docs remain intentionally checked in; a stronger index lowers the chance that future agents cite old implementation plans as current facts.
+- Likely files: `docs/README.md`, optionally `README.md` and `DEVELOPMENT_GUIDE.md`.
+- Risk level: Low.
+- Dependencies: Existing current-doc index and realness docs.
+- Acceptance criteria: Index labels current operational docs, historical milestone docs, and release-gated evidence clearly; no historical doc text is deleted or rewritten.
+- Validation commands: manual path/link check, `git diff --check`, `pnpm lint`.
+- Can run in parallel: Yes with code/test tasks that do not edit docs index.
