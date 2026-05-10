@@ -845,3 +845,33 @@ Last updated: May 10, 2026 06:17 CDT
 ### Recommended Next Task
 
 - Task 77, `Replace Runtime-Derived Filter Allowlist With Dataset Field Allowlists`, is the next task. It touches dashboard query construction, so keep it focused and test-first.
+
+
+## Task 77 Update
+
+- Task chosen: `TASKS.md` item 77, "Replace Runtime-Derived Filter Allowlist With Dataset Field Allowlists".
+- Why this was next: It was the next verified recommendation and reduces query-construction risk by making allowed dashboard filters fixed per dataset instead of derived from runtime intent values.
+- Scope: `apps/web/lib/dashboard.ts`, `apps/web/test/dashboard.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Query construction changed only for filter validation. No catalog/sample data, schema migration, database, backend persistence, provider/media call, deployment mutation, release evidence refresh, secrets, auth, or billing changed.
+
+### Files Updated
+
+- `apps/web/test/dashboard.test.ts`: Added regression coverage for rejecting a cross-dataset filter before querying.
+- `apps/web/lib/dashboard.ts`: Added fixed dataset-specific filter allowlists and dataset-specific rejection copy.
+- `TASKS.md`: Marks Task 77 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records Task 77 scope, safety notes, validation, and next task.
+
+### Validation
+
+- RED: `pnpm test -- apps/web/test/dashboard.test.ts -t "fixed dataset field allowlist"` failed against the old generic runtime-derived allowlist error.
+- GREEN: `pnpm test -- apps/web/test/dashboard.test.ts -t "fixed dataset field allowlist"`: Passed; Vitest discovered 102 tests across 15 files.
+- `pnpm typecheck`: Passed across shared, MCP server, and web.
+- `pnpm test -- apps/web/test/dashboard.test.ts`: Passed with 102 tests across 15 files.
+- `pnpm governance:audit`: Passed 19/19 with expected historical release-evidence warning.
+- `pnpm lint`: Passed.
+- `pnpm test`: Passed with 102 tests across 15 files.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 78, `Guard Unsupported-Prompt Suggestions For Empty Catalog`, is the next small resilience task.

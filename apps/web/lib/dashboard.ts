@@ -111,6 +111,12 @@ const demoIntents: DemoIntent[] = [
   }
 ];
 
+const datasetFilterAllowlists: Record<DemoIntent["datasetId"], string[]> = {
+  dallas_311_requests: ["city", "__groupBy", "created_date", "category", "status", "zip_code"],
+  austin_building_permits: ["city", "__groupBy", "issued_date", "permit_type", "status", "zip_code"],
+  houston_transportation_incidents: ["city", "__groupBy", "reported_date", "incident_type", "status", "zip_code"]
+};
+
 function detectIntent(prompt: string): DemoIntent | null {
   const normalized = prompt.toLowerCase();
   const dallasTopicTerms = [
@@ -205,10 +211,10 @@ function parseDateRange(value: string | undefined, prompt: string, promptIntent?
 }
 
 function buildFilters(prompt: string, intent: DemoIntent, filterValues: DashboardFilterValues = {}, promptIntent?: PromptIntent) {
-  const allowedKeys = new Set(["city", "__groupBy", intent.dateField, intent.categoryField, intent.statusField, intent.geographyField]);
+  const allowedKeys = new Set(datasetFilterAllowlists[intent.datasetId]);
   for (const [field, value] of Object.entries(filterValues)) {
     if (value && !allowedKeys.has(field)) {
-      throw new Error(`Filter field "${field}" is not allowlisted for this dashboard.`);
+      throw new Error(`Filter field "${field}" is not approved for ${intent.datasetId}.`);
     }
   }
 

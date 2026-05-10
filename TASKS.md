@@ -1193,6 +1193,8 @@ Status: Complete on May 10, 2026 at 06:38 CDT.
 
 ## 77. Replace Runtime-Derived Filter Allowlist With Dataset Field Allowlists
 
+Status: Complete on May 10, 2026 at 06:40 CDT.
+
 - Owner type: Query / Safety
 - Goal: Ensure dashboard filters are checked against fixed approved dataset field allowlists rather than values derived from runtime intent.
 - Scope: `apps/web/lib/dashboard.ts`, dashboard/query tests.
@@ -1200,6 +1202,8 @@ Status: Complete on May 10, 2026 at 06:38 CDT.
 - Acceptance criteria: Supported prompts/filters still work; disallowed fields fail before query execution; allowlists are readable and dataset-specific.
 - Validation commands: focused dashboard/query tests, `pnpm typecheck`, `pnpm test`, `pnpm governance:audit`, `git diff --check`.
 - Can run in parallel: No.
+- Completed notes: Replaced runtime-intent-derived filter allowlist with fixed dataset-specific filter allowlists for Dallas, Austin, and Houston. Added regression coverage that a cross-dataset field is rejected with the dataset ID before query execution while existing supported filters continue to pass.
+- Validation: RED focused dashboard test failed on old generic allowlist error; GREEN focused dashboard test passed with 102 tests across 15 files; `pnpm typecheck`, focused dashboard test file, `pnpm governance:audit`, `pnpm lint`, full `pnpm test`, and `git diff --check` passed.
 
 ## 78. Guard Unsupported-Prompt Suggestions For Empty Catalog
 

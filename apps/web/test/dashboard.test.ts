@@ -207,6 +207,13 @@ describe("dashboard generation", () => {
     expect(houston.canvas.sources[0].caveats.join(" ")).toContain("sample-first");
   });
 
+  it("rejects filters outside the fixed dataset field allowlist before querying", async () => {
+    await expect(generateCanvasForPrompt(
+      "Show Dallas 311 service requests by category and ZIP code for 2024.",
+      { permit_type: "Electrical" }
+    )).rejects.toThrow(/not approved for dallas_311_requests/);
+  });
+
   it("applies category filters to Dallas dashboard generation", async () => {
     const generation = await generateCanvasForPrompt(
       "Show Dallas 311 service requests by category and ZIP code for 2024.",
