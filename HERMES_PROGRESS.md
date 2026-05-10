@@ -967,3 +967,28 @@ Last updated: May 10, 2026 06:17 CDT
 ### Recommended Next Task
 
 - Task 71, `Add Local Backend Persistence Approval Checklist`, is the next safe docs-only task. Preserve browser-local fallback behavior and do not implement persistence.
+
+
+## Task 71 Update
+
+- Task chosen: `TASKS.md` item 71, "Add Local Backend Persistence Approval Checklist".
+- Why this was next: Task 70 completed with green validation, and Task 71 was the next safe docs-only guardrail task before any future Task 55 persistence work.
+- Scope: `docs/LOCAL_PERSISTENCE_SPIKE.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Documentation only. No backend persistence code, database, migration, seed/reset command, env file, production data, or browser-local fallback behavior changed.
+
+### Files Updated
+
+- `docs/LOCAL_PERSISTENCE_SPIKE.md`: Added explicit approval checklist before implementation, including local/dev-only scope, storage target, env gate, migration/seed/reset scope, rollback, UI/API honesty, and validation gates.
+- `TASKS.md`: Marks Task 71 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records Task 71 scope, safety notes, validation, and next task.
+
+### Validation
+
+- Manual checklist/path check: Passed by checking required approval phrases in `docs/LOCAL_PERSISTENCE_SPIKE.md`.
+- `pnpm persistence:readiness:json`: Passed; no network, no mutation, browser-local default preserved, persistence still not implemented.
+- `pnpm lint`: Passed.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 72, `Add Demo Artifact Git Hygiene Check`, is the next safe script/test task. Keep generated artifact files ignored and do not commit screenshots/videos.

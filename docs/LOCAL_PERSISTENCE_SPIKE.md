@@ -71,6 +71,19 @@ Validation rules:
 - Preserve SourceMethodBlock and hidden-field checks.
 - Never store raw secrets, provider keys, auth tokens, or unvalidated user HTML.
 
+## Approval Checklist Before Implementation
+
+Do not start a local/backend persistence implementation until an explicitly scoped task records approval for all of these items:
+
+- Persistence mode and owner: confirm the task is local/dev only, not production persistence or a public share service.
+- Storage target: confirm SQLite under an ignored local path, or document why another local/dev database is required.
+- Env gate: confirm default unset behavior keeps browser-local localStorage and URL-hash sharing unchanged.
+- Migration scope: list the migration command, target path, idempotence expectation, and temporary-test-database validation.
+- Seed/reset scope: list seed source fixtures and prove reset refuses paths outside `.local/` or test temp directories.
+- Rollback path: document how to return to browser-local-only mode by unsetting the env gate, without deleting user browser-local data.
+- UI/API honesty: define copy and health metadata that distinguish browser-local, local-backend-enabled, unavailable, and production-unsupported states.
+- Validation gates: include focused persistence tests, saved-canvas E2E default-path coverage, governance checks, and `pnpm persistence:readiness:json`.
+
 ## Migration And Rollback Assumptions
 
 Migration assumptions:
