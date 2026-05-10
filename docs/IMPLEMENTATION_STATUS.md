@@ -35,6 +35,8 @@ Last updated: May 9, 2026
 
 `v1.3.0-hosted-launch-readiness` is active on branch `feat/v1.3-hosted-launch-readiness`. The v0.6 through v1.2 code milestones remain locally implemented, but their public release tags are still blocked because this repo context has no public Vercel URL, Git remote, or Vercel project linkage/credentials.
 
+The latest public-launch review confirmed the remaining release blocker is operational. Accepted follow-up work now tracks open-source readiness, production CSP tightening, MCP contract validation, expanded governance audit checks, sample data quality thresholds, and baseline public-repo CI/security scanning.
+
 The v0.6 release gate is a verified public deployment. The repo has no configured Git remote today, so the first supported deployment path is manual Vercel CLI deployment. Do not tag `v0.6.0-hosted-beta` until a public URL passes deployment smoke checks and remote browser smoke tests.
 
 Because no public URL is available in this repo context, v0.7 starts from the completed local v0.6 hardening branch while preserving the v0.6 tag blocker in release docs.

@@ -3,13 +3,16 @@ import { fileURLToPath } from "node:url";
 
 const appDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(appDir, "../..");
+const scriptSrc = process.env.NODE_ENV === "production"
+  ? "script-src 'self' 'unsafe-inline'"
+  : "script-src 'self' 'unsafe-inline' 'unsafe-eval'";
 const contentSecurityPolicy = [
   "default-src 'self'",
   "base-uri 'self'",
   "object-src 'none'",
   "frame-ancestors 'none'",
   "form-action 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+  scriptSrc,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data:",
   "font-src 'self' data:",
@@ -20,12 +23,10 @@ const contentSecurityPolicy = [
 const nextConfig = {
   poweredByHeader: false,
   transpilePackages: ["@texas-data-canvas/shared"],
-  experimental: {
-    outputFileTracingRoot: repoRoot,
-    outputFileTracingIncludes: {
-      "/*": ["../../data/**/*"],
-      "/api/**/*": ["../../data/**/*"]
-    }
+  outputFileTracingRoot: repoRoot,
+  outputFileTracingIncludes: {
+    "/*": ["../../data/**/*"],
+    "/api/**/*": ["../../data/**/*"]
   },
   async headers() {
     return [

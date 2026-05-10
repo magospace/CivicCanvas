@@ -3,6 +3,12 @@ import { join } from "node:path";
 
 const root = process.cwd();
 const jsonMode = process.argv.includes("--json");
+const minimumRowsByDataset = {
+  houston_transportation_incidents: 40
+};
+const defaultMinimumRows = 100;
+const maximumMissingZipRatio = 0.05;
+const minimumDistinctMonths = 12;
 
 function readJson(path) {
   return JSON.parse(readFileSync(path, "utf8"));
@@ -30,10 +36,26 @@ function qualityForDataset(dataset) {
   const dateValues = dateFields
     .flatMap((field) => rows.map((row) => row[field]).filter((value) => typeof value === "string"))
     .sort();
+  const distinctMonths = new Set(dateValues.map((value) => value.slice(0, 7))).size;
   const categoryField = dataset.fields.find((field) =>
     ["category", "permit_type", "incident_type"].includes(field.name)
   )?.name;
   const expectedZip = dataset.fields.some((field) => field.name === "zip_code");
+  const missingZipRows = expectedZip
+    ? rows.filter((row) => typeof row.zip_code !== "string" || row.zip_code.length === 0).length
+    : 0;
+  const minimumRows = minimumRowsByDataset[dataset.id] ?? defaultMinimumRows;
+  const issues = [];
+
+  if (rows.length < minimumRows) {
+    issues.push(`row count ${rows.length} is below minimum ${minimumRows}`);
+  }
+  if (dateFields.length > 0 && distinctMonths < minimumDistinctMonths) {
+    issues.push(`date coverage has ${distinctMonths} distinct month(s), expected ${minimumDistinctMonths}`);
+  }
+  if (expectedZip && rows.length > 0 && missingZipRows / rows.length > maximumMissingZipRatio) {
+    issues.push(`missing ZIP ratio ${missingZipRows}/${rows.length} exceeds ${maximumMissingZipRatio}`);
+  }
 
   return {
     datasetId: dataset.id,
@@ -43,12 +65,14 @@ function qualityForDataset(dataset) {
     datasetIdMatches: sample.datasetId === dataset.id,
     rowCount: rows.length,
     dateRange: dateValues.length > 0 ? { min: dateValues[0], max: dateValues[dateValues.length - 1] } : null,
+    distinctMonths,
     expectedZip,
-    missingZipRows: expectedZip
-      ? rows.filter((row) => typeof row.zip_code !== "string" || row.zip_code.length === 0).length
-      : 0,
+    missingZipRows,
     topCategories: categoryField ? countValues(rows, categoryField) : [],
-    topStatuses: countValues(rows, "status")
+    topStatuses: countValues(rows, "status"),
+    minimumRows,
+    issues,
+    ok: issues.length === 0 && sample.datasetId === dataset.id
   };
 }
 
@@ -60,7 +84,7 @@ const galleryFiles = readdirSync(join(root, "data/gallery")).filter((file) => fi
 const output = {
   schemaVersion: "1.0",
   checkedAt: new Date().toISOString(),
-  ok: datasets.every((dataset) => dataset.datasetIdMatches),
+  ok: datasets.every((dataset) => dataset.ok),
   summary: {
     datasetCount: datasets.length,
     galleryCanvasCount: galleryFiles.length,
@@ -76,7 +100,8 @@ if (jsonMode) {
   console.log(`Data quality ${output.ok ? "OK" : "FAILED"}: ${output.summary.datasetCount} samples, ${output.summary.totalSampleRows} rows, ${output.summary.galleryCanvasCount} gallery canvases.`);
   for (const dataset of datasets) {
     const dateRange = dataset.dateRange ? `${dataset.dateRange.min} to ${dataset.dateRange.max}` : "no date field";
-    console.log(`- ${dataset.datasetId}: ${dataset.rowCount} rows, ${dateRange}, missing ZIP rows ${dataset.missingZipRows}`);
+    const issueText = dataset.issues.length > 0 ? `, issues: ${dataset.issues.join("; ")}` : "";
+    console.log(`- ${dataset.datasetId}: ${dataset.rowCount} rows, ${dateRange}, ${dataset.distinctMonths} month(s), missing ZIP rows ${dataset.missingZipRows}${issueText}`);
   }
 }
 

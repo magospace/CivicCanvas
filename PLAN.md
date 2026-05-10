@@ -16,7 +16,44 @@ This plan tracks the active `feat/v1.3-hosted-launch-readiness` branch. The v0.6
 - v1.1 product-depth work is locally verified and keeps Houston sample-first after official/source-owned verification.
 - v1.2 hosted-trust work is locally verified and centralizes release metadata, production-local verification, governance audit scripts, and hosted blockers.
 - v1.3 hosted-launch-readiness work adds deployment handoff, release evidence, Vercel output verification, data quality reporting, prompt/demo polish, and launch-readiness checks.
+- The May 2026 public-launch review found no new architecture blockers. The accepted follow-up is being tracked as v1.4-style open-source/security hardening unless public hosted deployment becomes available first.
 - All dashboard output must remain validated `CanvasDocument` JSON rendered through the allowlisted React block registry.
+
+## Accepted Public-Launch Review Follow-Up
+
+These items apply from the latest external review and should be completed before broad open-source/public sharing:
+
+1. **Operational release blocker remains P0.**
+   - Configure Git remote and Vercel project linkage.
+   - Deploy a public URL.
+   - Run hosted smoke and remote Playwright with `--expect-version v1.3.0-hosted-launch-readiness`.
+   - Confirm Vercel-native firewall/rate limiting before broad sharing.
+   - Tag only the latest release that passes hosted checks unless old tags are explicitly requested.
+
+2. **Open-source readiness is accepted.**
+   - Add MIT license, contributing guide, code of conduct, and security policy.
+   - Add Dependabot, CodeQL, and secret scanning so a public repo has baseline supply-chain visibility.
+
+3. **Security hardening is accepted where it does not add new infrastructure.**
+   - Remove `unsafe-eval` from production CSP while preserving it for local dev.
+   - Upgrade Next.js to a patched 15.5.x line to clear high-severity framework audit findings.
+   - Document that middleware throttling is defense in depth only in serverless deployments.
+   - Keep `/api/health` release metadata intentional and documented for hosted smoke diagnostics.
+   - Tighten MCP input schemas and validate MCP tool outputs before JSON serialization.
+
+4. **Governance audit expansion is accepted.**
+   - Fail if hidden/review fields appear in live field maps or live-capable fields.
+   - Check live verification freshness.
+   - Require blocked live checks to be documented in public notes.
+   - Check README known-boundary copy against catalog status.
+   - Make sample data quality fail on row-count/date-range/ZIP regressions, while keeping Houston labeled as a sample-first pilot.
+
+5. **Deferred or product-call items.**
+   - Shared hosted rate limits through KV/Upstash remain deferred because v1.3 has no hosted persistence.
+   - React component coverage and coverage gates are useful but should be added in a focused testing sprint.
+   - Completed version-plan files can be archived to `docs/archive/` in a documentation-cleanup pass, but the active handoff docs stay in place for now.
+   - Texas Government Spending should remain coming-later until schema/classification/sample governance is complete, or be removed from public UI if it becomes distracting.
+   - Analytics/observability and a public feedback channel are public-beta product decisions, not current blockers.
 
 ## Implemented v0.6 Review Hardening
 

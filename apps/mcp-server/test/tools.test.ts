@@ -176,6 +176,8 @@ describe("MCP tool handlers", () => {
       metrics: [{ type: "count", alias: "request_count" }],
       limit: 10
     })).rejects.toThrow(/not allowlisted/);
+    expect(() => summarizeQueryResult({ rows: [] })).toThrow();
+    expect(() => recommendVisualization({ columns: [] })).toThrow();
     expect(validateCanvasSpec({ blocks: [{ type: "UnknownBlock" }] }).ok).toBe(false);
   });
 });

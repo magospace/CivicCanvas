@@ -5,7 +5,7 @@ import { SavedCanvases } from "../../components/saved-canvases";
 
 export default function SavedPage() {
   return (
-    <main className="min-h-screen bg-civic-50">
+    <main id="main-content" className="min-h-screen bg-civic-50">
       <Header />
       <section className="mx-auto flex max-w-5xl flex-col items-center px-6 py-20 text-center">
         <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-white text-civic-700 shadow-panel">

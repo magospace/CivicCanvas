@@ -267,6 +267,7 @@ export function TableBlockView({ props }: TableBlock) {
               {props.columns.map((column) => (
                 <th
                   key={column.field}
+                  scope="col"
                   aria-sort={sortField === column.field ? (sortDirection === "asc" ? "ascending" : "descending") : "none"}
                   className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-slate-500"
                 >

@@ -33,9 +33,22 @@ The check is non-network and safe without credentials. If `.vercel/output` is ab
 
 ## Data Quality And Governance
 
-`pnpm governance:audit` now checks fallback samples, hidden-field leakage, SourceMethodBlock coverage, catalog caveats, sample dataset ID consistency, gallery source references, SourceMethodBlock caveats, governance limits, package versions, and active-release docs.
+`pnpm governance:audit` now checks fallback samples, hidden-field leakage, SourceMethodBlock coverage, catalog caveats, sample dataset ID consistency, hidden-field exclusion from live mappings, live verification freshness, documented blocked checks, gallery source references, SourceMethodBlock caveats, governance limits, README/catalog boundary parity, package versions, and active-release docs.
 
-`pnpm data:quality` reports sample row counts, date ranges, missing ZIP rows, top categories, and top statuses for Dallas, Austin, and Houston.
+`pnpm data:quality` reports sample row counts, date ranges, distinct month coverage, missing ZIP rows, top categories, and top statuses for Dallas, Austin, and Houston. It fails when sample dataset IDs drift, row counts drop below configured thresholds, ZIP coverage regresses, or 2024 month coverage disappears.
+
+## Open-Source Launch Readiness
+
+The public-launch review accepted open-source readiness work for this milestone:
+
+- MIT license at repo root.
+- Contributor guide with required local gates and data-governance rules.
+- Code of conduct.
+- Security policy with disclosure process and explicit generated-dashboard safety boundaries.
+- Baseline public-repo automation for Dependabot, CodeQL, and secret scanning.
+- Production CSP removes `unsafe-eval`; development keeps it for Next.js dev tooling.
+- Web runtime is upgraded to Next.js 15.5.15 to clear high-severity framework advisories while preserving the existing App Router routes.
+- MCP result/canvas tools use typed schemas, and tool outputs validate before JSON serialization.
 
 ## Houston TranStar Boundary
 

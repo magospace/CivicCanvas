@@ -9,6 +9,12 @@
 - Improves `/demo-readiness` with release evidence, data quality, and hosted handoff copy actions.
 - Improves `/gallery` with an “open in explore” flow through the validated saved-canvas path.
 - Keeps Houston sample-first and adds a Houston TranStar access packet for future live promotion.
+- Adds open-source readiness files: MIT license, contributing guide, code of conduct, and security policy.
+- Tightens production CSP by removing `unsafe-eval` outside development.
+- Upgrades the web app to Next.js 15.5.15 to clear high-severity Next.js audit findings.
+- Tightens MCP contracts with typed inputs for result/canvas tools and output validation before JSON serialization.
+- Expands governance and data-quality release checks for live mapping safety, verification freshness, README/catalog boundary drift, and sample regression thresholds.
+- Adds baseline public-repo automation for Dependabot, CodeQL, and secret scanning.
 - Release tag remains blocked until a real public URL passes hosted smoke and remote Playwright.
 
 ## v1.2.0-hosted-trust (locally complete / untagged)

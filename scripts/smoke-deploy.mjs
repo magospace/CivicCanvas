@@ -245,11 +245,13 @@ const checks = [
         const value = response.headers.get(key) ?? "";
         return !value.includes(expected);
       });
+      const csp = response.headers.get("content-security-policy") ?? "";
+      const hasUnsafeEval = csp.includes("'unsafe-eval'");
       return {
-        ok: missing.length === 0,
-        reason: missing.length === 0
+        ok: missing.length === 0 && !hasUnsafeEval,
+        reason: missing.length === 0 && !hasUnsafeEval
           ? "Expected production-safe headers are present."
-          : `Missing or unexpected headers: ${missing.map(([key]) => key).join(", ")}.`
+          : `Missing or unexpected headers: ${missing.map(([key]) => key).join(", ")}${hasUnsafeEval ? "; CSP contains unsafe-eval" : ""}.`
       };
     }
   },

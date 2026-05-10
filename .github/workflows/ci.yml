@@ -21,8 +21,11 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm typecheck
+      - run: pnpm governance:audit
+      - run: pnpm data:quality
       - run: pnpm test
       - run: pnpm build
+      - run: pnpm audit --audit-level=high
 
   live-smoke:
     if: github.event_name == 'workflow_dispatch'

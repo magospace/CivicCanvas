@@ -7,7 +7,7 @@ export default function GalleryPage() {
   const canvases = getCuratedGalleryCanvases();
 
   return (
-    <main className="min-h-screen bg-civic-50">
+    <main id="main-content" className="min-h-screen bg-civic-50">
       <Header />
       <section className="mx-auto max-w-7xl space-y-6 px-6 py-8">
         <div className="flex flex-col gap-5 border-b border-slate-200 pb-6 md:flex-row md:items-end md:justify-between">

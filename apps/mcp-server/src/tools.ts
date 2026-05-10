@@ -5,13 +5,13 @@ import {
   createSourceAttribution,
   generateMiroExportSpec as generateSharedMiroExportSpec,
   releaseMetadata,
+  canvasDocumentSchema,
+  queryResultSchema,
   queryModeSchema,
   safeValidateCanvasDocument,
   validateCanvasDocument,
   UnsupportedDatasetError,
-  type CanvasDocument,
-  type DatasetMetadata,
-  type QueryResult
+  type DatasetMetadata
 } from "@texas-data-canvas/shared";
 import { getAdapter, getCatalog, getReleaseEvidence as readReleaseEvidence } from "./data.js";
 
@@ -184,7 +184,7 @@ export async function getSampleRows(input: unknown) {
 }
 
 export function summarizeQueryResult(input: unknown) {
-  const result = z.custom<QueryResult>((value) => Boolean(value && typeof value === "object")).parse(input);
+  const result = queryResultSchema.parse(input);
 
   return {
     summary: `${result.source.datasetTitle} returned ${result.rows.length} bounded rows for ${result.resultType}. ${result.caveats.join(" ")}`,
@@ -193,7 +193,7 @@ export function summarizeQueryResult(input: unknown) {
 }
 
 export function recommendVisualization(input: unknown) {
-  const result = z.custom<QueryResult>((value) => Boolean(value && typeof value === "object")).parse(input);
+  const result = queryResultSchema.parse(input);
   const fields = result.columns.map((column) => column.field);
   const blocks = ["SummaryBlock", "MetricBlock", "TableBlock", "SourceMethodBlock"];
 
@@ -296,7 +296,7 @@ export async function auditQuery(input: unknown) {
 export function generateMiroExportSpec(input: unknown) {
   const { canvas, template } = z
     .object({
-      canvas: z.custom<CanvasDocument>((value) => Boolean(value && typeof value === "object")),
+      canvas: canvasDocumentSchema,
       template: z.enum(["briefing_board", "slide_deck", "community_workshop"]).default("briefing_board")
     })
     .parse(input);

@@ -108,7 +108,9 @@ Input:
 
 ```json
 {
+  "schemaVersion": "1.0",
   "datasetId": "dallas_311_requests",
+  "mode": "sample_only",
   "filters": [
     { "field": "created_date", "operator": "between", "value": ["2024-01-01", "2024-12-31"] }
   ],
@@ -135,10 +137,29 @@ Output:
 Validation:
 
 - dataset must exist in approved catalog
-- fields must be allowlisted
-- operator must be allowed
-- limit must be below configured max
+- `filters[].operator` must be one of `eq`, `neq`, `in`, `between`, `gte`, `lte`, or `contains`
+- `metrics[].type` must be one of `count`, `sum`, `avg`, `min`, or `max`
+- fields must be allowlisted and mapped in catalog metadata
+- limit must be below configured max: 100 raw rows or 1000 aggregate rows
 - sensitive fields must be blocked or aggregated
+
+### `get_server_status`
+
+Returns MCP server readiness, active shared release metadata, data-mode controls, and safety model summary.
+
+### `get_release_evidence`
+
+Returns checked-in release evidence for local and hosted readiness gates.
+
+Output includes the active release version, branch, local gate results, governance audit summary, production-local result, and hosted status. Hosted status remains `blocked` until a real public URL passes deploy smoke and remote Playwright.
+
+### `validate_catalog`
+
+Returns catalog health, live-enabled datasets, fallback sample availability, and validation issues.
+
+### `list_live_sources`
+
+Returns live-enabled datasets and their verified live field mappings. Sample-first or blocked datasets are intentionally excluded from this list.
 
 ### `get_sample_rows`
 
@@ -192,12 +213,8 @@ Input:
 
 ```json
 {
-  "canvasId": "canvas_dallas_311",
-  "template": "briefing_board",
-  "includeCharts": true,
-  "includeMap": true,
-  "includeTable": true,
-  "includeSourceMethod": true
+  "canvas": "validated CanvasDocument object with SourceMethodBlock",
+  "template": "briefing_board"
 }
 ```
 
@@ -218,6 +235,18 @@ Output:
     }
   ],
   "sourceMethodFrameRequired": true
+}
+```
+
+The MCP server validates tool outputs before serializing them with `jsonContent()`. Successful tool outputs preserve their existing shapes; failures return:
+
+```json
+{
+  "ok": false,
+  "error": {
+    "category": "unsupported_field",
+    "message": "Field is not allowlisted."
+  }
 }
 ```
 

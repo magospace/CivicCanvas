@@ -67,7 +67,7 @@ export default function DemoReadinessPage() {
   const hostedStatus = process.env.NEXT_PUBLIC_SITE_URL ? "pending hosted verification" : "blocked: no public URL configured";
 
   return (
-    <main className="min-h-screen bg-civic-50">
+    <main id="main-content" className="min-h-screen bg-civic-50">
       <Header />
       <section className="mx-auto max-w-6xl px-6 py-8">
         <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">

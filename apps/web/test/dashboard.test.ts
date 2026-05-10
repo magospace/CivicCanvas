@@ -16,6 +16,7 @@ import { apiError, parseJsonRequest } from "../lib/api";
 import { boundedQuerySpecJson, canvasDocumentJson, tableCsv } from "../lib/dashboard-exports";
 import { generateCanvasForPrompt } from "../lib/dashboard";
 import { getCuratedGalleryCanvases } from "../lib/data";
+import { zipFeaturesForRows } from "../lib/geography";
 import { generateMiroExportSpec } from "../lib/miro";
 
 describe("dashboard generation", () => {
@@ -168,6 +169,38 @@ describe("dashboard generation", () => {
     expect(JSON.parse(specJson ?? "{}").datasetId).toBe("dallas_311_requests");
     expect(csv).toContain("request count");
     expect(csv).toContain("Sanitation");
+  });
+
+  it("escapes CSV cells and omits unknown ZIP centroids", async () => {
+    const generation = await generateCanvasForPrompt("Show Dallas 311 service requests by category and ZIP code for 2024.");
+    const canvas = {
+      ...generation.canvas,
+      blocks: generation.canvas.blocks.map((block) => {
+        if (block.type !== "TableBlock") {
+          return block;
+        }
+        return {
+          ...block,
+          props: {
+            ...block.props,
+            rows: [
+              {
+                ...block.props.rows[0],
+                category: "Trash, \"Bulk\""
+              }
+            ]
+          }
+        };
+      })
+    };
+
+    expect(tableCsv(canvas)).toContain("\"Trash, \"\"Bulk\"\"\"");
+    expect(zipFeaturesForRows([
+      { zip_code: "75201", request_count: 4 },
+      { zip_code: "99999", request_count: 3 }
+    ], "zip_code")).toEqual([
+      expect.objectContaining({ id: "75201", label: "75201" })
+    ]);
   });
 
   it("keeps hidden Houston fields out of client exports", async () => {
@@ -364,8 +397,12 @@ describe("production API contracts", () => {
       "hidden fields stay out of canvas/export fixtures",
       "catalog datasets include source caveats",
       "sample files match catalog dataset IDs",
+      "live mappings exclude hidden fields",
+      "live verification timestamps are fresh",
+      "blocked live checks are documented",
       "gallery canvas sources reference approved catalog datasets",
-      "source method blocks include caveats"
+      "source method blocks include caveats",
+      "README known boundaries match catalog"
     ]));
   });
 
@@ -384,6 +421,10 @@ describe("production API contracts", () => {
       "houston_transportation_incidents"
     ]));
     expect(body.summary.totalSampleRows).toBeGreaterThan(0);
+    expect(body.datasets.every((dataset: { ok: boolean }) => dataset.ok)).toBe(true);
+    expect(body.datasets.find((dataset: { datasetId: string }) =>
+      dataset.datasetId === "austin_building_permits"
+    )?.distinctMonths).toBe(12);
   });
 
   it("verifies Vercel output safely when no local output exists", () => {

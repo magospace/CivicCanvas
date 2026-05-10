@@ -59,6 +59,7 @@ pnpm smoke:deploy:json -- --url http://localhost:3000
 pnpm test:e2e
 PLAYWRIGHT_BASE_URL=https://your-deployment.example pnpm test:e2e:remote
 pnpm verify
+pnpm clean
 ```
 
 `pnpm smoke:live` is optional and only checks catalog entries with `liveAvailable: true`.
@@ -67,6 +68,15 @@ pnpm verify
 `pnpm verify:prod-local` builds `apps/web`, runs `next start` on an available local port, then runs hosted-style smoke and remote-mode Playwright against that production server.
 `pnpm verify:vercel-output` inspects `.vercel/output` after `vercel build` when available, and skips output inspection safely when it is absent.
 `pnpm verify` runs the local release gate: preflight, live smoke, and Playwright browser smoke.
+
+## Contributing And Security
+
+- License: MIT; see `LICENSE`.
+- Contribution guide: `CONTRIBUTING.md`.
+- Code of conduct: `CODE_OF_CONDUCT.md`.
+- Security reporting and safety boundaries: `SECURITY.md`.
+
+Public deployments must configure platform-level firewall/rate limiting. The in-repo middleware throttle is defense in depth only and is not a substitute for Vercel-native controls in a serverless environment.
 
 ## MVP demo prompts
 

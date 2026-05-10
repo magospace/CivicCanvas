@@ -219,7 +219,7 @@ export function AppShell({
   }
 
   return (
-    <main className="min-h-screen bg-civic-50">
+    <main id="main-content" className="min-h-screen bg-civic-50">
       <Header />
       <div className="mx-auto grid max-w-[1600px] lg:grid-cols-[280px_minmax(0,1fr)_330px]">
         <DatasetSidebar datasets={datasets} />

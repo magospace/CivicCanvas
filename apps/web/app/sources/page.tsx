@@ -12,7 +12,7 @@ export default function SourcesPage() {
       : "border-signal/30 bg-signal/10 text-signal";
 
   return (
-    <main className="min-h-screen bg-civic-50">
+    <main id="main-content" className="min-h-screen bg-civic-50">
       <Header />
       <section className="mx-auto max-w-7xl px-6 py-8">
         <div className="mb-8 max-w-3xl">

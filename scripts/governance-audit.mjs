@@ -72,6 +72,7 @@ const catalogPath = join(root, "data/catalog/approved-datasets.json");
 const catalog = readJson(catalogPath);
 const releaseMetadata = readReleaseMetadata(root);
 const hiddenFields = collectHiddenFields(catalog);
+const hiddenFieldSet = new Set(hiddenFields);
 const galleryDir = join(root, "data/gallery");
 const galleryCanvasPaths = readdirSync(galleryDir)
   .filter((file) => file.endsWith(".canvas.json"))
@@ -140,6 +141,59 @@ const checks = [
         }
       }
       return `${catalog.filter((entry) => entry.fallbackSampleFile).length} sample file(s) checked.`;
+    }
+  ),
+  check(
+    "live mappings exclude hidden fields",
+    "Sensitive or review-only catalog fields must not be promoted into live maps or live-capable fields.",
+    () => {
+      for (const dataset of catalog) {
+        const liveMappedFields = [
+          ...Object.keys(dataset.liveFieldMap ?? {}),
+          ...(dataset.liveVerification?.liveCapableFields ?? [])
+        ];
+        for (const field of liveMappedFields) {
+          if (hiddenFieldSet.has(field)) {
+            throw new Error(`${dataset.id} promotes hidden/review field ${field} into live access metadata`);
+          }
+        }
+      }
+      return `${catalog.length} catalog dataset(s) checked for hidden live mappings.`;
+    }
+  ),
+  check(
+    "live verification timestamps are fresh",
+    "Live verification records should be refreshed at least every 90 days.",
+    () => {
+      const maxAgeMs = 90 * 24 * 60 * 60 * 1000;
+      const now = Date.now();
+      let checked = 0;
+      for (const dataset of catalog.filter((entry) => entry.liveVerification)) {
+        checked += 1;
+        const checkedAt = Date.parse(dataset.liveVerification.lastCheckedAt);
+        if (!Number.isFinite(checkedAt)) {
+          throw new Error(`${dataset.id} has an invalid liveVerification.lastCheckedAt`);
+        }
+        if (now - checkedAt > maxAgeMs) {
+          throw new Error(`${dataset.id} live verification is older than 90 days`);
+        }
+      }
+      return `${checked} live verification record(s) checked.`;
+    }
+  ),
+  check(
+    "blocked live checks are documented",
+    "Any non-passing live verification check must be visible through liveQueryNotes.",
+    () => {
+      let blockers = 0;
+      for (const dataset of catalog.filter((entry) => entry.liveVerification)) {
+        const failedChecks = dataset.liveVerification.checks.filter((item) => item.status !== "passed");
+        blockers += failedChecks.length;
+        if (failedChecks.length > 0 && (!Array.isArray(dataset.liveQueryNotes) || dataset.liveQueryNotes.length === 0)) {
+          throw new Error(`${dataset.id} has blocked live checks but no liveQueryNotes`);
+        }
+      }
+      return `${blockers} blocked/deferred live verification check(s) documented.`;
     }
   ),
   check(
@@ -274,6 +328,24 @@ const checks = [
         }
       }
       return files.join(", ");
+    }
+  ),
+  check(
+    "README known boundaries match catalog",
+    "README known sample/live boundaries must name the current Dallas, Austin, and Houston catalog limitations.",
+    () => {
+      const readme = readFileSync(join(root, "README.md"), "utf8");
+      const expectedPhrases = [
+        "Dallas 311 live aggregates are promoted only for verified non-ZIP mapped fields",
+        "Austin permit metadata is verified, but monthly live aggregation remains sample-first",
+        "Houston transportation incidents is the public-pilot third dataset"
+      ];
+      for (const phrase of expectedPhrases) {
+        if (!readme.includes(phrase)) {
+          throw new Error(`README.md is missing known boundary phrase: ${phrase}`);
+        }
+      }
+      return `${expectedPhrases.length} known boundary phrase(s) checked.`;
     }
   )
 ];

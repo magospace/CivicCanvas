@@ -7,9 +7,10 @@ const savedCanvases = {
   canvas_austin_permits_seed: "Show Austin building permits by month and ZIP code."
 };
 
-export async function GET(_request: Request, { params }: { params: { id: keyof typeof savedCanvases } }) {
+export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   const requestId = createRequestId();
-  const prompt = savedCanvases[params.id];
+  const { id } = await params;
+  const prompt = savedCanvases[id as keyof typeof savedCanvases];
 
   if (!prompt) {
     return apiError(new Error("Canvas not found."), { code: "canvas_not_found", status: 404, requestId });

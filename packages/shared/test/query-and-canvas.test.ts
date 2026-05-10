@@ -571,6 +571,28 @@ describe("adapter and intent helpers", () => {
     ).toThrow(/Unsafe Socrata expression/);
   });
 
+  it("rejects undocumented Socrata expressions in live mappings", () => {
+    const dataset = {
+      ...catalog().find((item) => item.id === "dallas_311_requests")!,
+      liveFieldMap: {
+        ...catalog().find((item) => item.id === "dallas_311_requests")!.liveFieldMap,
+        category: "lower(service_request_type)"
+      }
+    };
+
+    expect(() =>
+      buildSocrataQueryUrl({
+        dataset,
+        spec: {
+          datasetId: "dallas_311_requests",
+          groupBy: ["category"],
+          metrics: [{ type: "count", alias: "request_count" }],
+          limit: 10
+        }
+      })
+    ).toThrow(/Unsafe Socrata expression/);
+  });
+
   it("parses governed prompt intent", () => {
     const intent = parsePromptIntent({
       prompt: "Show Dallas 311 service requests by category and ZIP code for 2024.",

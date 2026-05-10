@@ -3,8 +3,8 @@
   "releaseVersion": "v1.3.0-hosted-launch-readiness",
   "branch": "feat/v1.3-hosted-launch-readiness",
   "commit": "pending-v1.3-commit",
-  "updatedAt": "2026-05-10T01:31:06.000Z",
-  "localVerifiedAt": "2026-05-10T01:31:06.000Z",
+  "updatedAt": "2026-05-10T02:30:37.000Z",
+  "localVerifiedAt": "2026-05-10T02:30:37.000Z",
   "localGates": [
     {
       "name": "pnpm lint",
@@ -19,7 +19,7 @@
     {
       "name": "pnpm test",
       "status": "passed",
-      "detail": "Vitest passed 56 tests across shared, web, and MCP packages."
+      "detail": "Vitest passed 58 tests across shared, web, and MCP packages."
     },
     {
       "name": "pnpm build",
@@ -29,7 +29,7 @@
     {
       "name": "pnpm governance:audit",
       "status": "passed",
-      "detail": "Governance audit passed 12/12 checks."
+      "detail": "Governance audit passed 16/16 checks."
     },
     {
       "name": "pnpm verify:prod-local",
@@ -49,7 +49,7 @@
     {
       "name": "pnpm release:check",
       "status": "passed",
-      "detail": "Governance audit, data quality, production-local verification, and Vercel output checks passed."
+      "detail": "Governance audit, data quality, production-local verification, Vercel output checks, and production CSP checks passed."
     }
   ],
   "productionLocal": {
@@ -58,7 +58,7 @@
   },
   "governanceAudit": {
     "status": "passed",
-    "summary": "Governance audit passed 12/12 checks for v1.3.0-hosted-launch-readiness."
+    "summary": "Governance audit passed 16/16 checks for v1.3.0-hosted-launch-readiness."
   },
   "hosted": {
     "status": "blocked",

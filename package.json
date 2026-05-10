@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "pnpm --filter @texas-data-canvas/web dev",
     "start:web": "pnpm --filter @texas-data-canvas/web start",
+    "clean": "rm -rf node_modules apps/web/.next apps/web/tsconfig.tsbuildinfo apps/mcp-server/dist apps/mcp-server/tsconfig.tsbuildinfo packages/shared/dist packages/shared/tsconfig.tsbuildinfo .turbo test-results playwright-report .vercel/output",
     "typecheck": "pnpm -r --sort typecheck",
     "build": "pnpm -r --sort build",
     "lint": "pnpm --filter @texas-data-canvas/web lint",
