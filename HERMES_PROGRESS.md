@@ -1494,3 +1494,13 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm lint` passed; `pnpm typecheck` passed; `pnpm test` passed with 15 files / 107 tests; `pnpm governance:audit` passed 19/19 checks with the pre-existing release-evidence HEAD warning; `pnpm data:quality` passed for 3 samples / 280 rows / 4 gallery canvases; `pnpm --filter @texas-data-canvas/mcp-server build` passed; `pnpm --filter @texas-data-canvas/mcp-server inspect` passed and listed 16 MCP tools; `pnpm test:e2e` passed with 20 browser tests; `git diff --check` passed.
 - MCP fix: The server main guard now compares `fileURLToPath(import.meta.url)` with `process.argv[1]`, so `node dist/index.js` actually starts the stdio server for inspector/client use. The `inspect` script now uses inspector CLI `tools/list` mode so validation exits cleanly and does not print a browser proxy token.
 - Stop point: P0 readiness pass is implemented and validated. Remaining blockers are submission logistics, hosted URL/firewall proof if needed, Loom recording, and intentionally stale release evidence until the gated full release task runs.
+
+## Task 103 Update
+
+- Task chosen: `TASKS.md` item 103, "Add Sources Page Summary Legend".
+- Why this was next: It was the next pending safe Loom/demo polish task and improves the opening `/sources` proof without touching catalog data or live claims.
+- Scope: `apps/web/app/sources/page.tsx`, `tests/e2e/sources.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: UI/test/docs state only. No catalog data, live mappings, provider calls, schema changes, migrations, deploy config, secrets, release evidence, or generated artifacts changed.
+- Files updated: `/sources` now has a readiness legend for approved sources, live-promoted sources, sample fallback sources, and coming-later sources; sources E2E asserts the legend and existing hidden-field/source-boundary copy.
+- Validation: First targeted Playwright run failed on a strict `Live promoted` locator; after scoping assertions to the legend, `pnpm test:e2e -- tests/e2e/sources.spec.ts`, `pnpm lint`, and `git diff --check` passed.
+- Recommended next task: Task 104, `Add Header Active Navigation State`.

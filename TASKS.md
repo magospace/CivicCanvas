@@ -1646,7 +1646,7 @@ Status: Complete on May 10, 2026.
 
 ## 103. Add Sources Page Summary Legend
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: UI / Demo UX
 - Goal: Make `/sources` communicate approved/live/sample boundaries faster for the opening Loom scene.
@@ -1656,6 +1656,8 @@ Status: Pending.
 - Acceptance criteria: `/sources` above-the-fold shows counts/legend such as approved sources, live-promoted sources, sample-first/fallback sources, and coming-later sources; labels stay honest with current catalog metadata.
 - Validation commands: `PLAYWRIGHT_BASE_URL=http://localhost:<port> pnpm test:e2e -- tests/e2e/sources.spec.ts`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with sources-page UI/test edits.
+- Completed notes: `/sources` now shows an above-the-fold readiness legend with approved source count, live-promoted count, sample fallback count, and coming-later count, while preserving detailed catalog caveats and hidden-field warnings.
+- Validation: `pnpm test:e2e -- tests/e2e/sources.spec.ts`, `pnpm lint`, and `git diff --check` passed.
 
 ## 104. Add Header Active Navigation State
 
