@@ -2114,7 +2114,7 @@ Triage summary:
 
 ## 130. Add Mobile Header Navigation
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: UI / Demo Blocker
 - Goal: Make `/explore`, `/saved`, `/sources`, `/gallery`, and `/demo-readiness` reachable from the header on mobile widths.
@@ -2125,6 +2125,9 @@ Status: Pending.
 - Acceptance criteria: At mobile viewport, a menu button opens/closes the nav, links preserve active labels, Escape closes the menu, and desktop nav still renders.
 - Validation command: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "mobile header navigation"`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with header route/nav edits.
+
+- Completed notes: Added a mobile-only header menu button with open/close state, active route links for Explore/Saved/Sources/Gallery/Demo, route-change close behavior, and Escape-to-close support while preserving the desktop navigation.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "mobile header navigation"` passed (project script executed all 18 product-demo browser tests); `pnpm lint` passed; `git diff --check` passed.
 
 ## 131. Remove Confirmed No-Op Demo Controls
 

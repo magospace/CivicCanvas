@@ -34,6 +34,32 @@ test("explore route loads the governed shell", async ({ page }) => {
   await expect(page.getByLabel("Dashboard prompt")).toHaveValue("Show Austin building permits by month and ZIP code for 2024.");
 });
 
+test("mobile header navigation opens, closes, and reaches core demo routes", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/explore");
+
+  const menuButton = page.getByRole("button", { name: "Open navigation menu" });
+  await expect(menuButton).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Mobile navigation" })).toBeHidden();
+
+  await menuButton.click();
+  const mobileNav = page.getByRole("navigation", { name: "Mobile navigation" });
+  await expect(page.getByRole("button", { name: "Close navigation menu" })).toHaveAttribute("aria-expanded", "true");
+  await expect(mobileNav.getByRole("link", { name: /Saved Canvases/ })).toBeVisible();
+  await expect(mobileNav.getByRole("link", { name: /Sources/ })).toBeVisible();
+  await expect(mobileNav.getByRole("link", { name: /Gallery/ })).toBeVisible();
+  await expect(mobileNav.getByRole("link", { name: /Demo/ })).toBeVisible();
+
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("button", { name: "Open navigation menu" })).toHaveAttribute("aria-expanded", "false");
+  await expect(mobileNav).toBeHidden();
+
+  await page.getByRole("button", { name: "Open navigation menu" }).click();
+  await mobileNav.getByRole("link", { name: /Sources/ }).click();
+  await expect(page).toHaveURL(/\/sources$/);
+  await expect(page.getByRole("button", { name: "Open navigation menu" })).toBeVisible();
+});
+
 test("Dallas prompt generates fallback ZIP dashboard and filter changes table state", async ({ page }) => {
   await page.goto("/explore");
   await generate(page, "Show Dallas 311 service requests by category and ZIP code for 2024.");

@@ -1835,3 +1835,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Classification summary: P0 confirmed mobile nav, duplicate controls, no-op controls, and status feedback; P1 useful jargon, seed starter clarity, toolbar/chart/date/source-method/inspector/saved/sources/focus/mode-label/why-dashboard polish; P2 useful accessibility/perf/data memoization/sample expansion; older critical items 1-5 from `clauderecommends.md` already resolved/stale; broad Sentry/analytics/CI/refactor/schema/persistence/Miro/deploy/release-evidence work deferred as risky or out of local demo scope.
 - Planned execution cap: Pick up to three highest-value safe tasks. Start with Task 130 mobile header navigation, then Task 131 no-op controls/deep-link prompt prefill, then Task 133 seed starter copy if validation remains green.
 - Live API/media/OpenAI calls: 0.
+
+
+## Task 130 Update - Mobile Header Navigation
+
+- Task chosen: `TASKS.md` item 130, "Add Mobile Header Navigation".
+- Why this was next: `REVIEW_RECOMMENDATIONS.md` identified mobile navigation as a P0 public-demo blocker, and source review confirmed desktop nav was hidden below `md` with no mobile route access.
+- Scope: `apps/web/components/header.tsx`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Changes: Added a `md:hidden` mobile menu button, accessible expanded state, route links for all current nav items, active-route styling, route-change close behavior, and Escape-to-close handling. Desktop nav remains unchanged.
+- Safety notes: UI/navigation only. No data-path, provider, schema, migration, deployment, release-evidence, auth, billing, persistence, secret, or generated-artifact changes. `REVIEW_RECOMMENDATIONS.md` and `clauderecommends.md` remain untracked and unstaged.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "mobile header navigation"` passed; due the repo script wiring, all 18 product-demo browser tests ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 131, `Remove Confirmed No-Op Demo Controls`, because it addresses confirmed misleading UI affordances without broad architecture changes.
