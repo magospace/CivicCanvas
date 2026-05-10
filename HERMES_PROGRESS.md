@@ -1263,3 +1263,23 @@ Last updated: May 10, 2026 06:17 CDT
 ### Recommended Next Task
 
 - Task 91, `Add No-Spend Media Proof Contract To Submission Readiness`, is next.
+
+
+## Task 91 Update
+
+- Task chosen: `TASKS.md` item 91, "Add No-Spend Media Proof Contract To Submission Readiness".
+- Why this was next: Task 90 completed cleanly, and Task 91 was the next provider-readiness tooling task. It improves honest media proof reporting while keeping live Fal calls gated and unrun.
+- Scope: `scripts/submission-readiness.mjs`, `apps/web/test/release-scripts.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Script/test only. No live Fal call, generated media, app media wiring, provider spend, deploy, release evidence refresh, backend persistence, schema, migration, secrets, auth, billing, or production data changed.
+
+### Validation
+
+- `pnpm submission:readiness:json`: Passed.
+- `pnpm media:fal:smoke:json`: Passed with no-spend path and zero live calls.
+- `pnpm test -- apps/web/test/release-scripts.test.ts -t "submission bundle readiness"`: Passed.
+- `pnpm lint`: Passed.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 92, `Add Backend Persistence Gate To Health/Readiness Docs`, is next.

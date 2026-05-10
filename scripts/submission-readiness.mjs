@@ -30,6 +30,16 @@ const localValidationCommands = [
   "pnpm release:evidence:precheck:json",
   "pnpm demo:artifact-hygiene:json"
 ];
+const mediaProof = {
+  noSpendCommand: "pnpm media:fal:smoke:json",
+  liveGateEnv: "RUN_LIVE_FAL_SMOKE",
+  liveGateRequiredValue: "1",
+  liveProofStatus: "not_run_by_this_script",
+  appMediaWiring: "not_implemented_dashboard_ui_only",
+  expectedDefaultLiveCallCount: 0,
+  caveat: "No-spend Fal proof is script-level only; normal dashboard generation does not call Fal or generate media artifacts."
+};
+
 const gatedChecks = [
   {
     gate: "Task 35",
@@ -121,6 +131,10 @@ const checks = [
   {
     name: "git remote submission target is inspectable without network",
     ok: repoRemote.configured
+  },
+  {
+    name: "no-spend media proof remains script-level and live-gated",
+    ok: packageJson.scripts?.["media:fal:smoke:json"] === "node scripts/fal-media-smoke.mjs --json" && mediaProof.expectedDefaultLiveCallCount === 0
   }
 ];
 const ok = checks.every((check) => check.ok);
@@ -133,6 +147,7 @@ const output = {
   requiredDocs,
   packageScripts,
   repoRemote,
+  mediaProof,
   localValidationCommands,
   gatedChecks,
   knownSubmissionTodos: [

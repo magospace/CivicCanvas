@@ -279,6 +279,14 @@ describe("release and governance scripts", () => {
       expect(body.repoRemote.host).not.toContain("@");
       expect(body.repoRemote.path).not.toContain("@");
     }
+    expect(body.mediaProof).toEqual(expect.objectContaining({
+      noSpendCommand: "pnpm media:fal:smoke:json",
+      liveGateEnv: "RUN_LIVE_FAL_SMOKE",
+      liveProofStatus: "not_run_by_this_script",
+      appMediaWiring: "not_implemented_dashboard_ui_only",
+      expectedDefaultLiveCallCount: 0
+    }));
+    expect(body.checks.map((check: { name: string }) => check.name)).toContain("no-spend media proof remains script-level and live-gated");
     expect(body.gatedChecks).toEqual(expect.arrayContaining([
       expect.objectContaining({ gate: "Task 35", status: "not_run_by_this_script" }),
       expect.objectContaining({ gate: "live provider spend", status: "not_run_by_this_script" })

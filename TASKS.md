@@ -1431,6 +1431,8 @@ Status: Complete on May 10, 2026.
 
 ## 91. Add No-Spend Media Proof Contract To Submission Readiness
 
+Status: Complete on May 10, 2026.
+
 - Owner type: Provider / QA Tooling
 - Goal: Make submission readiness explicitly require the no-spend Fal proof script and classify live Fal proof as gated/not run.
 - Scope: Script/test only; no live Fal call.
@@ -1439,6 +1441,8 @@ Status: Complete on May 10, 2026.
 - Acceptance criteria: JSON includes media proof status, no-spend command, live gate command name, app media wiring caveat, and no live call count.
 - Validation commands: `pnpm submission:readiness:json`, `pnpm media:fal:smoke:json`, focused Vitest command, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with submission readiness script edits.
+- Completed notes: Added `mediaProof` metadata to submission readiness output for no-spend Fal command, `RUN_LIVE_FAL_SMOKE` gate, not-run live status, dashboard-not-wired caveat, and expected zero default live calls. Added regression assertions.
+- Validation: `pnpm submission:readiness:json`, `pnpm media:fal:smoke:json`, focused release-script Vitest, `pnpm lint`, and `git diff --check` passed.
 
 ## 92. Add Backend Persistence Gate To Health/Readiness Docs
 
