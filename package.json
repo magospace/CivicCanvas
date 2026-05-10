@@ -24,6 +24,8 @@
     "demo:screenshots:json": "node scripts/capture-demo-screenshots.mjs --json",
     "demo:artifact-hygiene": "node scripts/demo-artifact-hygiene.mjs",
     "demo:artifact-hygiene:json": "node scripts/demo-artifact-hygiene.mjs --json",
+    "submission:readiness": "node scripts/submission-readiness.mjs",
+    "submission:readiness:json": "node scripts/submission-readiness.mjs --json",
     "live:fallback-proof": "node scripts/live-fallback-proof.mjs",
     "live:fallback-proof:json": "node scripts/live-fallback-proof.mjs --json",
     "persistence:readiness": "node scripts/local-persistence-readiness.mjs",

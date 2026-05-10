@@ -1085,3 +1085,25 @@ Last updated: May 10, 2026 06:17 CDT
 ### Recommended Next Task
 
 - Task 82, `Add Submission Bundle Readiness Script`, is next if continuing with script/test work.
+
+
+## Task 82 Update
+
+- Task chosen: `TASKS.md` item 82, "Add Submission Bundle Readiness Script".
+- Why this was next: It was the next safe script/test task and improves final submission readiness without network/deploy/provider side effects.
+- Scope: `scripts/submission-readiness.mjs`, `package.json`, `apps/web/test/release-scripts.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: No-network/no-mutation script. No release evidence refresh, hosted deploy, live provider call, generated media, backend persistence, migrations, production data, secrets, or `.env` changes.
+
+### Validation
+
+- RED: `pnpm test -- apps/web/test/release-scripts.test.ts -t "submission bundle readiness"` failed before implementation because `scripts/submission-readiness.mjs` did not exist.
+- `pnpm submission:readiness:json`: Passed; no network, no mutation, required docs/scripts present, gated risky checks listed but not run.
+- GREEN focused release-script test: Passed; Vitest discovered 107 tests across 15 files.
+- `pnpm lint`: Passed.
+- `pnpm typecheck`: Passed across shared, MCP server, and web.
+- `pnpm test`: Passed with 107 tests across 15 files.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 83, `Add Supported Prompt Grammar Doc`, is the next safe docs task.

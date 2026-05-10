@@ -251,6 +251,30 @@ describe("release and governance scripts", () => {
     ]));
   });
 
+  it("reports submission bundle readiness without network or mutation", () => {
+    const stdout = execFileSync("node", ["scripts/submission-readiness.mjs", "--json"], {
+      cwd: process.cwd(),
+      encoding: "utf8"
+    });
+    const body = JSON.parse(stdout);
+
+    expect(body.ok).toBe(true);
+    expect(body.network).toBe("not_used");
+    expect(body.mutatesFiles).toBe(false);
+    expect(body.requiredDocs.map((doc: { path: string }) => doc.path)).toEqual(expect.arrayContaining([
+      "README.md",
+      "docs/HACKATHON_SUBMISSION_GUIDE.md",
+      "docs/HACKATHON_SUBMISSION_CHECKLIST.md",
+      "docs/MCP_DEMO_PROOF.md"
+    ]));
+    expect(body.localValidationCommands).toEqual(expect.arrayContaining(["pnpm lint", "pnpm typecheck", "pnpm test"]));
+    expect(body.gatedChecks).toEqual(expect.arrayContaining([
+      expect.objectContaining({ gate: "Task 35", status: "not_run_by_this_script" }),
+      expect.objectContaining({ gate: "live provider spend", status: "not_run_by_this_script" })
+    ]));
+    expect(stdout).not.toContain("DATABASE_URL");
+  });
+
   it("verifies current-doc links and historical-doc labeling", () => {
     const stdout = execFileSync("node", ["scripts/docs-consistency.mjs", "--json"], {
       cwd: process.cwd(),

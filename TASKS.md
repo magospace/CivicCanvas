@@ -1289,6 +1289,8 @@ Status: Complete on May 10, 2026 at 07:06 CDT.
 
 ## 82. Add Submission Bundle Readiness Script
 
+Status: Complete on May 10, 2026 at 07:08 CDT.
+
 - Owner type: QA / Tooling
 - Goal: Add a no-network script that reports whether submission docs, README links, package scripts, and known blockers are present before Airtable/Loom submission.
 - Scope: Script/tests only; no generated media or release evidence refresh.
@@ -1297,6 +1299,8 @@ Status: Complete on May 10, 2026 at 07:06 CDT.
 - Acceptance criteria: JSON command reports required docs, local commands, known gated blockers, and exits 0 without mutating files.
 - Validation commands: script JSON command, focused Vitest command, `pnpm lint`, `pnpm test`, `git diff --check`.
 - Can run in parallel: No with release-script edits.
+- Completed notes: Added `scripts/submission-readiness.mjs` plus `pnpm submission:readiness(:json)` scripts. The no-network/no-mutation report checks required submission docs, no-spend/readiness scripts, local validation commands, and gated blockers for Task 35, hosted proof, live provider spend, and backend persistence. Added focused release-script coverage.
+- Validation: RED focused test failed before the script existed; GREEN `pnpm submission:readiness:json`, focused release-script test, `pnpm lint`, `pnpm typecheck`, full `pnpm test`, and `git diff --check` passed.
 
 ## 83. Add Supported Prompt Grammar Doc
 
