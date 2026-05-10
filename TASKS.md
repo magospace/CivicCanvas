@@ -1234,3 +1234,120 @@ Status: Complete on May 10, 2026 at 06:42 CDT.
 - Can run in parallel: No with dashboard edits.
 - Completed notes: `createDatasetSuggestionCanvas` now accepts an optional catalog for deterministic testing, handles an empty supported-suggestion list with a valid `catalog_suggestions` source, omits dataset cards when no approved suggestions exist, and shows explicit governed guidance instead of crashing or implying unavailable datasets.
 - Validation: RED focused test failed on the old behavior because the fallback source still dereferenced the default Dallas suggestion path; after implementation/fix, the focused test passed with 103 tests across 15 files. `pnpm typecheck`, focused dashboard test file, `pnpm lint`, full `pnpm test`, and `git diff --check` passed.
+
+
+---
+
+# Hackathon Finalization Queue
+
+Last replenished: May 10, 2026 after Task 72. Existing untracked input preserved: `clauderecommends.md`; existing untracked submission guide input detected at repo root and should be adopted or intentionally left untracked without staging unrelated files.
+
+## 79. Adopt Hackathon Submission Guide As Current Docs
+
+- Owner type: Docs / Submission
+- Goal: Convert the existing root-level hackathon submission guide input into a current linked docs page without staging unrelated external feedback.
+- Scope: Docs/index links only; preserve the untracked root input unless explicitly archiving it.
+- Likely files: `docs/HACKATHON_SUBMISSION_GUIDE.md`, `docs/README.md`, `README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Acceptance criteria: Current docs link to the submission guide; guide copy preserves honest local/sample/browser-local/MCP boundaries; untracked external feedback remains unstaged.
+- Validation commands: manual path/link check, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes with non-doc tasks.
+
+## 80. Add README Architecture Diagram For Submission Reviewers
+
+- Owner type: Docs / Architecture
+- Goal: Add a compact architecture diagram to README so judges can understand the deterministic prompt, catalog, bounded query, canvas, and MCP flow quickly.
+- Scope: README only; no product behavior changes.
+- Likely files: `README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Acceptance criteria: README diagram does not claim LLM/media/backend/Miro write support; sample/live boundaries remain unchanged.
+- Validation commands: manual README check, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes with script tasks.
+
+## 81. Add MCP Demo Proof Checklist
+
+- Owner type: MCP / Submission Docs
+- Goal: Add a short checklist for showing the MCP server and agent skill in the Loom without implying unsafe live/provider behavior.
+- Scope: Docs only.
+- Likely files: `docs/MCP_DEMO_PROOF.md`, `docs/README.md`, `README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Acceptance criteria: Checklist includes build/inspect commands, safe tool examples, no secrets, no arbitrary SQL, and preview-only Miro caveat.
+- Validation commands: manual path/link check, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes with non-doc tasks.
+
+## 82. Add Submission Bundle Readiness Script
+
+- Owner type: QA / Tooling
+- Goal: Add a no-network script that reports whether submission docs, README links, package scripts, and known blockers are present before Airtable/Loom submission.
+- Scope: Script/tests only; no generated media or release evidence refresh.
+- Likely files: `scripts/submission-readiness.mjs`, `package.json`, `apps/web/test/release-scripts.test.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium.
+- Acceptance criteria: JSON command reports required docs, local commands, known gated blockers, and exits 0 without mutating files.
+- Validation commands: script JSON command, focused Vitest command, `pnpm lint`, `pnpm test`, `git diff --check`.
+- Can run in parallel: No with release-script edits.
+
+## 83. Add Supported Prompt Grammar Doc
+
+- Owner type: Product Docs / Prompt Parser
+- Goal: Document supported prompt patterns, synonyms, unsupported/sensitive prompt behavior, and data-mode expectations.
+- Scope: Docs only.
+- Likely files: `docs/SUPPORTED_PROMPTS.md`, `docs/README.md`, `README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Acceptance criteria: Examples match deterministic parser support and avoid claiming generic natural-language coverage.
+- Validation commands: manual examples check, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes with script tasks.
+
+## 84. Add Catalog Onboarding Checklist
+
+- Owner type: Data Governance / Docs
+- Goal: Add a new-dataset onboarding checklist for field classification, live verification, sample fallback, hidden fields, and validation gates.
+- Scope: Docs only; no catalog mutation.
+- Likely files: `docs/CATALOG_ONBOARDING_CHECKLIST.md`, `docs/README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Acceptance criteria: Checklist requires safe field classifications, fallback samples, live proof or sample-first flag, and governance/data-quality validation.
+- Validation commands: manual path/link check, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes with non-doc tasks.
+
+## 85. Add No-Spend Provider Proof Notes To Submission Checklist
+
+- Owner type: Provider / Submission Docs
+- Goal: Clarify in submission docs how to explain Fal/provider proof as optional script-level no-spend/live-gated proof, not app media generation.
+- Scope: Docs only.
+- Likely files: `docs/HACKATHON_SUBMISSION_CHECKLIST.md`, `docs/FAL_LIVE_PROOF_TEMPLATE.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Acceptance criteria: Docs distinguish app-generated media, no-spend Fal smoke, and RUN_LIVE_FAL_SMOKE live proof.
+- Validation commands: manual wording check, `pnpm media:fal:smoke:json`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes with non-provider script tasks.
+
+## 86. Add Release Evidence Warning To Submission Guide
+
+- Owner type: Release / Docs
+- Goal: Ensure the submission guide prominently warns that release evidence is historical until gated Task 35 reruns full validation.
+- Scope: Docs only; must not edit `docs/release-evidence.json`.
+- Likely files: `docs/HACKATHON_SUBMISSION_GUIDE.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Acceptance criteria: Guide tells submitters not to cite release evidence as current proof; points to `pnpm release:evidence:precheck:json`.
+- Validation commands: manual wording check, `pnpm release:evidence:precheck:json`, `git diff --check`.
+- Can run in parallel: Yes with non-release tasks.
+
+## 87. Add Local Demo Smoke Command Checklist
+
+- Owner type: QA / Docs
+- Goal: Add a concise command checklist for final local demo verification that avoids deploy, live spend, and release evidence refresh by default.
+- Scope: Docs only.
+- Likely files: `docs/HACKATHON_DEMO_READINESS.md`, `README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Acceptance criteria: Checklist includes lint/typecheck/test/governance/data-quality/no-spend media/precheck commands and labels optional live/deploy checks.
+- Validation commands: manual path/link check, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes.
+
+## 88. Add Public URL Smoke Evidence Placeholder
+
+- Owner type: Hosted Readiness / Docs
+- Goal: Add a template section for recording a public URL smoke check without mutating deployment config or release evidence.
+- Scope: Docs only; no deploy.
+- Likely files: `docs/HOSTED_SMOKE_TEMPLATE.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Acceptance criteria: Template captures URL, command, version expectation, firewall/rate-limit caveat, and says not release evidence unless Task 35 runs.
+- Validation commands: manual wording check, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes.
