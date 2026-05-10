@@ -203,6 +203,18 @@ The dashboard prompt bar and inspector expose the same governed data modes used 
 - Houston transportation incidents is the public-pilot third dataset. It is sample-first, excludes precise locations, and remains live-disabled. Houston TranStar provides sample feed documentation, but live feed access and aggregate-safe mappings are not promoted yet.
 - Sample fallback remains mandatory for every live-enabled dataset so public demos stay reliable when live portals time out or reject a safe aggregate.
 
+## Data realism matrix
+
+| Surface | Classification | What is real | What is not claimed |
+|---|---|---|---|
+| Approved catalog | Fixture file through data loader / acceptable. | Source metadata, field classifications, live verification notes, and prompt routing come from `data/catalog/approved-datasets.json` via app/shared loaders. | Arbitrary web search or unrestricted dataset discovery. |
+| Dallas/Austin/Houston sample rows | Deterministic fallback / acceptable when labeled. | Schema-aligned fallback rows live in `data/samples/*.sample.json` and are checked by `pnpm data:quality`. | Complete source-owned production extracts. |
+| Gallery dashboards | Fixture files through data loader / acceptable. | Checked-in `data/gallery/*.canvas.json` dashboards are validated before render. | Component-local mock dashboards or generated runtime HTML. |
+| Saved canvases | Browser-local editable records / acceptable when labeled. | `/saved` edits, duplicates, deletes, exports, and hash-share bundles use validated localStorage records. | Backend persistence, accounts, cross-device sync, or hosted public share objects. |
+| Optional OpenAI assist | Provider-gated fallback metadata / acceptable when labeled. | Server-only prompt/summary assist can be enabled with a key and falls back deterministically. | LLM-generated dashboard code, SQL, hidden fields, or client-side key exposure. |
+| Narrow Dallas live aggregates | Live public API for approved non-ZIP aggregate fields. | Catalog-gated Socrata fields can be live when marked safe. | Live ZIP geography dashboards or complete Texas live coverage. |
+| Miro export | Preview-only JSON spec / acceptable when labeled. | Validated `MiroExportSpec` JSON can be copied/exported. | OAuth, board IDs, or live Miro board creation/update. |
+
 ## MCP server
 
 ```bash

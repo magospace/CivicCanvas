@@ -2013,3 +2013,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved bundle"` passed; due repo script wiring, all 21 product-demo browser tests ran and passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 144, `Add README Data Realism Table`, to make these local/sample/live/preview boundaries scannable in the public README.
+
+
+## Task 144 Update - README Data Realism Table
+
+- Task chosen: `TASKS.md` item 144, "Add README Data Realism Table".
+- Why this was next: After adding provenance and saved-flow proof, the public README needed a concise judge-scannable table classifying what is fixture/sample/local/live/preview and what is not claimed.
+- Scope: `README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Documentation only, aligned with `REALNESS_AUDIT.md`.
+- Changes: Added a `Data realism matrix` covering approved catalog metadata, Dallas/Austin/Houston fallback rows, gallery dashboards, browser-local saved canvases, optional OpenAI assist, narrow Dallas live aggregates, and preview-only Miro export. Each row states what is real and what is not claimed.
+- Validation: `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 145, `Add Gallery Fixture Loader Regression Proof`, because it adds executable proof for the README's gallery fixture/data-loader classification.

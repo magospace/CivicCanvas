@@ -2340,7 +2340,7 @@ Status: Complete on May 10, 2026.
 
 ## 144. Add README Data Realism Table
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: README / Submission Honesty
 - Goal: Add a concise table to README classifying catalog, samples, gallery, saved canvases, OpenAI assist, live Dallas, and Miro preview.
@@ -2351,6 +2351,8 @@ Status: Pending.
 - Acceptance criteria: Public README makes sample/live/local/preview boundaries scannable and avoids hosted/persistence overclaims.
 - Validation command: `git diff --check`.
 - Can run in parallel: Yes with code tasks not editing README.
+- Completed notes: Added a README `Data realism matrix` classifying approved catalog, fallback samples, gallery dashboards, saved canvases, optional OpenAI assist, narrow Dallas live aggregates, and Miro export with explicit not-claimed boundaries.
+- Validation: `git diff --check` passed.
 
 ## 145. Add Gallery Fixture Loader Regression Proof
 
