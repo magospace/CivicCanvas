@@ -1676,3 +1676,14 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm test -- apps/web/test/api-contracts.test.ts apps/web/test/openai-provider.test.ts` passed with 17 files / 120 tests discovered; `pnpm typecheck` passed; `pnpm lint` passed; `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0 live calls; mocked fetch only.
 - Recommended next task: Task 117, `Reconcile Realness Audit After OpenAI Boundary Change`, before considering the higher-risk optional live OpenAI smoke gate.
+
+## Task 117 Update - Realness Audit After OpenAI Boundary
+
+- Task chosen: `TASKS.md` item 117, "Reconcile Realness Audit After OpenAI Boundary Change".
+- Why this was next: Task 115 added a no-network OpenAI smoke route, and `REALNESS_AUDIT.md` still described OpenAI/model-provider paths as absent. The audit needed to be current before any optional live-provider work.
+- Scope: `REALNESS_AUDIT.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism changes: Provider metadata is now classified as optional server-side assist, disabled without key, schema-validated, and not dashboard/code/SQL generation. Default local demo remains deterministic and sample-mode secret-free.
+- Safety notes: Docs/durable-state only. No OpenAI live call, no provider spend, no env file reads, no secrets, no schema/migration, backend persistence, deploy, release evidence, Fal/media, production data, or generated artifacts.
+- Validation: Manual wording check passed; `pnpm lint` passed; `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 119, `Add Live Public API Smoke If Network Proof Is Available`, is a safer real-data proof than Task 116 live OpenAI spend and can use existing public endpoints.

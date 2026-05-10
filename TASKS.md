@@ -1876,7 +1876,7 @@ Status: Pending.
 
 ## 117. Reconcile Realness Audit After OpenAI Boundary Change
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Docs / Realness
 - Goal: Update `REALNESS_AUDIT.md` so OpenAI is no longer described as absent while preserving no-LLM-dashboard-generation honesty.
@@ -1887,6 +1887,8 @@ Status: Pending.
 - Acceptance criteria: Audit says OpenAI is optional server-side prompt/summary assist, disabled without key, schema-validated, and not dashboard/code/SQL generation; no secret values or live proof overclaims.
 - Validation commands: manual wording check, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes with non-doc tasks that do not edit the same files.
+- Completed notes: Updated `REALNESS_AUDIT.md` so OpenAI is described as optional server-side prompt/summary assist rather than absent, while preserving the deterministic dashboard-generation boundary, no-key fallback, schema validation, catalog allowlists, no secret echo, and no live proof overclaims.
+- Validation: Manual wording check, `pnpm lint`, and `git diff --check` passed.
 
 ## 118. Improve Source Card Density Without Hiding Caveats
 
