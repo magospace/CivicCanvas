@@ -1548,3 +1548,140 @@ Status: Complete on May 10, 2026.
 - Can run in parallel: Yes.
 - Completed notes: Added final artifact hygiene reminders to submission and demo video checklists, including `pnpm demo:artifact-hygiene:json`, ignored `demo-artifacts/`, and prohibitions on committing `.env`, screenshots/videos/GIFs, Fal/provider outputs, signed URLs, or generated artifacts unless explicitly scoped.
 - Validation: Manual wording check, `pnpm demo:artifact-hygiene:json`, `pnpm lint`, and `git diff --check` passed.
+
+
+---
+
+# Loom Demo Polish And Realness Queue
+
+Last replenished: May 10, 2026 after the Loom visual UI/UX audit and localized dashboard polish. Existing untracked input preserved: `clauderecommends.md`. Gated work remains blocked unless explicitly approved: Task 35 release-evidence refresh, Task 55 local backend persistence/migrations, hosted deployment mutation/proof, live provider spend, production data operations, secrets/auth/billing, and platform configuration changes.
+
+## 99. Add Visual Polish Regression Coverage For Generated Dashboard
+
+Status: Pending.
+
+- Owner type: QA / UI
+- Goal: Add browser-level regression coverage that protects the Loom-polished generated dashboard surfaces.
+- Scope: Test only; no visual snapshot artifacts committed.
+- Likely files: `tests/e2e/product-demo.spec.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Acceptance criteria: E2E coverage asserts the Dallas generated dashboard shows the new sample/fallback status strip, visible trend/bar chart labels or values, friendly `Request count` sort label, and `Apply filters` copy without relying on screenshots.
+- Validation commands: `PLAYWRIGHT_BASE_URL=http://localhost:<port> pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "visual polish"`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with other edits to `tests/e2e/product-demo.spec.ts`.
+
+## 100. Add Saved Empty-State Explore CTA
+
+Status: Pending.
+
+- Owner type: UI / Demo UX
+- Goal: Make `/saved` clearer in a fresh browser by offering a primary route back to the core `/explore` demo loop.
+- Scope: Local UI copy/link only; do not change browser-local persistence, import validation, share-link hashing, or backend behavior.
+- Likely files: `apps/web/components/saved-canvases.tsx`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Acceptance criteria: Empty/fresh `/saved` state includes a visible `Go to Explore` or `Create a canvas` CTA linking to `/explore`, while browser-local/no-backend copy remains visible.
+- Validation commands: targeted Playwright saved-flow test or `PLAYWRIGHT_BASE_URL=http://localhost:<port> pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved"`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with saved-page UI/test edits.
+
+## 101. Add Visual Audit To Submission Readiness Outputs
+
+Status: Pending.
+
+- Owner type: Submission / QA Tooling
+- Goal: Make the no-network submission readiness script report the Loom visual audit and localized polish status as part of final recording readiness.
+- Scope: Script/test/docs only; no screenshots committed and no browser launch required.
+- Likely files: `scripts/submission-readiness.mjs`, `apps/web/test/release-scripts.test.ts`, `docs/SUBMISSION_BLOCKERS.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium.
+- Acceptance criteria: `pnpm submission:readiness:json` includes visual audit metadata, committed audit doc path, ignored screenshot artifact path guidance, and remaining visual risks without claiming screenshots are release evidence.
+- Validation commands: `pnpm submission:readiness:json`, focused release-script Vitest, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with submission readiness script edits.
+
+## 102. Add Mobile Prompt-First Explore Layout
+
+Status: Pending.
+
+- Owner type: UI / Responsive UX
+- Goal: Make the mobile `/explore` first viewport show the prompt loop before source discovery so the demo action is obvious within 15 seconds.
+- Scope: Layout ordering only on small screens; preserve desktop three-column layout, source catalog details, and all data-mode honesty copy.
+- Likely files: `apps/web/components/app-shell.tsx`, `apps/web/components/dataset-sidebar.tsx`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Medium.
+- Acceptance criteria: At mobile width, prompt card appears before Cities/Topics/Datasets; no horizontal overflow; desktop layout remains unchanged; data-mode and sample fallback copy remain visible.
+- Validation commands: targeted mobile Playwright test, `pnpm lint`, `pnpm typecheck`, `git diff --check`.
+- Can run in parallel: No with app-shell/sidebar layout edits.
+
+## 103. Add Sources Page Summary Legend
+
+Status: Pending.
+
+- Owner type: UI / Demo UX
+- Goal: Make `/sources` communicate approved/live/sample boundaries faster for the opening Loom scene.
+- Scope: Add concise summary/legend only; do not alter catalog data, live mappings, source verification claims, or cards' detailed caveats.
+- Likely files: `apps/web/app/sources/page.tsx`, `tests/e2e/sources.spec.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium.
+- Acceptance criteria: `/sources` above-the-fold shows counts/legend such as approved sources, live-promoted sources, sample-first/fallback sources, and coming-later sources; labels stay honest with current catalog metadata.
+- Validation commands: `PLAYWRIGHT_BASE_URL=http://localhost:<port> pnpm test:e2e -- tests/e2e/sources.spec.ts`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with sources-page UI/test edits.
+
+## 104. Add Header Active Navigation State
+
+Status: Pending.
+
+- Owner type: UI / Navigation Polish
+- Goal: Improve orientation during the Loom by making the current route visibly active in the header.
+- Scope: Header/nav styling only; preserve route labels and no-account/runtime labels.
+- Likely files: `apps/web/components/header.tsx` or a small client nav subcomponent, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium.
+- Acceptance criteria: Header visibly marks active `Explore`, `Sources`, `Saved`, `Gallery`, and `Demo` routes with accessible current-page semantics; no hydration or layout regressions.
+- Validation commands: targeted Playwright route/header assertions, `pnpm lint`, `pnpm typecheck`, `git diff --check`.
+- Can run in parallel: No with header/nav edits.
+
+## 105. Add No-Spend Loom Screenshot Capture Helper
+
+Status: Pending.
+
+- Owner type: Demo Tooling
+- Goal: Provide a repeatable local script for capturing ignored Loom prep screenshots without committing generated artifacts.
+- Scope: Script/docs/test only; no screenshot artifacts committed.
+- Likely files: `scripts/capture-demo-screenshots.mjs`, `package.json`, `apps/web/test/release-scripts.test.ts`, `docs/DEMO_VIDEO_CHECKLIST.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium.
+- Acceptance criteria: Script requires an explicit local `--url`, writes only under ignored `demo-artifacts/`, redacts no secrets because it captures local pages only, and has a dry-run or help mode covered by tests.
+- Validation commands: script help/dry-run, focused Vitest, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with package/script/release-script edits.
+
+## 106. Add Optional Live Public API Smoke Transcript Stub
+
+Status: Pending.
+
+- Owner type: Live Data / Submission Docs
+- Goal: Add a paste-safe transcript stub for optional `pnpm smoke:live:json` evidence if the user explicitly chooses to run live public API checks before submission.
+- Scope: Docs only; no live call by default and no release-evidence refresh.
+- Likely files: `docs/LIVE_API_SMOKE_TEMPLATE.md`, `docs/SUBMISSION_COMMAND_TRANSCRIPT_TEMPLATE.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Acceptance criteria: Template includes command, date, row/count summary, Dallas non-ZIP live caveat, Dallas ZIP fallback caveat, Austin/Houston sample-first caveats, and says optional network smoke is not release evidence unless Task 35 runs.
+- Validation commands: manual wording/path check, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes with non-doc tasks.
+
+## 107. Add Provider-Gated Media Honesty Note To Health UI
+
+Status: Pending.
+
+- Owner type: Provider / UI Honesty
+- Goal: Make app-visible health/demo surfaces state that Fal media proof is script-only and not wired into dashboard generation.
+- Scope: UI/docs only; no Fal call and no media generation.
+- Likely files: `apps/web/app/demo-readiness/page.tsx`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium.
+- Acceptance criteria: `/demo-readiness` visibly says normal dashboard generation does not call Fal or create image/video, while `RUN_LIVE_FAL_SMOKE=1` remains optional/script-level proof; E2E asserts the boundary.
+- Validation commands: targeted Playwright demo-readiness test, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with demo-readiness route/test edits.
+
+## 108. Reconcile Remaining Visual Audit Risks Into Queue
+
+Status: Pending.
+
+- Owner type: Planning / QA
+- Goal: Convert any remaining unresolved `docs/VISUAL_UI_UX_AUDIT.md` P1/P2 items into scoped future tasks after the first polish fixes land.
+- Scope: Planning/docs only; no product source changes.
+- Likely files: `TASKS.md`, `HERMES_PROGRESS.md`, optionally `docs/VISUAL_UI_UX_AUDIT.md`.
+- Risk level: Low.
+- Acceptance criteria: Remaining mobile prompt ordering, source-card density, nav active state, saved empty CTA, and technical-label polish risks are either completed, deferred, or represented as scoped tasks with validation commands.
+- Validation commands: manual audit/queue consistency check, `git diff --check`.
+- Can run in parallel: Yes with implementation tasks if it does not edit the same task/progress files.

@@ -1435,3 +1435,10 @@ Last updated: May 10, 2026 06:17 CDT
 - UI changes: Chart blocks now render visible line charts with points/value labels and horizontal bar charts with readable labels/counts; generated canvas headers now include a concise data-mode/source status strip; table sort labels use friendly arrows instead of `desc` text; embedded dashboard filter button now says `Apply filters`.
 - Safety notes: No schema, data, API semantics, persistence, provider/media, auth, billing, deployment, live calls, release evidence, or generated screenshot artifacts were committed. `clauderecommends.md` remains preserved and untracked.
 - Validation: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `PLAYWRIGHT_BASE_URL=http://localhost:3015 pnpm test:e2e -- tests/e2e/product-demo.spec.ts`, `pnpm build`, and `git diff --check` passed.
+
+## Queue Replenishment After Visual Polish
+
+- Reason: After Task 98 and the ad hoc Loom visual audit/polish commits, `TASKS.md` had no safe uncompleted non-gated work. The only remaining pre-existing options were gated release evidence, backend persistence/migrations, hosted deployment proof, live provider spend, or production/platform changes.
+- Action: Replenished `TASKS.md` with Tasks 99-108 focused on Loom demo polish, visual regression coverage, saved empty-state UX, submission readiness metadata, responsive prompt-first behavior, sources summary clarity, active nav state, ignored screenshot tooling, optional live API transcript stubs, provider-gated media honesty, and visual-risk reconciliation.
+- Safety notes: Replenishment is planning only. No live APIs, Fal/media generation, schema/migrations, backend persistence, auth, billing, deployment mutation, production data, secrets, or release-evidence refresh. Existing untracked `clauderecommends.md` remains preserved and unstaged.
+- Selected next tasks: 99, 100, 101, 102, and 103 are the highest-priority sequence, with Task 99 first because it protects the just-completed Loom-polish surface before further UI changes.
