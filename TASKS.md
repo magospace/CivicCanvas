@@ -1446,6 +1446,8 @@ Status: Complete on May 10, 2026.
 
 ## 92. Add Backend Persistence Gate To Health/Readiness Docs
 
+Status: Complete on May 10, 2026.
+
 - Owner type: Persistence / Docs
 - Goal: Ensure current submission/demo docs point future real backend work to the local persistence readiness script and approval checklist.
 - Scope: Docs only; no persistence implementation.
@@ -1454,6 +1456,8 @@ Status: Complete on May 10, 2026.
 - Acceptance criteria: Docs tell reviewers saved canvases are browser-local today and future backend persistence requires Task 55 approval, local/dev DB scope, rollback/seed assumptions, and `pnpm persistence:readiness:json`.
 - Validation commands: manual wording check, `pnpm persistence:readiness:json`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes with non-doc tasks.
+- Completed notes: Added backend persistence gate language to submission guide/checklist and local persistence spike docs. The docs preserve browser-local saved-canvas claims and point future real backend work to Task 55, local/dev-only approval, migration/seed/reset/rollback assumptions, UI/API honesty, and `pnpm persistence:readiness:json`.
+- Validation: Manual wording check, `pnpm persistence:readiness:json`, `pnpm lint`, and `git diff --check` passed.
 
 ## 93. Add Live Public Data Optional Smoke Evidence Template
 

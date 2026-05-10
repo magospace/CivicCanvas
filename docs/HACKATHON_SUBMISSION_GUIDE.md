@@ -82,6 +82,19 @@ Target: 3 minutes.
 - Datasets and provenance: present through catalog/sample docs. Keep saying "synthetic/schema-aligned samples" where relevant.
 - Known limitations and next steps: present, especially around no DB persistence, sample fallback, no auth, preview-only Miro, and historical release evidence.
 
+
+## Backend Persistence Boundary
+
+For the current submission, saved canvases are browser-local and share links are URL-hash bundles. Do not claim database persistence, accounts, public hosted share URLs, or multi-user backend storage.
+
+If reviewers ask about a real backend path, point to `docs/LOCAL_PERSISTENCE_SPIKE.md` and say it is a future Task 55 local/dev-only gate. The safe current check is:
+
+```bash
+pnpm persistence:readiness:json
+```
+
+Do not start migrations, create DB files, add `DATABASE_URL`, or change browser-local fallback behavior from this guide.
+
 ## Submission Readiness
 
 Status: strong local Brainforge submission, but repo/deploy form fields remain incomplete.

@@ -84,6 +84,13 @@ Do not start a local/backend persistence implementation until an explicitly scop
 - UI/API honesty: define copy and health metadata that distinguish browser-local, local-backend-enabled, unavailable, and production-unsupported states.
 - Validation gates: include focused persistence tests, saved-canvas E2E default-path coverage, governance checks, and `pnpm persistence:readiness:json`.
 
+
+## Submission And Demo Gate
+
+Submission/demo docs must continue to describe current saved-canvas behavior as browser-local until a future approved Task 55 implementation changes product behavior. `pnpm persistence:readiness:json` is the safe no-network readiness check for this boundary; it should report no mutation, no DB runtime files, no env-value echo, and `persistenceImplemented: false` until the implementation task is approved.
+
+Do not use submission pressure as approval to create migrations, reset local databases, add `DATABASE_URL`, or replace URL-hash/browser-local fallback behavior.
+
 ## Migration And Rollback Assumptions
 
 Migration assumptions:

@@ -54,6 +54,21 @@ Expected claim: unsupported or sensitive prompts return approved-source suggesti
 | Media | Screen recordings/screenshots of the app UI; optional no-spend Fal smoke script availability. | App-generated images/video/media artifacts or automatic Fal dashboard rendering. |
 | Release evidence | Historical evidence is checked in for audit context. | Current release proof unless Task 35 reruns the full gate and refreshes `docs/release-evidence.json`. |
 
+
+## Backend Persistence Gate
+
+Current submission wording should say saved canvases are browser-local `localStorage` plus URL-hash share bundles. Do not describe `/saved` or `/api/canvas/save` as a server database, account store, public share service, or multi-user backend.
+
+Future real backend persistence is gated behind Task 55 and the local persistence plan in `docs/LOCAL_PERSISTENCE_SPIKE.md`. Before any backend implementation, the task must approve local/dev-only scope, env gate, migration target, seed/reset assumptions, rollback path, UI/API honesty copy, and validation gates.
+
+Safe readiness command:
+
+```bash
+pnpm persistence:readiness:json
+```
+
+Expected result today: browser-local default preserved, persistence not implemented, no DB files created, no network, and no env values echoed.
+
 ## Local Proof Checklist
 
 Run these before submitting local-demo claims:
