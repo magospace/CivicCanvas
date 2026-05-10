@@ -180,14 +180,14 @@ export function InspectorPanel({
             </div>
             {querySpec ? (
               <pre
-                aria-label="Active BoundedQuerySpec JSON"
+                aria-label="Active query definition JSON"
                 tabIndex={0}
                 className="max-h-52 overflow-auto rounded-md bg-civic-900 p-3 text-[11px] leading-5 text-civic-50"
               >
                 {JSON.stringify(querySpec, null, 2)}
               </pre>
             ) : (
-              <p className="rounded-md bg-civic-50 px-3 py-2">No active BoundedQuerySpec is available for this canvas.</p>
+              <p className="rounded-md bg-civic-50 px-3 py-2">No active query definition is available for this dashboard.</p>
             )}
           </div>
         </details>

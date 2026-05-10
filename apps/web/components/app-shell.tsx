@@ -192,7 +192,7 @@ export function AppShell({
   async function copyCanvasJson() {
     try {
       await navigator.clipboard?.writeText(canvasDocumentJson(activeCanvas));
-      setStatus({ message: "Validated CanvasDocument JSON copied to clipboard.", tone: "success" });
+      setStatus({ message: "Dashboard JSON copied to clipboard.", tone: "success" });
     } catch (error) {
       setStatus({ message: error instanceof Error ? error.message : "Could not copy canvas JSON.", tone: "error" });
     }
@@ -202,11 +202,11 @@ export function AppShell({
     try {
       const json = boundedQuerySpecJson(querySpec);
       if (!json) {
-        setStatus({ message: "No active BoundedQuerySpec is available for this canvas.", tone: "error" });
+        setStatus({ message: "No active query definition is available for this dashboard.", tone: "error" });
         return;
       }
       await navigator.clipboard?.writeText(json);
-      setStatus({ message: "Active BoundedQuerySpec copied to clipboard.", tone: "success" });
+      setStatus({ message: "Active query definition copied to clipboard.", tone: "success" });
     } catch (error) {
       setStatus({ message: error instanceof Error ? error.message : "Could not copy query spec.", tone: "error" });
     }
@@ -327,7 +327,7 @@ export function AppShell({
                 className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
               >
                 <FileJson className="h-4 w-4" />
-                Canvas JSON
+                Dashboard JSON
               </button>
               <button
                 onClick={copyQuerySpec}
@@ -335,7 +335,7 @@ export function AppShell({
                 className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
               >
                 <ClipboardList className="h-4 w-4" />
-                Query spec
+                Query definition
               </button>
               <button
                 onClick={exportMiroSpec}

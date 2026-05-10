@@ -27,8 +27,8 @@ const hostedGateCommands = [
 ];
 
 const safetyRules = [
-  "Dashboards render only validated CanvasDocument JSON.",
-  "Queries run only through approved BoundedQuerySpec objects.",
+  "Dashboards render only validated dashboard JSON.",
+  "Queries run only through approved query definitions.",
   "Saved/share bundles validate before render.",
   "Miro remains preview/spec-only.",
   "Fal media proof is optional script-only; normal dashboard generation does not call Fal or create image/video artifacts.",

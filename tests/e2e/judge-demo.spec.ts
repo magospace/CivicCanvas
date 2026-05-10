@@ -5,7 +5,7 @@ const PRIMARY_JUDGE_PROMPT = "Show Dallas 311 service requests by category and Z
 async function generate(page: Page, prompt: string) {
   await page.getByLabel("Dashboard prompt").fill(prompt);
   await page.getByRole("button", { name: "Generate View" }).click();
-  await expect(page.getByText("Validated CanvasSpec")).toBeVisible();
+  await expect(page.getByText("Validated Dashboard")).toBeVisible();
 }
 
 test("primary judge demo path generates an inspectable Dallas fallback dashboard", async ({ page }) => {
@@ -29,7 +29,7 @@ test("primary judge demo path generates an inspectable Dallas fallback dashboard
   await expect(inspector.getByText("Dataset ID matched approved catalog.").first()).toBeVisible();
   await expect(inspector.getByText(/Row limit enforced at \d+\./).first()).toBeVisible();
 
-  const activeQuery = inspector.getByLabel("Active BoundedQuerySpec JSON");
+  const activeQuery = inspector.getByLabel("Active query definition JSON");
   await expect(activeQuery).toContainText('"datasetId": "dallas_311_requests"');
   await expect(activeQuery).toContainText('"groupBy"');
   await expect(activeQuery).toContainText('"category"');

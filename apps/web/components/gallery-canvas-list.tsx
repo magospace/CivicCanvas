@@ -69,12 +69,12 @@ export function GalleryCanvasList({ canvases }: { canvases: CanvasDocument[] }) 
             <button
               type="button"
               onClick={() => exportCanvasJson(canvas)}
-              aria-label={`Download ${canvas.title} CanvasDocument JSON`}
-              title={`Download ${canvas.title} CanvasDocument JSON`}
+              aria-label={`Download ${canvas.title} dashboard JSON`}
+              title={`Download ${canvas.title} dashboard JSON`}
               className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
             >
               <FileJson className="h-4 w-4" />
-              Canvas JSON
+              Dashboard JSON
             </button>
           </div>
           <CanvasRenderer document={canvas} />

@@ -113,7 +113,7 @@ export function CanvasRenderer({
       <div className="mb-5 flex flex-col justify-between gap-3 border-b border-slate-200 pb-4 md:flex-row md:items-end">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-civic-700">
-            Validated CanvasSpec
+            Validated Dashboard
           </p>
           <h1 className="mt-2 text-2xl font-semibold text-ink">{validatedDocument.title}</h1>
           {validatedDocument.description ? (
@@ -129,7 +129,7 @@ export function CanvasRenderer({
           </div>
         </div>
         <div className="rounded-md bg-civic-100 px-3 py-2 text-xs font-semibold text-civic-700">
-          {validatedDocument.blocks.length} allowlisted blocks
+          {validatedDocument.blocks.length} approved panels
         </div>
       </div>
       {metricBlocks.length > 0 ? (

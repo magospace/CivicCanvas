@@ -77,7 +77,7 @@ export function SavedCanvases() {
       setImportText("");
     } catch (error) {
       const detail = error instanceof Error ? ` ${error.message}` : "";
-      setImportError(`Import rejected. Saved bundles must contain valid canvases with allowlisted blocks and a SourceMethodBlock.${detail}`);
+      setImportError(`Import rejected. Saved bundles must contain valid dashboards with approved panels and a Source & Method panel.${detail}`);
     }
   }
 

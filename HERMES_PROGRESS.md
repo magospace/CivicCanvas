@@ -1907,3 +1907,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "sources route shows"` passed; due repo script wiring, all 21 product-demo browser tests ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 135, `Add Demo-Safe Jargon Copy Pass`, to continue improving public-facing clarity before recording.
+
+
+## Task 135 Update - Demo-Safe Jargon Copy Pass
+
+- Task chosen: `TASKS.md` item 135, "Add Demo-Safe Jargon Copy Pass".
+- Why this was next: After route-flow and action-deduplication fixes, the remaining high-impact demo friction was public UI language that sounded like an internal engineering console.
+- Scope: `apps/web/components/app-shell.tsx`, `apps/web/components/canvas/canvas-renderer.tsx`, `apps/web/components/inspector-panel.tsx`, `apps/web/components/saved-canvases.tsx`, `apps/web/components/gallery-canvas-list.tsx`, `apps/web/app/gallery/page.tsx`, `apps/web/app/demo-readiness/page.tsx`, affected e2e tests, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Copy-only. The change preserves no-arbitrary-code/no-hidden-fields honesty and does not change seed/sample/live/provider/database behavior.
+- Changes: Replaced visible internal labels/messages such as `Validated CanvasSpec`, `CanvasDocument JSON`, `BoundedQuerySpec`, `allowlisted blocks`, `Canvas JSON`, and `Query spec` with user-facing dashboard/query/panel wording. Kept JSON/detail wording where users intentionally export or inspect structured data.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts` passed, 21/21 browser tests. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 136, `Improve Chart And Map Accessibility Copy`, if continuing UI polish.

@@ -19,11 +19,11 @@ export default function GalleryPage() {
             <p className="mt-3 text-sm leading-6 text-slate-600">
               These checked-in fixtures demonstrate the public beta flows without accounts,
               databases, arbitrary generated UI, or live Miro writes. Each gallery item is a
-              validated CanvasDocument rendered through the same allowlisted block registry as
+              validated dashboard JSON rendered through the same approved panel registry as
               the main dashboard.
             </p>
             <p className="mt-3 rounded-md border border-mint/30 bg-mint/10 px-3 py-2 text-xs font-semibold leading-5 text-civic-900">
-              Safety proof: gallery dashboards are checked-in CanvasDocument JSON, validated before render,
+              Safety proof: gallery dashboards are checked-in dashboard JSON, validated before render,
               and available to open in `/explore` through the same saved-canvas validation path.
             </p>
           </div>

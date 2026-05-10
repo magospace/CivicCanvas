@@ -4,7 +4,7 @@ import { expect, test, type Page } from "@playwright/test";
 async function generate(page: Page, prompt: string) {
   await page.getByLabel("Dashboard prompt").fill(prompt);
   await page.getByRole("button", { name: "Generate View" }).click();
-  await expect(page.getByText("Validated CanvasSpec")).toBeVisible();
+  await expect(page.getByText("Validated Dashboard")).toBeVisible();
 }
 
 async function expectNoSeriousAccessibilityViolations(page: Page) {
@@ -184,7 +184,7 @@ test("app feedback distinguishes success toasts from dismissible errors", async 
 
   await page.getByRole("button", { name: "Copy query definition" }).click();
   const appAlert = page.locator("main [role='alert']");
-  await expect(appAlert).toContainText("No active BoundedQuerySpec is available for this canvas.");
+  await expect(appAlert).toContainText("No active query definition is available for this dashboard.");
   await page.getByRole("button", { name: "Dismiss" }).click();
   await expect(appAlert).toHaveCount(0);
 
@@ -286,14 +286,14 @@ test("gallery route renders checked-in validated canvases", async ({ page }) => 
   await expect(page.getByText("Austin Permits Sample Dashboard")).toBeVisible();
   await expect(page.getByText("Houston Transportation Sample Dashboard")).toBeVisible();
   await expect(page.getByText("Unsupported Sensitive Prompt Example")).toBeVisible();
-  await expect(page.getByText(/Safety proof: gallery dashboards are checked-in CanvasDocument JSON/i)).toBeVisible();
+  await expect(page.getByText(/Safety proof: gallery dashboards are checked-in dashboard JSON/i)).toBeVisible();
   await expect(page.getByLabel(/Open .* in explore/)).toHaveCount(4);
   await page.getByLabel("Open Dallas 311 Sample Dashboard in explore").click();
   await expect(page).toHaveURL(/\/explore/);
   await expect(page.getByRole("heading", { name: "Dallas 311 Sample Dashboard" })).toBeVisible();
   await page.goto("/gallery");
   await expect(page.getByLabel("Download Dallas 311 Sample Dashboard table CSV")).toBeVisible();
-  await expect(page.getByLabel("Download Austin Permits Sample Dashboard CanvasDocument JSON")).toBeVisible();
+  await expect(page.getByLabel("Download Austin Permits Sample Dashboard dashboard JSON")).toBeVisible();
 });
 
 test("demo readiness route shows public release boundaries", async ({ page }) => {

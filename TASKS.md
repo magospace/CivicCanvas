@@ -2195,7 +2195,7 @@ Status: Complete on May 10, 2026.
 
 ## 135. Add Demo-Safe Jargon Copy Pass
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: UI Copy / Product Clarity
 - Goal: Replace visible terms such as `Validated CanvasSpec`, `CanvasDocument JSON`, `BoundedQuerySpec`, and `allowlisted blocks` with user-facing labels while preserving developer detail where useful.
@@ -2206,6 +2206,8 @@ Status: Pending.
 - Acceptance criteria: Public UI says Dashboard/Dashboard JSON/Query definition/panels, technical labels remain available in advanced/export contexts, and product-demo tests pass.
 - Validation command: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with app-shell/inspector/canvas copy edits.
+- Completed notes: Replaced public UI labels/messages for `Validated CanvasSpec`, `CanvasDocument JSON`, `BoundedQuerySpec`, `allowlisted blocks`, `Canvas JSON`, and `Query spec` with dashboard/query/panel wording while preserving JSON detail in advanced export/aria contexts.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts` passed, 21/21 browser tests. `pnpm lint` passed; `git diff --check` passed.
 
 ## 136. Improve Chart And Map Accessibility Copy
 

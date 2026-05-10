@@ -5,7 +5,7 @@ const PRIMARY_JUDGE_PROMPT = "Show Dallas 311 service requests by category and Z
 async function generate(page: Page, prompt: string) {
   await page.getByLabel("Dashboard prompt").fill(prompt);
   await page.getByRole("button", { name: "Generate View" }).click();
-  await expect(page.getByText("Validated CanvasSpec")).toBeVisible();
+  await expect(page.getByText("Validated Dashboard")).toBeVisible();
 }
 
 test("sources, saved canvases, and Miro preview stay governed", async ({ page }) => {
