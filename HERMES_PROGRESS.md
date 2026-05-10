@@ -1145,3 +1145,21 @@ Last updated: May 10, 2026 06:17 CDT
 ### Recommended Next Task
 
 - Task 85, `Add No-Spend Provider Proof Notes To Submission Checklist`, is next.
+
+## Task 85 Update
+
+- Task chosen: `TASKS.md` item 85, "Add No-Spend Provider Proof Notes To Submission Checklist".
+- Why this was next: Task 84 completed cleanly, and Task 85 was the next safe provider-honesty docs task. It improves submission wording around the existing no-spend/live-gated Fal proof without running a live provider call.
+- Scope: `docs/HACKATHON_SUBMISSION_CHECKLIST.md`, `docs/FAL_LIVE_PROOF_TEMPLATE.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Documentation only. No live Fal call, provider spend, generated media, app media integration, secrets, release evidence refresh, deploy mutation, backend persistence, schema, migration, auth, billing, or production data changed.
+
+### Validation
+
+- Manual wording check: Passed. Confirmed docs distinguish no-spend script proof, optional one-call env-gated live proof, and not-implemented app media generation.
+- `pnpm media:fal:smoke:json`: Passed; no-spend path reported zero live calls.
+- `pnpm lint`: Passed.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 86, `Add Release Evidence Warning To Submission Guide`, is next.

@@ -123,24 +123,36 @@ Record results without overstating scope:
 
 ## Media Proof Checklist
 
+Use this section only to describe provider-proof posture. It is not evidence that the app generates dashboard images or videos.
+
 No-spend default:
 
 ```bash
 pnpm media:fal:smoke:json
 ```
 
-Optional one-call live proof only with explicit approval and credentials:
+Expected no-spend result:
+
+- `status` is `skipped_no_spend`.
+- `liveCallCount` is `0`.
+- `network` is not used for a paid provider call.
+- Normal `/explore` dashboard generation still does not call Fal, upload media, or create image/video artifacts.
+
+Optional one-call live proof only with explicit approval, credentials, and accepted billing risk:
 
 ```bash
 RUN_LIVE_FAL_SMOKE=1 FAL_KEY=<redacted> pnpm media:fal:smoke:json
 ```
 
+Before citing live Fal proof, fill out `docs/FAL_LIVE_PROOF_TEMPLATE.md` with sanitized output. Do not paste raw provider responses, signed URLs, request tokens, authorization headers, or secret-like values into the submission.
+
 Record:
 
 - Live Fal call made: yes/no.
-- Approximate call count: 0 unless the env gate was enabled.
+- Approximate call count: 0 unless the env gate was enabled; one minimal proof request when enabled.
 - Output artifact: do not commit generated media unless a separate task explicitly approves it.
 - App integration status: normal dashboard generation still does not call Fal or generate media artifacts.
+- Safe wording: "Optional script-level Fal proof is env-gated and separate from the app UI." Do not say "CivicCanvas generates media" unless app wiring is implemented and validated in a future task.
 
 ## Screenshot And Video Assets
 

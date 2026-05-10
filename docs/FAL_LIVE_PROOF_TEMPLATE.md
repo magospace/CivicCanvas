@@ -6,6 +6,12 @@ Use this template only when an approved reviewer intentionally runs one minimal 
 
 This template records an optional provider proof for `scripts/fal-media-smoke.mjs`. It is not app media-generation evidence unless a future task explicitly wires media generation into the product. Do not commit provider secrets, `.env` files, billing details, or generated media artifacts unless a separate task explicitly approves artifact handling.
 
+Submission wording should distinguish three states:
+
+- No-spend proof: `pnpm media:fal:smoke:json` proves the script-level gate exists and makes zero live provider calls.
+- Live proof: `RUN_LIVE_FAL_SMOKE=1 FAL_KEY=<redacted> pnpm media:fal:smoke:json` proves one approved provider request only when credentials and billing risk are explicitly accepted.
+- App integration: not implemented until a future task wires media generation into product flows with tests, docs, artifact ownership, and cost controls.
+
 ## Required Gate
 
 No-spend dry run:

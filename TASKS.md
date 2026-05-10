@@ -1334,6 +1334,8 @@ Status: Complete on May 10, 2026 at 07:11 CDT.
 
 ## 85. Add No-Spend Provider Proof Notes To Submission Checklist
 
+Status: Complete on May 10, 2026 at 07:13 CDT.
+
 - Owner type: Provider / Submission Docs
 - Goal: Clarify in submission docs how to explain Fal/provider proof as optional script-level no-spend/live-gated proof, not app media generation.
 - Scope: Docs only.
@@ -1342,6 +1344,8 @@ Status: Complete on May 10, 2026 at 07:11 CDT.
 - Acceptance criteria: Docs distinguish app-generated media, no-spend Fal smoke, and RUN_LIVE_FAL_SMOKE live proof.
 - Validation commands: manual wording check, `pnpm media:fal:smoke:json`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes with non-provider script tasks.
+- Completed notes: Strengthened submission checklist and Fal proof template wording so no-spend script proof, one-call live Fal proof, and future app media integration are clearly separate states. Added redaction and safe-submission wording reminders.
+- Validation: Manual wording check passed; `pnpm media:fal:smoke:json`, `pnpm lint`, and `git diff --check` passed.
 
 ## 86. Add Release Evidence Warning To Submission Guide
 
