@@ -1,6 +1,6 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 06:09 CDT
+Last updated: May 10, 2026 06:10 CDT
 
 ## Current Cycle
 
@@ -567,6 +567,31 @@ Last updated: May 10, 2026 06:09 CDT
 ### Recommended Next Task
 
 - Task 64, `Add Fal Live Proof Result Template And Redaction Checklist`, is the next safe task.
+
+## Task 64 Update
+
+- Task chosen: `TASKS.md` item 64, "Add Fal Live Proof Result Template And Redaction Checklist".
+- Why this was next: It was the next safe media/provider task after Task 63 and supports approved one-call Fal proof recording without running a provider call or changing app media wiring.
+- Scope: `docs/FAL_LIVE_PROOF_TEMPLATE.md`, `docs/DEMO_VIDEO_CHECKLIST.md`, `docs/README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Documentation only. No live Fal call, generated media artifact, provider spend, secret read, app media wiring, release evidence refresh, schema/migration change, database operation, deploy mutation, auth, billing, or production config changed.
+
+### Files Updated
+
+- `docs/FAL_LIVE_PROOF_TEMPLATE.md`: New template for approved Fal smoke proof metadata, required env gate, redaction checklist, artifact handling, sanitized JSON output, and app-wiring caveats.
+- `docs/DEMO_VIDEO_CHECKLIST.md`: References the Fal template as an optional separate proof, not part of normal app video capture.
+- `docs/README.md`: Links the Fal live proof template from release/demo docs.
+- `TASKS.md`: Marks item 64 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records item 64 scope, safety notes, validation, and next task.
+
+### Validation
+
+- Manual path/link check via `python3`: Passed.
+- `git diff --check`: Passed.
+- `pnpm lint`: Passed.
+
+### Recommended Next Task
+
+- Task 65, `Add Hosted Smoke Template Consistency Check`, is the next safe task.
 
 ## Historical Sequential Progress
 

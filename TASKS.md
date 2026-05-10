@@ -1002,6 +1002,8 @@ Status: Complete on May 10, 2026 at 06:09 CDT.
 
 ## 64. Add Fal Live Proof Result Template And Redaction Checklist
 
+Status: Complete on May 10, 2026 at 06:10 CDT.
+
 - Owner type: Media / Provider QA
 - Goal: Add a structured template for recording an approved one-call Fal smoke result without committing secrets or generated media.
 - Scope: Docs/tests optional; no live provider call by default.
@@ -1010,6 +1012,8 @@ Status: Complete on May 10, 2026 at 06:09 CDT.
 - Acceptance criteria: Template records gate, model, prompt class, approximate call count, artifact handling, cost caveat, redaction checks, and app-wiring status; clearly states normal dashboard generation still does not call Fal.
 - Validation commands: manual path/link check, `git diff --check`, `pnpm lint`.
 - Can run in parallel: Yes with tasks not editing docs index.
+- Completed notes: Added `docs/FAL_LIVE_PROOF_TEMPLATE.md` with dry-run/live-gated commands, result metadata, redaction checklist, artifact handling, sanitized output summary, cost/approval caveats, and explicit `not_implemented_dashboard_ui_only` app-wiring status. Linked it from docs index and demo video checklist.
+- Validation: Manual path/link check passed; `git diff --check` passed; `pnpm lint` passed. No live Fal call was made.
 
 ## 65. Add Hosted Smoke Template Consistency Check
 

@@ -40,6 +40,7 @@ These are current operational handoff docs, but release proof remains gated. Use
 | [`V1_3_HOSTED_LAUNCH_READINESS_PLAN.md`](V1_3_HOSTED_LAUNCH_READINESS_PLAN.md) | Current v1.3 hosted launch-readiness plan. |
 | [`DEMO_SCRIPT.md`](DEMO_SCRIPT.md) | Demo prompts and walkthrough steps. |
 | [`DEMO_VIDEO_CHECKLIST.md`](DEMO_VIDEO_CHECKLIST.md) | Screen-recording checklist for hackathon demo video capture without generated-media claims. |
+| [`FAL_LIVE_PROOF_TEMPLATE.md`](FAL_LIVE_PROOF_TEMPLATE.md) | Optional env-gated Fal smoke result template with redaction, artifact, cost, and app-wiring caveats. |
 | [`HACKATHON_SUBMISSION_CHECKLIST.md`](HACKATHON_SUBMISSION_CHECKLIST.md) | Submission metadata and proof checklist that separates local, hosted, live, media, and release-evidence claims. |
 | [`HACKATHON_DEMO_READINESS.md`](HACKATHON_DEMO_READINESS.md) | Local-first judge-demo checklist that does not refresh release evidence. |
 | [`HOSTED_SMOKE_TEMPLATE.md`](HOSTED_SMOKE_TEMPLATE.md) | Optional hosted smoke evidence template that records URL checks without mutating deployment config or release evidence. |

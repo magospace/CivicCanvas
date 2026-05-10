@@ -138,4 +138,5 @@ These can be cited only if intentionally run and recorded elsewhere:
 - `pnpm live:fallback-proof:json` for no-network live/fallback boundary proof.
 - `pnpm media:fal:smoke:json` for no-spend Fal proof-script availability.
 - `RUN_LIVE_FAL_SMOKE=1 FAL_KEY=<redacted> pnpm media:fal:smoke:json` for one approved live Fal smoke call.
+- `docs/FAL_LIVE_PROOF_TEMPLATE.md` for recording a sanitized live Fal proof result without claiming normal app media generation.
 - Task 35 full release gate for current release evidence.
