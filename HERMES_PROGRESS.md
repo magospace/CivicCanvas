@@ -1,6 +1,6 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 06:10 CDT
+Last updated: May 10, 2026 06:12 CDT
 
 ## Current Cycle
 
@@ -592,6 +592,34 @@ Last updated: May 10, 2026 06:10 CDT
 ### Recommended Next Task
 
 - Task 65, `Add Hosted Smoke Template Consistency Check`, is the next safe task.
+
+## Task 65 Update
+
+- Task chosen: `TASKS.md` item 65, "Add Hosted Smoke Template Consistency Check".
+- Why this was next: It was the next safe hosted QA task after Task 64 and protects the hosted smoke template from losing required command/caveat wording.
+- Scope: `scripts/docs-consistency.mjs`, `apps/web/test/release-scripts.test.ts`, `docs/HOSTED_SMOKE_TEMPLATE.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: No-network script/test/docs changes only. No hosted smoke was run, no deployment config changed, no release evidence refreshed, no provider calls made, and no secrets/auth/billing/production config touched.
+
+### Files Updated
+
+- `scripts/docs-consistency.mjs`: Added hosted smoke template required-phrase check and JSON field for required phrases.
+- `apps/web/test/release-scripts.test.ts`: Asserts the new docs-consistency check and required hosted smoke phrases.
+- `docs/HOSTED_SMOKE_TEMPLATE.md`: Tightened wording to include exact no-release-evidence and platform firewall/rate-limit caveats.
+- `TASKS.md`: Marks item 65 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records item 65 scope, safety notes, validation, and next task.
+
+### Validation
+
+- RED: `node scripts/docs-consistency.mjs --json` initially failed after adding the check because `docs/HOSTED_SMOKE_TEMPLATE.md` did not include exact required phrases for `platform-level firewall/rate limiting` and `not release evidence`.
+- GREEN: `node scripts/docs-consistency.mjs --json`: Passed after wording fix.
+- `pnpm test -- apps/web/test/release-scripts.test.ts -t "current-doc links"`: Passed; Vitest discovered the full 15-file suite and reported 97 tests passed.
+- `git diff --check`: Passed.
+- `pnpm lint`: Passed.
+- `pnpm test`: Passed with 15 files, 97 tests.
+
+### Recommended Next Task
+
+- Task 66, `Add Sample Data Freshness Snapshot Script`, is the next safe task for a future cycle.
 
 ## Historical Sequential Progress
 

@@ -4,7 +4,7 @@ Use this template to record smoke-test observations for an already-deployed host
 
 ## Evidence Boundary
 
-This document is a note-taking template only. Hosted smoke notes become current release evidence only if Task 35 intentionally reruns the full release gate for the intended commit and refreshes `docs/release-evidence.json`.
+This document is a note-taking template only. Hosted smoke notes are not release evidence. Hosted smoke notes become current release evidence only if Task 35 intentionally reruns the full release gate for the intended commit and refreshes `docs/release-evidence.json`.
 
 Do not paste secrets, provider tokens, Vercel project metadata with credentials, `.env` contents, private dashboard URLs, or billing details into this template.
 
@@ -71,7 +71,7 @@ Generated screenshots or videos should usually remain local artifacts. If record
 
 ## Known Caveats To Preserve
 
-- Hosted rate limiting requires platform-level controls; in-repo middleware is defense-in-depth only.
+- Hosted rate limiting requires platform-level firewall/rate limiting; in-repo middleware is defense-in-depth only.
 - Release evidence remains historical until Task 35 refreshes it after the full release gate.
 - Dallas has limited live support; the Dallas ZIP demo uses visible sample fallback.
 - Austin monthly and Houston transportation demos remain sample-first/fallback bounded.

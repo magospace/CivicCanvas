@@ -176,6 +176,14 @@ describe("release and governance scripts", () => {
       "docs/AGENT_DEVELOPMENT_PLAN.md"
     ]));
     expect(body.checks.map((check: { name: string }) => check.name)).toContain("historical docs are labeled away from current starting points");
+    expect(body.checks.map((check: { name: string }) => check.name)).toContain("hosted smoke template preserves release and secret caveats");
+    expect(body.hostedSmokeTemplateRequiredPhrases).toEqual(expect.arrayContaining([
+      "pnpm smoke:deploy",
+      "PLAYWRIGHT_BASE_URL",
+      "platform-level firewall/rate limiting",
+      "not release evidence",
+      "Do not paste secrets"
+    ]));
   });
 
   it("reports Fal media smoke as skipped by default with no spend", () => {

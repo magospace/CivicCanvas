@@ -57,6 +57,7 @@ const docsIndex = read("docs/README.md");
 const readme = read("README.md");
 const developmentGuide = read("DEVELOPMENT_GUIDE.md");
 const codebaseOverview = read("CODEBASE_OVERVIEW.md");
+const hostedSmokeTemplate = read("docs/HOSTED_SMOKE_TEMPLATE.md");
 
 const missingCurrentDocs = currentDocs.filter((path) => !fileExists(path));
 const missingHistoricalDocs = historicalDocs.filter((path) => !fileExists(path));
@@ -80,6 +81,16 @@ const rootCurrentDocLinksPresent = [
 ].every((link) => readme.includes(link));
 const guideAndOverviewWarnHistorical = developmentGuide.includes("Historical milestone docs") &&
   codebaseOverview.includes("Historical docs");
+const hostedSmokeTemplateRequiredPhrases = [
+  "pnpm smoke:deploy",
+  "PLAYWRIGHT_BASE_URL",
+  "platform-level firewall/rate limiting",
+  "not release evidence",
+  "Do not paste secrets"
+];
+const missingHostedSmokeTemplatePhrases = hostedSmokeTemplateRequiredPhrases.filter((phrase) =>
+  !hostedSmokeTemplate.includes(phrase)
+);
 
 const checks = [
   check(
@@ -108,6 +119,13 @@ const checks = [
     "development guide and codebase overview warn about historical docs",
     guideAndOverviewWarnHistorical,
     guideAndOverviewWarnHistorical ? "Guide and overview warn that milestone docs can be historical." : "Missing historical-doc warning in guide or overview."
+  ),
+  check(
+    "hosted smoke template preserves release and secret caveats",
+    missingHostedSmokeTemplatePhrases.length === 0,
+    missingHostedSmokeTemplatePhrases.length === 0
+      ? "Hosted smoke template includes required smoke commands, platform caveat, no-release-evidence boundary, and secret warning."
+      : `Hosted smoke template missing required phrase(s): ${missingHostedSmokeTemplatePhrases.join(", ")}`
   )
 ];
 
@@ -116,6 +134,7 @@ const output = {
   ok: checks.every((item) => item.status === "passed"),
   currentDocs,
   historicalDocs,
+  hostedSmokeTemplateRequiredPhrases,
   checks
 };
 

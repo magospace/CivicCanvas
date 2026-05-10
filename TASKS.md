@@ -1017,6 +1017,8 @@ Status: Complete on May 10, 2026 at 06:10 CDT.
 
 ## 65. Add Hosted Smoke Template Consistency Check
 
+Status: Complete on May 10, 2026 at 06:12 CDT.
+
 - Owner type: Release / QA
 - Goal: Add a local no-network check that hosted smoke template docs preserve required caveats and command placeholders.
 - Scope: Script/test only; no hosted network call.
@@ -1025,6 +1027,8 @@ Status: Complete on May 10, 2026 at 06:10 CDT.
 - Acceptance criteria: Check verifies the hosted template mentions `pnpm smoke:deploy`, `PLAYWRIGHT_BASE_URL`, platform rate limiting, not release evidence, and no secret pasting.
 - Validation commands: focused script/test, `git diff --check`, `pnpm lint`, `pnpm test`.
 - Can run in parallel: No with other release-script/docs-consistency edits.
+- Completed notes: Extended `scripts/docs-consistency.mjs` to require hosted smoke template phrases for `pnpm smoke:deploy`, `PLAYWRIGHT_BASE_URL`, platform rate limiting, not-release-evidence boundary, and secret warning. Updated release-scripts coverage to assert the new check and required phrase list. Tightened `docs/HOSTED_SMOKE_TEMPLATE.md` wording to include the exact caveats.
+- Validation: RED docs-consistency run failed before template wording included the exact required phrases; after fixing wording, `node scripts/docs-consistency.mjs --json`, focused release-scripts Vitest command, `git diff --check`, `pnpm lint`, and full `pnpm test` passed with 97 tests across 15 files. No hosted network calls were made.
 
 ## 66. Add Sample Data Freshness Snapshot Script
 
