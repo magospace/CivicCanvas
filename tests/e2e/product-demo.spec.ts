@@ -184,6 +184,7 @@ test("saved share-link hash rejects malformed bundles without backend persistenc
 
   await expect(page.getByText("Shared link rejected")).toBeVisible();
   await expect(page.getByText("Save a generated dashboard from /explore or import a validated saved-canvas bundle.")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Go to Explore" })).toHaveAttribute("href", "/explore");
   await expect(page).toHaveURL(/\/saved#canvasBundle=/);
   expect(saveRouteCalls).toBe(0);
   expect(await page.evaluate(() => window.localStorage.getItem("tdc.savedCanvases.v1"))).toBeNull();

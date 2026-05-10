@@ -1573,7 +1573,7 @@ Status: Complete on May 10, 2026.
 
 ## 100. Add Saved Empty-State Explore CTA
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: UI / Demo UX
 - Goal: Make `/saved` clearer in a fresh browser by offering a primary route back to the core `/explore` demo loop.
@@ -1583,6 +1583,8 @@ Status: Pending.
 - Acceptance criteria: Empty/fresh `/saved` state includes a visible `Go to Explore` or `Create a canvas` CTA linking to `/explore`, while browser-local/no-backend copy remains visible.
 - Validation commands: targeted Playwright saved-flow test or `PLAYWRIGHT_BASE_URL=http://localhost:<port> pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved"`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with saved-page UI/test edits.
+- Completed notes: Empty `/saved` now keeps browser-local/import guidance and adds a primary `Go to Explore` link to `/explore`. Saved share-link rejection coverage asserts the CTA remains visible without backend persistence.
+- Validation: Targeted saved Playwright command ran the product-demo spec and passed 17 browser tests; `pnpm lint`, `pnpm typecheck`, and `git diff --check` passed.
 
 ## 101. Add Visual Audit To Submission Readiness Outputs
 

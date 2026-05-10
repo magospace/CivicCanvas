@@ -1452,3 +1452,13 @@ Last updated: May 10, 2026 06:17 CDT
 - Files updated: `tests/e2e/product-demo.spec.ts` now asserts the Dallas generated dashboard shows sample fallback status, governed fields summary, visible trend/bar chart labels, friendly `Request count` sort label, and `Apply filters` copy.
 - Validation: `PLAYWRIGHT_BASE_URL=http://localhost:3015 pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "visual polish"` passed; the project script ran the full product-demo spec with 17 browser tests. `pnpm lint` and `git diff --check` passed.
 - Next recommended task: Task 100, `Add Saved Empty-State Explore CTA`.
+
+## Task 100 Update
+
+- Task chosen: `TASKS.md` item 100, "Add Saved Empty-State Explore CTA".
+- Why this was next: Task 99 completed cleanly, and Task 100 is a low-risk Loom UX improvement for the saved-canvas handoff path in a fresh browser.
+- Scope: `apps/web/components/saved-canvases.tsx`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Browser-local UI only. No saved-canvas storage architecture changes, backend persistence, share-link hashing changes, import validation changes, schema/migrations, live APIs, provider/media calls, release evidence, deploy mutation, secrets, auth, billing, or production data changes.
+- Files updated: Empty `/saved` state now includes a primary `Go to Explore` link while preserving local/import/no-backend copy. The malformed share-link test asserts the CTA is visible and points to `/explore` without calling `/api/canvas/save`.
+- Validation: `PLAYWRIGHT_BASE_URL=http://localhost:3015 pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved share-link hash|saved bundle"` passed; the project script ran the full product-demo spec with 17 browser tests. `pnpm lint`, `pnpm typecheck`, and `git diff --check` passed.
+- Next recommended task: Task 101, `Add Visual Audit To Submission Readiness Outputs`.

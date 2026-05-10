@@ -91,8 +91,18 @@ export function SavedCanvases() {
   if (items.length === 0) {
     return (
       <section className="mt-8 w-full max-w-3xl space-y-4">
-        <div className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600 shadow-panel">
-          Save a generated dashboard from /explore or import a validated saved-canvas bundle.
+        <div className="rounded-lg border border-slate-200 bg-white px-4 py-4 text-sm text-slate-600 shadow-panel">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p>
+              Save a generated dashboard from /explore or import a validated saved-canvas bundle.
+            </p>
+            <Link
+              href="/explore"
+              className="inline-flex items-center justify-center rounded-md bg-civic-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-civic-700 focus:outline-none focus:ring-2 focus:ring-civic-100"
+            >
+              Go to Explore
+            </Link>
+          </div>
         </div>
         <ImportPanel
           importText={importText}
