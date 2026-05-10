@@ -1924,3 +1924,149 @@ Status: Complete on May 10, 2026.
 - Can run in parallel: Yes if no script edits; no with live-smoke script changes.
 - Completed notes: Ran the existing no-network live/fallback proof and optional live public API smoke. The live smoke made one approved public Dallas Socrata aggregate check for 2024 category counts, returned 3 live aggregate rows, and did not promote Dallas ZIP, Austin monthly, or Houston sample-first dashboards. Added paste-safe evidence to the live API smoke template.
 - Validation: `pnpm live:fallback-proof:json`, `pnpm smoke:live:json`, `pnpm lint`, and `git diff --check` passed. Live public API call count: 1.
+
+---
+
+# Final Submission And GitHub Readiness Queue
+
+Last replenished: May 10, 2026 after Tasks 116 and 118 completed and no pending tasks remained. This queue keeps CivicCanvas public naming, Brainforge/Vicinity Texas Open Data fit, MCP/agent skill proof, dataset provenance, sample/live boundary honesty, and local-only submission readiness. Do not push without explicit instruction. Gated/high-risk work remains blocked unless selected with approval: production deployment mutation, release-evidence refresh, backend persistence/database migrations, auth/billing, destructive data operations, and paid provider calls beyond env-gated smoke proof.
+
+## 120. Add MCP Demo Transcript Fixture
+
+Status: Pending.
+
+- Owner type: MCP / Submission Proof
+- Goal: Add a paste-safe, no-secret transcript template showing the exact MCP commands/tools judges should see for Brainforge proof.
+- Scope: Docs/template only; do not run external MCP clients or mutate generated release evidence.
+- Likely files: `docs/MCP_DEMO_TRANSCRIPT_TEMPLATE.md`, `README.md`, `docs/README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: MCP catalog/query proof should read approved catalog/sample/live adapters through existing tool paths; no hardcoded UI mock data.
+- Acceptance criteria: Template includes source discovery, bounded query, catalog health, canvas spec generation, Miro preview-only caveat, no secret fields, and sample/live labels; README/docs index link it.
+- Validation commands: manual path/wording check, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes with non-doc tasks that do not edit README/docs index.
+
+## 121. Add Submission Readiness Script OpenAI Smoke Coverage
+
+Status: Pending.
+
+- Owner type: QA / Provider Readiness
+- Goal: Include the no-spend OpenAI smoke command in the submission readiness report so judges/developers can see provider proof status without spending credits.
+- Scope: Readiness script/report/tests only; default must remain no-network.
+- Likely files: `scripts/submission-readiness.mjs`, `apps/web/test/release-scripts.test.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium.
+- Data realism classification: Provider-gated fallback metadata is acceptable if clearly labeled and replaceable by env-gated live proof.
+- Acceptance criteria: `pnpm submission:readiness:json` reports OpenAI no-spend command, live gate env, default expected live call count 0, and missing/present key status without values or env file reads.
+- Validation commands: `pnpm submission:readiness:json`, focused release-script Vitest, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with submission-readiness script edits.
+
+## 122. Add Demo Readiness UI Link To OpenAI Smoke
+
+Status: Pending.
+
+- Owner type: UI / Provider Honesty
+- Goal: Surface the new OpenAI smoke gate on `/demo-readiness` without implying dashboards are LLM-generated.
+- Scope: Demo-readiness UI and browser assertion only.
+- Likely files: `apps/web/app/demo-readiness/page.tsx`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium.
+- Data realism classification: Fake provider metadata must be labeled; default local demo remains deterministic.
+- Acceptance criteria: UI lists `pnpm provider:openai:smoke:json`, live gate `RUN_LIVE_OPENAI_SMOKE=1`, default zero-call mode, and states OpenAI does not generate dashboard code/SQL.
+- Validation commands: targeted demo-readiness Playwright, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with demo-readiness route/test edits.
+
+## 123. Add README MCP Quick-Proof Commands
+
+Status: Pending.
+
+- Owner type: Docs / Submission Readiness
+- Goal: Make the README judge-scannable for MCP/agent-skill proof without rebranding internal packages.
+- Scope: README docs only; no code behavior changes.
+- Likely files: `README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Docs must say MCP tools use approved catalog/query paths, not hardcoded demo arrays.
+- Acceptance criteria: README includes concise MCP server run/test commands, agent skill path, and honest preview-only Miro note in the submission checklist or verification section.
+- Validation commands: manual path/command check, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes with non-README tasks.
+
+## 124. Add Data Realism CI Guard For Component Demo Arrays
+
+Status: Pending.
+
+- Owner type: QA / Data Realism
+- Goal: Strengthen `pnpm data:realism:json` so future hardcoded demo arrays inside UI components are detected as review items.
+- Scope: Audit script/test only; do not rewrite product data paths unless a confirmed blocker appears.
+- Likely files: `scripts/data-realism-audit.mjs`, `apps/web/test/release-scripts.test.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Medium.
+- Data realism classification: Hardcoded UI mock arrays should be flagged unless classified as static nav/config.
+- Acceptance criteria: Audit explicitly scans known component paths for prompt/demo/gallery/seed arrays, keeps header nav classified as static navigation config, and tests prove no secret/env values are printed.
+- Validation commands: `pnpm data:realism:json`, focused release-script Vitest, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with data-realism audit script edits.
+
+## 125. Add Local Demo Smoke Checklist For Browser Saved Edits
+
+Status: Pending.
+
+- Owner type: Docs / Demo Reliability
+- Goal: Add a concise manual checklist for recording the saved-canvas edit/export/share path added in Task 114.
+- Scope: Docs only.
+- Likely files: `docs/LOCAL_DEMO_SMOKE_CHECKLIST.md`, `HACKATHON_SUBMISSION_GUIDE.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Browser-local persistence is acceptable if documented as local-only and editable through normal product flow.
+- Acceptance criteria: Checklist covers save, edit title/prompt, reopen, export, share hash, delete, and no-backend-persistence narration.
+- Validation commands: manual wording/path check, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes with non-doc tasks that do not edit submission guide.
+
+## 126. Add Public URL Smoke Placeholder To Submission Guide
+
+Status: Pending.
+
+- Owner type: Docs / Hosted Readiness
+- Goal: Make the submission guide clearer about what to fill in if a hosted URL is available versus local-only Loom.
+- Scope: Docs only; no deployment or push.
+- Likely files: `HACKATHON_SUBMISSION_GUIDE.md`, `docs/HOSTED_SMOKE_TEMPLATE.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Hosted smoke must not turn sample fallback or historical release evidence into current live proof.
+- Acceptance criteria: Guide has a fill-in placeholder for hosted URL smoke result, command, date, firewall/rate-limit caveat, and fallback if no hosted URL exists.
+- Validation commands: manual wording/path check, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes with non-submission-guide tasks.
+
+## 127. Add Source Provenance Mini Table To README
+
+Status: Pending.
+
+- Owner type: Docs / Data Provenance
+- Goal: Add a compact README table classifying Dallas, Austin, Houston, and Texas spending source status for judges.
+- Scope: README docs only; do not change catalog facts.
+- Likely files: `README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Fixture/catalog metadata and deterministic samples are acceptable if clearly labeled; live Dallas aggregate proof must remain narrow.
+- Acceptance criteria: Table distinguishes live-promoted Dallas aggregate fields, Dallas ZIP fallback, Austin/Houston sample-first, Texas spending coming-later metadata, source URLs/catalog path, and caveats.
+- Validation commands: manual catalog/README consistency check, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes with non-README tasks.
+
+## 128. Add No-Push Local Branch Readiness Snapshot
+
+Status: Pending.
+
+- Owner type: Release Hygiene / GitHub Readiness
+- Goal: Add a local-only command/template that reports branch, ahead count, untracked external recommendations, and no-push status before final handoff.
+- Scope: Script/docs/test; must not push or mutate remotes.
+- Likely files: `scripts/local-git-readiness.mjs`, `package.json`, `apps/web/test/release-scripts.test.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium.
+- Data realism classification: Not data-path-related; supports safe local GitHub readiness handoff.
+- Acceptance criteria: JSON report shows current branch/ahead state, preserved untracked external files by name only, whether working tree has tracked changes, and warns that push is intentionally not run.
+- Validation commands: script JSON run, focused release-script Vitest, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with package/release-script test edits.
+
+## 129. Add Submission Copy Boundary Assertions
+
+Status: Pending.
+
+- Owner type: QA / Demo Honesty
+- Goal: Add tests that key README/submission guide phrases do not overclaim production auth, durable backend persistence, hosted readiness, live broad data, or LLM-generated dashboards.
+- Scope: Docs assertion test only.
+- Likely files: `apps/web/test/release-scripts.test.ts`, maybe `scripts/docs-consistency.mjs`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium.
+- Data realism classification: Ensures docs keep mock/live/local/provider boundaries honest.
+- Acceptance criteria: Tests assert required honest phrases and reject common overclaim phrases in current submission docs; no network or file mutation.
+- Validation commands: focused release-script Vitest, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with release-script/docs-consistency test edits.

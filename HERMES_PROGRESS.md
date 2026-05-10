@@ -1729,3 +1729,15 @@ Last updated: May 10, 2026 06:17 CDT
   - GREEN: `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0; live OpenAI proof blocked by missing shell credential.
 - Recommended next task: No pending useful task remains in `TASKS.md`; replenish the queue before implementing further work.
+
+
+## Queue Replenishment Update - Final Submission And GitHub Readiness
+
+- Task chosen: Replenish `TASKS.md` because Tasks 116 and 118 completed and `Status: Pending` search returned no remaining useful tasks.
+- Why this was next: The user requested replenishment when the queue has no useful remaining work, and further implementation should start from a fresh durable queue.
+- Scope: `TASKS.md` and `HERMES_PROGRESS.md` only.
+- Queue action: Added Tasks 120-129 for MCP transcript proof, submission readiness OpenAI smoke reporting, demo-readiness provider honesty, README MCP quick proof, data-realism CI guard, saved-edit demo checklist, public URL smoke placeholder, README provenance mini-table, local no-push git readiness, and submission copy boundary assertions.
+- Safety notes: Planning/durable-state only. No live APIs, OpenAI calls, Fal/media calls, schema/migrations, backend persistence, deployment mutation, release evidence refresh, production data, secrets, auth, billing, generated artifacts, or `.env` files. `clauderecommends.md` and `REVIEW_RECOMMENDATIONS.md` remain untracked and unstaged.
+- Validation: `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 121 is the highest-value implementation follow-up because it wires the new no-spend OpenAI proof into the existing submission-readiness report without live spend. Task 120 is the highest-value docs-only follow-up if a Loom transcript is urgently needed.
