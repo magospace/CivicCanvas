@@ -8,6 +8,22 @@ Users ask natural-language questions about Texas public data. The app parses sup
 
 Optional stretch: generate preview-only MiroExportSpec JSON for briefing boards, slide-like frames, or workshop boards. The app does not create or update Miro boards.
 
+## Architecture at a glance
+
+```mermaid
+flowchart LR
+  U["User prompt"] --> P["Deterministic TypeScript parser"]
+  P --> C["Approved dataset catalog"]
+  C --> Q["BoundedQuerySpec validation"]
+  Q --> D["Sample/live public-data adapters"]
+  D --> A["Source attribution + query audit"]
+  A --> V["Validated CanvasDocument"]
+  V --> R["Trusted React block registry"]
+  C --> M["MCP tools for safe agent workflows"]
+```
+
+This flow is deterministic and governed: no LLM-generated dashboard code, no arbitrary SQL, no backend saved-canvas database, and no live media generation run by the app. Live public-data access is dataset/field-gated and falls back to approved samples when unsafe or unavailable.
+
 ## MVP workflows
 
 1. Dallas 311 service requests by category and ZIP code for 2024.

@@ -1049,3 +1049,21 @@ Last updated: May 10, 2026 06:17 CDT
 ### Recommended Next Task
 
 - Task 80, `Add README Architecture Diagram For Submission Reviewers`, is next.
+
+
+## Task 80 Update
+
+- Task chosen: `TASKS.md` item 80, "Add README Architecture Diagram For Submission Reviewers".
+- Why this was next: It was the next safe docs task and directly improves hackathon reviewer comprehension without changing product behavior.
+- Scope: `README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Docs only. No release evidence refresh, deploy, provider calls, generated media, backend persistence, schema, migrations, secrets, or production operations.
+
+### Validation
+
+- Manual README diagram/honesty check: Passed. Confirmed diagram and copy mention deterministic parser, MCP tools, no LLM-generated dashboard code, no backend saved-canvas database, and no app-run live media generation.
+- `pnpm lint`: Passed.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 81, `Add MCP Demo Proof Checklist`, is next.

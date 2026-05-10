@@ -1259,6 +1259,8 @@ Status: Complete on May 10, 2026 at 07:02 CDT.
 
 ## 80. Add README Architecture Diagram For Submission Reviewers
 
+Status: Complete on May 10, 2026 at 07:04 CDT.
+
 - Owner type: Docs / Architecture
 - Goal: Add a compact architecture diagram to README so judges can understand the deterministic prompt, catalog, bounded query, canvas, and MCP flow quickly.
 - Scope: README only; no product behavior changes.
@@ -1267,6 +1269,8 @@ Status: Complete on May 10, 2026 at 07:02 CDT.
 - Acceptance criteria: README diagram does not claim LLM/media/backend/Miro write support; sample/live boundaries remain unchanged.
 - Validation commands: manual README check, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes with script tasks.
+- Completed notes: Added a compact Mermaid architecture diagram to README showing deterministic prompt parsing, approved catalog, BoundedQuerySpec validation, sample/live adapters, source attribution/query audit, validated CanvasDocument rendering, and MCP tools. Added explicit boundary copy for no LLM-generated dashboard code, no arbitrary SQL, no backend saved-canvas database, and no app-run live media generation.
+- Validation: Manual README diagram/honesty check passed; `pnpm lint` and `git diff --check` passed.
 
 ## 81. Add MCP Demo Proof Checklist
 
