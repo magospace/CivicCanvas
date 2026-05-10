@@ -1698,3 +1698,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm live:fallback-proof:json` passed with no network; `pnpm smoke:live:json` passed with one public Dallas live aggregate API check; `pnpm lint` passed; `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 1 public Dallas Socrata live smoke call; 0 OpenAI; 0 Fal/media.
 - Recommended next task: Task 116 remains optional/high-care for env-gated live OpenAI proof, or Task 118 for lower-risk source-card density polish.
+
+
+## Task 118 Update - Source Card Density Without Hiding Caveats
+
+- Task chosen: `TASKS.md` item 118, "Improve Source Card Density Without Hiding Caveats".
+- Why this was next: Task 119 completed cleanly and Task 118 was the safest remaining pending P1 demo-polish task; Task 116 is higher-care live OpenAI spend and should follow after low-risk UI polish.
+- Scope: `apps/web/components/sources-catalog.tsx`, `tests/e2e/sources.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Catalog data remains `fixture file through data loader / acceptable`; this task only changed presentation density. Dallas live-promoted status, sample-first source labels, hidden-field warnings, hosted-beta caveats, and source caveats remain visible.
+- Safety notes: No catalog data, live mappings, live API calls, OpenAI calls, Fal/media calls, schema/migrations, backend persistence, deployment mutation, release evidence, secrets, or generated artifacts changed. `clauderecommends.md` and `REVIEW_RECOMMENDATIONS.md` remain untracked and unstaged.
+- Validation: `pnpm test:e2e -- tests/e2e/sources.spec.ts` passed; `pnpm lint` passed; `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 116, `Add Optional Live OpenAI Smoke Gate`, because the shell reports an OpenAI key is present and the task can be implemented with a no-spend default plus one env-gated structured-output call.

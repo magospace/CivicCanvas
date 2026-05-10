@@ -1892,7 +1892,7 @@ Status: Complete on May 10, 2026.
 
 ## 118. Improve Source Card Density Without Hiding Caveats
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: UI / Demo polish
 - Goal: Address remaining visual audit source-card density/lower whitespace while keeping catalog caveats and hidden-field warnings visible.
@@ -1903,6 +1903,9 @@ Status: Pending.
 - Acceptance criteria: Source cards are easier to scan, Dallas live-promoted status remains honest, sample-first sources remain labeled, hidden-field warnings remain visible, and E2E covers the key labels.
 - Validation commands: targeted sources Playwright, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with sources page/test edits.
+
+- Completed notes: Reworked source cards so live verification and field confidence share a compact two-column evidence panel on wider screens. Dallas live-promoted labels, sample-first labels, hosted-beta caveats, hidden-field warnings, source caveats, and filters remain visible; no catalog facts or live/sample classifications changed.
+- Validation: `pnpm test:e2e -- tests/e2e/sources.spec.ts`, `pnpm lint`, and `git diff --check` passed.
 
 ## 119. Add Live Public API Smoke If Network Proof Is Available
 

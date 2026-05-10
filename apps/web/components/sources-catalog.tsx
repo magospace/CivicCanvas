@@ -174,43 +174,53 @@ export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
                 {hostedBetaNote}
               </p>
             ) : null}
-            {verification ? (
-              <div className="mt-4 rounded-md border border-slate-200 bg-civic-50 p-3">
-                <div className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
-                  Live verification
-                </div>
-                <div className="mt-2 grid gap-2 text-xs leading-5 text-slate-600">
-                  <div>Live-capable fields: {verification.liveCapableFields.join(", ") || "none"}</div>
-                  <div>Sample-only fields: {verification.sampleOnlyFields.join(", ") || "none"}</div>
-                  {verification.checks.slice(0, 3).map((check) => (
-                    <div key={check.label} className="rounded bg-white px-2 py-1">
-                      <span className="font-semibold text-ink">{check.label}</span>: {check.status} / {check.reason}
+            <div className="mt-4 grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
+              {verification ? (
+                <div className="rounded-md border border-slate-200 bg-civic-50 p-3">
+                  <div className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
+                    Live verification
+                  </div>
+                  <dl className="mt-2 grid grid-cols-2 gap-2 text-xs leading-5 text-slate-600">
+                    <div className="rounded bg-white px-2 py-1">
+                      <dt className="font-semibold text-ink">Live-capable</dt>
+                      <dd>{verification.liveCapableFields.join(", ") || "none"}</dd>
                     </div>
-                  ))}
+                    <div className="rounded bg-white px-2 py-1">
+                      <dt className="font-semibold text-ink">Sample-only</dt>
+                      <dd>{verification.sampleOnlyFields.join(", ") || "none"}</dd>
+                    </div>
+                  </dl>
+                  <div className="mt-2 space-y-1 text-xs leading-5 text-slate-600">
+                    {verification.checks.slice(0, 2).map((check) => (
+                      <div key={check.label} className="rounded bg-white px-2 py-1">
+                        <span className="font-semibold text-ink">{check.label}</span>: {check.status} / {check.reason}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ) : null}
-            <div className="mt-4">
-              <div className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
-                Field confidence
-              </div>
-              <div className="flex flex-wrap gap-2">
-              {fields.map((field) => (
-                <span
-                  key={field.name}
-                  className={`rounded-md border px-2.5 py-1 text-xs font-medium ${field.status.className}`}
-                >
-                  {field.name} · {field.status.label}
-                </span>
-              ))}
-              </div>
-              {hiddenFields.length > 0 ? (
-                <p className="mt-2 rounded-md bg-signal/10 px-3 py-2 text-xs leading-5 text-signal">
-                  Hidden fields such as {hiddenFields.map((field) => field.name).join(", ")} are intentionally excluded from queries, exports, and generated dashboards.
-                </p>
               ) : null}
+              <div className="rounded-md border border-slate-200 bg-white p-3">
+                <div className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
+                  Field confidence
+                </div>
+                <div className="flex flex-wrap gap-2">
+                {fields.map((field) => (
+                  <span
+                    key={field.name}
+                    className={`rounded-md border px-2.5 py-1 text-xs font-medium ${field.status.className}`}
+                  >
+                    {field.name} · {field.status.label}
+                  </span>
+                ))}
+                </div>
+                {hiddenFields.length > 0 ? (
+                  <p className="mt-2 rounded-md bg-signal/10 px-3 py-2 text-xs leading-5 text-signal">
+                    Hidden fields such as {hiddenFields.map((field) => field.name).join(", ")} are intentionally excluded from queries, exports, and generated dashboards.
+                  </p>
+                ) : null}
+              </div>
             </div>
-            <p className="mt-4 text-xs leading-5 text-slate-500">{dataset.caveats[0]}</p>
+            <p className="mt-3 text-xs leading-5 text-slate-500">{dataset.caveats[0]}</p>
           </article>
           );
         })}
