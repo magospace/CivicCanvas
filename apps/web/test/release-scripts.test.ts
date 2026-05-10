@@ -171,6 +171,19 @@ describe("release and governance scripts", () => {
     const savedCanvases = body.classifications.find((item: { surface: string }) => item.surface === "savedCanvases");
     expect(savedCanvases.classification).toBe("browser_local_persistence");
     expect(body.remainingHardcodedReview.some((item: { surface: string }) => item.surface === "explorePromptExamples")).toBe(false);
+    expect(body.summary.componentPathsScanned).toBeGreaterThanOrEqual(5);
+    expect(body.summary.hardcodedUiDemoArrayFindings).toBe(0);
+    expect(body.componentDemoArrayScan.scannedPaths).toEqual(expect.arrayContaining([
+      "apps/web/components/app-shell.tsx",
+      "apps/web/components/gallery-canvas-list.tsx",
+      "apps/web/components/saved-canvases.tsx",
+      "apps/web/components/sources-catalog.tsx",
+      "apps/web/components/header.tsx"
+    ]));
+    expect(body.componentDemoArrayScan.hardcodedUiDemoArrays).toEqual([]);
+    expect(body.remainingHardcodedReview).toEqual(expect.arrayContaining([
+      expect.objectContaining({ surface: "headerNavItems", classification: "static_ui_navigation_config" })
+    ]));
     expect(stdout).not.toContain("sk-fake-secret-value");
     expect(stdout).not.toContain("fal-fake-secret-value");
   });

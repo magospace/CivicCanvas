@@ -1789,3 +1789,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: Manual README path/command check passed; `pnpm lint` passed; `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 124, `Add Data Realism CI Guard For Component Demo Arrays`, to strengthen future enforcement of the data-realism policy.
+
+
+## Task 124 Update - Data Realism CI Guard For Component Demo Arrays
+
+- Task chosen: `TASKS.md` item 124, "Add Data Realism CI Guard For Component Demo Arrays".
+- Why this was next: After README/MCP proof docs, the next highest-value implementation task was strengthening the repeatable data-realism gate so future component-local demo arrays are caught instead of relying on manual review.
+- Scope: `scripts/data-realism-audit.mjs`, `apps/web/test/release-scripts.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism changes: `pnpm data:realism:json` now scans `app-shell`, `gallery-canvas-list`, `saved-canvases`, `sources-catalog`, and `header` components for known component-local prompt/demo/gallery/seed arrays. It reports zero hardcoded UI demo arrays and keeps `headerNavItems` classified as static navigation config, not demo data.
+- Safety notes: Script/test only. No product behavior changed, no network/provider call was made, no `.env` files were read, no secret values printed, and no generated artifacts/release evidence/deploy changes were created. `clauderecommends.md` and `REVIEW_RECOMMENDATIONS.md` remain untracked and unstaged.
+- Validation: `pnpm data:realism:json` passed with `componentPathsScanned=5` and `hardcodedUiDemoArrayFindings=0`; `pnpm test -- apps/web/test/release-scripts.test.ts -t "classifies demo data realism"` passed; `pnpm lint` passed; `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 125, `Add Local Demo Smoke Checklist For Browser Saved Edits`, to document the normal editable browser-local saved record flow added earlier.

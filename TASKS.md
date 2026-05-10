@@ -1997,7 +1997,7 @@ Status: Complete on May 10, 2026.
 
 ## 124. Add Data Realism CI Guard For Component Demo Arrays
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: QA / Data Realism
 - Goal: Strengthen `pnpm data:realism:json` so future hardcoded demo arrays inside UI components are detected as review items.
@@ -2008,6 +2008,8 @@ Status: Pending.
 - Acceptance criteria: Audit explicitly scans known component paths for prompt/demo/gallery/seed arrays, keeps header nav classified as static navigation config, and tests prove no secret/env values are printed.
 - Validation commands: `pnpm data:realism:json`, focused release-script Vitest, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with data-realism audit script edits.
+- Completed notes: Strengthened `scripts/data-realism-audit.mjs` with a component demo-array scan over app shell, gallery, saved, sources, and header components. It reports zero component-local demo arrays, keeps header navigation classified as static UI config, and exposes scan results in JSON. Release-script coverage asserts scanned paths, zero findings, static header allowlist, and secret redaction.
+- Validation: `pnpm data:realism:json`, focused release-script Vitest, `pnpm lint`, and `git diff --check` passed.
 
 ## 125. Add Local Demo Smoke Checklist For Browser Saved Edits
 

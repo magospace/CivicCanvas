@@ -17,6 +17,53 @@ function fileExists(path) {
   }
 }
 
+function readText(path) {
+  return readFileSync(join(root, path), "utf8");
+}
+
+const componentScanTargets = [
+  "apps/web/components/app-shell.tsx",
+  "apps/web/components/gallery-canvas-list.tsx",
+  "apps/web/components/saved-canvases.tsx",
+  "apps/web/components/sources-catalog.tsx",
+  "apps/web/components/header.tsx"
+];
+
+const demoArrayPatterns = [
+  { surface: "promptExamples", pattern: /const\s+promptExamples\s*=\s*\[/ },
+  { surface: "sampleCanvases", pattern: /const\s+\w*(?:Sample|Demo|Gallery|Canvas)\w*\s*=\s*\[/ },
+  { surface: "seedRecords", pattern: /const\s+\w*(?:Seed|Fixture)\w*\s*=\s*\[/ }
+];
+
+function scanComponentDemoArrays() {
+  const scans = componentScanTargets.map((path) => {
+    const text = readText(path);
+    const findings = demoArrayPatterns
+      .filter((item) => item.pattern.test(text))
+      .map((item) => item.surface);
+    const staticNavigationConfig = path.endsWith("header.tsx") && /const\s+navItems\s*=\s*\[/.test(text);
+
+    return {
+      path,
+      scanned: true,
+      findings,
+      staticNavigationConfig,
+      acceptable: findings.length === 0 && (path.endsWith("header.tsx") ? staticNavigationConfig : true)
+    };
+  });
+
+  return {
+    scannedPaths: scans.map((scan) => scan.path),
+    scans,
+    hardcodedUiDemoArrays: scans.flatMap((scan) =>
+      scan.findings.map((surface) => ({ surface, path: scan.path }))
+    ),
+    staticConfigAllowlist: scans
+      .filter((scan) => scan.staticNavigationConfig)
+      .map((scan) => ({ surface: "headerNavItems", path: scan.path, classification: "static_ui_navigation_config" }))
+  };
+}
+
 const catalog = readJson("data/catalog/approved-datasets.json");
 const seedCanvases = readJson("data/seed-canvases.json");
 const galleryFiles = [
@@ -104,19 +151,28 @@ const classifications = [
   }
 ];
 
+const componentDemoArrayScan = scanComponentDemoArrays();
+
 const remainingHardcodedReview = [
-  {
-    surface: "headerNavItems",
-    classification: "static_ui_navigation_config",
+  ...componentDemoArrayScan.staticConfigAllowlist.map((item) => ({
+    surface: item.surface,
+    classification: item.classification,
     acceptableForNow: true,
-    path: "apps/web/components/header.tsx",
+    path: item.path,
     note: "Route navigation config is intentionally static UI configuration, not demo data."
-  }
+  })),
+  ...componentDemoArrayScan.hardcodedUiDemoArrays.map((item) => ({
+    surface: item.surface,
+    classification: "hardcoded_ui_mock_should_replace",
+    acceptableForNow: false,
+    path: item.path,
+    note: "Potential component-local demo records should move to fixture/data-loader/API/read-model paths before being treated as real demo data."
+  }))
 ];
 
 const output = {
   schemaVersion: "1.0",
-  ok: classifications.every((item) => item.acceptable),
+  ok: classifications.every((item) => item.acceptable) && componentDemoArrayScan.hardcodedUiDemoArrays.length === 0,
   checkedAt: new Date().toISOString(),
   network: "not_used",
   mutatesFiles: false,
@@ -128,9 +184,12 @@ const output = {
     galleryFixtures: gallery.length,
     seedCanvasRecords: Array.isArray(seedCanvases) ? seedCanvases.length : 0,
     promptExampleRecords: Array.isArray(promptExamples) ? promptExamples.length : 0,
+    componentPathsScanned: componentDemoArrayScan.scannedPaths.length,
+    hardcodedUiDemoArrayFindings: componentDemoArrayScan.hardcodedUiDemoArrays.length,
     remainingHardcodedReviewCount: remainingHardcodedReview.length
   },
   classifications,
+  componentDemoArrayScan,
   remainingHardcodedReview,
   validation: {
     noNetwork: true,
