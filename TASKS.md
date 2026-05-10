@@ -1114,3 +1114,79 @@ Status: Complete on May 10, 2026 at 06:17 CDT.
 - Acceptance criteria: Check verifies `demo-artifacts` is ignored and reports staged generated media extensions if present; default repo state passes.
 - Validation commands: script command, focused Vitest command, `git diff --check`, `pnpm lint`, `pnpm test`.
 - Can run in parallel: No with package/script edits.
+
+
+---
+
+# Verified Claude Recommendations Queue
+
+Last reconciled: May 10, 2026 at 06:20 CDT.
+
+`clauderecommends.md` was reviewed as external feedback and checked against the current repo before accepting findings. Existing dirty work was preserved: untracked `clauderecommends.md` and untracked `docs/MIRO_PREVIEW_ARTIFACT_TEMPLATE.md` were not staged as part of this queue.
+
+Reconciliation summary:
+
+- Confirmed and still relevant before hackathon submission: route-boundary CanvasDocument validation for Miro/save APIs (#1; save route already validates after request parsing but the request schema still accepts unknown), rate-limiter bucket eviction (#2), client-only/localStorage hardening and quota/import errors (#3/#18/#19), dashboard partial-query fallback and fallback reason surfacing (#4/#10; high impact but touches risky dashboard/shared schema surfaces), fixed dataset filter allowlists (#5; high impact but touches risky dashboard/query validation), and empty catalog guard (#26).
+- Already fixed or partly stale: shared `parseSavedCanvasImport` already performs a pre-parse byte limit (#20); README already documents `/api/canvas/save` and `/api/canvas/[id]` boundaries (#44) and Houston/Dallas live/sample boundaries beyond the MVP bullet list (#39/#40); hash-import sad paths and saved workflows have existing unit/e2e coverage (#31/#32) though more malformed round-trip coverage remains useful.
+- High impact but deferred until after submission or explicit approval: Sentry/analytics/telemetry/health runtime metrics (#6-#9), CI required-check changes (#11-#13), broad formatting hooks (#14/#16), CODEOWNERS/PR template (#15), sample data expansion (#17, data mutation), large dashboard/module refactors (#21/#24), catalog schema/onboarding changes (#27/#29), and real backend/Miro/Houston/Austin integration roadmap items (#47-#50).
+- Risky or approval-needed: release evidence refresh remains gated Task 35; backend persistence/migrations remain gated Task 55; provider spend, production deployment config, auth hardening, billing, and destructive database operations remain out of scope without explicit approval.
+
+## 73. Tighten CanvasDocument Route Boundary Validation
+
+- Owner type: API / Validation
+- Goal: Replace route-level `z.unknown()` canvas request fields with `canvasDocumentSchema` so malformed canvases are rejected at the API boundary before business logic.
+- Scope: `apps/web/app/api/export/miro-spec/route.ts`, `apps/web/app/api/canvas/save/route.ts`, focused route tests.
+- Risk level: Low to Medium because API validation behavior changes, but only to reject malformed payloads earlier.
+- Acceptance criteria: Valid canvas save/export still works; malformed Miro/save canvas payloads return structured 400 errors; Miro remains preview-only and save remains browser-local validation stub.
+- Validation commands: focused Vitest route/API tests, `git diff --check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`.
+- Can run in parallel: No with API route validation edits.
+
+## 74. Add Middleware Rate-Limit Bucket Eviction
+
+- Owner type: API / Reliability
+- Goal: Keep in-memory middleware throttling bounded for long-running local/demo processes by evicting expired buckets.
+- Scope: `apps/web/middleware.ts`, middleware contract tests.
+- Risk level: Low to Medium because middleware is high-impact; keep behavior identical for active windows.
+- Acceptance criteria: Expired buckets are culled after their reset window, active buckets still rate-limit, headers are unchanged, and docs still state platform firewall/rate limiting is required for broad hosted sharing.
+- Validation commands: focused middleware Vitest test, `git diff --check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`.
+- Can run in parallel: No with middleware edits.
+
+## 75. Harden Browser-Local Saved-Canvas Client Boundaries
+
+- Owner type: Frontend / Persistence
+- Goal: Make saved-canvas client helpers explicitly client-only and improve user-facing handling for oversized imports or localStorage quota failures without adding backend persistence.
+- Scope: `apps/web/lib/saved-canvases.ts`, `apps/web/components/saved-canvases.tsx`, saved-canvas tests as needed.
+- Risk level: Low to Medium because it touches the reliable browser-local demo path.
+- Acceptance criteria: Client helper has a `use client` boundary; import size checks happen before parsing in the UI path; localStorage write failures surface as clear import/save/share errors; browser-local and URL-hash behavior remains unchanged.
+- Validation commands: focused saved-canvas Vitest/E2E where relevant, `git diff --check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`.
+- Can run in parallel: No with saved-canvas component/helper edits.
+
+## 76. Add Dashboard Partial-Query Fallback And Runtime Fallback Reasons
+
+- Owner type: Dashboard / Data honesty
+- Goal: Prevent one failed dashboard sub-query from killing the whole dashboard and surface specific fallback/failure reasons in source/method output.
+- Scope: `apps/web/lib/dashboard.ts`, shared `QueryAudit` schema if needed, dashboard tests.
+- Risk level: Medium to High because `dashboard.ts` and shared schemas are risky files.
+- Acceptance criteria: One failed aggregate produces a visible caveat or omitted block instead of full dashboard failure; fallback reasons remain honest and tested.
+- Validation commands: focused dashboard tests, `pnpm typecheck`, `pnpm test`, `git diff --check`, and likely `pnpm test:e2e` for the core demo path.
+- Can run in parallel: No.
+
+## 77. Replace Runtime-Derived Filter Allowlist With Dataset Field Allowlists
+
+- Owner type: Query / Safety
+- Goal: Ensure dashboard filters are checked against fixed approved dataset field allowlists rather than values derived from runtime intent.
+- Scope: `apps/web/lib/dashboard.ts`, dashboard/query tests.
+- Risk level: Medium to High because it touches query construction and protected dashboard logic.
+- Acceptance criteria: Supported prompts/filters still work; disallowed fields fail before query execution; allowlists are readable and dataset-specific.
+- Validation commands: focused dashboard/query tests, `pnpm typecheck`, `pnpm test`, `pnpm governance:audit`, `git diff --check`.
+- Can run in parallel: No.
+
+## 78. Guard Unsupported-Prompt Suggestions For Empty Catalog
+
+- Owner type: Frontend / Resilience
+- Goal: Avoid `datasets[0]` crashes if catalog loading ever returns no supported suggestion datasets.
+- Scope: `apps/web/lib/dashboard.ts`, focused dashboard test.
+- Risk level: Medium because it touches dashboard fallback behavior; small scope.
+- Acceptance criteria: Empty catalog/suggestion list returns a valid governed fallback canvas or structured error instead of throwing from undefined source metadata.
+- Validation commands: focused dashboard test, `pnpm typecheck`, `pnpm test`, `git diff --check`.
+- Can run in parallel: No with dashboard edits.

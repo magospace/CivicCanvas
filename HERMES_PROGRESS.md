@@ -691,3 +691,18 @@ Last updated: May 10, 2026 06:17 CDT
 - Task 41 committed as `7825404` (`docs: audit seed save api naming`).
 - Task 42 committed as `446f81c` (`docs: clarify deterministic no-provider generation`).
 - Safe-queue replenishment committed as `673d1da` (`docs: replenish safe stabilization queue`).
+
+
+## Claude Recommendations Reconciliation Update
+
+- Date: May 10, 2026 06:20 CDT.
+- Task chosen: Reconcile external `clauderecommends.md` into a verified hackathon-stabilization development queue before accepting any finding.
+- Context recovered: Read `AGENTS.md`, current `TASKS.md` tail, `HERMES_PROGRESS.md`, `QA_FINDINGS.md`, `REALNESS_AUDIT.md`, `README.md`, and `clauderecommends.md`; ran `git status --short --branch`.
+- Dirty worktree note: Preserved untracked `clauderecommends.md` and untracked `docs/MIRO_PREVIEW_ARTIFACT_TEMPLATE.md`; neither was staged for this reconciliation.
+- Confirmed findings after code inspection: Miro export route still accepted `canvas: z.unknown()` at the request boundary; canvas save route parsed `z.unknown()` before downstream CanvasDocument validation; middleware kept an unbounded bucket map; saved-canvas helper directly used `window.localStorage` without an explicit client boundary; dashboard generation still uses `Promise.all`; filter allowlist is derived from the detected intent; unsupported prompt fallback assumes `datasets[0]`; saved import parsing already has shared and app byte-limit checks.
+- Prioritization decision: Added Tasks 73-78 to `TASKS.md`. Highest immediate safe tasks are Task 73 route-boundary validation, Task 74 middleware bucket eviction, and Task 75 browser-local saved-canvas hardening. Dashboard partial-query fallback/filter allowlist/empty-catalog work is valuable but touches risky dashboard/shared-schema surfaces and should follow only after smaller API/persistence hardening is green.
+- Deferred/approval-needed: Sentry/analytics/telemetry, CI required-check changes, formatting hooks, CODEOWNERS, sample-data expansion, release evidence refresh, backend persistence, Miro write integration, auth/billing/production deployment changes, live provider spend, and destructive DB work were not selected for this hackathon-safe cycle.
+
+### Recommended Next Task
+
+- Task 73, `Tighten CanvasDocument Route Boundary Validation`, is the next safe implementation task.
