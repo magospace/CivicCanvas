@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "1.0",
+  "releaseVersion": "v1.3.0-hosted-launch-readiness",
+  "branch": "feat/v1.3-hosted-launch-readiness",
+  "commit": "pending-v1.3-commit",
+  "updatedAt": "2026-05-10T01:31:06.000Z",
+  "localVerifiedAt": "2026-05-10T01:31:06.000Z",
+  "localGates": [
+    {
+      "name": "pnpm lint",
+      "status": "passed",
+      "detail": "No ESLint warnings or errors."
+    },
+    {
+      "name": "pnpm typecheck",
+      "status": "passed",
+      "detail": "All workspace TypeScript projects typechecked."
+    },
+    {
+      "name": "pnpm test",
+      "status": "passed",
+      "detail": "Vitest passed 56 tests across shared, web, and MCP packages."
+    },
+    {
+      "name": "pnpm build",
+      "status": "passed",
+      "detail": "All workspace packages built successfully; Next generated 17 app routes."
+    },
+    {
+      "name": "pnpm governance:audit",
+      "status": "passed",
+      "detail": "Governance audit passed 12/12 checks."
+    },
+    {
+      "name": "pnpm verify:prod-local",
+      "status": "passed",
+      "detail": "Production-local next start passed deploy smoke 17/17 and remote-mode Playwright 14/14."
+    },
+    {
+      "name": "pnpm data:quality",
+      "status": "passed",
+      "detail": "Data quality checked 3 samples, 280 rows, and 4 gallery canvases."
+    },
+    {
+      "name": "pnpm verify",
+      "status": "passed",
+      "detail": "Preflight, live smoke, and Playwright e2e passed."
+    },
+    {
+      "name": "pnpm release:check",
+      "status": "passed",
+      "detail": "Governance audit, data quality, production-local verification, and Vercel output checks passed."
+    }
+  ],
+  "productionLocal": {
+    "status": "passed",
+    "detail": "next build and next start passed; deploy smoke passed 17/17; remote-mode Playwright passed 14/14 against the local production server."
+  },
+  "governanceAudit": {
+    "status": "passed",
+    "summary": "Governance audit passed 12/12 checks for v1.3.0-hosted-launch-readiness."
+  },
+  "hosted": {
+    "status": "blocked",
+    "smokeDeploy": "blocked",
+    "remotePlaywright": "blocked",
+    "firewallRateLimit": "blocked",
+    "blocker": "No public URL, Git remote, or Vercel project linkage is available in this repo context."
+  },
+  "screenshots": [
+    {
+      "label": "Explore shell",
+      "path": "docs/screenshots/v0.8/explore-shell.png"
+    },
+    {
+      "label": "Dallas dashboard",
+      "path": "docs/screenshots/v0.8/dallas-dashboard.png"
+    },
+    {
+      "label": "Austin dashboard",
+      "path": "docs/screenshots/v0.8/austin-dashboard.png"
+    },
+    {
+      "label": "Gallery",
+      "path": "docs/screenshots/v0.8/gallery.png"
+    },
+    {
+      "label": "Miro preview",
+      "path": "docs/screenshots/v0.8/miro-preview.png"
+    },
+    {
+      "label": "Saved workflow",
+      "path": "docs/screenshots/v0.8/saved-share-workflow.png"
+    },
+    {
+      "label": "Mobile explore",
+      "path": "docs/screenshots/v0.8/mobile-explore.png"
+    }
+  ]
+}

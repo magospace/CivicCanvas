@@ -2,9 +2,9 @@ import Link from "next/link";
 import { execSync } from "node:child_process";
 import { AlertTriangle, CheckCircle2, ClipboardCheck, ExternalLink, ShieldCheck } from "lucide-react";
 import { releaseMetadata, type DatasetMetadata } from "@texas-data-canvas/shared";
-import { DemoChecklistActions, ReleaseGateActions } from "../../components/demo-checklist-actions";
+import { DemoChecklistActions, HostedHandoffActions, ReleaseGateActions } from "../../components/demo-checklist-actions";
 import { Header } from "../../components/header";
-import { getCatalogHealth, getDatasetCatalog } from "../../lib/data";
+import { getCatalogHealth, getDatasetCatalog, getReleaseEvidence, getSampleDataQualityReport } from "../../lib/data";
 
 const localGateCommands = [
   "pnpm lint",
@@ -12,13 +12,15 @@ const localGateCommands = [
   "pnpm test",
   "pnpm build",
   "pnpm governance:audit",
+  "pnpm data:quality",
   "pnpm verify",
   "pnpm verify:prod-local",
+  "pnpm release:check",
   "pnpm smoke:deploy -- --url http://localhost:<port>"
 ];
 
 const hostedGateCommands = [
-  "pnpm smoke:deploy -- --url <public-url> --expect-version v1.2.0-hosted-trust",
+  "pnpm smoke:deploy -- --url <public-url> --expect-version v1.3.0-hosted-launch-readiness",
   "PLAYWRIGHT_BASE_URL=<public-url> pnpm test:e2e:remote"
 ];
 
@@ -53,6 +55,8 @@ function gitValue(command: string) {
 
 export default function DemoReadinessPage() {
   const health = getCatalogHealth();
+  const releaseEvidence = getReleaseEvidence();
+  const quality = getSampleDataQualityReport();
   const datasets = getDatasetCatalog();
   const dallas = datasets.find((dataset) => dataset.id === "dallas_311_requests");
   const austin = datasets.find((dataset) => dataset.id === "austin_building_permits");
@@ -86,6 +90,7 @@ export default function DemoReadinessPage() {
           </Link>
           <DemoChecklistActions />
           <ReleaseGateActions />
+          <HostedHandoffActions />
         </div>
 
         <section className="mb-6 rounded-lg border border-slate-200 bg-white p-5 shadow-panel">
@@ -96,7 +101,7 @@ export default function DemoReadinessPage() {
               </p>
               <h2 className="mt-2 text-xl font-semibold text-ink">{releaseMetadata.releaseVersion}</h2>
               <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
-                v1.2 makes hosted-style verification repeatable before any manual Vercel release.
+                v1.3 makes hosted handoff, release evidence, and demo readiness repeatable before any manual Vercel release.
                 The package version, health route, MCP status, docs, and audit scripts all derive from shared release metadata.
               </p>
             </div>
@@ -123,8 +128,34 @@ export default function DemoReadinessPage() {
             </div>
           </div>
           <div className="mt-4 rounded-md border border-mint/30 bg-mint/10 px-3 py-2 text-xs leading-5 text-civic-900">
-            Latest local gate record: v1.1 passed lint, typecheck, tests, build, verify, local deploy smoke,
-            smoke JSON, and remote-mode Playwright against localhost. v1.2 adds governance audit and production-local verification gates.
+            Latest evidence: {releaseEvidence.localVerifiedAt ?? "local v1.3 verification pending"} / hosted {releaseEvidence.hosted.status}.
+            Passed gates recorded: {releaseEvidence.localGates.filter((gate) => gate.status === "passed").map((gate) => gate.name).join(", ") || "pending"}.
+          </div>
+        </section>
+
+        <section className="mb-6 rounded-lg border border-slate-200 bg-white p-5 shadow-panel">
+          <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+            <div>
+              <h2 className="text-base font-semibold text-ink">Sample data quality</h2>
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                Current samples cover {quality.datasets.length} datasets and {quality.datasets.reduce((sum, dataset) => sum + dataset.rowCount, 0)} rows.
+                Missing ZIP rows: {quality.datasets.reduce((sum, dataset) => sum + dataset.missingZipRows, 0)}.
+              </p>
+            </div>
+            <code className="rounded-md bg-civic-900 px-3 py-2 text-xs text-civic-50">pnpm data:quality:json</code>
+          </div>
+          <div className="mt-4 grid gap-3 md:grid-cols-3">
+            {quality.datasets.map((dataset) => (
+              <div key={dataset.datasetId} className="rounded-md border border-slate-200 bg-civic-50 p-3">
+                <div className="text-sm font-semibold text-ink">{dataset.title}</div>
+                <p className="mt-1 text-xs leading-5 text-slate-600">
+                  {dataset.rowCount} rows / {dataset.dateRange ? `${dataset.dateRange.min} to ${dataset.dateRange.max}` : "no date range"}
+                </p>
+                <p className="mt-1 text-xs leading-5 text-slate-500">
+                  Top status: {dataset.topStatuses[0] ? `${dataset.topStatuses[0].value} (${dataset.topStatuses[0].count})` : "n/a"}
+                </p>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -158,7 +189,7 @@ export default function DemoReadinessPage() {
               Hosted blocker
             </div>
             <p className="mt-4 text-sm leading-6 text-slate-600">
-              v0.6 through v1.1 remain untagged until a public URL passes hosted smoke,
+              v0.6 through v1.2 remain untagged until a public URL passes hosted smoke,
               remote Playwright, and platform-level firewall/rate-limit review for the target release.
             </p>
             <div className="mt-3 rounded-md bg-signal/10 px-3 py-2 text-xs font-semibold text-signal">

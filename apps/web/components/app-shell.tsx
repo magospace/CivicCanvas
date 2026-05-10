@@ -11,6 +11,21 @@ import { PromptBar } from "./prompt-bar";
 import { boundedQuerySpecJson, canvasDocumentJson, tableCsv } from "../lib/dashboard-exports";
 import { createCanvasShareBundleLink, importSavedCanvasHash, saveCanvasLocally, takePendingOpenCanvas } from "../lib/saved-canvases";
 
+const promptExamples = [
+  {
+    label: "Dallas 311 by ZIP",
+    prompt: "Show Dallas 311 service requests by category and ZIP code for 2024."
+  },
+  {
+    label: "Austin permits trend",
+    prompt: "Show Austin building permits by month and ZIP code for 2024."
+  },
+  {
+    label: "Houston incidents",
+    prompt: "Show Houston transportation incidents by ZIP and incident type for 2024."
+  }
+];
+
 export function AppShell({
   canvas,
   datasets
@@ -213,12 +228,17 @@ export function AppShell({
             prompt={prompt}
             dataModePreference={dataModePreference}
             isGenerating={isGenerating}
+            promptExamples={promptExamples}
             onPromptChange={setPrompt}
             onDataModePreferenceChange={setDataModePreference}
             onGenerate={generateDashboard}
           />
           {status ? (
-            <div className="rounded-lg border border-civic-100 bg-white px-4 py-3 text-sm text-civic-700 shadow-sm">
+            <div
+              role="status"
+              aria-live="polite"
+              className="rounded-lg border border-civic-100 bg-white px-4 py-3 text-sm text-civic-700 shadow-sm"
+            >
               {status}
             </div>
           ) : null}
@@ -228,6 +248,19 @@ export function AppShell({
               <p className="text-xs text-slate-500">
                 Export only validated canvas, query, and table data. No generated HTML or scripts.
               </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <span className="rounded-md bg-civic-100 px-2 py-1 text-[11px] font-semibold text-civic-700">
+                  Selected mode: {dataModePreference}
+                </span>
+                <span className="rounded-md bg-mint/10 px-2 py-1 text-[11px] font-semibold text-mint">
+                  Rendered mode: {dataMode}
+                </span>
+                {fallbackReason || sampleModeNotice ? (
+                  <span className="rounded-md bg-amber-50 px-2 py-1 text-[11px] font-semibold text-amber-900">
+                    Fallback/caveat active
+                  </span>
+                ) : null}
+              </div>
             </div>
             <div className="flex flex-wrap gap-2">
               <button

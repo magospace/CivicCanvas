@@ -2,19 +2,20 @@
 
 Last updated: May 9, 2026
 
-This plan tracks the active `feat/v1.2-hosted-trust` branch. The v0.6 through v1.1 code work remains locally complete but untagged because no public deployment URL is available. v1.2 hosted-trust work tightens version hygiene, production-local verification, governance auditability, and public-demo release surfaces while keeping the no-auth, no hosted persistence, no KV, no LLM parsing, no arbitrary generated UI, no arbitrary SQL/SoQL, no external map layers, and no live Miro writes boundary.
+This plan tracks the active `feat/v1.3-hosted-launch-readiness` branch. The v0.6 through v1.2 code work remains locally complete but untagged because no public deployment URL is available. v1.3 hosted-launch-readiness work focuses on deployment handoff, release evidence, public demo confidence, sample-data quality, and launch checks while keeping the no-auth, no hosted persistence, no KV, no LLM parsing, no arbitrary generated UI, no arbitrary SQL/SoQL, no external map layers, and no live Miro writes boundary.
 
 ## Current State
 
 - `main` has been fast-forwarded to `v0.5.0-public-beta`.
-- Active branch: `feat/v1.2-hosted-trust`.
+- Active branch: `feat/v1.3-hosted-launch-readiness`.
 - v0.6 local hosted-beta work is implemented, including the external review hardening backlog listed below.
 - v0.7 local public-hardening work is implemented and verified locally, but v0.6/v0.7 are not tagged because there is no public Vercel URL, no Git remote, and no Vercel credential environment in this repo context.
 - v0.8 product-readiness work is locally closed out on the same branch with screenshots and release-gate documentation.
 - v0.9 public-reliability work is locally complete and remains untagged until hosted verification exists.
 - v1.0 public-pilot work adds Houston transportation as a governed sample-first third dataset with tests and visible readiness status.
 - v1.1 product-depth work is locally verified and keeps Houston sample-first after official/source-owned verification.
-- v1.2 hosted-trust work centralizes release metadata, adds production-local verification, adds governance audit scripts, and makes hosted blockers visible in the demo console.
+- v1.2 hosted-trust work is locally verified and centralizes release metadata, production-local verification, governance audit scripts, and hosted blockers.
+- v1.3 hosted-launch-readiness work adds deployment handoff, release evidence, Vercel output verification, data quality reporting, prompt/demo polish, and launch-readiness checks.
 - All dashboard output must remain validated `CanvasDocument` JSON rendered through the allowlisted React block registry.
 
 ## Implemented v0.6 Review Hardening
@@ -235,9 +236,32 @@ Active branch: `feat/v1.2-hosted-trust`. This pass focuses on repeatable hosted-
 
 - Do not tag `v1.2.0-hosted-trust` until a real public URL passes hosted smoke and remote Playwright.
 
+## v1.3 Hosted Launch Readiness Active
+
+Active branch: `feat/v1.3-hosted-launch-readiness`.
+
+1. Add `docs/V1_3_HOSTED_LAUNCH_READINESS_PLAN.md`.
+2. Update shared release metadata:
+   - `packageVersion: 1.3.0`
+   - `releaseVersion: v1.3.0-hosted-launch-readiness`
+   - `devFallbackVersion: v1.3.0-hosted-launch-readiness-dev`
+   - `releaseChannel: hosted-launch-readiness`
+3. Add `docs/release-evidence.json` and surface its local/hosted status on `/demo-readiness`.
+4. Add `pnpm verify:vercel-output` and `pnpm release:check` for deployment handoff.
+5. Add `pnpm data:quality` and `pnpm data:quality:json` for sample sanity checks.
+6. Extend `pnpm governance:audit` with catalog caveats, sample dataset ID consistency, gallery source references, SourceMethodBlock caveats, and hidden-field export checks.
+7. Improve `/explore` with prompt chips and clearer data-mode/fallback visibility.
+8. Improve `/sources`, `/gallery`, and `/demo-readiness` with launch-readiness copy and validated open/export flows.
+9. Add `docs/HOUSTON_TRANSTAR_ACCESS_PACKET.md` while keeping Houston sample-first.
+
+### Remaining v1.3 Work
+
+- Run local gates after implementation.
+- Do not tag `v1.3.0-hosted-launch-readiness` until a real public URL passes hosted smoke and remote Playwright.
+
 ## Release Gate
 
-Do not tag `v0.6.0-hosted-beta`, `v0.7.0-public-hardening`, `v0.8.0-product-readiness`, `v0.9.0-public-reliability`, `v1.0.0-public-pilot`, `v1.1.0-product-depth`, or `v1.2.0-hosted-trust` until:
+Do not tag `v0.6.0-hosted-beta`, `v0.7.0-public-hardening`, `v0.8.0-product-readiness`, `v0.9.0-public-reliability`, `v1.0.0-public-pilot`, `v1.1.0-product-depth`, `v1.2.0-hosted-trust`, or `v1.3.0-hosted-launch-readiness` until:
 
 - v0.6 must-fix items above are resolved or explicitly waived in docs.
 - `pnpm verify` passes.

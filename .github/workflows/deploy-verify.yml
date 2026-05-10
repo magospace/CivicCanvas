@@ -10,7 +10,7 @@ on:
       expected_version:
         description: "Expected /api/health appVersion"
         required: true
-        default: "v0.6.0-hosted-beta"
+        default: "v1.3.0-hosted-launch-readiness"
         type: string
 
 jobs:

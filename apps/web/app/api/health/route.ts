@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { releaseMetadata } from "@texas-data-canvas/shared";
-import { getCatalogHealth } from "../../../lib/data";
+import { getCatalogHealth, getReleaseEvidence } from "../../../lib/data";
 
 function deploymentUrl() {
   if (process.env.NEXT_PUBLIC_SITE_URL) {
@@ -24,6 +24,7 @@ function deploymentProvider() {
 
 export function GET() {
   const catalog = getCatalogHealth();
+  const releaseEvidence = getReleaseEvidence();
   const gitRef = process.env.VERCEL_GIT_COMMIT_REF ?? process.env.GITHUB_REF_NAME;
 
   return NextResponse.json({
@@ -39,6 +40,13 @@ export function GET() {
     gitCommitSha: process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.GITHUB_SHA,
     gitBranch: gitRef,
     gitRef,
+    releaseEvidence: {
+      localVerifiedAt: releaseEvidence.localVerifiedAt,
+      hostedStatus: releaseEvidence.hosted.status,
+      latestLocalGates: releaseEvidence.localGates
+        .filter((gate) => gate.status === "passed")
+        .map((gate) => gate.name)
+    },
     checkedAt: catalog.checkedAt,
     catalogCount: catalog.datasetCount,
     liveEnabledDatasets: catalog.liveEnabledDatasets,

@@ -1,9 +1,11 @@
 "use client";
 
 import { Download, FileJson } from "lucide-react";
-import type { CanvasDocument } from "@texas-data-canvas/shared";
+import { createSavedCanvas, type CanvasDocument } from "@texas-data-canvas/shared";
+import { useRouter } from "next/navigation";
 import { canvasDocumentJson, tableCsv } from "../lib/dashboard-exports";
 import { downloadTextFile, safeDownloadName } from "../lib/client-downloads";
+import { queueCanvasForOpen } from "../lib/saved-canvases";
 import { CanvasRenderer } from "./canvas/canvas-renderer";
 
 function exportCanvasJson(canvas: CanvasDocument) {
@@ -28,11 +30,31 @@ function exportTableCsv(canvas: CanvasDocument) {
 }
 
 export function GalleryCanvasList({ canvases }: { canvases: CanvasDocument[] }) {
+  const router = useRouter();
+
+  function openInExplore(canvas: CanvasDocument) {
+    queueCanvasForOpen(createSavedCanvas({
+      canvas,
+      audits: [],
+      prompt: canvas.prompt ?? canvas.title
+    }));
+    router.push("/explore");
+  }
+
   return (
     <div className="space-y-6">
       {canvases.map((canvas) => (
         <section key={canvas.id} className="space-y-3">
           <div className="flex flex-wrap items-center justify-end gap-2">
+            <button
+              type="button"
+              onClick={() => openInExplore(canvas)}
+              aria-label={`Open ${canvas.title} in explore`}
+              title={`Open ${canvas.title} in explore`}
+              className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+            >
+              Open in explore
+            </button>
             <button
               type="button"
               onClick={() => exportTableCsv(canvas)}

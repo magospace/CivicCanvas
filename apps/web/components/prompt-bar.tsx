@@ -5,6 +5,7 @@ export function PromptBar({
   prompt,
   dataModePreference,
   isGenerating,
+  promptExamples,
   onPromptChange,
   onDataModePreferenceChange,
   onGenerate
@@ -12,6 +13,7 @@ export function PromptBar({
   prompt: string;
   dataModePreference: DataModePreference;
   isGenerating: boolean;
+  promptExamples?: { label: string; prompt: string }[];
   onPromptChange: (prompt: string) => void;
   onDataModePreferenceChange: (mode: DataModePreference) => void;
   onGenerate: () => void;
@@ -60,6 +62,24 @@ export function PromptBar({
           {isGenerating ? "Generating..." : "Generate View"}
         </button>
       </form>
+      {promptExamples && promptExamples.length > 0 ? (
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <span className="text-xs font-semibold text-slate-500">Try:</span>
+          {promptExamples.map((example) => (
+            <button
+              key={example.label}
+              type="button"
+              onClick={() => onPromptChange(example.prompt)}
+              className="rounded-md border border-slate-200 bg-civic-50 px-2.5 py-1 text-xs font-semibold text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+            >
+              {example.label}
+            </button>
+          ))}
+          <span className="text-xs text-slate-500">
+            Auto uses live only for verified fields; sample fallback stays available for ZIP, Austin month, and Houston.
+          </span>
+        </div>
+      ) : null}
     </section>
   );
 }

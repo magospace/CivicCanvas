@@ -26,6 +26,9 @@ test("explore route loads the governed shell", async ({ page }) => {
   await expect(page.getByText("Texas Data Canvas").first()).toBeVisible();
   await expect(page.getByLabel("Dashboard prompt")).toBeVisible();
   await expect(page.getByText("Known data boundaries")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Dallas 311 by ZIP" })).toBeVisible();
+  await page.getByRole("button", { name: "Austin permits trend" }).click();
+  await expect(page.getByLabel("Dashboard prompt")).toHaveValue("Show Austin building permits by month and ZIP code for 2024.");
 });
 
 test("Dallas prompt generates fallback ZIP dashboard and filter changes table state", async ({ page }) => {
@@ -81,7 +84,7 @@ test("sources route shows live verification status", async ({ page }) => {
   await expect(page.getByText("Live verification").first()).toBeVisible();
   await expect(page.getByText("live promoted").first()).toBeVisible();
   await expect(page.getByText("sample fallback required").first()).toBeVisible();
-  await expect(page.getByText("sample first").first()).toBeVisible();
+  await expect(page.getByText("sample-first").first()).toBeVisible();
   await expect(page.getByText("precise_address · hidden")).toBeVisible();
   await expect(page.getByText(/intentionally excluded from queries, exports, and generated dashboards/i)).toBeVisible();
 });
@@ -140,6 +143,11 @@ test("gallery route renders checked-in validated canvases", async ({ page }) => 
   await expect(page.getByText("Austin Permits Sample Dashboard")).toBeVisible();
   await expect(page.getByText("Houston Transportation Sample Dashboard")).toBeVisible();
   await expect(page.getByText("Unsupported Sensitive Prompt Example")).toBeVisible();
+  await expect(page.getByText(/Safety proof: gallery dashboards are checked-in CanvasDocument JSON/i)).toBeVisible();
+  await page.getByLabel("Open Dallas 311 Sample Dashboard in explore").click();
+  await expect(page).toHaveURL(/\/explore/);
+  await expect(page.getByRole("heading", { name: "Dallas 311 Sample Dashboard" })).toBeVisible();
+  await page.goto("/gallery");
   await expect(page.getByLabel("Download Dallas 311 Sample Dashboard table CSV")).toBeVisible();
   await expect(page.getByLabel("Download Austin Permits Sample Dashboard CanvasDocument JSON")).toBeVisible();
 });
@@ -147,13 +155,15 @@ test("gallery route renders checked-in validated canvases", async ({ page }) => 
 test("demo readiness route shows public release boundaries", async ({ page }) => {
   await page.goto("/demo-readiness");
 
-  await expect(page.getByText("Demo readiness")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Demo readiness" })).toBeVisible();
   await expect(page.getByText("Known sample/live boundaries")).toBeVisible();
   await expect(page.getByText("Dataset readiness")).toBeVisible();
   await expect(page.getByRole("button", { name: "Copy demo checklist" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Copy release gates" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Copy hosted handoff" })).toBeVisible();
   await expect(page.getByText("Release proof")).toBeVisible();
-  await expect(page.getByText("v1.2.0-hosted-trust").first()).toBeVisible();
+  await expect(page.getByText("v1.3.0-hosted-launch-readiness").first()).toBeVisible();
+  await expect(page.getByText("Sample data quality")).toBeVisible();
   await expect(page.getByText("Hosted blocker", { exact: true })).toBeVisible();
   await expect(page.getByText("Houston live verification")).toBeVisible();
   await expect(page.getByText(/Houston TranStar publishes sample JSON feeds/i)).toBeVisible();
@@ -185,7 +195,7 @@ test("key public-beta flows have no serious accessibility violations", async ({ 
   await expectNoSeriousAccessibilityViolations(page);
 
   await page.goto("/demo-readiness");
-  await expect(page.getByText("Demo readiness")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Demo readiness" })).toBeVisible();
   await expectNoSeriousAccessibilityViolations(page);
 
   await page.goto("/saved");

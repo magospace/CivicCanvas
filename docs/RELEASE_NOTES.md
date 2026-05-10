@@ -1,6 +1,17 @@
 # Release Notes
 
-## v1.2.0-hosted-trust (active)
+## v1.3.0-hosted-launch-readiness (active)
+
+- Adds deployment handoff docs, checked-in release evidence, Vercel build-output verification, and `pnpm release:check`.
+- Adds `pnpm data:quality` for sample row counts, date ranges, ZIP gaps, and top status/category summaries.
+- Extends governance audit coverage for catalog caveats, sample dataset IDs, gallery source references, and SourceMethodBlock caveats.
+- Improves `/explore` with prompt chips and clearer sample/live boundaries.
+- Improves `/demo-readiness` with release evidence, data quality, and hosted handoff copy actions.
+- Improves `/gallery` with an “open in explore” flow through the validated saved-canvas path.
+- Keeps Houston sample-first and adds a Houston TranStar access packet for future live promotion.
+- Release tag remains blocked until a real public URL passes hosted smoke and remote Playwright.
+
+## v1.2.0-hosted-trust (locally complete / untagged)
 
 - Centralizes active release metadata in `@texas-data-canvas/shared` with package version `1.2.0`, release version `v1.2.0-hosted-trust`, dev fallback `v1.2.0-hosted-trust-dev`, and release channel `hosted-trust`.
 - Adds production-local hosted verification through `pnpm verify:prod-local`.

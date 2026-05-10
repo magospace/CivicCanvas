@@ -143,6 +143,63 @@ const checks = [
     }
   ),
   check(
+    "catalog datasets include source caveats",
+    "Every approved catalog dataset includes at least one public-data caveat.",
+    () => {
+      for (const dataset of catalog) {
+        if (!Array.isArray(dataset.caveats) || dataset.caveats.length === 0) {
+          throw new Error(`${dataset.id} has no caveats`);
+        }
+      }
+      return `${catalog.length} catalog dataset(s) checked.`;
+    }
+  ),
+  check(
+    "sample files match catalog dataset IDs",
+    "Every fallback sample file declares the same datasetId as the catalog entry.",
+    () => {
+      for (const dataset of catalog.filter((entry) => entry.fallbackSampleFile)) {
+        const sample = readJson(join(root, "data/samples", dataset.fallbackSampleFile));
+        if (sample.datasetId !== dataset.id) {
+          throw new Error(`${dataset.fallbackSampleFile} declares ${sample.datasetId}, expected ${dataset.id}`);
+        }
+      }
+      return `${catalog.filter((entry) => entry.fallbackSampleFile).length} sample file(s) checked.`;
+    }
+  ),
+  check(
+    "gallery canvas sources reference approved catalog datasets",
+    "Gallery sources either reference an approved dataset or the catalog suggestion fixture.",
+    () => {
+      const approvedIds = new Set(catalog.map((dataset) => dataset.id));
+      approvedIds.add("catalog_suggestions");
+      for (const path of checkedCanvasPaths) {
+        const canvas = readJson(path);
+        for (const source of canvas.sources ?? []) {
+          if (source.datasetId && !approvedIds.has(source.datasetId)) {
+            throw new Error(`${relative(root, path)} references unapproved source dataset ${source.datasetId}`);
+          }
+        }
+      }
+      return `${checkedCanvasPaths.length} canvas source list(s) checked.`;
+    }
+  ),
+  check(
+    "source method blocks include caveats",
+    "Every SourceMethodBlock checked by the audit includes non-empty caveats.",
+    () => {
+      for (const path of checkedCanvasPaths) {
+        const canvas = readJson(path);
+        const sourceBlock = canvas.blocks?.find((block) => block.type === "SourceMethodBlock");
+        const caveats = sourceBlock?.props?.attribution?.caveats ?? sourceBlock?.props?.caveats ?? [];
+        if (!Array.isArray(caveats) || caveats.length === 0) {
+          throw new Error(`${relative(root, path)} SourceMethodBlock has no caveats`);
+        }
+      }
+      return `${checkedCanvasPaths.length} SourceMethodBlock caveat set(s) checked.`;
+    }
+  ),
+  check(
     "governance limits match documentation",
     "DATA_GOVERNANCE.md records the code governance limits.",
     () => {
@@ -200,14 +257,15 @@ const checks = [
   ),
   check(
     "release docs reference active version",
-    "README, PLAN, implementation status, and release notes reference the active v1.2 release.",
+    "README, PLAN, implementation status, release notes, and active plan reference the active release.",
     () => {
       const files = [
         "README.md",
         "PLAN.md",
         "docs/IMPLEMENTATION_STATUS.md",
         "docs/RELEASE_NOTES.md",
-        "docs/V1_2_HOSTED_TRUST_PLAN.md"
+        "docs/V1_3_HOSTED_LAUNCH_READINESS_PLAN.md",
+        "docs/release-evidence.json"
       ];
       for (const file of files) {
         const source = readFileSync(join(root, file), "utf8");

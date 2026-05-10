@@ -47,8 +47,11 @@ pnpm typecheck
 pnpm test
 pnpm build
 pnpm governance:audit
+pnpm data:quality
 pnpm preflight
 pnpm verify:prod-local
+pnpm verify:vercel-output
+pnpm release:check
 pnpm smoke:live
 pnpm smoke:live:json
 pnpm smoke:deploy -- --url http://localhost:3000
@@ -60,7 +63,9 @@ pnpm verify
 
 `pnpm smoke:live` is optional and only checks catalog entries with `liveAvailable: true`.
 `pnpm governance:audit` checks catalog fallback policy, hidden-field leakage, governance-limit drift, and active release-version consistency.
+`pnpm data:quality` summarizes sample row counts, date ranges, ZIP gaps, and top statuses/categories for demo sanity.
 `pnpm verify:prod-local` builds `apps/web`, runs `next start` on an available local port, then runs hosted-style smoke and remote-mode Playwright against that production server.
+`pnpm verify:vercel-output` inspects `.vercel/output` after `vercel build` when available, and skips output inspection safely when it is absent.
 `pnpm verify` runs the local release gate: preflight, live smoke, and Playwright browser smoke.
 
 ## MVP demo prompts
@@ -117,7 +122,7 @@ Recommended Vercel settings:
 - Output framework: Next.js
 - Required secrets: none for sample mode
 - Hosted beta env: `NEXT_PUBLIC_APP_ENV=hosted-beta`
-- Hosted beta version: set the release being verified, for example `NEXT_PUBLIC_APP_VERSION=v1.2.0-hosted-trust`
+- Hosted beta version: set the release being verified, for example `NEXT_PUBLIC_APP_VERSION=v1.3.0-hosted-launch-readiness`
 - Optional site URL: `NEXT_PUBLIC_SITE_URL=https://your-public-beta.example`
 
 Set hosted beta `NEXT_PUBLIC_*` values before building; Next.js captures them into the production bundle.
@@ -127,7 +132,7 @@ Sample mode requires no secrets. Live Socrata adapters use verified catalog fiel
 After deploying, smoke-check the public URL:
 
 ```bash
-pnpm smoke:deploy -- --url https://your-deployment.example --expect-version v1.2.0-hosted-trust
+pnpm smoke:deploy -- --url https://your-deployment.example --expect-version v1.3.0-hosted-launch-readiness
 ```
 
 Saved canvases remain browser-local. Use `/saved` to export/import portable saved-canvas bundles for demos and handoffs. Share links place the validated bundle in the URL hash and import only after schema validation; they are not public database-backed URLs.

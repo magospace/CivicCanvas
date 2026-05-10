@@ -4,8 +4,10 @@ import { fileURLToPath } from "node:url";
 import {
   approvedDatasetCatalogSchema,
   createAdapterRouter,
+  releaseEvidenceSchema,
   type DatasetMetadata,
   type DatasetSamples,
+  type ReleaseEvidence,
   type SampleRow
 } from "@texas-data-canvas/shared";
 
@@ -25,6 +27,10 @@ function readJson(pathFromRepoRoot: string): unknown {
 
 export function getCatalog(): DatasetMetadata[] {
   return approvedDatasetCatalogSchema.parse(readJson("data/catalog/approved-datasets.json"));
+}
+
+export function getReleaseEvidence(): ReleaseEvidence {
+  return releaseEvidenceSchema.parse(readJson("docs/release-evidence.json"));
 }
 
 export function getRows(datasetId: string): SampleRow[] {

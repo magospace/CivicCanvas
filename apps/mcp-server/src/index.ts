@@ -11,6 +11,7 @@ import {
   generateCanvasSpec,
   generateMiroExportSpec,
   getDatasetMetadata,
+  getReleaseEvidence,
   getSampleRows,
   getServerStatus,
   getSourceAttribution,
@@ -83,6 +84,11 @@ export function createServer() {
     title: "Get server status",
     description: "Return MCP server readiness and safety model metadata."
   }, handled(() => getServerStatus()));
+
+  server.registerTool("get_release_evidence", {
+    title: "Get release evidence",
+    description: "Return checked-in release evidence for local and hosted readiness gates."
+  }, handled(() => getReleaseEvidence()));
 
   server.registerTool("validate_catalog", {
     title: "Validate catalog",

@@ -1,7 +1,7 @@
 {
   "name": "texas-data-canvas",
   "private": true,
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Open-source MCP-powered visual explorer for Texas public datasets.",
   "packageManager": "pnpm@10.14.0",
   "scripts": {
@@ -13,7 +13,11 @@
     "preflight": "node scripts/preflight.mjs && node scripts/governance-audit.mjs && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "governance:audit": "node scripts/governance-audit.mjs",
     "governance:audit:json": "node scripts/governance-audit.mjs --json",
+    "data:quality": "node scripts/data-quality.mjs",
+    "data:quality:json": "node scripts/data-quality.mjs --json",
     "verify:prod-local": "node scripts/verify-prod-local.mjs",
+    "verify:vercel-output": "node scripts/verify-vercel-build-output.mjs",
+    "release:check": "node scripts/governance-audit.mjs && node scripts/data-quality.mjs && node scripts/verify-prod-local.mjs && node scripts/verify-vercel-build-output.mjs",
     "smoke:live": "node scripts/smoke-live.mjs",
     "smoke:live:json": "node scripts/smoke-live.mjs --json",
     "smoke:deploy": "node scripts/smoke-deploy.mjs",

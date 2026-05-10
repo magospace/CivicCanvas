@@ -6,10 +6,12 @@ import {
   approvedDatasetCatalogSchema,
   catalogHealthReportSchema,
   createAdapterRouter,
+  releaseEvidenceSchema,
   validateCanvasDocument,
   type CanvasDocument,
   type DatasetMetadata,
-  type DatasetSamples
+  type DatasetSamples,
+  type ReleaseEvidence
 } from "@texas-data-canvas/shared";
 
 const sampleFileSchema = z.object({
@@ -66,6 +68,62 @@ export function getCuratedGalleryCanvases(): CanvasDocument[] {
   return galleryCanvasFiles.map((fileName) =>
     validateCanvasDocument(readJson(`data/gallery/${fileName}`))
   );
+}
+
+export function getReleaseEvidence(): ReleaseEvidence {
+  return releaseEvidenceSchema.parse(readJson("docs/release-evidence.json"));
+}
+
+function countValues(rows: Array<Record<string, unknown>>, field: string) {
+  const counts = new Map<string, number>();
+  for (const row of rows) {
+    const value = row[field];
+    if (typeof value === "string" && value.trim()) {
+      counts.set(value, (counts.get(value) ?? 0) + 1);
+    }
+  }
+  return [...counts.entries()]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .slice(0, 5)
+    .map(([value, count]) => ({ value, count }));
+}
+
+export function getSampleDataQualityReport() {
+  const catalog = getDatasetCatalog();
+  const datasets = catalog
+    .filter((dataset) => dataset.fallbackSampleFile)
+    .map((dataset) => {
+      const fileName = dataset.fallbackSampleFile!;
+      const sample = sampleFileSchema.parse(readJson(`data/samples/${fileName}`));
+      const dateFields = dataset.fields.filter((field) => field.type === "date").map((field) => field.name);
+      const dateValues = dateFields.flatMap((field) =>
+        sample.rows.map((row) => row[field]).filter((value): value is string => typeof value === "string")
+      ).sort();
+      const expectedZip = dataset.fields.some((field) => field.name === "zip_code");
+      const missingZipRows = expectedZip
+        ? sample.rows.filter((row) => typeof row.zip_code !== "string" || row.zip_code.length === 0).length
+        : 0;
+      const categoryField = dataset.fields.find((field) =>
+        ["category", "permit_type", "incident_type"].includes(field.name)
+      )?.name;
+
+      return {
+        datasetId: dataset.id,
+        title: dataset.title,
+        file: fileName,
+        rowCount: sample.rows.length,
+        dateRange: dateValues.length > 0 ? { min: dateValues[0], max: dateValues[dateValues.length - 1] } : null,
+        expectedZip,
+        missingZipRows,
+        topCategories: categoryField ? countValues(sample.rows, categoryField) : [],
+        topStatuses: countValues(sample.rows, "status")
+      };
+    });
+
+  return {
+    checkedAt: new Date().toISOString(),
+    datasets
+  };
 }
 
 export function getDatasetAdapter() {

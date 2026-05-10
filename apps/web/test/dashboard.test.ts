@@ -228,7 +228,7 @@ describe("production API contracts", () => {
     process.env.NEXT_PUBLIC_SITE_URL = "https://texas-data-canvas.example";
     process.env.VERCEL = "1";
     process.env.VERCEL_GIT_COMMIT_SHA = "abc123";
-    process.env.VERCEL_GIT_COMMIT_REF = "feat/v1.2-hosted-trust";
+    process.env.VERCEL_GIT_COMMIT_REF = "feat/v1.3-hosted-launch-readiness";
 
     try {
       const health = await healthGET();
@@ -238,7 +238,8 @@ describe("production API contracts", () => {
       expect(body.deploymentProvider).toBe("vercel");
       expect(body.deploymentUrl).toBe("https://texas-data-canvas.example");
       expect(body.gitCommitSha).toBe("abc123");
-      expect(body.gitBranch).toBe("feat/v1.2-hosted-trust");
+      expect(body.gitBranch).toBe("feat/v1.3-hosted-launch-readiness");
+      expect(body.releaseEvidence.hostedStatus).toBe("blocked");
     } finally {
       for (const [key, value] of Object.entries(previous)) {
         if (value === undefined) {
@@ -359,7 +360,41 @@ describe("production API contracts", () => {
 
     expect(body.ok).toBe(true);
     expect(body.releaseVersion).toBe(releaseMetadata.releaseVersion);
-    expect(body.checks.map((check: { name: string }) => check.name)).toContain("hidden fields stay out of canvas/export fixtures");
+    expect(body.checks.map((check: { name: string }) => check.name)).toEqual(expect.arrayContaining([
+      "hidden fields stay out of canvas/export fixtures",
+      "catalog datasets include source caveats",
+      "sample files match catalog dataset IDs",
+      "gallery canvas sources reference approved catalog datasets",
+      "source method blocks include caveats"
+    ]));
+  });
+
+  it("reports sample data quality for release handoff", () => {
+    const stdout = execFileSync("node", ["scripts/data-quality.mjs", "--json"], {
+      cwd: process.cwd(),
+      encoding: "utf8"
+    });
+    const body = JSON.parse(stdout);
+
+    expect(body.ok).toBe(true);
+    expect(body.summary.datasetCount).toBe(3);
+    expect(body.datasets.map((dataset: { datasetId: string }) => dataset.datasetId)).toEqual(expect.arrayContaining([
+      "dallas_311_requests",
+      "austin_building_permits",
+      "houston_transportation_incidents"
+    ]));
+    expect(body.summary.totalSampleRows).toBeGreaterThan(0);
+  });
+
+  it("verifies Vercel output safely when no local output exists", () => {
+    const stdout = execFileSync("node", ["scripts/verify-vercel-build-output.mjs", "--json"], {
+      cwd: process.cwd(),
+      encoding: "utf8"
+    });
+    const body = JSON.parse(stdout);
+
+    expect(body.ok).toBe(true);
+    expect(body.checks.map((check: { name: string }) => check.name)).toContain("no tracked Vercel secrets or project metadata");
   });
 
   it("governance audit rejects controlled hidden-field leakage", () => {

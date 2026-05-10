@@ -28,6 +28,25 @@ function fieldStatus(dataset: DatasetMetadata, fieldName: string) {
   return { label: dataset.liveAvailable ? "mapped" : "sample", className: "border-slate-200 bg-white text-slate-600" };
 }
 
+function datasetStatus(dataset: DatasetMetadata) {
+  const promotion = dataset.liveVerification?.promotionStatus;
+  if (promotion === "promoted") {
+    return { label: "live promoted", className: "bg-mint/10 text-mint" };
+  }
+  if (promotion === "blocked") {
+    return { label: "blocked", className: "bg-amber-50 text-amber-900" };
+  }
+  if (promotion === "sample_first") {
+    return { label: "sample-first", className: "bg-amber-50 text-amber-900" };
+  }
+  if (dataset.fields.length === 0) {
+    return { label: "coming later", className: "bg-slate-100 text-slate-600" };
+  }
+  return dataset.liveAvailable
+    ? { label: "live verified", className: "bg-mint/10 text-mint" }
+    : { label: "sample fallback", className: "bg-slate-100 text-slate-600" };
+}
+
 export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
   const [city, setCity] = useState("All");
   const [topic, setTopic] = useState("All");
@@ -77,15 +96,7 @@ export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
             ? dataset.fields.map((field) => ({ name: field.name, status: fieldStatus(dataset, field.name) }))
             : [{ name: "Approved metadata pending", status: fieldStatus(dataset, "pending") }];
           const hiddenFields = dataset.fields.filter((field) => field.classification === "sensitive_hide");
-          const promotionLabel = verification?.promotionStatus === "promoted"
-            ? "live promoted"
-            : verification?.promotionStatus === "blocked"
-              ? "sample fallback required"
-              : verification?.promotionStatus === "sample_first"
-                ? "sample first"
-                : dataset.liveAvailable
-                  ? "live verified"
-                  : dataset.dataAccess;
+          const status = datasetStatus(dataset);
           const hostedBetaNote = dataset.id === "dallas_311_requests"
             ? "Hosted beta: verified Dallas live aggregates do not expose ZIP, so ZIP geography dashboards use sample fallback."
             : dataset.id === "austin_building_permits"
@@ -116,12 +127,17 @@ export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
             </div>
             <p className="mt-3 text-sm leading-6 text-slate-600">{dataset.description}</p>
             <div className="mt-4 flex flex-wrap gap-2">
-              <span className="rounded-md bg-mint/10 px-2.5 py-1 text-xs font-medium text-mint">
-                {promotionLabel}
+              <span className={`rounded-md px-2.5 py-1 text-xs font-semibold ${status.className}`}>
+                {status.label}
               </span>
               <span className="rounded-md bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
-                {dataset.externalDatasetId ? `external ${dataset.externalDatasetId}` : "schema pending"}
+              {dataset.externalDatasetId ? `external ${dataset.externalDatasetId}` : "schema pending"}
               </span>
+              {dataset.fallbackSampleFile ? (
+                <span className="rounded-md bg-civic-100 px-2.5 py-1 text-xs font-medium text-civic-700">
+                  sample fallback required
+                </span>
+              ) : null}
               {verification ? (
                 <span className="rounded-md bg-civic-100 px-2.5 py-1 text-xs font-medium text-civic-700">
                   checked {new Date(verification.lastCheckedAt).toLocaleDateString("en-US")}
@@ -147,6 +163,12 @@ export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
                 ))}
               </div>
             ) : null}
+            <div className="mt-3 rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-xs leading-5 text-slate-600">
+              <span className="font-semibold text-ink">Verification summary:</span>{" "}
+              {verification
+                ? `${verification.promotionStatus}; last checked ${new Date(verification.lastCheckedAt).toLocaleDateString("en-US")}. ${verification.checks.find((check) => check.status !== "passed")?.reason ?? "Current verified field mappings are listed below."}`
+                : "Live verification is not complete; treat this source as coming later until metadata and sample governance are approved."}
+            </div>
             {hostedBetaNote ? (
               <p className="mt-3 rounded-md bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-800">
                 {hostedBetaNote}

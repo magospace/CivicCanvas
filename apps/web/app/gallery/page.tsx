@@ -22,6 +22,10 @@ export default function GalleryPage() {
               validated CanvasDocument rendered through the same allowlisted block registry as
               the main dashboard.
             </p>
+            <p className="mt-3 rounded-md border border-mint/30 bg-mint/10 px-3 py-2 text-xs font-semibold leading-5 text-civic-900">
+              Safety proof: gallery dashboards are checked-in CanvasDocument JSON, validated before render,
+              and available to open in `/explore` through the same saved-canvas validation path.
+            </p>
           </div>
           <div className="w-52 rounded-lg border border-slate-200 bg-white p-3 shadow-sm">
             <Image

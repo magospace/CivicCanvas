@@ -13,7 +13,7 @@ import {
   type DatasetMetadata,
   type QueryResult
 } from "@texas-data-canvas/shared";
-import { getAdapter, getCatalog } from "./data.js";
+import { getAdapter, getCatalog, getReleaseEvidence as readReleaseEvidence } from "./data.js";
 
 export const MCP_SERVER_VERSION = releaseMetadata.releaseVersion;
 
@@ -31,6 +31,20 @@ export function getServerStatus() {
     liveEnabledDatasets: catalog.filter((dataset) => dataset.liveAvailable).map((dataset) => dataset.id),
     dataModeControls: ["auto", "live_if_available", "sample_only"],
     safetyModel: "BoundedQuerySpec plus approved catalog; no raw SQL, SoQL, HTML, JavaScript, or arbitrary components."
+  };
+}
+
+export function getReleaseEvidence() {
+  const evidence = readReleaseEvidence();
+  return {
+    releaseVersion: evidence.releaseVersion,
+    branch: evidence.branch,
+    commit: evidence.commit,
+    localVerifiedAt: evidence.localVerifiedAt,
+    hosted: evidence.hosted,
+    localGates: evidence.localGates,
+    governanceAudit: evidence.governanceAudit,
+    productionLocal: evidence.productionLocal
   };
 }
 

@@ -33,7 +33,7 @@ Last updated: May 9, 2026
 
 ## Current Milestone
 
-`v1.2.0-hosted-trust` is active on branch `feat/v1.2-hosted-trust`. The v0.6 through v1.1 code milestones remain locally implemented, but their public release tags are still blocked because this repo context has no public Vercel URL, Git remote, or Vercel project linkage/credentials.
+`v1.3.0-hosted-launch-readiness` is active on branch `feat/v1.3-hosted-launch-readiness`. The v0.6 through v1.2 code milestones remain locally implemented, but their public release tags are still blocked because this repo context has no public Vercel URL, Git remote, or Vercel project linkage/credentials.
 
 The v0.6 release gate is a verified public deployment. The repo has no configured Git remote today, so the first supported deployment path is manual Vercel CLI deployment. Do not tag `v0.6.0-hosted-beta` until a public URL passes deployment smoke checks and remote browser smoke tests.
 
@@ -196,3 +196,19 @@ Started on branch `feat/v1.2-hosted-trust` from locally verified `feat/v1.1-prod
   - `pnpm verify:prod-local` — production build, `next start`, 17/17 deploy smoke checks, and 14 remote-mode Playwright checks passed against localhost.
 
 The v1.2 release remains subject to the same hosted gate: no `v1.2.0-hosted-trust` tag until public deployment smoke, remote Playwright, and platform-level firewall/rate-limit checks pass.
+
+## v1.3 Hosted Launch Readiness Status
+
+Started on branch `feat/v1.3-hosted-launch-readiness` from locally verified `feat/v1.2-hosted-trust`:
+
+- Added `docs/V1_3_HOSTED_LAUNCH_READINESS_PLAN.md`.
+- Updated shared release metadata to `v1.3.0-hosted-launch-readiness` with package version `1.3.0`.
+- Added `docs/release-evidence.json` as the checked-in release evidence surface.
+- Added Vercel output verification and `pnpm release:check`.
+- Added `pnpm data:quality` and surfaced sample quality on `/demo-readiness`.
+- Extended governance audit coverage for source caveats, sample dataset IDs, gallery source references, and SourceMethodBlock caveats.
+- Added hosted handoff checklist copy action on `/demo-readiness`.
+- Added first-run prompt chips on `/explore` and gallery “open in explore” using the existing validated saved-canvas path.
+- Added `docs/HOUSTON_TRANSTAR_ACCESS_PACKET.md`.
+
+The v1.3 release remains subject to the same hosted gate: no `v1.3.0-hosted-launch-readiness` tag until public deployment smoke, remote Playwright, and platform-level firewall/rate-limit checks pass.

@@ -5,6 +5,7 @@ import {
   generateCanvasSpec,
   generateMiroExportSpec,
   getDatasetMetadata,
+  getReleaseEvidence,
   getSampleRows,
   getServerStatus,
   getSourceAttribution,
@@ -27,6 +28,8 @@ describe("MCP tool handlers", () => {
     expect(getServerStatus().version).toBe(releaseMetadata.releaseVersion);
     expect(getServerStatus().releaseChannel).toBe(releaseMetadata.releaseChannel);
     expect(getServerStatus().packageVersion).toBe(releaseMetadata.packageVersion);
+    expect(getReleaseEvidence().releaseVersion).toBe(releaseMetadata.releaseVersion);
+    expect(getReleaseEvidence().hosted.status).toBe("blocked");
     expect(getServerStatus().dataModeControls).toContain("live_if_available");
     expect(validateCatalog().health.status).toBe("ok");
     const liveSources = listLiveSources().liveSources;
