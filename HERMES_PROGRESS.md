@@ -1,19 +1,19 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 04:13 CDT
+Last updated: May 10, 2026 04:16 CDT
 
 ## Current Cycle
 
-- Task chosen: `TASKS.md` item 32, "Strengthen Main Judge-Demo E2E Path".
-- Why this was next: Item 32 is the next incomplete safe task after the core demo fallback proof and adds browser-level proof for the exact primary judge flow.
-- Scope: `tests/e2e/judge-demo.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Task chosen: `TASKS.md` item 33, "Add Governed Workflow E2E Coverage For Sources, Saved, And Miro Preview".
+- Why this was next: Item 33 is the next incomplete safe task after the primary judge-demo E2E proof and covers the secondary governed demo workflows judges are likely to inspect.
+- Scope: `tests/e2e/governed-workflows.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
 - Safety notes: No product behavior, runtime source code, package scripts, config, source data, secrets, auth, billing, migrations, production config, deploy scripts, release evidence, catalog data, samples, live API calls, or destructive operations were changed. Release evidence was not refreshed.
 
 ## Files Updated
 
-- `tests/e2e/judge-demo.spec.ts`: Added a focused Playwright proof for the exact primary Dallas judge prompt, visible generated blocks, fallback indicators, source/method attribution, inspector reason codes, audit decisions, active bounded query JSON, and absence of unsupported-prompt state.
-- `TASKS.md`: Marked item 32 complete with validation notes.
-- `HERMES_PROGRESS.md`: Recorded item 32 scope, safety notes, and validation.
+- `tests/e2e/governed-workflows.spec.ts`: Added a focused Playwright smoke for `/sources` hidden-field governance, browser-local saved-canvas handoff, no-account/no-hosted-database saved-page copy, and preview-only Miro response/UI boundaries.
+- `TASKS.md`: Marked item 33 complete with validation notes.
+- `HERMES_PROGRESS.md`: Recorded item 33 scope, safety notes, and validation.
 
 ## Sequential Progress
 
@@ -22,7 +22,8 @@ Last updated: May 10, 2026 04:13 CDT
 - Task 29 committed as `2563468` (`docs: add local demo readiness checklist`).
 - Task 30 committed as `7ef1ca8` (`docs: add public data fallback proof matrix`).
 - Task 31 committed as `8667205` (`test: add core demo fallback proof`).
-- Task 32 completed and ready to commit as `test: strengthen judge demo e2e path`.
+- Task 32 committed as `2585388` (`test: strengthen judge demo e2e path`).
+- Task 33 completed and ready to commit as `test: add governed workflow e2e smoke`.
 
 ## Sequential Task Plan
 
@@ -216,6 +217,9 @@ Current `git status --short --branch` shows branch `feat/v1.3-hosted-launch-read
 ## Validation
 
 - `pnpm test:e2e -- tests/e2e/judge-demo.spec.ts`: Passed after tightening duplicate-text locators in the new spec.
+- `pnpm test:e2e`: Passed with 17 browser tests after adding the judge-demo spec.
+- `pnpm test:e2e -- tests/e2e/governed-workflows.spec.ts`: Passed.
+- `pnpm test:e2e`: Passed with 18 browser tests after adding the governed-workflows spec.
 
 ## Blockers
 
@@ -223,4 +227,4 @@ Current `git status --short --branch` shows branch `feat/v1.3-hosted-launch-read
 
 ## Recommended Next Task
 
-- `TASKS.md` item 33, "Add Governed Workflow E2E Coverage For Sources, Saved, And Miro Preview".
+- `TASKS.md` item 34, "Migrate From Deprecated `next lint` To ESLint CLI In Isolation", if tooling scope remains clear.

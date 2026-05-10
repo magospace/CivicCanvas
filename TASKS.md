@@ -493,6 +493,8 @@ Status: Complete on May 10, 2026 at 04:13 CDT.
 
 ## 33. Add Governed Workflow E2E Coverage For Sources, Saved, And Miro Preview
 
+Status: Complete on May 10, 2026 at 04:16 CDT.
+
 - Owner type: QA / E2E
 - Goal: Add a focused browser smoke covering `/sources`, saved-canvas handoff, and Miro preview-only export staying governed.
 - Why it matters: Final demo stability depends on secondary workflows not drifting into unsupported claims about hidden fields, server persistence, or real Miro writes.
@@ -502,6 +504,8 @@ Status: Complete on May 10, 2026 at 04:13 CDT.
 - Acceptance criteria: Test verifies source catalog hidden-field warning, saves a generated canvas locally, opens or imports it from `/saved`, requests Miro preview, and asserts preview-only/no OAuth/no board-write language or JSON shape.
 - Validation commands: Targeted Playwright command for the new/updated spec; `pnpm test:e2e` if runtime permits; `pnpm lint` if UI copy/accessibility changes are needed.
 - Can run in parallel: Yes, with non-e2e tasks. Avoid parallel edits to the same e2e spec files.
+- Completed notes: Added `tests/e2e/governed-workflows.spec.ts` covering `/sources` hidden-field warning copy, local save status, saved-canvas open from `/saved`, the no-account/no-hosted-database saved-page boundary, Miro preview UI, and the preview route response note/no OAuth/no board-write JSON shape.
+- Validation: `pnpm test:e2e -- tests/e2e/governed-workflows.spec.ts` passed; `pnpm test:e2e` passed with 18 browser tests.
 
 ## 34. Migrate From Deprecated `next lint` To ESLint CLI In Isolation
 
