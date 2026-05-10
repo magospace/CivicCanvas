@@ -1092,6 +1092,8 @@ Status: Complete on May 10, 2026 at 06:45 CDT.
 
 ## 70. Add Provider Output Redaction Utility
 
+Status: Complete on May 10, 2026 at 06:51 CDT.
+
 - Owner type: Security / Tooling
 - Goal: Extract small shared redaction helper for provider smoke scripts if more provider proof scripts are added.
 - Scope: Script utility/tests; no real provider calls.
@@ -1100,6 +1102,8 @@ Status: Complete on May 10, 2026 at 06:45 CDT.
 - Acceptance criteria: Existing Fal smoke output remains unchanged except implementation uses shared helper; fake secret tests pass.
 - Validation commands: focused Vitest command, `node scripts/fal-media-smoke.mjs --json`, `git diff --check`, `pnpm lint`, `pnpm test`.
 - Can run in parallel: No with provider script edits.
+- Completed notes: Added reusable `scripts/lib/redaction.mjs` helpers for provider output redaction, switched Fal smoke to use the helper, redacted signed artifact URLs, and added focused coverage for secrets, bearer tokens, signed URLs, sensitive request IDs, and raw provider-response fields. No live provider call was made.
+- Validation: RED focused test failed before the utility existed; GREEN focused provider redaction/Fal tests passed. `pnpm media:fal:smoke:json` passed in skipped/no-spend mode; `pnpm lint`, `pnpm typecheck`, full `pnpm test`, and `git diff --check` passed.
 
 ## 71. Add Local Backend Persistence Approval Checklist
 

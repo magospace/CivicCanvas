@@ -1,13 +1,10 @@
+import { redactProviderOutput, redactSecret, redactUrl } from "./lib/redaction.mjs";
+
 const jsonMode = process.argv.includes("--json");
 const liveGate = process.env.RUN_LIVE_FAL_SMOKE === "1";
 const falKey = process.env.FAL_KEY || process.env.FAL_API_KEY || "";
 const model = process.env.FAL_SMOKE_MODEL || "fal-ai/fast-sdxl";
 const endpoint = `https://queue.fal.run/${model}`;
-
-function redact(value) {
-  if (!value) return "";
-  return "[REDACTED]";
-}
 
 function print(output) {
   if (jsonMode) {
@@ -34,7 +31,7 @@ function baseOutput(overrides = {}) {
     requiredGate: "RUN_LIVE_FAL_SMOKE=1",
     acceptedKeyEnv: ["FAL_KEY", "FAL_API_KEY"],
     keyPresent: Boolean(falKey),
-    keyEcho: redact(falKey),
+    keyEcho: redactSecret(falKey),
     model,
     liveCallCount: 0,
     ...overrides
@@ -75,7 +72,7 @@ async function runLiveProof() {
   try {
     body = text ? JSON.parse(text) : null;
   } catch {
-    body = { raw: text.slice(0, 500) };
+    body = { raw: redactProviderOutput(text.slice(0, 500)) };
   }
 
   const artifactUrl = body?.images?.[0]?.url ?? body?.image?.url ?? body?.url ?? null;
@@ -87,8 +84,8 @@ async function runLiveProof() {
     startedAt,
     completedAt: new Date().toISOString(),
     liveCallCount: 1,
-    artifact: artifactUrl ? { url: artifactUrl } : null,
-    responseShape: body && typeof body === "object" ? Object.keys(body).slice(0, 20) : []
+    artifact: artifactUrl ? { url: redactUrl(artifactUrl) } : null,
+    responseShape: body && typeof body === "object" ? Object.keys(redactProviderOutput(body)).slice(0, 20) : []
   });
 
   print(output);

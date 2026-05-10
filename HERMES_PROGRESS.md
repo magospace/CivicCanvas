@@ -936,3 +936,34 @@ Last updated: May 10, 2026 06:17 CDT
 
 - Completed the requested up-to-five cycle. Remaining untracked file: `clauderecommends.md` preserved as external feedback input.
 - Next recommended task if continuing: Task 70, `Add Provider Output Redaction Utility`, only as a no-spend script/test refactor; avoid live provider calls unless explicitly env-gated and necessary.
+
+
+## Task 70 Update
+
+- Task chosen: `TASKS.md` item 70, "Add Provider Output Redaction Utility".
+- Why this was next: Task 69 completed cleanly and Task 70 was the next recommended safe no-spend provider-hardening task.
+- Scope: `scripts/lib/redaction.mjs`, `scripts/fal-media-smoke.mjs`, `apps/web/test/release-scripts.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Script/test-only provider hardening. No live Fal/provider call, no generated media artifact, no deployment, no release evidence mutation, no secrets committed, and no backend/database change. The default Fal smoke path remains no-spend unless `RUN_LIVE_FAL_SMOKE=1` is explicitly set.
+
+### Files Updated
+
+- `scripts/lib/redaction.mjs`: New reusable provider redaction helper for secrets, authorization headers, tokens, signed URL query parameters, request IDs, and raw provider response fields.
+- `scripts/fal-media-smoke.mjs`: Replaced local redaction helper with shared utility and redacts live artifact URLs/parse-fallback raw text before reporting.
+- `apps/web/test/release-scripts.test.ts`: Added focused regression coverage for provider redaction utility behavior.
+- `TASKS.md`: Marks Task 70 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records Task 70 scope, safety notes, validation, and next task.
+
+### Validation
+
+- RED: `pnpm test -- apps/web/test/release-scripts.test.ts -t "redacts provider secrets"` failed before implementation because `scripts/lib/redaction.mjs` did not exist.
+- GREEN: `pnpm test -- apps/web/test/release-scripts.test.ts -t "redacts provider secrets"`: Passed; Vitest discovered 105 tests across 15 files.
+- `pnpm media:fal:smoke:json`: Passed; skipped no-spend path, live call count 0.
+- `pnpm test -- apps/web/test/release-scripts.test.ts -t "Fal|redacts provider secrets"`: Passed.
+- `pnpm lint`: Passed.
+- `pnpm typecheck`: Passed across shared, MCP server, and web.
+- `pnpm test`: Passed with 105 tests across 15 files.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 71, `Add Local Backend Persistence Approval Checklist`, is the next safe docs-only task. Preserve browser-local fallback behavior and do not implement persistence.

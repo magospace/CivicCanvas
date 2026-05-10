@@ -6,6 +6,34 @@ import { describe, expect, it } from "vitest";
 import { releaseMetadata } from "@texas-data-canvas/shared";
 
 describe("release and governance scripts", () => {
+  it("redacts provider secrets, bearer tokens, signed URLs, and sensitive response IDs", async () => {
+    const redactionModulePath = join(process.cwd(), "scripts/lib/redaction.mjs");
+    const { redactProviderOutput } = await import(/* @vite-ignore */ redactionModulePath);
+    const secret = "fal_secret_value_do_not_print";
+    const token = "bearer_token_value_do_not_print";
+    const signedUrl = "https://example.invalid/output.png?X-Amz-Signature=abc123&token=secret-token&safe=ok";
+
+    const redacted = redactProviderOutput({
+      authorization: `Bearer ${token}`,
+      apiKey: secret,
+      request_id: "req_123456789",
+      artifact: { url: signedUrl },
+      nested: { prompt: "safe prompt", providerResponse: { raw: "raw body should not print" } }
+    });
+    const serialized = JSON.stringify(redacted);
+
+    expect(redacted.authorization).toBe("[REDACTED]");
+    expect(redacted.apiKey).toBe("[REDACTED]");
+    expect(redacted.request_id).toBe("[REDACTED]");
+    expect(redacted.artifact.url).toBe("https://example.invalid/output.png?[REDACTED_QUERY]");
+    expect(redacted.nested.prompt).toBe("safe prompt");
+    expect(redacted.nested.providerResponse).toBe("[REDACTED]");
+    expect(serialized).not.toContain(secret);
+    expect(serialized).not.toContain(token);
+    expect(serialized).not.toContain("abc123");
+    expect(serialized).not.toContain("raw body should not print");
+  });
+
   it("rejects deployment smoke runs without a base URL", () => {
     try {
       execFileSync("node", ["scripts/smoke-deploy.mjs"], {
