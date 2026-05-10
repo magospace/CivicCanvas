@@ -17,15 +17,21 @@ describe("Miro export route", () => {
     expect(response.status).toBe(200);
     expect(body.note).toContain("Preview-only");
     expect(body.note).toContain("No Miro board write");
+    expect(Object.keys(body).sort()).toEqual(["note", "spec"]);
     expect(body.spec.template).toBe("community_workshop");
     expect(body.spec.sourceMethodFrameRequired).toBe(true);
     expect(body.spec.frames.map((frame: { title: string }) => frame.title)).toContain("Source & Method");
+    expect(body.spec.frames.flatMap((frame: { items: Array<{ type: string }> }) => frame.items.map((item) => item.type))).toContain("source_method");
+    expect(body).not.toHaveProperty("boardId");
+    expect(body).not.toHaveProperty("writeUrl");
+    expect(body).not.toHaveProperty("oauthUrl");
     expect(JSON.stringify(body)).not.toContain("accessToken");
     expect(JSON.stringify(body)).not.toContain("oauth");
     expect(JSON.stringify(body)).not.toContain("oauthUrl");
     expect(JSON.stringify(body)).not.toContain("boardId");
     expect(JSON.stringify(body)).not.toContain("boardWriteUrl");
     expect(JSON.stringify(body).toLowerCase()).not.toContain("modelprovider");
+    expect(JSON.stringify(body).toLowerCase()).not.toContain("write_to_board");
   });
 
   it("returns governed errors for invalid Miro export canvases", async () => {

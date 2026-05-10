@@ -2533,7 +2533,7 @@ Status: Complete on May 10, 2026.
 
 ## 156. Add Miro Preview No-Write Guard
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Third-Party Boundary / Test Coverage
 - Goal: Prove Miro export remains preview-only JSON and contains Source & Method without OAuth/board write claims.
@@ -2544,6 +2544,8 @@ Status: Pending.
 - Acceptance criteria: Tests assert preview/spec-only metadata and no board ID/OAuth/write side effects; docs remain honest.
 - Validation command: `pnpm test -- apps/web/test/miro-export-route.test.ts`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes with unrelated docs.
+- Completed notes: Strengthened Miro export route tests to assert the response remains limited to `spec` and `note`, includes a Source & Method frame/item, and does not expose board IDs, write URLs, OAuth URLs, access tokens, model-provider metadata, or write-to-board semantics.
+- Validation: `pnpm test -- apps/web/test/miro-export-route.test.ts` passed; due repo script wiring, 127 tests across 18 files ran and passed. `pnpm lint` passed; `git diff --check` passed.
 
 ## 157. Add Catalog Unsupported Source Route Guard
 

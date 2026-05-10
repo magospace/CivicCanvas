@@ -2166,3 +2166,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm test -- apps/web/test/canvas-save-route.test.ts` passed; due repo script wiring, 127 tests across 18 files ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 156, `Add Miro Preview No-Write Guard`, to keep preview-only third-party boundaries protected.
+
+
+## Task 156 Update - Miro Preview No-Write Guard
+
+- Task chosen: `TASKS.md` item 156, "Add Miro Preview No-Write Guard".
+- Why this was next: It was the next pending boundary/proof task after the canvas-save validation-stub guard and protects the preview-only third-party integration claim.
+- Scope: `apps/web/test/miro-export-route.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Preview-only export / acceptable when labeled. No Miro provider, OAuth, board write, schema, or route behavior changed.
+- Changes: Strengthened the valid Miro export test to assert the route response only includes `spec` and `note`, Source & Method remains required as a frame and item, and the response does not expose `boardId`, `writeUrl`, `oauthUrl`, `accessToken`, `boardWriteUrl`, model-provider metadata, or write-to-board semantics. Existing invalid/malformed request guards remain.
+- Validation: `pnpm test -- apps/web/test/miro-export-route.test.ts` passed; due repo script wiring, 127 tests across 18 files ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 157, `Add Catalog Unsupported Source Route Guard`, to keep metadata-only catalog entries from becoming hardcoded dashboards.
