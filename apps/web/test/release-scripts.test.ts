@@ -205,8 +205,13 @@ describe("release and governance scripts", () => {
     expect(body.releaseEvidence.status).toMatch(/historical_not_current_head|current_for_head/);
     expect(body.knownBlockers).toEqual(expect.arrayContaining([
       expect.stringContaining("Release evidence remains historical"),
-      expect.stringContaining("platform-level firewall/rate limiting")
+      expect.stringContaining("platform-level firewall/rate limiting"),
+      expect.stringContaining("does not produce image/video/media artifacts"),
+      expect.stringContaining("Server-side saved-canvas persistence is not implemented")
     ]));
+    expect(body.knownBlockers.join("\n")).toContain("Task 35");
+    expect(body.knownBlockers.join("\n")).not.toContain("DATABASE_URL");
+    expect(body.knownBlockers.join("\n")).not.toContain("FAL_KEY");
   });
 
   it("reports a dry-run screenshot capture plan without creating generated media", () => {

@@ -1521,14 +1521,18 @@ Status: Complete on May 10, 2026.
 
 ## 97. Add Demo Readiness Snapshot Blocker Assertions
 
+Status: Complete on May 10, 2026.
+
 - Owner type: QA / Tests
 - Goal: Strengthen tests for `demo-readiness-snapshot` so release-evidence and hosted-rate-limit blockers stay visible.
 - Scope: Test only unless script output is missing required fields.
-- Likely files: `apps/web/test/release-scripts.test.ts`, optionally `scripts/demo-readiness-snapshot.mjs`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Likely files: `apps/web/test/release-scripts.test.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
 - Risk level: Low to Medium.
 - Acceptance criteria: Focused test asserts known blockers include historical release evidence and platform firewall/rate-limit wording, and snapshot remains no-network/non-mutating.
 - Validation commands: focused Vitest command, `pnpm test`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with release-script tests.
+- Completed notes: Strengthened the existing demo-readiness snapshot test to assert release-evidence, platform firewall/rate-limit, no app media generation, and no server-side saved-canvas persistence blockers remain visible, while avoiding secret/env-name leakage in blocker text.
+- Validation: Focused release-script Vitest, full `pnpm test`, `pnpm lint`, and `git diff --check` passed.
 
 ## 98. Add Final No-Artifact Submission Hygiene Checklist
 

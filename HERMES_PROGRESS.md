@@ -1378,3 +1378,22 @@ Last updated: May 10, 2026 06:17 CDT
 ### Recommended Next Task
 
 - Task 97, `Add Demo Readiness Snapshot Blocker Assertions`, is next.
+
+
+## Task 97 Update
+
+- Task chosen: `TASKS.md` item 97, "Add Demo Readiness Snapshot Blocker Assertions".
+- Why this was next: Task 96 completed cleanly, and Task 97 was the next safe test-hardening task. It protects demo-readiness blocker honesty for release evidence, hosted rate limits, media, and persistence.
+- Scope: `apps/web/test/release-scripts.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Test-only. No script behavior changed, no deploy, release evidence refresh, live API/provider call, generated media, backend persistence, schema, migration, secrets, auth, billing, or production data changed.
+
+### Validation
+
+- `pnpm test -- apps/web/test/release-scripts.test.ts -t "demo readiness snapshot"`: Passed.
+- `pnpm test`: Passed.
+- `pnpm lint`: Passed.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 98, `Add Final No-Artifact Submission Hygiene Checklist`, is next.
