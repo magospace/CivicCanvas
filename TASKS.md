@@ -6,6 +6,16 @@ The next executable Hermes/Codex tasks, ordered for safe progress. Each task is 
 
 Status: P0 complete on May 10, 2026.
 
+
+### Latest Reviewer Triage Mapping - May 10, 2026 at 10:00 CDT
+
+Source: `HACKATHON_REVIEW_TRIAGE.md` is the latest reviewer handoff. The original dirty-tree finding in that file is now stale but preserved there with a follow-up reconciliation note.
+
+- P0 reviewer findings are all represented above and currently complete for local submission readiness: dirty-tree reconciliation, CivicCanvas public naming, exact demo prompt proof, MCP/agent-skill proof, and visible dataset provenance/sample-live boundaries.
+- P1 reviewer findings are represented and currently complete except optional hosted smoke: sanitized MCP proof/readme links and `/sources` narration legend are complete; hosted smoke remains gated until a deployment URL is intentionally in scope.
+- P2 reviewer findings remain preserved as backlog/gated work: internal package rename only after hackathon approval, real backend persistence only behind an explicit local/dev database plan, live API expansion only after field-level verification, and release evidence refresh only through gated Task 35.
+- P3 reviewer findings remain preserved as backlog/nice-to-have work: ignored screenshot artifacts if needed, optional architecture graphic, and concise Loom structure including MCP/agent-skill close.
+
 ### P0 - Airtable Submission Readiness
 
 - Owner type: Product/Docs. Goal: Replace product-facing UI and submission-doc names with `CivicCanvas` while preserving internal package names such as `@texas-data-canvas/*` and the existing skill path when renaming would add risk. Scope: root README, hackathon submission docs, demo proof docs, web metadata/header, agent skill wording. Risk level: Low. Acceptance criteria: public demo surfaces say CivicCanvas; internal package commands remain stable. Validation commands: `pnpm lint`, `pnpm typecheck`, `pnpm test:e2e` if UI changed. Parallelization notes: Can run independently from backend/provider work.

@@ -20,6 +20,24 @@ Observed repo state during review:
   - `data/seed-canvases.json`
 - Recent commits included OpenAI assist boundary, media-generation boundary, live API smoke transcript stub, and visual audit reconciliation.
 
+
+## Current Follow-Up Reconciliation - 2026-05-10 10:00 CDT
+
+Status: the original dirty-tree observation above is stale but preserved for audit history. Current inspection found branch `feat/v1.3-hosted-launch-readiness...origin/main` with no tracked modifications and only `clauderecommends.md` untracked. Recent `HEAD` is `fb73645` (`docs: add CivicCanvas hackathon triage`) and `origin/main` points at the same commit.
+
+Reconciled reviewer findings:
+
+- P0.1 dirty-tree reconciliation: complete/stale as a blocker. The previously observed route/data/test/seed fixture work is committed and validated; the only remaining untracked file is external recommendation input intentionally left unstaged.
+- P0.2 public CivicCanvas naming: complete for public/demo docs and UI surfaces; internal package names remain `@texas-data-canvas/*` by design.
+- P0.3 exact demo prompts: complete by existing regression coverage for Dallas, Austin, and Houston prompt dashboards plus unsupported prompt suggestions.
+- P0.4 MCP / agent-skill proof: complete by prior MCP build/inspect validation and checked-in proof docs/skill wording; keep it visible in Loom/submission.
+- P0.5 dataset provenance and sample/live boundaries: complete by sources/demo-readiness/readme/docs coverage and no-network proof scripts; keep release evidence labeled historical.
+- P1.1-P1.3 polish: complete via MCP proof docs/README links and `/sources` summary legend.
+- P1.4 hosted smoke: still optional/gated. Do not claim hosted readiness unless a deployed URL is intentionally smoke-tested.
+- P2/P3 findings remain preserved in `TASKS.md` as post-submission hardening or nice-to-have work rather than discarded.
+
+Current readiness read: ready for local Loom/GitHub submission from the validated repo state, subject to external form logistics (Loom URL, team roster, optional hosted URL) and the historical release-evidence caveat. No new live API, OpenAI, Fal, media, deploy, database, auth, billing, migration, or release-evidence work is required for the local demo path.
+
 ## Likely Judging Strength
 
 - Technical Execution: 0.86

@@ -1634,3 +1634,13 @@ Last updated: May 10, 2026 06:17 CDT
   - `pnpm data:realism:json`: Passed, no network/no mutation/no env values read or printed, promptExampleRecords=3, remainingHardcodedReviewCount=1.
   - `git diff --check`: Passed before commit.
 - Recommended next task: Task 113, `Strengthen Gallery Fixture Read Path Proof`.
+
+## Hackathon Review Triage Reconciliation - May 10, 2026 10:00 CDT
+
+- Task chosen: Reconcile `HACKATHON_REVIEW_TRIAGE.md` as the latest reviewer handoff before any additional implementation.
+- Why this was next: The reviewer triage contained stale dirty-tree observations even though current `git status --short --branch` shows no tracked local changes and only the preserved untracked external input `clauderecommends.md`. Submission/GitHub readiness needed the stale blocker updated without deleting audit history.
+- Scope: `HACKATHON_REVIEW_TRIAGE.md`, `TASKS.md`, and `HERMES_PROGRESS.md` only.
+- Reconciliation: Added a current follow-up note to triage marking the original dirty-tree finding stale/complete, confirming P0 naming/demo-prompt/MCP/provenance work is already complete, preserving optional hosted smoke as gated, and retaining P2/P3 findings in `TASKS.md` rather than discarding them.
+- Safety notes: Documentation/durable-state only. No live API calls, OpenAI calls, Fal/media calls, deployment mutation, release-evidence refresh, backend persistence, schema/migrations, secrets, auth, billing, production data, generated artifacts, or `.env` files touched. `clauderecommends.md` remains untracked and unstaged.
+- Validation: `pnpm lint` passed; `git diff --check` passed.
+- Recommended next task: If validation passes, no additional P0/P1 implementation is required for the local CivicCanvas submission path; remaining blockers are external submission logistics, optional hosted smoke, and gated release-evidence refresh if explicitly requested.
