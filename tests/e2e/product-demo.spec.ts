@@ -22,6 +22,7 @@ async function expectNoSeriousAccessibilityViolations(page: Page) {
 test("explore route loads the governed shell", async ({ page }) => {
   await page.goto("/explore");
   await expect(page).toHaveTitle(/CivicCanvas/);
+  await expect(page.getByRole("link", { name: /Explore/ })).toHaveAttribute("aria-current", "page");
   await expect(page.getByAltText("CivicCanvas logo").first()).toBeVisible();
   await expect(page.getByText("CivicCanvas").first()).toBeVisible();
   await expect(page.getByLabel("Dashboard prompt")).toBeVisible();

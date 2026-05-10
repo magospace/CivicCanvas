@@ -1504,3 +1504,13 @@ Last updated: May 10, 2026 06:17 CDT
 - Files updated: `/sources` now has a readiness legend for approved sources, live-promoted sources, sample fallback sources, and coming-later sources; sources E2E asserts the legend and existing hidden-field/source-boundary copy.
 - Validation: First targeted Playwright run failed on a strict `Live promoted` locator; after scoping assertions to the legend, `pnpm test:e2e -- tests/e2e/sources.spec.ts`, `pnpm lint`, and `git diff --check` passed.
 - Recommended next task: Task 104, `Add Header Active Navigation State`.
+
+## Task 104 Update
+
+- Task chosen: `TASKS.md` item 104, "Add Header Active Navigation State".
+- Why this was next: It was the next pending low-risk Loom navigation polish task after Task 103 and improves route orientation during recording.
+- Scope: `apps/web/components/header.tsx`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Header/nav UI and Playwright assertion only. No data, providers, persistence, schema, migrations, release evidence, deploy config, secrets, or generated artifacts changed.
+- Files updated: Header now uses `usePathname` to set `aria-current="page"` and visible active styling for the current route; product-demo E2E asserts Explore is active on `/explore`.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "explore route loads"` ran the full product-demo spec with 17 browser tests and passed; `pnpm lint`, `pnpm typecheck`, and `git diff --check` passed.
+- Recommended next task: Task 105, `Add No-Spend Loom Screenshot Capture Helper`, appears already implemented as a dry-run/capture script but remains pending in `TASKS.md`; verify and reconcile it before new tooling.

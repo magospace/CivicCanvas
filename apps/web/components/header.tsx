@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { ClipboardCheck, Database, GalleryHorizontalEnd, LayoutDashboard, Search, UserCircle } from "lucide-react";
 
 const navItems = [
@@ -11,6 +14,7 @@ const navItems = [
 ];
 
 export function Header() {
+  const pathname = usePathname();
   const appEnvironment = process.env.NEXT_PUBLIC_APP_ENV;
   const appVersion = process.env.NEXT_PUBLIC_APP_VERSION;
   const runtimeLabel = appEnvironment === "hosted-beta"
@@ -47,11 +51,17 @@ export function Header() {
         <nav className="hidden items-center gap-1 md:flex">
           {navItems.map((item) => {
             const Icon = item.icon;
+            const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-civic-100 hover:text-civic-900"
+                aria-current={isActive ? "page" : undefined}
+                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition ${
+                  isActive
+                    ? "bg-civic-900 text-white shadow-sm"
+                    : "text-slate-600 hover:bg-civic-100 hover:text-civic-900"
+                }`}
               >
                 <Icon className="h-4 w-4" />
                 {item.label}

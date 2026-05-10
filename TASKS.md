@@ -1661,7 +1661,7 @@ Status: Complete on May 10, 2026.
 
 ## 104. Add Header Active Navigation State
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: UI / Navigation Polish
 - Goal: Improve orientation during the Loom by making the current route visibly active in the header.
@@ -1671,6 +1671,8 @@ Status: Pending.
 - Acceptance criteria: Header visibly marks active `Explore`, `Sources`, `Saved`, `Gallery`, and `Demo` routes with accessible current-page semantics; no hydration or layout regressions.
 - Validation commands: targeted Playwright route/header assertions, `pnpm lint`, `pnpm typecheck`, `git diff --check`.
 - Can run in parallel: No with header/nav edits.
+- Completed notes: Header navigation is now client-aware via `usePathname`, marks the current route with `aria-current="page"`, and applies visible active styling while preserving route labels, runtime label, logo, and no-account mode.
+- Validation: Targeted product-demo Playwright command ran the full product-demo spec with 17 browser tests; `pnpm lint`, `pnpm typecheck`, and `git diff --check` passed.
 
 ## 105. Add No-Spend Loom Screenshot Capture Helper
 
