@@ -2581,7 +2581,7 @@ Status: Complete on May 10, 2026.
 
 ## 159. Add Final Push-Readiness Diff Summary Command
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: GitHub Readiness / Local Ops
 - Goal: Add a local-only command or docs snippet that summarizes branch-ahead status, untracked external files, and last validation before a human decides whether to push.
@@ -2592,3 +2592,5 @@ Status: Pending.
 - Acceptance criteria: Command reports current branch, upstream, ahead/behind counts when available, untracked files, and reminds user not to push unless explicitly instructed.
 - Validation command: `pnpm local:push-readiness`, `git diff --check`.
 - Can run in parallel: No with package script edits.
+- Completed notes: Added `pnpm local:push-readiness` / `pnpm local:push-readiness:json`, a local-only git summary command that reports branch, upstream, ahead/behind counts, dirty tracked files, untracked files, recent commits, and an explicit no-push reminder.
+- Validation: `pnpm local:push-readiness` passed and reported branch `feat/v1.3-hosted-launch-readiness`, upstream `origin/main`, ahead 47/behind 0 at validation time, package/script work in progress, and intentionally untracked recommendation files. `pnpm lint` passed; `git diff --check` passed.

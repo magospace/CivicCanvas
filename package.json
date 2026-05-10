@@ -41,6 +41,8 @@
     "live:fallback-proof:json": "node scripts/live-fallback-proof.mjs --json",
     "persistence:readiness": "node scripts/local-persistence-readiness.mjs",
     "persistence:readiness:json": "node scripts/local-persistence-readiness.mjs --json",
+    "local:push-readiness": "node scripts/local-push-readiness.mjs",
+    "local:push-readiness:json": "node scripts/local-push-readiness.mjs --json",
     "sample:freshness": "node scripts/sample-freshness-snapshot.mjs",
     "sample:freshness:json": "node scripts/sample-freshness-snapshot.mjs --json",
     "verify:prod-local": "node scripts/verify-prod-local.mjs",

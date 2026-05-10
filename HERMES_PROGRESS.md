@@ -2202,3 +2202,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: Initial `pnpm hygiene:artifacts` failed on over-broad tracked-artifact classification of existing `.env.example` and historical docs screenshots. Narrowed the guard to staged/untracked hazards plus `.env.example` allowance. Final `pnpm hygiene:artifacts` passed with 0 issues and reported the two external recommendation files as intentionally untracked. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 159, `Add Final Push-Readiness Diff Summary Command`, to summarize local branch state without pushing.
+
+
+## Task 159 Update - Local Push-Readiness Summary
+
+- Task chosen: `TASKS.md` item 159, "Add Final Push-Readiness Diff Summary Command".
+- Why this was next: It was the final pending task in the local submission guardrail queue and gives a no-push summary before a human decides whether to publish local commits.
+- Scope: `scripts/local-push-readiness.mjs`, `package.json`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Not data-path-related. Local git/readiness guard only; no push or remote mutation.
+- Changes: Added `pnpm local:push-readiness` and `pnpm local:push-readiness:json`. The command reports branch, HEAD, upstream, ahead/behind counts, dirty tracked files, untracked files, recent commits, and an explicit reminder not to push unless the user instructs it.
+- Validation: `pnpm local:push-readiness` passed and reported branch `feat/v1.3-hosted-launch-readiness`, upstream `origin/main`, ahead 47/behind 0 at validation time, package/script work in progress, and intentionally untracked `REVIEW_RECOMMENDATIONS.md`, `clauderecommends.md`, plus the new script before staging. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Remaining status: Tasks 150-159 are now complete, so the next action is to replenish `TASKS.md` before starting more implementation.
