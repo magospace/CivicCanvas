@@ -2404,7 +2404,7 @@ Status: Complete on May 10, 2026.
 
 ## 148. Add Final No-Spend Validation Checklist Task
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Release QA / Local Submission
 - Goal: Run and record the broad no-spend local validation set before any final submission or push request.
@@ -2415,6 +2415,8 @@ Status: Pending.
 - Acceptance criteria: Record results for `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm governance:audit`, `pnpm data:quality`, and selected e2e smoke; stop on unclear failure.
 - Validation command: those listed commands plus `git diff --check`.
 - Can run in parallel: No; validation aggregator.
+- Completed notes: Ran and recorded the broad no-spend validation set after the latest local docs/test commits. Governance audit passed with the expected warning that `docs/release-evidence.json` records historical commit `a5ce07a` while current HEAD was `68f5ffc` at validation time; no release-evidence refresh was performed.
+- Validation: `pnpm lint`, `pnpm typecheck`, `pnpm test` (126 tests / 18 files), `pnpm governance:audit` (19/19 pass + historical evidence warning), `pnpm data:quality` (3 samples, 280 rows, 4 gallery canvases), `pnpm test:e2e -- tests/e2e/product-demo.spec.ts` (21 passed), and `git diff --check` all passed.
 
 ## 149. Review Release Evidence Warning Placement
 
