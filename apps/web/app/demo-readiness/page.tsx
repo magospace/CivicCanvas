@@ -13,6 +13,8 @@ const localGateCommands = [
   "pnpm build",
   "pnpm governance:audit",
   "pnpm data:quality",
+  "pnpm provider:openai:smoke:json",
+  "RUN_LIVE_OPENAI_SMOKE=1 pnpm provider:openai:smoke:json",
   "pnpm verify",
   "pnpm verify:prod-local",
   "pnpm release:check",
@@ -30,6 +32,7 @@ const safetyRules = [
   "Saved/share bundles validate before render.",
   "Miro remains preview/spec-only.",
   "Fal media proof is optional script-only; normal dashboard generation does not call Fal or create image/video artifacts.",
+  "OpenAI proof is optional, server-side, live-gated, and cannot generate dashboard code, SQL, or hidden-field output.",
   "No auth, database, LLM parser, arbitrary generated UI, or live external map layers."
 ];
 

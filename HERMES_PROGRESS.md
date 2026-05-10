@@ -1753,3 +1753,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm submission:readiness:json` passed and reported `openAIProof.expectedDefaultLiveCallCount=0`; `pnpm test -- apps/web/test/release-scripts.test.ts -t "submission bundle readiness"` passed; `pnpm lint` passed; `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 122, `Add Demo Readiness UI Link To OpenAI Smoke`, to make the same provider boundary visible in the browser demo console.
+
+
+## Task 122 Update - Demo Readiness OpenAI Smoke Link
+
+- Task chosen: `TASKS.md` item 122, "Add Demo Readiness UI Link To OpenAI Smoke".
+- Why this was next: Task 121 added OpenAI smoke metadata to the submission-readiness script; this task makes the same provider boundary visible in the browser release console used during Loom/demo checks.
+- Scope: `apps/web/app/demo-readiness/page.tsx`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: OpenAI provider metadata remains `provider-gated fallback metadata / acceptable if clearly labeled`. The UI now states default proof is no-spend command-visible, live proof is `RUN_LIVE_OPENAI_SMOKE=1` gated, and OpenAI cannot generate dashboard code, SQL, or hidden-field output.
+- Safety notes: UI/test only. No network/provider call was made. No `.env` files were read; no secret values printed. No Fal/media calls, public live API calls, schema/migrations, backend persistence, deployment mutation, release evidence, production data, generated artifacts, auth, or billing changes. `clauderecommends.md` and `REVIEW_RECOMMENDATIONS.md` remain untracked and unstaged.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "demo readiness route"` passed; the project script ran all 17 product-demo browser tests. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 120, `Add MCP Demo Transcript Fixture`, if the next session prioritizes Loom/judge proof; otherwise Task 123 for README MCP quick-proof commands.

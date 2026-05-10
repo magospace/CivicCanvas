@@ -1726,6 +1726,8 @@ Status: Complete on May 10, 2026.
 - Acceptance criteria: `/demo-readiness` visibly says normal dashboard generation does not call Fal or create image/video, while `RUN_LIVE_FAL_SMOKE=1` remains optional/script-level proof; E2E asserts the boundary.
 - Validation commands: targeted Playwright demo-readiness test, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with demo-readiness route/test edits.
+- Completed notes: `/demo-readiness` now lists the no-spend OpenAI smoke command and live gate alongside local gates, and the safety model states OpenAI proof is optional, server-side, live-gated, and cannot generate dashboard code, SQL, or hidden-field output. Product-demo E2E asserts the visible command and boundary copy.
+- Validation: Targeted demo-readiness Playwright command ran the full product-demo spec with 17 browser tests; `pnpm lint` and `git diff --check` passed. No provider calls were made.
 - Completed notes: `/demo-readiness` safety model now explicitly says Fal media proof is optional script-only and normal dashboard generation does not call Fal or create image/video artifacts. Product-demo E2E asserts this boundary.
 - Validation: Targeted demo-readiness Playwright command ran the full product-demo spec with 17 browser tests; `pnpm lint` and `git diff --check` passed.
 
@@ -1963,7 +1965,7 @@ Status: Complete on May 10, 2026.
 
 ## 122. Add Demo Readiness UI Link To OpenAI Smoke
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: UI / Provider Honesty
 - Goal: Surface the new OpenAI smoke gate on `/demo-readiness` without implying dashboards are LLM-generated.
