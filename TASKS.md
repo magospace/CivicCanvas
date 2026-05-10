@@ -1536,6 +1536,8 @@ Status: Complete on May 10, 2026.
 
 ## 98. Add Final No-Artifact Submission Hygiene Checklist
 
+Status: Complete on May 10, 2026.
+
 - Owner type: Submission / Artifact Hygiene
 - Goal: Ensure final submission docs remind agents not to commit screenshots/videos/provider artifacts or `.env` files.
 - Scope: Docs only.
@@ -1544,3 +1546,5 @@ Status: Complete on May 10, 2026.
 - Acceptance criteria: Docs point to `pnpm demo:artifact-hygiene:json`, mention ignored `demo-artifacts/`, and prohibit `.env`, screenshots/videos, generated provider artifacts unless a task explicitly approves them.
 - Validation commands: manual wording check, `pnpm demo:artifact-hygiene:json`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes.
+- Completed notes: Added final artifact hygiene reminders to submission and demo video checklists, including `pnpm demo:artifact-hygiene:json`, ignored `demo-artifacts/`, and prohibitions on committing `.env`, screenshots/videos/GIFs, Fal/provider outputs, signed URLs, or generated artifacts unless explicitly scoped.
+- Validation: Manual wording check, `pnpm demo:artifact-hygiene:json`, `pnpm lint`, and `git diff --check` passed.

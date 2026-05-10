@@ -108,6 +108,7 @@ Use this closing line:
 
 Before uploading the video:
 
+- Run `pnpm demo:artifact-hygiene:json` and confirm generated demo media is ignored and not staged.
 - Confirm no secrets, tokens, `.env` contents, or private browser tabs are visible.
 - Confirm narration does not claim generated image/video output.
 - Confirm narration does not claim server-side saved-canvas persistence.

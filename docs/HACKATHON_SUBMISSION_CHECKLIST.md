@@ -172,7 +172,9 @@ Record:
 ## Screenshot And Video Assets
 
 - Use `docs/DEMO_VIDEO_CHECKLIST.md` for video capture sequence and narration.
-- Keep generated screenshots/video files out of git unless a separate task explicitly approves committing them.
+- Run `pnpm demo:artifact-hygiene:json` before final commit/submission packaging.
+- Keep generated screenshots/video files under ignored `demo-artifacts/` or external storage; do not commit them unless a separate task explicitly approves committing generated media.
+- Do not commit `.env` files, provider outputs, Fal artifacts, screenshots, videos, GIFs, signed URLs, or other generated assets without explicit task scope.
 - Confirm no secrets, private browser tabs, `.env` contents, tokens, local credentials, or unrelated personal data are visible.
 - Caption fallback/live boundaries so judges do not infer unsupported live-provider behavior.
 
