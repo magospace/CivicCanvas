@@ -201,6 +201,7 @@ Brand assets live under `apps/web/public/brand/`. The header uses the compact Ci
 - [Architecture map](ARCHITECTURE_MAP.md)
 - [Development guide](DEVELOPMENT_GUIDE.md)
 - [Live/fallback proof matrix](docs/LIVE_FALLBACK_PROOF.md)
+- [Sample and persistence realness matrix](docs/SAMPLE_AND_PERSISTENCE_REALNESS.md)
 - [Agent instructions](AGENTS.md)
 - [Roadmap](ROADMAP.md)
 - [Task list](TASKS.md)

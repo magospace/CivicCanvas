@@ -91,6 +91,10 @@ Summaries must:
 - Identify source dataset
 - State if data is sample/demo data
 
+## Sample provenance and persistence
+
+Sample files under `data/samples/*.sample.json` are checked-in synthetic development samples aligned to approved public-data schemas. They are not complete live extracts or source-owned production snapshots. Use `docs/SAMPLE_AND_PERSISTENCE_REALNESS.md` for the current row-count, provenance, live/fallback, hidden-field, saved-canvas, share-link, seed API, and release-evidence matrix.
+
 ## Miro export policy
 
 Miro export must:

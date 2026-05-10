@@ -1,22 +1,23 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 04:27 CDT
+Last updated: May 10, 2026 04:46 CDT
 
 ## Current Cycle
 
-- Task chosen: `TASKS.md` item 39, "Add Current-HEAD Release Evidence Warning To Demo Handoff".
-- Why this was next: Item 39 follows the media-provider wording pass and keeps demo/release docs honest while Task 35 remains approval-gated.
-- Scope: `GOVERNANCE_NOTE.md`, `docs/DEMO_SCRIPT.md`, `docs/README.md`, `REALNESS_AUDIT.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Task chosen: `TASKS.md` item 40, "Add Sample Data Provenance And Persistence Realness Matrix".
+- Why this was next: Item 35 remains release-evidence work requiring explicit approval, and items 36-39 are complete, so item 40 is the next safe realness-audit follow-up.
+- Scope: `docs/SAMPLE_AND_PERSISTENCE_REALNESS.md`, `docs/DATA_GOVERNANCE.md`, `README.md`, `docs/README.md`, `REALNESS_AUDIT.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
 - Safety notes: Documentation only. No product behavior, runtime source code, tests, package scripts, config, source data, secrets, auth, billing, migrations, production config, deploy scripts, release evidence, catalog data, samples, live API calls, or destructive operations were changed. Release evidence was not refreshed.
 
 ## Files Updated
 
-- `GOVERNANCE_NOTE.md`: Updated the release-evidence warning to avoid stale exact-current-HEAD wording and state that the branch has advanced beyond recorded evidence.
-- `docs/DEMO_SCRIPT.md`: Added a judge-demo warning not to cite checked-in release evidence as current proof.
-- `docs/README.md`: Labeled `release-evidence.json` as historical evidence for commit `a5ce07a...`, not current branch proof.
-- `REALNESS_AUDIT.md`: Updated the release-evidence row with the new warning surfaces.
-- `TASKS.md`: Marked item 39 complete with validation notes.
-- `HERMES_PROGRESS.md`: Recorded item 39 scope, safety notes, and validation.
+- `docs/SAMPLE_AND_PERSISTENCE_REALNESS.md`: Added sample row/date/provenance matrix plus persistence/artifact boundaries for catalog, samples, gallery, saved canvases, share links, save/seed APIs, and release evidence.
+- `docs/DATA_GOVERNANCE.md`: Linked the new matrix from the sample provenance policy.
+- `README.md`: Added the matrix to current developer docs.
+- `docs/README.md`: Added the matrix to current domain docs.
+- `REALNESS_AUDIT.md`: Updated persistence and sample-data rows to reference the new matrix.
+- `TASKS.md`: Marked item 40 complete with validation notes.
+- `HERMES_PROGRESS.md`: Recorded item 40 scope, safety notes, and validation.
 
 ## Sequential Progress
 
@@ -31,22 +32,20 @@ Last updated: May 10, 2026 04:27 CDT
 - Task 36 committed as `476143a` (`docs: clarify saved canvas persistence boundary`).
 - Task 37 committed as `452e608` (`docs: align miro preview-only wording`).
 - Task 38 committed as `43e900d` (`docs: document no media provider path`).
-- Task 39 committed as `bb75c66` (`docs: warn release evidence is historical`).
+- Task 39 committed as `1987aa8` (`docs: warn release evidence is historical`).
+- Task 40 completed and ready to commit as `docs: add sample persistence realness matrix`.
 
 ## Sequential Task Plan
 
-1. Task 36, "Clarify Saved-Canvas Validation Stub Honesty".
+1. Task 40, "Add Sample Data Provenance And Persistence Realness Matrix".
+   - Validation: `git diff --check`, `pnpm lint`, `pnpm data:quality`.
+   - Expected commit: `docs: add sample persistence realness matrix`.
+2. Task 41, "Add Seed/Save API Naming Honesty Audit".
+   - Validation: focused canvas save/seed route tests if touched, `git diff --check`, `pnpm lint`, `pnpm test`.
+   - Expected commit: `docs: audit seed save api naming`.
+3. Task 42, "Add No-LLM/No-Secret Provider Demo Wording Pass".
    - Validation: `git diff --check`, `pnpm lint`.
-   - Expected commit: `docs: clarify saved canvas persistence boundary`.
-2. Task 37, "Align Miro Export Docs With Preview-Only Implementation".
-   - Validation: `git diff --check`, `pnpm lint`.
-   - Expected commit: `docs: align miro preview-only wording`.
-3. Task 38, "Document No Image/Video/Media Provider Path".
-   - Validation: `git diff --check`, `pnpm lint`.
-   - Expected commit: `docs: document no media provider path`.
-4. Task 39, "Add Current-HEAD Release Evidence Warning To Demo Handoff".
-   - Validation: `git diff --check`, `pnpm lint`; optionally `pnpm governance:audit` to confirm the historical evidence warning remains expected.
-   - Expected commit: `docs: warn release evidence is historical`.
+   - Expected commit: `docs: clarify deterministic no-provider generation`.
 
 ## Dirty Worktree Reconciliation Plan
 

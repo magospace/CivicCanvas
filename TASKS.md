@@ -609,6 +609,8 @@ Status: Complete on May 10, 2026 at 04:27 CDT.
 
 ## 40. Add Sample Data Provenance And Persistence Realness Matrix
 
+Status: Complete on May 10, 2026 at 04:46 CDT.
+
 - Owner type: Docs / Data governance
 - Goal: Add a compact matrix showing synthetic sample provenance, local browser persistence, checked-in gallery fixtures, and release evidence status.
 - Why it matters: The data samples are synthetic/schema-aligned local files, not complete live extracts; saved canvases are local, not multi-user durable objects.
@@ -618,6 +620,8 @@ Status: Complete on May 10, 2026 at 04:27 CDT.
 - Acceptance criteria: Matrix names each sample file, row count, provenance note, live/fallback status, hidden-field boundary, and validation command; saved/share persistence is labeled browser-local/hash-based.
 - Validation commands: `git diff --check`, `pnpm lint`, `pnpm data:quality`.
 - Can run in parallel: Yes with tasks not editing the same governance docs.
+- Completed notes: Added `docs/SAMPLE_AND_PERSISTENCE_REALNESS.md` with sample row counts, date ranges, synthetic provenance notes, live/fallback status, Houston hidden-field boundary, saved/localStorage and URL-hash share-link boundaries, seed/save API boundaries, gallery fixture status, and historical release-evidence status. Linked it from `README.md`, `docs/README.md`, `docs/DATA_GOVERNANCE.md`, and `REALNESS_AUDIT.md`.
+- Validation: `git diff --check`, `pnpm lint`, and `pnpm data:quality` passed.
 
 ## 41. Add Seed/Save API Naming Honesty Audit
 
