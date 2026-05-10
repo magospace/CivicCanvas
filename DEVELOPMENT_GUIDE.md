@@ -201,12 +201,10 @@ Release evidence refresh is not a daily check. Do not update `docs/release-evide
 
 Treat these as situational checks, not routine validation:
 
-| Command | Caution |
-|---|---|
-| `pnpm clean` | Deletes dependencies and generated outputs. Use only when intentionally resetting local artifacts. |
-| `pnpm smoke:live` | Uses network against public live APIs. Skip if offline or avoiding network. |
-| `pnpm smoke:deploy -- --url <url>` | Requires a running local or hosted deployment URL. |
-| `pnpm test:e2e:remote` | Requires `PLAYWRIGHT_BASE_URL`. |
+- `pnpm smoke:live` hits public live APIs.
+- `pnpm smoke:deploy -- --url <url>` requires a running local or hosted app.
+- `PLAYWRIGHT_BASE_URL=<url> pnpm test:e2e:remote` requires a public or separately started local URL.
+- Optional OpenAI prompt-assist/source-summary work must keep `OPENAI_API_KEY` server-side in `.env.local` or hosting secrets only, report readiness as present/missing without echoing the key, and preserve deterministic fallback when the key is absent or model output fails schema validation. Do not make OpenAI mandatory for the default local demo.
 
 ### Hosted Rate-Limit Readiness
 

@@ -493,6 +493,41 @@ export const promptIntentSchema = z.object({
   unresolvedQuestions: z.array(z.string().min(1)).default([])
 });
 
+export const promptAssistResultSchema = z
+  .object({
+    provider: z.enum(["openai", "deterministic_fallback"]),
+    mode: z.enum(["supported", "unsupported"]),
+    datasetCandidates: z.array(z.string().min(1)).max(3),
+    supportedQueryShape: z.enum(["approved_dataset_query", "catalog_discovery", "unsupported_refusal"]),
+    closestSupportedPrompt: z.string().min(1),
+    explanation: z.string().min(1),
+    blockedReason: z.string().min(1).optional(),
+    caveats: z.array(z.string().min(1)).default([])
+  })
+  .strict();
+
+export const unsupportedPromptSuggestionSchema = z
+  .object({
+    provider: z.enum(["openai", "deterministic_fallback"]),
+    suggestedPrompt: z.string().min(1),
+    explanation: z.string().min(1),
+    blockedReason: z.string().min(1),
+    approvedDatasetIds: z.array(z.string().min(1)).max(3),
+    caveats: z.array(z.string().min(1)).default([])
+  })
+  .strict();
+
+export const sourceAwareSummarySchema = z
+  .object({
+    provider: z.enum(["openai", "deterministic_fallback"]),
+    summary: z.string().min(1),
+    caveats: z.array(z.string().min(1)).min(1),
+    sourceDatasetIds: z.array(z.string().min(1)).min(1),
+    dataMode: dataModeSchema,
+    unsupportedClaimsAvoided: z.literal(true)
+  })
+  .strict();
+
 export const savedCanvasSchema = z.object({
   schemaVersion: schemaVersionSchema,
   canvasId: z.string().min(1),
@@ -537,6 +572,9 @@ export type CanvasDocument = z.infer<typeof canvasDocumentSchema>;
 export type MiroExportSpec = z.infer<typeof miroExportSpecSchema>;
 export type QueryAudit = z.infer<typeof queryAuditSchema>;
 export type PromptIntent = z.infer<typeof promptIntentSchema>;
+export type PromptAssistResult = z.infer<typeof promptAssistResultSchema>;
+export type UnsupportedPromptSuggestion = z.infer<typeof unsupportedPromptSuggestionSchema>;
+export type SourceAwareSummary = z.infer<typeof sourceAwareSummarySchema>;
 export type SavedCanvas = z.infer<typeof savedCanvasSchema>;
 export type SavedCanvasBundle = z.infer<typeof savedCanvasBundleSchema>;
 export type QueryExecution = {

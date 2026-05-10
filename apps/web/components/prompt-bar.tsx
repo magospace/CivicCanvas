@@ -6,6 +6,7 @@ export function PromptBar({
   dataModePreference,
   isGenerating,
   promptExamples,
+  suggestionsLabel = "Guided suggestions",
   onPromptChange,
   onDataModePreferenceChange,
   onGenerate
@@ -14,6 +15,7 @@ export function PromptBar({
   dataModePreference: DataModePreference;
   isGenerating: boolean;
   promptExamples?: { label: string; prompt: string }[];
+  suggestionsLabel?: "AI-assisted suggestions" | "Guided suggestions";
   onPromptChange: (prompt: string) => void;
   onDataModePreferenceChange: (mode: DataModePreference) => void;
   onGenerate: () => void;
@@ -25,7 +27,7 @@ export function PromptBar({
           <Sparkles className="h-4 w-4 text-signal" />
           Ask about Texas public data
         </div>
-        <span className="text-xs font-medium text-slate-500">Public beta / governed data mode</span>
+        <span className="text-xs font-medium text-slate-500">{suggestionsLabel} / governed data mode</span>
       </div>
       <form
         className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_180px_auto]"

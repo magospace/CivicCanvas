@@ -6,7 +6,7 @@ Last inspected: May 10, 2026
 
 Texas Data Canvas is a no-account, no-database public-data explorer for Texas civic datasets. Users type plain-English prompts about approved public datasets, and the app generates source-cited dashboards made from trusted React blocks: summaries, metrics, charts, ZIP bubble maps, tables, filters, dataset cards, and source/method cards.
 
-The app is intentionally not a generic chatbot or arbitrary code generator. It parses supported prompts with deterministic local TypeScript rules rather than an LLM/provider call, turns them into validated `BoundedQuerySpec` objects, queries approved static samples or verified live public APIs, then renders a validated `CanvasDocument` through an allowlisted block registry.
+The app is intentionally not a generic chatbot or arbitrary code generator. Its deterministic local TypeScript parser remains the authority for supported prompt-to-query behavior; the optional server-only OpenAI wrapper can assist with prompt interpretation and source-aware summary wording when a server-side key is configured, but it must return schema-validated JSON and falls back to deterministic templates whenever the key is missing or model output is invalid. Governed query generation still turns approved intents into validated `BoundedQuerySpec` objects, queries approved static samples or verified live public APIs, then renders a validated `CanvasDocument` through an allowlisted block registry.
 
 Current supported dashboard workflows:
 
@@ -140,10 +140,11 @@ Only public/runtime metadata variables are required for hosted-style builds. Sam
 | `VERCEL_GIT_COMMIT_SHA`, `VERCEL_GIT_COMMIT_REF` | `apps/web/app/api/health/route.ts`, `apps/web/app/demo-readiness/page.tsx` | Hosted git metadata shown in health/demo readiness. |
 | `GITHUB_SHA`, `GITHUB_REF_NAME` | `apps/web/app/api/health/route.ts`, `apps/web/app/demo-readiness/page.tsx` | CI fallback for commit/branch metadata. |
 | `NODE_ENV` | `apps/web/next.config.mjs` | Controls whether CSP includes `unsafe-eval` for development only. |
+| `OPENAI_API_KEY` | `apps/web/lib/openai-provider.ts`, `apps/web/app/api/health/route.ts`, `apps/web/app/explore/page.tsx` | Optional server-side provider key for prompt-assist and source-aware summary wording. Keep real values in `.env.local` or hosting secrets only; never prefix with `NEXT_PUBLIC_` and never expose the value in health JSON, screenshots, logs, or proof artifacts. |
 
 `.env.example` currently uses `NEXT_PUBLIC_APP_VERSION=v1.3.0-hosted-launch-readiness`, matching the active release metadata in `packages/shared/src/release/index.ts`. The public runtime label may still use `hosted-beta` for deployment context; do not treat that label as a release-version mismatch.
 
-No `DATABASE_URL`, Supabase, Prisma, OAuth, OpenAI/Anthropic/model-provider API key, or app-secret environment variable is used by current runtime code. Vercel token/org/project values are mentioned only in deployment docs and are explicitly checked so they are not committed.
+No `DATABASE_URL`, Supabase, Prisma, OAuth, or required app-secret environment variable is used by the default local demo. Optional OpenAI support uses a server-side `OPENAI_API_KEY` only for schema-validated prompt-assist/source-summary wording and preserves deterministic fallback when absent. Vercel token/org/project values are mentioned only in deployment docs and are explicitly checked so they are not committed.
 
 ## External Services And APIs
 
@@ -155,7 +156,7 @@ No `DATABASE_URL`, Supabase, Prisma, OAuth, OpenAI/Anthropic/model-provider API 
 | Vercel | Intended hosting target and smoke/deployment docs. No committed Vercel secrets or `.vercel/project.json`. |
 | Miro | Preview-only `MiroExportSpec` generation. No Miro API writes are implemented. |
 | MCP clients | The stdio MCP server exposes safe tools for dataset search, query, canvas generation, validation, audit, and Miro preview specs. |
-| LLM/model providers | Not implemented. Prompt support is deterministic/rule-based local TypeScript with no provider SDK, model secret, or paid inference path. |
+| LLM/model providers | Optional server-side OpenAI wrapper for schema-validated prompt-assist and source-aware summary wording. It is disabled when the key is missing and never generates dashboard code, arbitrary SQL, non-catalog dataset access, or hidden-field overrides. |
 
 ## Current Risks, Incomplete Areas, And Confusing Patterns
 

@@ -4,7 +4,7 @@ Open-source, MCP-powered visual explorer for Texas public datasets.
 
 ## What it does
 
-Users ask natural-language questions about Texas public data. The app parses supported prompts with deterministic local TypeScript rules, discovers approved public datasets, runs safe bounded queries, and renders interactive dashboards with maps, charts, tables, filters, summaries, and source attribution. There is no LLM provider, paid inference path, hidden prompt API key, or model-generated dashboard execution in the current app.
+Users ask natural-language questions about Texas public data. The app parses supported prompts with deterministic local TypeScript rules, discovers approved public datasets, runs safe bounded queries, and renders interactive dashboards with maps, charts, tables, filters, summaries, and source attribution. OpenAI is optional and server-side only for prompt-assist/summary wording when `OPENAI_API_KEY` is configured; it is not required for the default local demo and cannot generate dashboard code, arbitrary SQL, non-catalog dataset access, or hidden-field overrides.
 
 Optional stretch: generate preview-only MiroExportSpec JSON for briefing boards, slide-like frames, or workshop boards. The app does not create or update Miro boards.
 
@@ -34,6 +34,7 @@ This flow is deterministic and governed: no LLM-generated dashboard code, no arb
 
 - No arbitrary AI-generated runtime HTML/JavaScript.
 - No LLM-backed dashboard generation or required model/provider secret.
+- Optional OpenAI prompt-assist and source-summary helpers are server-side only, schema-validated, and deterministic-fallback by default.
 - No arbitrary SQL.
 - Use CanvasSpec JSON + trusted React block registry.
 - Use BoundedQuerySpec + approved dataset catalog.
@@ -186,6 +187,8 @@ Recommended Vercel settings:
 Set hosted beta `NEXT_PUBLIC_*` values before building; Next.js captures them into the production bundle.
 
 Sample mode requires no secrets. Live Socrata adapters use verified catalog field mappings and keep sample fallbacks for demos.
+
+Optional OpenAI support uses `OPENAI_API_KEY` from `.env.local` or the server environment only. When the key is missing, `/explore` labels prompt help as "Guided suggestions" and the provider wrapper uses deterministic parsing/templates. When the key is present, health metadata reports only `keyStatus: present`; keys must never be exposed to client bundles, screenshots, logs, browser JSON, or generated proof artifacts.
 
 The health route exposes media-generation status. Current dashboard generation does not create image/video artifacts, upload media, or call Fal by default. `pnpm media:fal:smoke:json` is an optional script-level proof path; the app health metadata labels it as `RUN_LIVE_FAL_SMOKE=1` gated and separate from normal dashboard rendering.
 

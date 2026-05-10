@@ -19,11 +19,20 @@ describe("production API contracts", () => {
     expect(healthBody.releaseVersion).toBe(releaseMetadata.releaseVersion);
     expect(healthBody.releaseChannel).toBe(releaseMetadata.releaseChannel);
     expect(healthBody.packageVersion).toBe(releaseMetadata.packageVersion);
-    expect(healthBody.promptProcessing).toEqual({
+    expect(healthBody.promptProcessing).toMatchObject({
       mode: "deterministic_rule_based",
       requiresProviderSecret: false,
-      provider: null
+      provider: null,
+      openAIReadiness: {
+        provider: "openai",
+        enabled: false,
+        keyStatus: "missing",
+        serverSideOnly: true,
+        defaultLocalFallback: "deterministic",
+        secretEcho: false
+      }
     });
+    expect(healthBody.promptProcessing.boundaries).toContain("Deterministic parser and bounded query engine remain authoritative.");
     expect(healthBody.mediaGeneration).toEqual({
       appGeneratesMedia: false,
       dashboardMediaOutput: "not_implemented",
@@ -34,8 +43,8 @@ describe("production API contracts", () => {
       secretEcho: false,
       note: "Dashboards render validated UI and client exports only. Fal media proof is an optional script path, not normal app generation."
     });
-    expect(JSON.stringify(healthBody).toLowerCase()).not.toContain("openai");
     expect(JSON.stringify(healthBody).toLowerCase()).not.toContain("anthropic");
+    expect(JSON.stringify(healthBody)).not.toContain("OPENAI_API_KEY");
     expect(JSON.stringify(healthBody)).not.toContain("FAL_KEY");
     expect(healthBody.catalogCount).toBeGreaterThan(0);
 

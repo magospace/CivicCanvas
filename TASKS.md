@@ -1731,3 +1731,18 @@ Status: Pending.
 - Acceptance criteria: Remaining mobile prompt ordering, source-card density, nav active state, saved empty CTA, and technical-label polish risks are either completed, deferred, or represented as scoped tasks with validation commands.
 - Validation commands: manual audit/queue consistency check, `git diff --check`.
 - Can run in parallel: Yes with implementation tasks if it does not edit the same task/progress files.
+
+## 109. Add Server-Only OpenAI Assist Wrapper
+
+Status: Complete on May 10, 2026.
+
+- Owner type: Provider / Governance / QA
+- Goal: Standardize optional OpenAI use for CivicCanvas prompt-assist and source-aware summary wording while preserving deterministic public-data authority and key-missing fallback.
+- Scope: Server-only provider wrapper, shared structured-output schemas, health/readiness metadata, guided-vs-AI-assisted UI copy, docs/env examples, and tests.
+- Likely files: `apps/web/lib/openai-provider.ts`, `packages/shared/src/schemas/index.ts`, `apps/web/app/api/health/route.ts`, `apps/web/app/explore/page.tsx`, `apps/web/components/app-shell.tsx`, `apps/web/components/prompt-bar.tsx`, `apps/web/test/openai-provider.test.ts`, `apps/web/test/api-contracts.test.ts`, `tests/e2e/product-demo.spec.ts`, `.env.example`, `README.md`, `CODEBASE_OVERVIEW.md`, `ARCHITECTURE_MAP.md`, `DEVELOPMENT_GUIDE.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Medium.
+- Acceptance criteria: `OPENAI_API_KEY` is checked only through server env without printing; readiness reports present/missing only; structured output schemas validate PromptAssistResult, SourceAwareSummary, and UnsupportedPromptSuggestion; invalid/missing-key OpenAI output falls back deterministically; tests cover key-missing fallback, invalid schema fallback, no secret leakage, mocked happy path, unsupported prompt boundaries, hidden-field safety, and non-catalog dataset rejection; UI says "Guided suggestions" when no key is active.
+- Validation commands: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm governance:audit`, `pnpm data:quality`, `pnpm --filter @texas-data-canvas/mcp-server build`, `pnpm test:e2e` if UI changed, `git diff --check`.
+- Can run in parallel: No with schema/provider/API/UI test edits.
+- Completed notes: Added `apps/web/lib/openai-provider.ts` using fetch-based server-side OpenAI calls with JSON response validation and deterministic fallbacks; added shared structured schemas/types; health metadata now exposes OpenAI readiness without key values or env var names; `/explore` shows "Guided suggestions" unless the server-side key is active; docs and `.env.example` document `OPENAI_API_KEY=` without a real value.
+- Validation: Focused OpenAI/API Vitest passed; `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm governance:audit`, `pnpm data:quality`, MCP server build, targeted product-demo Playwright run, and `git diff --check` passed. No live OpenAI calls were made.

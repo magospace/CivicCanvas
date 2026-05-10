@@ -27,9 +27,11 @@ const promptExamples = [
 ];
 
 export function AppShell({
+  aiSuggestionsActive,
   canvas,
   datasets
 }: {
+  aiSuggestionsActive?: boolean;
   canvas: CanvasDocument;
   datasets: DatasetMetadata[];
 }) {
@@ -231,6 +233,7 @@ export function AppShell({
             dataModePreference={dataModePreference}
             isGenerating={isGenerating}
             promptExamples={promptExamples}
+            suggestionsLabel={aiSuggestionsActive ? "AI-assisted suggestions" : "Guided suggestions"}
             onPromptChange={setPrompt}
             onDataModePreferenceChange={setDataModePreference}
             onGenerate={generateDashboard}

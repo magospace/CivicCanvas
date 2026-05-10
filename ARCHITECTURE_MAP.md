@@ -8,7 +8,7 @@ Texas Data Canvas is a pnpm monorepo with three runtime/code packages:
 
 | Package | Role |
 |---|---|
-| `apps/web` | Next.js App Router web UI and API routes. |
+| `apps/web` | Next.js App Router web UI, API routes, and server-only OpenAI provider wrapper. |
 | `apps/mcp-server` | MCP stdio server exposing the same governed catalog/query/canvas logic as tools. |
 | `packages/shared` | Shared Zod schemas, TypeScript types, query execution, adapters, prompt parsing, persistence helpers, Miro export specs, and release metadata. |
 
@@ -63,6 +63,7 @@ Key boundaries shown above:
 - `/explore` talks to API routes; reusable safety logic lives in `packages/shared`.
 - Catalog and sample data are checked-in JSON files under `data`; there is no database, ORM, migration layer, or server-side saved-canvas store.
 - Live public API access is only through catalog-approved field mappings; user prompts do not become raw SQL or raw SoQL.
+- Optional OpenAI assistance is server-side only and limited to schema-validated prompt interpretation/source-summary wording; invalid or missing-key paths fall back to deterministic parsing/templates.
 - Dashboard output is a validated `CanvasDocument` rendered through the allowlisted React block registry, not arbitrary HTML or JavaScript.
 - MCP tools reuse the same catalog, query, canvas validation, source attribution, and Miro preview-spec boundaries as the web app.
 - Miro export remains preview-only JSON; the app performs no OAuth flow, board write, or authenticated third-party side effect.
@@ -104,7 +105,7 @@ Supporting App Router files:
 |---|---|
 | `apps/web/components/header.tsx` | Sticky app header, navigation, runtime version label, "No account mode" UI. |
 | `apps/web/components/app-shell.tsx` | Main client state and event orchestration for `/explore`. |
-| `apps/web/components/prompt-bar.tsx` | Prompt input, data-mode selector, example prompt chips. |
+| `apps/web/components/prompt-bar.tsx` | Prompt input, data-mode selector, example prompt chips, and guided/AI-assisted suggestion label depending on server-side OpenAI readiness. |
 | `apps/web/components/dataset-sidebar.tsx` | City/topic/dataset sidebar from catalog metadata. |
 | `apps/web/components/inspector-panel.tsx` | Filters, audit summaries, data-mode controls, export actions, "Why this dashboard?" panel. |
 | `apps/web/components/canvas/canvas-renderer.tsx` | Validates `CanvasDocument` and dispatches blocks through the trusted registry. |

@@ -1543,3 +1543,33 @@ Last updated: May 10, 2026 06:17 CDT
 - Files updated: Demo readiness safety model now states Fal media proof is optional script-only and normal dashboard generation does not call Fal or create image/video artifacts; E2E asserts the copy.
 - Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "demo readiness route"` ran the full product-demo spec with 17 browser tests and passed; `pnpm lint` and `git diff --check` passed.
 - Recommended next task: Task 108, `Reconcile Remaining Visual Audit Risks Into Queue`.
+
+## Task 109 Update - Server-Only OpenAI Assist Wrapper
+
+- Task chosen: User requested standardizing OpenAI API usage across hackathon apps for CivicCanvas, with server-side key handling, provider readiness metadata, structured outputs, deterministic fallback, and safety tests.
+- Why this was next: The previous cycle completed Tasks 103-107 cleanly. The new user request explicitly scoped OpenAI standardization and included safety/validation requirements. Existing Task 108 remains pending because this request superseded visual-risk reconciliation for the current cycle.
+- Scope: `apps/web/lib/openai-provider.ts`, `packages/shared/src/schemas/index.ts`, `apps/web/app/api/health/route.ts`, `apps/web/app/explore/page.tsx`, `apps/web/components/app-shell.tsx`, `apps/web/components/prompt-bar.tsx`, `apps/web/test/openai-provider.test.ts`, `apps/web/test/api-contracts.test.ts`, `tests/e2e/product-demo.spec.ts`, `.env.example`, `README.md`, `CODEBASE_OVERVIEW.md`, `ARCHITECTURE_MAP.md`, `DEVELOPMENT_GUIDE.md`, `TASKS.md`, and this progress note.
+- Safety notes: Checked whether `OPENAI_API_KEY` was configured without printing it; it was not configured in the shell environment. Did not read, cat, grep, log, or commit `.env.local`. No live OpenAI call was made. No real key, `.env`, screenshots, browser JSON, proof artifacts, generated media, schema migrations, database work, deploy mutation, auth, billing, or production data changes were made.
+- Files updated:
+  - `apps/web/lib/openai-provider.ts`: New fetch-based server-side OpenAI wrapper with readiness metadata, JSON response parsing, schema validation, catalog ID validation, and deterministic fallbacks.
+  - `packages/shared/src/schemas/index.ts`: Added `promptAssistResultSchema`, `unsupportedPromptSuggestionSchema`, and `sourceAwareSummarySchema` plus exported types.
+  - `apps/web/app/api/health/route.ts`: Added OpenAI readiness metadata reporting provider enabled state and key present/missing without key values or env var names.
+  - `apps/web/app/explore/page.tsx`, `apps/web/components/app-shell.tsx`, `apps/web/components/prompt-bar.tsx`: `/explore` now labels help as `Guided suggestions` unless the server-side OpenAI key is active, in which case it can say `AI-assisted suggestions`.
+  - `apps/web/test/openai-provider.test.ts`: Added mocked-provider tests for missing key fallback, invalid schema fallback, no secret leakage, happy path, unsupported prompt boundaries, hidden-field protection, non-catalog dataset rejection, and grounded summary fallback.
+  - `apps/web/test/api-contracts.test.ts`: Updated health contract assertions for OpenAI readiness and no secret/env-name leakage.
+  - `tests/e2e/product-demo.spec.ts`: Added browser assertion that default no-key UI shows `Guided suggestions` and not `AI-assisted suggestions`.
+  - `.env.example`, `README.md`, `CODEBASE_OVERVIEW.md`, `ARCHITECTURE_MAP.md`, `DEVELOPMENT_GUIDE.md`: Documented optional server-side `OPENAI_API_KEY`, local `.env.local` usage, deterministic fallback, and hard provider boundaries.
+  - `TASKS.md`: Recorded completed Task 109.
+- Validation:
+  - RED: Focused OpenAI provider test failed before `apps/web/lib/openai-provider.ts` existed.
+  - GREEN/focused: `pnpm test -- apps/web/test/openai-provider.test.ts apps/web/test/api-contracts.test.ts` passed; Vitest discovered the full suite and reported 16 files / 114 tests passed.
+  - `pnpm lint`: Passed.
+  - `pnpm typecheck`: Passed.
+  - `pnpm test`: Passed with 16 files / 114 tests.
+  - `pnpm governance:audit`: Passed 19/19 checks with the pre-existing warning that release evidence commit `a5ce07a` differs from current HEAD.
+  - `pnpm data:quality`: Passed with 3 samples, 280 rows, 4 gallery canvases.
+  - `pnpm --filter @texas-data-canvas/mcp-server build`: Passed.
+  - `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "explore route loads"`: Passed; project script ran the full product-demo spec with 17 browser tests.
+  - `git diff --check`: Passed.
+- Live API/media calls: 0 OpenAI calls, 0 Fal/media calls, 0 public live API calls.
+- Recommended next task: Task 108, `Reconcile Remaining Visual Audit Risks Into Queue`, remains the next safe pending queue item after this OpenAI standardization task.

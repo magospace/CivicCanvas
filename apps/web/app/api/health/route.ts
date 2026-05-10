@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { releaseMetadata } from "@texas-data-canvas/shared";
 import { getCatalogHealth, getReleaseEvidence } from "../../../lib/data";
+import { getOpenAIReadiness } from "../../../lib/openai-provider";
 
 function deploymentUrl() {
   if (process.env.NEXT_PUBLIC_SITE_URL) {
@@ -26,6 +27,7 @@ export function GET() {
   const catalog = getCatalogHealth();
   const releaseEvidence = getReleaseEvidence();
   const gitRef = process.env.VERCEL_GIT_COMMIT_REF ?? process.env.GITHUB_REF_NAME;
+  const openAI = getOpenAIReadiness();
 
   return NextResponse.json({
     ok: catalog.status !== "failed",
@@ -35,9 +37,15 @@ export function GET() {
     releaseChannel: releaseMetadata.releaseChannel,
     packageVersion: releaseMetadata.packageVersion,
     promptProcessing: {
-      mode: "deterministic_rule_based",
-      requiresProviderSecret: false,
-      provider: null
+      mode: openAI.enabled ? "deterministic_with_optional_openai_assist" : "deterministic_rule_based",
+      requiresProviderSecret: openAI.enabled,
+      provider: openAI.enabled ? "openai" : null,
+      openAIReadiness: openAI,
+      boundaries: [
+        "Deterministic parser and bounded query engine remain authoritative.",
+        "OpenAI may assist with prompt interpretation and summaries only when a server-side provider key is configured.",
+        "OpenAI cannot generate executable dashboard code, arbitrary SQL, non-catalog dataset access, or hidden-field overrides."
+      ]
     },
     mediaGeneration: {
       appGeneratesMedia: false,

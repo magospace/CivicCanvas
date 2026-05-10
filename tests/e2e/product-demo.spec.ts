@@ -26,6 +26,8 @@ test("explore route loads the governed shell", async ({ page }) => {
   await expect(page.getByAltText("CivicCanvas logo").first()).toBeVisible();
   await expect(page.getByText("CivicCanvas").first()).toBeVisible();
   await expect(page.getByLabel("Dashboard prompt")).toBeVisible();
+  await expect(page.getByText("Guided suggestions / governed data mode")).toBeVisible();
+  await expect(page.getByText("AI-assisted suggestions / governed data mode")).toHaveCount(0);
   await expect(page.getByText("Known data boundaries")).toBeVisible();
   await expect(page.getByRole("button", { name: "Dallas 311 by ZIP" })).toBeVisible();
   await page.getByRole("button", { name: "Austin permits trend" }).click();
