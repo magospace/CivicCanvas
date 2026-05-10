@@ -11,7 +11,7 @@ Next.js App Router app for the Texas Data Canvas public-data explorer.
 - `/gallery` renders checked-in validated demo canvases through the allowlisted canvas renderer.
 - `/demo-readiness` renders release utility checks, catalog health, sample/live boundaries, hosted blockers, and copyable demo/release handoff text.
 
-Saved canvases stay in browser `localStorage`; there is no backend saved-canvas database or public share service.
+Saved canvases stay in browser `localStorage`; there is no backend saved-canvas database or public share service. The `/api/canvas/save` route validates submitted `CanvasDocument` JSON for contract/API checks only. Despite the route name and `saved: true` response, it does not persist to a server, account, object store, or shared database.
 
 ## Commands
 

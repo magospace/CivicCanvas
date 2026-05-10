@@ -169,6 +169,8 @@ pnpm smoke:deploy -- --url https://your-deployment.example --expect-version v1.3
 
 Saved canvases remain browser-local. Use `/saved` to export/import portable saved-canvas bundles for demos and handoffs. Share links place the validated bundle in the URL hash and import only after schema validation; they are not public database-backed URLs.
 
+The `/api/canvas/save` route is a validation stub for API and contract checks. It validates a `CanvasDocument` and returns the validated canvas ID, but it does not write to a server store, database, account, or public share service. The visible save workflow writes only to browser `localStorage`.
+
 The `/explore` inspector includes a "Why this dashboard?" section with matched prompt terms, reason codes, safety decisions, selected data mode, and active bounded query JSON. Dashboard exports stay client-side and governed: current table CSV, validated `CanvasDocument` JSON, and active `BoundedQuerySpec` JSON.
 
 The `/demo-readiness` route is a utility page for checking release gates and public-demo boundaries. It is intentionally not a marketing landing page.

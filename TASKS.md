@@ -545,6 +545,8 @@ These tasks come from `REALNESS_AUDIT.md`. They are intentionally scoped to keep
 
 ## 36. Clarify Saved-Canvas Validation Stub Honesty
 
+Status: Complete on May 10, 2026 at 04:20 CDT.
+
 - Owner type: Docs / API honesty
 - Goal: Make the local-only saved-canvas boundary impossible to misread, especially around `/api/canvas/save`.
 - Why it matters: The route returns `saved: true` after validation, but the implementation has no backend store; browser `localStorage` does the real save.
@@ -554,6 +556,8 @@ These tasks come from `REALNESS_AUDIT.md`. They are intentionally scoped to keep
 - Acceptance criteria: Docs and tests explicitly call `/api/canvas/save` a validation stub; no copy implies server persistence or public share service; product behavior is unchanged unless separately approved.
 - Validation commands: `git diff --check`, `pnpm lint`; run focused canvas-save route tests only if test files change.
 - Can run in parallel: Yes with tasks not editing the same docs/tests.
+- Completed notes: Strengthened `README.md`, `apps/web/README.md`, `ARCHITECTURE_MAP.md`, and `REALNESS_AUDIT.md` to say `/api/canvas/save` is a validation stub only, that `saved: true` does not mean server persistence, and that `/saved` writes only to browser `localStorage`/hash bundles. Existing route tests already assert the validation-stub note, so no product behavior or test files changed.
+- Validation: `git diff --check` passed; `pnpm lint` passed.
 
 ## 37. Align Miro Export Docs With Preview-Only Implementation
 

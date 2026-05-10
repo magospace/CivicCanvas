@@ -1,22 +1,22 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 04:18 CDT
+Last updated: May 10, 2026 04:20 CDT
 
 ## Current Cycle
 
-- Task chosen: `TASKS.md` item 34, "Migrate From Deprecated `next lint` To ESLint CLI In Isolation".
-- Why this was next: Item 34 is the next incomplete safe task after the E2E proof tasks and removes a known tooling/deprecation risk without changing product behavior.
-- Scope: `apps/web/package.json`, `apps/web/postcss.config.js`, `DEVELOPMENT_GUIDE.md`, `QA_FINDINGS.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
-- Safety notes: No product behavior, runtime source code, source data, secrets, auth, billing, migrations, production config, deploy scripts, release evidence, catalog data, samples, live API calls, or destructive operations were changed. Package script/config changes were limited to the selected lint-tooling task. Release evidence was not refreshed.
+- Task chosen: `TASKS.md` item 36, "Clarify Saved-Canvas Validation Stub Honesty".
+- Why this was next: Item 35 is high-risk release-evidence work requiring explicit approval, so the next safe incomplete task is item 36 from the realness-audit follow-up queue.
+- Scope: `README.md`, `apps/web/README.md`, `ARCHITECTURE_MAP.md`, `REALNESS_AUDIT.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Documentation only. No product behavior, runtime source code, tests, package scripts, config, source data, secrets, auth, billing, migrations, production config, deploy scripts, release evidence, catalog data, samples, live API calls, or destructive operations were changed. Release evidence was not refreshed.
 
 ## Files Updated
 
-- `apps/web/package.json`: Replaced deprecated `next lint` with the direct ESLint CLI command and zero-warning enforcement.
-- `apps/web/postcss.config.js`: Converted the anonymous default export to a named config object so the direct CLI pass has no warnings.
-- `DEVELOPMENT_GUIDE.md`: Replaced the migration spike with current ESLint CLI linting guidance.
-- `QA_FINDINGS.md`: Resolved the deprecated lint entrypoint finding and refreshed current test/e2e validation counts.
-- `TASKS.md`: Marked item 34 complete with validation notes.
-- `HERMES_PROGRESS.md`: Recorded item 34 scope, safety notes, and validation.
+- `README.md`: Added an explicit `/api/canvas/save` validation-stub note and clarified that visible saves use browser `localStorage`.
+- `apps/web/README.md`: Clarified that `saved: true` does not mean backend persistence.
+- `ARCHITECTURE_MAP.md`: Added route and storage-flow notes distinguishing the validation stub from `/saved` local persistence.
+- `REALNESS_AUDIT.md`: Updated saved-canvas and canvas-save claims with the clearer docs boundary.
+- `TASKS.md`: Marked item 36 complete with validation notes.
+- `HERMES_PROGRESS.md`: Recorded item 36 scope, safety notes, and validation.
 
 ## Sequential Progress
 
@@ -27,28 +27,23 @@ Last updated: May 10, 2026 04:18 CDT
 - Task 31 committed as `8667205` (`test: add core demo fallback proof`).
 - Task 32 committed as `2585388` (`test: strengthen judge demo e2e path`).
 - Task 33 committed as `2529af4` (`test: add governed workflow e2e smoke`).
-- Task 34 completed and ready to commit as `chore: migrate web lint to eslint cli`.
+- Task 34 committed as `2fbcf44` (`chore: migrate web lint to eslint cli`).
+- Task 36 completed and ready to commit as `docs: clarify saved canvas persistence boundary`.
 
 ## Sequential Task Plan
 
-1. Task 28, "Write Final Judge Demo Script Covering Core Workflows".
-   - Validation: manual path/link check for referenced docs/routes, `git diff --check`, `pnpm lint`.
-   - Expected commit: `docs: add final judge demo script`.
-2. Task 29, "Add Final Local Demo Readiness Checklist Without Release Evidence Refresh".
-   - Validation: manual path/link check, `git diff --check`, `pnpm lint`.
-   - Expected commit: `docs: add local demo readiness checklist`.
-3. Task 30, "Add Public-Data Live/Fallback Proof Matrix".
-   - Validation: manual path/link check, `git diff --check`, `pnpm governance:audit`, `pnpm lint`.
-   - Expected commit: `docs: add public data fallback proof matrix`.
-4. Task 32, "Strengthen Main Judge-Demo E2E Path".
-   - Validation: targeted Playwright command for `tests/e2e/judge-demo.spec.ts`, `git diff --check`.
-   - Expected commit: `test: strengthen judge demo e2e path`.
-5. Task 33, "Add Governed Workflow E2E Coverage For Sources, Saved, And Miro Preview".
-   - Validation: targeted Playwright command for the new/updated governed workflow spec, `git diff --check`.
-   - Expected commit: `test: add governed workflow e2e smoke`.
-6. Task 34, "Migrate From Deprecated `next lint` To ESLint CLI In Isolation", if E2E tasks pass and tooling scope remains clear.
-   - Validation: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `git diff --check`.
-   - Expected commit: `chore: migrate web lint to eslint cli`.
+1. Task 36, "Clarify Saved-Canvas Validation Stub Honesty".
+   - Validation: `git diff --check`, `pnpm lint`.
+   - Expected commit: `docs: clarify saved canvas persistence boundary`.
+2. Task 37, "Align Miro Export Docs With Preview-Only Implementation".
+   - Validation: `git diff --check`, `pnpm lint`.
+   - Expected commit: `docs: align miro preview-only wording`.
+3. Task 38, "Document No Image/Video/Media Provider Path".
+   - Validation: `git diff --check`, `pnpm lint`.
+   - Expected commit: `docs: document no media provider path`.
+4. Task 39, "Add Current-HEAD Release Evidence Warning To Demo Handoff".
+   - Validation: `git diff --check`, `pnpm lint`; optionally `pnpm governance:audit` to confirm the historical evidence warning remains expected.
+   - Expected commit: `docs: warn release evidence is historical`.
 
 ## Dirty Worktree Reconciliation Plan
 
@@ -227,6 +222,8 @@ Current `git status --short --branch` shows branch `feat/v1.3-hosted-launch-read
 - `pnpm lint`: Passed through the ESLint CLI with no deprecated `next lint` warning.
 - `pnpm typecheck`: Passed.
 - `pnpm test`: Passed with 89 tests across 15 files.
+- `git diff --check`: Passed for Task 36 docs.
+- `pnpm lint`: Passed for Task 36 docs.
 
 ## Blockers
 

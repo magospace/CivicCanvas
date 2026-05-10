@@ -146,6 +146,8 @@ All web APIs are Next.js App Router route handlers in `apps/web/app/api`.
 | `/api/canvas/[id]` | GET | `apps/web/app/api/canvas/[id]/route.ts` | Returns generated seeded Dallas/Austin canvases for hardcoded IDs. |
 | `/api/export/miro-spec` | POST | `apps/web/app/api/export/miro-spec/route.ts` | Validates a canvas and returns preview-only `MiroExportSpec`. |
 
+`/api/canvas/save` is intentionally not a persistence endpoint. The `saved: true` response means the submitted `CanvasDocument` passed server-side validation; no database row, account record, object-store file, or public share URL is created.
+
 API request parsing and public error formatting are centralized in `apps/web/lib/api.ts`. It enforces JSON body size limits from `packages/shared/src/constants.ts` and hides internal error details unless the error is a governed validation error.
 
 `apps/web/middleware.ts` applies best-effort in-memory rate limiting to write-like public POST routes:
@@ -288,6 +290,8 @@ User imports JSON/hash
   -> canvas and bundle validation
   -> localStorage write
 ```
+
+The optional `POST /api/canvas/save` validation route is outside this storage flow. It validates submitted canvas JSON for API contract checks and returns metadata only; it does not create or load saved canvases for `/saved`.
 
 ### Seed Canvas Lookup Flow
 
