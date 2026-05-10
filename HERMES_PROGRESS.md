@@ -1955,3 +1955,13 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `git diff --check` passed before commit. No live/API/media/provider calls.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Replenish `TASKS.md` with a new safe hackathon/submission queue, because the current useful local UI/review queue is exhausted.
+
+
+## Task Queue Replenishment Update - Data Realism And Submission Proof
+
+- Task chosen: Replenish `TASKS.md` because the useful local UI/review queue was exhausted after Task 139.
+- Scope: Added Tasks 140-149 covering hardcoded demo-data audit guards, MCP proof docs, provenance summaries, local saved-record checklist honesty, README realness table, gallery fixture loader tests, provider-readiness copy guards, public URL honesty, no-spend final validation, and release-evidence warning placement.
+- Data realism classification: Planning/docs only in this commit. The new queue prioritizes fixture/data-loader proof, deterministic fallback honesty, editable browser-local records, and hardcoded UI mock detection.
+- Validation: `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 140, `Add Hardcoded Demo Data Audit Guard`, because it directly addresses the current prompt's data-realism policy without touching product data paths.

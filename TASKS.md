@@ -2272,3 +2272,144 @@ Status: Complete on May 10, 2026.
 - Can run in parallel: Yes with implementation tasks.
 - Completed notes: Deferred risky/non-demo recommendations for Sentry/analytics/CI mandates, large architecture refactors, schema broadening, platform rate limiting, release-evidence refresh, backend persistence, auth/billing, production deployment mutation, and real Miro writes. These remain future/release-readiness work unless explicitly approved.
 - Validation: `git diff --check` passed. No product files changed.
+
+
+## 140. Add Hardcoded Demo Data Audit Guard
+
+Status: Pending.
+
+- Owner type: Data Realism / Test Guard
+- Goal: Add a repeatable no-spend audit that flags likely component-local demo/mock arrays so future UI polish does not bypass catalog/sample/gallery/saved-data paths.
+- Scope: Static audit script and package script only; no product behavior changes.
+- Likely files: `scripts/audit-hardcoded-demo-data.mjs`, `package.json`, maybe `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium due to false positives.
+- Data realism classification: Audit/proof guard for hardcoded UI mock detection; should classify static navigation/copy separately from demo data.
+- Acceptance criteria: Script scans app components/routes for suspicious `mock`, `demo`, `sample`, and inline object-array patterns, allowlists known static UI lists, fails only on actionable findings, and prints a concise classification summary.
+- Validation command: `pnpm audit:demo-data`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes with docs-only tasks; no with package script edits.
+
+## 141. Add MCP Judge Demo Transcript Proof
+
+Status: Pending.
+
+- Owner type: Brainforge / MCP Proof Docs
+- Goal: Make the MCP/agent skill proof judge-scannable without requiring live tools during Loom recording.
+- Scope: Add/update a paste-safe transcript/checklist that shows MCP tools, skill path, and no-hidden-field boundaries.
+- Likely files: `docs/MCP_DEMO_TRANSCRIPT_TEMPLATE.md`, `HACKATHON_SUBMISSION_GUIDE.md`, `README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Documentation only; must not imply live production data or real Miro writes.
+- Acceptance criteria: Loom script can show MCP/skill proof in 15 seconds, commands are no-secret/no-spend, and Brainforge/Vicinity fit is explicit.
+- Validation command: `git diff --check`, optionally `pnpm lint` if README/MD tooling is unaffected.
+- Can run in parallel: Yes with implementation tasks that do not edit the same docs.
+
+## 142. Add Source Provenance Quick-Check Script
+
+Status: Pending.
+
+- Owner type: Data Provenance / Submission Proof
+- Goal: Provide a no-network script that summarizes approved catalog sources, sample files, hidden fields, live capability, and fallback status for judges/reviewers.
+- Scope: Read existing catalog/sample files only; no catalog edits.
+- Likely files: `scripts/source-provenance-summary.mjs`, `package.json`, `README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Fixture/catalog through data loader / acceptable; proves sample/live boundary honesty.
+- Acceptance criteria: Script exits green, lists Dallas/Austin/Houston supported prompts and source/fallback classifications, and does not call live APIs or print secrets.
+- Validation command: `pnpm provenance:summary`, `pnpm data:quality`, `git diff --check`.
+- Can run in parallel: No with package script edits.
+
+## 143. Tighten Saved Demo Checklist Around Editable Local Records
+
+Status: Pending.
+
+- Owner type: Demo Flow / Data Realism Docs
+- Goal: Ensure local saved-record demo instructions emphasize editable browser-local data through normal UI flows.
+- Scope: Checklist/docs only unless tests expose stale copy.
+- Likely files: `docs/LOCAL_DEMO_SMOKE_CHECKLIST.md`, `HACKATHON_SUBMISSION_GUIDE.md`, maybe `tests/e2e/product-demo.spec.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Browser-local editable records / acceptable when labeled.
+- Acceptance criteria: Checklist covers save, edit title/prompt, reopen, export/share, delete, and explicitly says no backend account/database/public share service.
+- Validation command: `git diff --check`, focused Playwright saved flow if test copy changes.
+- Can run in parallel: Yes with non-doc package tasks.
+
+## 144. Add README Data Realism Table
+
+Status: Pending.
+
+- Owner type: README / Submission Honesty
+- Goal: Add a concise table to README classifying catalog, samples, gallery, saved canvases, OpenAI assist, live Dallas, and Miro preview.
+- Scope: README docs only; no behavior changes.
+- Likely files: `README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Documentation only; must align with `REALNESS_AUDIT.md`.
+- Acceptance criteria: Public README makes sample/live/local/preview boundaries scannable and avoids hosted/persistence overclaims.
+- Validation command: `git diff --check`.
+- Can run in parallel: Yes with code tasks not editing README.
+
+## 145. Add Gallery Fixture Loader Regression Proof
+
+Status: Pending.
+
+- Owner type: Data Realism / Test Coverage
+- Goal: Strengthen proof that gallery demo records are loaded through the existing data loader and validated, not imported component-local mocks.
+- Scope: Unit tests around gallery data loading and validation only.
+- Likely files: `apps/web/test/gallery-fixtures.test.ts` or existing test file, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium.
+- Data realism classification: Fixture file through data loader / acceptable.
+- Acceptance criteria: Test asserts checked-in gallery fixtures are loaded via `apps/web/lib/data.ts`, pass validation, include Source & Method, and include no hidden fields.
+- Validation command: `pnpm test -- apps/web/test/gallery-fixtures.test.ts`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes with docs-only tasks.
+
+## 146. Add No-Key Provider Readiness Screenshot Copy Guard
+
+Status: Pending.
+
+- Owner type: Provider Honesty / UI Test
+- Goal: Protect `/demo-readiness` copy so OpenAI/provider proof remains optional, server-side, live-gated, and no-key safe.
+- Scope: Test/copy assertions only; no live provider calls.
+- Likely files: `tests/e2e/product-demo.spec.ts`, maybe `apps/web/app/demo-readiness/page.tsx`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Deterministic no-key fallback / acceptable if clearly labeled.
+- Acceptance criteria: E2E verifies no-key/optional/provider-gated wording and avoids implying dashboard generation uses OpenAI.
+- Validation command: focused Playwright for demo-readiness, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with demo-readiness route edits.
+
+## 147. Add Public URL Smoke Placeholder Guard
+
+Status: Pending.
+
+- Owner type: Submission Ops / Honesty
+- Goal: Keep submission docs honest when no deployed URL is validated.
+- Scope: Docs/readiness copy only; no deployment.
+- Likely files: `HACKATHON_SUBMISSION_GUIDE.md`, `README.md`, `docs/HOSTED_BETA_DEPLOYMENT.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Not data-path-related.
+- Acceptance criteria: Docs say local demo is validated, public URL remains TODO unless smoke-checked, and no hosted readiness claim is made.
+- Validation command: `git diff --check`.
+- Can run in parallel: Yes with code tasks not editing these docs.
+
+## 148. Add Final No-Spend Validation Checklist Task
+
+Status: Pending.
+
+- Owner type: Release QA / Local Submission
+- Goal: Run and record the broad no-spend local validation set before any final submission or push request.
+- Scope: Validation/progress update only unless a scoped stale assertion blocks proof.
+- Likely files: `HERMES_PROGRESS.md`, maybe `QA_FINDINGS.md`, `TASKS.md`.
+- Risk level: Medium due to time and possible existing failures.
+- Data realism classification: Validation only.
+- Acceptance criteria: Record results for `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm governance:audit`, `pnpm data:quality`, and selected e2e smoke; stop on unclear failure.
+- Validation command: those listed commands plus `git diff --check`.
+- Can run in parallel: No; validation aggregator.
+
+## 149. Review Release Evidence Warning Placement
+
+Status: Pending.
+
+- Owner type: Release Honesty / Docs
+- Goal: Ensure historical release evidence warnings remain visible after the latest local commits without refreshing gated evidence.
+- Scope: Docs/readiness wording only; do not edit `docs/release-evidence.json`.
+- Likely files: `README.md`, `GOVERNANCE_NOTE.md`, `docs/README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Not data-path-related; release proof honesty.
+- Acceptance criteria: Docs clearly state checked-in release evidence is historical and not proof of current HEAD.
+- Validation command: `git diff --check`.
+- Can run in parallel: Yes with non-doc tasks.
