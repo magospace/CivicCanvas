@@ -761,3 +761,32 @@ Last updated: May 10, 2026 06:17 CDT
 ### Recommended Next Task
 
 - Task 75, `Harden Browser-Local Saved-Canvas Client Boundaries`, is the next safe task if the cycle continues.
+
+
+## Task 75 Update
+
+- Task chosen: `TASKS.md` item 75, "Harden Browser-Local Saved-Canvas Client Boundaries".
+- Why this was next: It was the next confirmed hackathon-safe finding from `clauderecommends.md`, improving the reliable saved-canvas demo path while preserving no-backend browser-local and URL-hash behavior.
+- Scope: `apps/web/lib/saved-canvases.ts`, `apps/web/components/saved-canvases.tsx`, `apps/web/test/saved-canvases.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: No backend persistence, database, migration, auth, deploy config, secrets, release evidence refresh, provider call, or generated artifact was added. Saved canvases remain browser-local.
+
+### Files Updated
+
+- `apps/web/lib/saved-canvases.ts`: Added `use client`, centralized import byte-length helpers, and clear browser-local storage failure messages around localStorage writes.
+- `apps/web/components/saved-canvases.tsx`: Checks import size before parsing, and catches duplicate/delete/open storage failures with visible errors.
+- `apps/web/test/saved-canvases.test.ts`: Added quota/storage failure regression coverage for share-hash import.
+- `TASKS.md`: Marks Task 75 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records Task 75 scope, safety notes, validation, and next task.
+
+### Validation
+
+- `pnpm test -- apps/web/test/saved-canvases.test.ts`: Passed; Vitest discovered the full suite and reported 100 tests across 15 files.
+- `pnpm lint`: Passed.
+- `pnpm typecheck`: Passed across shared, MCP server, and web.
+- `pnpm test`: Passed with 100 tests across 15 files.
+- `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved"`: Passed with 16 browser tests.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 76, `Add Dashboard Partial-Query Fallback And Runtime Fallback Reasons`, is high impact but touches risky dashboard/shared-schema surfaces. Recommended next safe step is to start it only with focused tests and stop if the change expands beyond dashboard fallback/caveat handling.

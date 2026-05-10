@@ -29,6 +29,12 @@ class MemoryStorage implements StorageLike {
   }
 }
 
+class FailingSetItemStorage extends MemoryStorage {
+  setItem() {
+    throw new Error("quota exceeded");
+  }
+}
+
 function encodeBase64Url(value: string) {
   return Buffer.from(value, "utf8").toString("base64url");
 }
@@ -129,5 +135,23 @@ describe("saved canvas share hash import and export", () => {
 
     expect(() => importSavedCanvasHash(oversizedHash)).toThrow(/Shared canvas exceeds/);
     expect(storage.getItem(savedCanvasStorageKey)).toBeNull();
+  });
+
+  it("surfaces browser-local storage quota failures without masking the local-only boundary", () => {
+    const saved = createSavedCanvasFixture();
+    const bundle = JSON.stringify({
+      exportedAt: "2026-05-10T00:00:00.000Z",
+      appVersion: "test",
+      canvases: [saved]
+    });
+    const hash = `#${savedCanvasShareHashKey}=${encodeBase64Url(bundle)}`;
+    storage = new FailingSetItemStorage();
+    vi.stubGlobal("window", {
+      location: { origin: "http://localhost:3000" },
+      localStorage: storage
+    });
+
+    expect(() => importSavedCanvasHash(hash)).toThrow(/Browser-local saved-canvas storage failed while importing saved canvases/);
+    expect(() => importSavedCanvasHash(hash)).toThrow(/Clear browser storage or export existing canvases/);
   });
 });

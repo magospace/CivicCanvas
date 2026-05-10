@@ -15,6 +15,7 @@ import {
   createSavedCanvasShareLink,
   importSavedCanvasHash,
   importSavedCanvasJson,
+  isSavedCanvasImportOverLimit,
   listSavedCanvases,
   queueCanvasForOpen,
   savedCanvasImportLimitBytes
@@ -51,6 +52,9 @@ export function SavedCanvases() {
 
   function importCanvas() {
     try {
+      if (isSavedCanvasImportOverLimit(importText)) {
+        throw new Error(`Import exceeds ${savedCanvasImportLimitBytes.toLocaleString("en-US")} bytes.`);
+      }
       refresh(importSavedCanvasJson(importText));
       setImportText("");
     } catch (error) {
@@ -160,7 +164,15 @@ export function SavedCanvases() {
             <div className="mt-4 grid grid-cols-6 gap-2">
               <Link
                 href="/explore"
-                onClick={() => queueCanvasForOpen(item)}
+                onClick={(event) => {
+                  try {
+                    queueCanvasForOpen(item);
+                  } catch (error) {
+                    event.preventDefault();
+                    const detail = error instanceof Error ? error.message : "Could not open saved canvas.";
+                    setImportError(detail);
+                  }
+                }}
                 aria-label={`Open ${item.title}`}
                 title={`Open ${item.title}`}
                 className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
@@ -176,7 +188,14 @@ export function SavedCanvases() {
                 <Link2 className="h-4 w-4" />
               </button>
               <button
-                onClick={() => refresh(duplicateSavedCanvas(item))}
+                onClick={() => {
+                  try {
+                    refresh(duplicateSavedCanvas(item));
+                  } catch (error) {
+                    const detail = error instanceof Error ? error.message : "Could not duplicate saved canvas.";
+                    setImportError(detail);
+                  }
+                }}
                 aria-label={`Duplicate ${item.title}`}
                 title={`Duplicate ${item.title}`}
                 className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
@@ -202,7 +221,12 @@ export function SavedCanvases() {
               <button
                 onClick={() => {
                   if (window.confirm(`Delete ${item.title}?`)) {
-                    refresh(deleteSavedCanvas(item.canvasId));
+                    try {
+                      refresh(deleteSavedCanvas(item.canvasId));
+                    } catch (error) {
+                      const detail = error instanceof Error ? error.message : "Could not delete saved canvas.";
+                      setImportError(detail);
+                    }
                   }
                 }}
                 aria-label={`Delete ${item.title}`}

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   clearSavedCanvasStorage,
   createSavedCanvas,
@@ -21,6 +23,21 @@ export const savedCanvasImportLimitBytes = runtimeLimits.maxSavedCanvasImportByt
 export const savedCanvasShareHashKey = "canvasBundle";
 export const savedCanvasShareHashLimitChars = Math.ceil(savedCanvasImportLimitBytes * 1.4);
 
+export function savedCanvasImportByteLength(value: string) {
+  return new TextEncoder().encode(value).byteLength;
+}
+
+export function isSavedCanvasImportOverLimit(value: string) {
+  return savedCanvasImportByteLength(value) > savedCanvasImportLimitBytes;
+}
+
+function localStorageError(action: string, error: unknown) {
+  const detail = error instanceof Error && error.message ? ` ${error.message}` : "";
+  return new Error(
+    `Browser-local saved-canvas storage failed while ${action}. Clear browser storage or export existing canvases before trying again.${detail}`
+  );
+}
+
 function currentAppVersion() {
   return process.env.NEXT_PUBLIC_APP_VERSION ?? "local";
 }
@@ -41,7 +58,11 @@ export function saveCanvasLocally({
   intent?: PromptIntent;
 }) {
   const saved = createSavedCanvas({ canvas, audits, prompt, intent });
-  return saveCanvasToStorage(window.localStorage, saved);
+  try {
+    return saveCanvasToStorage(window.localStorage, saved);
+  } catch (error) {
+    throw localStorageError("saving this canvas", error);
+  }
 }
 
 export function duplicateSavedCanvas(saved: SavedCanvas) {
@@ -51,19 +72,35 @@ export function duplicateSavedCanvas(saved: SavedCanvas) {
     title: `${saved.title} Copy`,
     savedAt: new Date().toISOString()
   });
-  return saveCanvasToStorage(window.localStorage, duplicate);
+  try {
+    return saveCanvasToStorage(window.localStorage, duplicate);
+  } catch (error) {
+    throw localStorageError("duplicating this canvas", error);
+  }
 }
 
 export function deleteSavedCanvas(canvasId: string) {
-  return deleteCanvasFromStorage(window.localStorage, canvasId);
+  try {
+    return deleteCanvasFromStorage(window.localStorage, canvasId);
+  } catch (error) {
+    throw localStorageError("deleting this canvas", error);
+  }
 }
 
 export function clearAllSavedCanvases() {
-  return clearSavedCanvasStorage(window.localStorage);
+  try {
+    return clearSavedCanvasStorage(window.localStorage);
+  } catch (error) {
+    throw localStorageError("clearing saved canvases", error);
+  }
 }
 
 export function queueCanvasForOpen(saved: SavedCanvas) {
-  window.localStorage.setItem(pendingOpenCanvasStorageKey, JSON.stringify(saved));
+  try {
+    window.localStorage.setItem(pendingOpenCanvasStorageKey, JSON.stringify(saved));
+  } catch (error) {
+    throw localStorageError("queueing this canvas to open", error);
+  }
 }
 
 export function takePendingOpenCanvas(): SavedCanvas | null {
@@ -103,11 +140,15 @@ export function createCanvasShareBundleJson({
 }
 
 export function importSavedCanvasJson(value: string) {
-  if (new TextEncoder().encode(value).byteLength > savedCanvasImportLimitBytes) {
+  if (isSavedCanvasImportOverLimit(value)) {
     throw new Error(`Import exceeds ${savedCanvasImportLimitBytes.toLocaleString("en-US")} bytes.`);
   }
 
-  return saveCanvasBundleToStorage(window.localStorage, parseSavedCanvasImport(value));
+  try {
+    return saveCanvasBundleToStorage(window.localStorage, parseSavedCanvasImport(value));
+  } catch (error) {
+    throw localStorageError("importing saved canvases", error);
+  }
 }
 
 function encodeBase64Url(value: string) {
@@ -129,7 +170,7 @@ function decodeBase64Url(value: string) {
 
 export function createSavedCanvasShareLink(canvases: SavedCanvas[], route = "/explore") {
   const bundle = exportSavedCanvasesBundleJson(canvases);
-  if (new TextEncoder().encode(bundle).byteLength > savedCanvasImportLimitBytes) {
+  if (savedCanvasImportByteLength(bundle) > savedCanvasImportLimitBytes) {
     throw new Error(`Share bundle exceeds ${savedCanvasImportLimitBytes.toLocaleString("en-US")} bytes.`);
   }
   const url = new URL(route, window.location.origin);
@@ -164,7 +205,7 @@ export function importSavedCanvasHash(hash: string) {
   }
 
   const decoded = decodeBase64Url(encoded);
-  if (new TextEncoder().encode(decoded).byteLength > savedCanvasImportLimitBytes) {
+  if (savedCanvasImportByteLength(decoded) > savedCanvasImportLimitBytes) {
     throw new Error(`Shared canvas exceeds ${savedCanvasImportLimitBytes.toLocaleString("en-US")} bytes.`);
   }
   return importSavedCanvasJson(decoded);

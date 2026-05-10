@@ -1161,6 +1161,8 @@ Status: Complete on May 10, 2026 at 06:26 CDT.
 
 ## 75. Harden Browser-Local Saved-Canvas Client Boundaries
 
+Status: Complete on May 10, 2026 at 06:30 CDT.
+
 - Owner type: Frontend / Persistence
 - Goal: Make saved-canvas client helpers explicitly client-only and improve user-facing handling for oversized imports or localStorage quota failures without adding backend persistence.
 - Scope: `apps/web/lib/saved-canvases.ts`, `apps/web/components/saved-canvases.tsx`, saved-canvas tests as needed.
@@ -1168,6 +1170,8 @@ Status: Complete on May 10, 2026 at 06:26 CDT.
 - Acceptance criteria: Client helper has a `use client` boundary; import size checks happen before parsing in the UI path; localStorage write failures surface as clear import/save/share errors; browser-local and URL-hash behavior remains unchanged.
 - Validation commands: focused saved-canvas Vitest/E2E where relevant, `git diff --check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`.
 - Can run in parallel: No with saved-canvas component/helper edits.
+- Completed notes: Added an explicit client boundary to the saved-canvas helper, centralized import byte-length checks, wrapped localStorage writes with browser-local quota/clear-space error messages, added component-side oversized import precheck, and surfaced duplicate/delete/open storage failures without changing browser-local/hash behavior.
+- Validation: Focused saved-canvas Vitest command passed with 100 tests across 15 files; `pnpm lint` passed; `pnpm typecheck` passed; full `pnpm test` passed with 100 tests across 15 files; `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved"` passed with 16 browser tests; `git diff --check` passed.
 
 ## 76. Add Dashboard Partial-Query Fallback And Runtime Fallback Reasons
 
