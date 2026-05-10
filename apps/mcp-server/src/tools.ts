@@ -30,6 +30,20 @@ export function getServerStatus() {
     datasetCount: catalog.length,
     liveEnabledDatasets: catalog.filter((dataset) => dataset.liveAvailable).map((dataset) => dataset.id),
     dataModeControls: ["auto", "live_if_available", "sample_only"],
+    promptProcessing: {
+      mode: "deterministic_rule_based",
+      requiresProviderSecret: false,
+      provider: null
+    },
+    persistence: {
+      serverDatabase: false,
+      savedCanvasStorage: "browser_local_and_hash_bundle"
+    },
+    integrationBoundaries: {
+      miro: "preview_only_no_oauth_no_board_write",
+      mediaProviders: "not_implemented",
+      livePublicApis: "catalog_gated_with_sample_fallback"
+    },
     safetyModel: "BoundedQuerySpec plus approved catalog; no raw SQL, SoQL, HTML, JavaScript, or arbitrary components."
   };
 }

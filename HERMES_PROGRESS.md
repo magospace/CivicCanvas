@@ -1,6 +1,6 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 05:20 CDT
+Last updated: May 10, 2026 05:29 CDT
 
 ## Current Cycle
 
@@ -49,7 +49,7 @@ Last updated: May 10, 2026 05:20 CDT
 
 ## Recommended Next Task
 
-- Task 48, `Add MCP Realness Smoke For Preview-Only And Local-Only Boundaries`, is the next safe task. Keep it docs-only and do not claim platform firewall/rate-limit controls are configured.
+- Task 49, `Add Saved-Canvas Share-Link Size Boundary E2E Or Component Coverage`, is the next safe task. Keep it docs-only and do not claim platform firewall/rate-limit controls are configured.
 
 ## Task 44 Update
 
@@ -131,7 +131,7 @@ Last updated: May 10, 2026 05:20 CDT
 
 ### Recommended Next Task
 
-- Task 48, `Add MCP Realness Smoke For Preview-Only And Local-Only Boundaries`, is the next safe task.
+- Task 49, `Add Saved-Canvas Share-Link Size Boundary E2E Or Component Coverage`, is the next safe task.
 
 ## Task 47 Update
 
@@ -156,7 +156,33 @@ Last updated: May 10, 2026 05:20 CDT
 
 ### Recommended Next Task
 
-- Task 48, `Add MCP Realness Smoke For Preview-Only And Local-Only Boundaries`, is the next safe task.
+- Task 49, `Add Saved-Canvas Share-Link Size Boundary E2E Or Component Coverage`, is the next safe task.
+
+## Task 48 Update
+
+- Task chosen: `TASKS.md` item 48, "Add MCP Realness Smoke For Preview-Only And Local-Only Boundaries".
+- Why this was next: Item 48 was the next safe task after item 47 and improves MCP demo honesty for provider, persistence, Miro, media-provider, and live/fallback boundaries.
+- Scope: `apps/mcp-server/src/tools.ts`, `apps/mcp-server/test/tools.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: MCP metadata/tests only. No Miro write path, OAuth flow, LLM/provider integration, media generation, database persistence, schema migration, production config, deployment mutation, secrets, billing, live API spend, or release evidence refresh was added.
+
+### Files Updated
+
+- `apps/mcp-server/src/tools.ts`: Added explicit server-status metadata for deterministic no-provider prompt processing, browser-local/hash saved-canvas persistence, preview-only Miro boundary, no media providers, and catalog-gated live API fallback behavior.
+- `apps/mcp-server/test/tools.test.ts`: Added MCP assertions for no provider secret, no server database persistence, preview-only/no-board-write Miro boundary, no token/board identifiers, and no OpenAI implication.
+- `TASKS.md`: Marks item 48 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records item 48 scope, safety notes, and validation.
+
+### Validation
+
+- RED: `pnpm test -- apps/mcp-server/test/tools.test.ts -t "lists supported sources"` failed before MCP status boundary metadata existed. The command discovered the full Vitest suite and reported 1 failed / 89 passed.
+- GREEN: `pnpm test -- apps/mcp-server/test/tools.test.ts` passed after implementation. The command ran the full Vitest suite: 15 files, 90 tests passed.
+- `pnpm lint`: Passed.
+- `pnpm typecheck`: Passed.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 49, `Add Saved-Canvas Share-Link Size Boundary E2E Or Component Coverage`, is the next safe task.
 
 ## Historical Sequential Progress
 

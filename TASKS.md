@@ -745,6 +745,8 @@ Status: Complete on May 10, 2026 at 05:20 CDT.
 
 ## 48. Add MCP Realness Smoke For Preview-Only And Local-Only Boundaries
 
+Status: Complete on May 10, 2026 at 05:29 CDT.
+
 - Owner type: QA / MCP
 - Goal: Strengthen MCP tests so tool outputs keep the same no-provider, preview-only Miro, and local/static data boundaries as the web docs.
 - Why it matters: MCP is a demo/integration surface and should not overclaim storage, live data, or third-party side effects.
@@ -754,6 +756,8 @@ Status: Complete on May 10, 2026 at 05:20 CDT.
 - Acceptance criteria: Tests cover status/source/canvas or Miro tool output and assert preview/local/static wording or JSON fields do not imply OAuth, board writes, database persistence, or model-provider execution.
 - Validation commands: `pnpm test -- apps/mcp-server/test/tools.test.ts`, `git diff --check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`.
 - Can run in parallel: Yes with web-only docs/tests. Do not parallelize with another MCP task.
+- Completed notes: Added MCP server status metadata for deterministic no-provider prompt processing, browser-local/hash saved-canvas persistence, preview-only/no-OAuth/no-board-write Miro boundaries, no media providers, and catalog-gated live API fallback behavior. Strengthened MCP tests to assert these boundaries and Miro output does not include OAuth/token/board-write fields.
+- Validation: RED MCP status assertion failed before the metadata existed; focused MCP test command passed after implementation and ran the full 90-test Vitest suite; `pnpm lint`, `pnpm typecheck`, and `git diff --check` passed.
 
 ## 49. Add Saved-Canvas Share-Link Size Boundary E2E Or Component Coverage
 

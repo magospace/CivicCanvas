@@ -31,6 +31,23 @@ describe("MCP tool handlers", () => {
     expect(getReleaseEvidence().releaseVersion).toBe(releaseMetadata.releaseVersion);
     expect(getReleaseEvidence().hosted.status).toBe("blocked");
     expect(getServerStatus().dataModeControls).toContain("live_if_available");
+    expect(getServerStatus().promptProcessing).toEqual({
+      mode: "deterministic_rule_based",
+      requiresProviderSecret: false,
+      provider: null
+    });
+    expect(getServerStatus().persistence).toEqual({
+      serverDatabase: false,
+      savedCanvasStorage: "browser_local_and_hash_bundle"
+    });
+    expect(getServerStatus().integrationBoundaries).toEqual({
+      miro: "preview_only_no_oauth_no_board_write",
+      mediaProviders: "not_implemented",
+      livePublicApis: "catalog_gated_with_sample_fallback"
+    });
+    expect(JSON.stringify(getServerStatus()).toLowerCase()).not.toContain("openai");
+    expect(JSON.stringify(getServerStatus())).not.toContain("accessToken");
+    expect(JSON.stringify(getServerStatus())).not.toContain("boardId");
     expect(validateCatalog().health.status).toBe("ok");
     const liveSources = listLiveSources().liveSources;
     expect(liveSources.map((source) => source.datasetId)).toContain("dallas_311_requests");
@@ -162,6 +179,10 @@ describe("MCP tool handlers", () => {
     expect(validateCanvasSpec(canvas).ok).toBe(true);
     const miro = generateMiroExportSpec({ canvas, template: "briefing_board" });
     expect(miro.sourceMethodFrameRequired).toBe(true);
+    expect(JSON.stringify(miro)).not.toContain("accessToken");
+    expect(JSON.stringify(miro)).not.toContain("oauth");
+    expect(JSON.stringify(miro)).not.toContain("boardId");
+    expect(JSON.stringify(miro)).not.toContain("boardWriteUrl");
     expect(miro).toEqual(generateSharedMiroExportSpec({ canvas, template: "briefing_board" }));
   });
 
