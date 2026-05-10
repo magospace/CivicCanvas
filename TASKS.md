@@ -499,10 +499,102 @@ Status: Complete on May 10, 2026 at 03:11 CDT.
 
 - Owner type: Release / Governance
 - Goal: Refresh `docs/release-evidence.json` for the intended final demo/release commit only after the required full validation gate has passed from a clean, reviewed tree.
-- Why it matters: The current evidence records `a5ce07a` while `HEAD` is `2021b47`; blindly editing evidence would break the audit trail and overstate release readiness.
+- Why it matters: The current evidence records `a5ce07a` while the May 10, 2026 realness audit inspected `HEAD` at `05145a59ac40`; blindly editing evidence would break the audit trail and overstate release readiness.
 - Likely files: `docs/release-evidence.json`, `GOVERNANCE_NOTE.md`, `QA_FINDINGS.md`, `HERMES_PROGRESS.md`, optionally `README.md` if public release status changes.
 - Risk level: High.
 - Dependencies: Clean or intentionally reviewed working tree; completed dirty-worktree handoff; passing `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm preflight`, and any required hosted/local release checks for the intended commit.
 - Acceptance criteria: Evidence records the verified commit, branch, timestamps, gate results, hosted status, and screenshot paths for the intended release; `pnpm governance:audit` passes without the commit-mismatch warning; docs explain exactly which gate was rerun.
 - Validation commands: `git status --short --branch`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm preflight`, `pnpm verify:prod-local` if local release evidence is claimed, `pnpm governance:audit`.
 - Can run in parallel: No. This is a final gated release task and must not run alongside unrelated changes.
+
+---
+
+# Hackathon Realness Audit Follow-Up Queue
+
+Last replenished: May 10, 2026.
+
+These tasks come from `REALNESS_AUDIT.md`. They are intentionally scoped to keep demo claims honest without adding new infrastructure. Do not implement server persistence, auth, Miro writes, paid media generation, live provider spend, deploy changes, release-evidence refresh, secrets, billing, migrations, or destructive cleanup unless a future selected task explicitly allows it.
+
+## 36. Clarify Saved-Canvas Validation Stub Honesty
+
+- Owner type: Docs / API honesty
+- Goal: Make the local-only saved-canvas boundary impossible to misread, especially around `/api/canvas/save`.
+- Why it matters: The route returns `saved: true` after validation, but the implementation has no backend store; browser `localStorage` does the real save.
+- Likely files: `README.md`, `apps/web/README.md`, `ARCHITECTURE_MAP.md`, `REALNESS_AUDIT.md`, optionally `apps/web/test/canvas-save-route.test.ts` if assertions need clearer wording.
+- Risk level: Low if docs/tests only; Medium if route response shape changes.
+- Dependencies: Current no-database architecture.
+- Acceptance criteria: Docs and tests explicitly call `/api/canvas/save` a validation stub; no copy implies server persistence or public share service; product behavior is unchanged unless separately approved.
+- Validation commands: `git diff --check`, `pnpm lint`; run focused canvas-save route tests only if test files change.
+- Can run in parallel: Yes with tasks not editing the same docs/tests.
+
+## 37. Align Miro Export Docs With Preview-Only Implementation
+
+- Owner type: Docs / Integration honesty
+- Goal: Reconcile Miro docs with the current preview-only `MiroExportSpec` implementation and supported templates.
+- Why it matters: Historical/spec docs describe future board workflows and an extra template, while current code performs no OAuth or board writes.
+- Likely files: `docs/MIRO_EXPORT_SPEC.md`, `docs/README.md`, `README.md`, `REALNESS_AUDIT.md`.
+- Risk level: Low.
+- Dependencies: Current Miro route and shared schema.
+- Acceptance criteria: Current docs clearly distinguish implemented preview JSON from future write integration; template list matches the current schema or is labeled future; no docs imply real Miro board creation.
+- Validation commands: `git diff --check`, `pnpm lint`.
+- Can run in parallel: Yes with non-Miro docs/tests.
+
+## 38. Document No Image/Video/Media Provider Path
+
+- Owner type: Docs / Demo honesty
+- Goal: Add a concise statement that no image, video, upload, storage-bucket, or paid media-generation provider path is implemented.
+- Why it matters: The app has visual dashboards and Miro preview specs, but no generated media artifact ownership or credit-spending gate exists.
+- Likely files: `README.md`, `ARCHITECTURE_MAP.md`, `REALNESS_AUDIT.md`, optionally `docs/DEMO_SCRIPT.md`.
+- Risk level: Low.
+- Dependencies: Current package/env audit.
+- Acceptance criteria: Current docs say visual output is validated dashboard UI, static brand assets, client downloads, and Miro spec JSON; no media provider/API claim is introduced.
+- Validation commands: `git diff --check`, `pnpm lint`.
+- Can run in parallel: Yes with tasks not editing the same docs.
+
+## 39. Add Current-HEAD Release Evidence Warning To Demo Handoff
+
+- Owner type: Release / Docs
+- Goal: Make it obvious in demo handoff docs that checked-in release evidence is historical until Task 35 reruns the full gate.
+- Why it matters: `docs/release-evidence.json` records `a5ce07a81ee932bdf7a37724af0e7aab3a3d9f0f`, while the audited HEAD is `05145a59ac40`.
+- Likely files: `GOVERNANCE_NOTE.md`, `docs/DEMO_SCRIPT.md`, `docs/README.md`, `REALNESS_AUDIT.md`.
+- Risk level: Low.
+- Dependencies: Do not refresh `docs/release-evidence.json`.
+- Acceptance criteria: Demo/release docs warn not to cite release evidence as current proof; Task 35 remains the only evidence-refresh path.
+- Validation commands: `git diff --check`, `pnpm lint`, optionally `pnpm governance:audit` to confirm the warning remains expected.
+- Can run in parallel: Yes with non-release-evidence tasks.
+
+## 40. Add Sample Data Provenance And Persistence Realness Matrix
+
+- Owner type: Docs / Data governance
+- Goal: Add a compact matrix showing synthetic sample provenance, local browser persistence, checked-in gallery fixtures, and release evidence status.
+- Why it matters: The data samples are synthetic/schema-aligned local files, not complete live extracts; saved canvases are local, not multi-user durable objects.
+- Likely files: `docs/DATA_GOVERNANCE.md`, `README.md`, `REALNESS_AUDIT.md`, optionally a new `docs/SAMPLE_AND_PERSISTENCE_REALNESS.md`.
+- Risk level: Low.
+- Dependencies: Current sample files and no-database architecture.
+- Acceptance criteria: Matrix names each sample file, row count, provenance note, live/fallback status, hidden-field boundary, and validation command; saved/share persistence is labeled browser-local/hash-based.
+- Validation commands: `git diff --check`, `pnpm lint`, `pnpm data:quality`.
+- Can run in parallel: Yes with tasks not editing the same governance docs.
+
+## 41. Add Seed/Save API Naming Honesty Audit
+
+- Owner type: QA / API docs
+- Goal: Audit route names and tests for `/api/canvas/[id]` and `/api/canvas/save` so future agents do not infer server-side storage.
+- Why it matters: Both route names resemble durable persistence APIs, but one is a hardcoded seed helper and the other is a validation stub.
+- Likely files: `ARCHITECTURE_MAP.md`, `DEVELOPMENT_GUIDE.md`, `apps/web/test/canvas-seed-route.test.ts`, `apps/web/test/canvas-save-route.test.ts`, `REALNESS_AUDIT.md`.
+- Risk level: Low if docs/tests only.
+- Dependencies: Current route behavior.
+- Acceptance criteria: Docs/tests describe exact behavior and non-persistence boundaries; no route behavior changes; existing tests still pass.
+- Validation commands: focused Vitest commands for the two route tests if touched, `git diff --check`, `pnpm lint`, `pnpm test`.
+- Can run in parallel: Yes with non-API-doc tasks.
+
+## 42. Add No-LLM/No-Secret Provider Demo Wording Pass
+
+- Owner type: Docs / Demo honesty
+- Goal: Ensure current demo script and public docs describe natural-language support as deterministic/rule-based and do not imply LLM/provider-backed generation.
+- Why it matters: The app accepts prompts, but current generation uses local TypeScript parsing and no OpenAI/Anthropic/provider secret path.
+- Likely files: `docs/DEMO_SCRIPT.md`, `README.md`, `CODEBASE_OVERVIEW.md`, `REALNESS_AUDIT.md`.
+- Risk level: Low.
+- Dependencies: Current rule-based prompt parser.
+- Acceptance criteria: Demo wording says "rule-based" or "deterministic" where relevant; no docs imply paid AI inference, hidden API keys, or model-generated dashboards; natural-language UI copy remains accurate.
+- Validation commands: `git diff --check`, `pnpm lint`.
+- Can run in parallel: Yes with non-demo-doc tasks.

@@ -1,17 +1,34 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 03:14 CDT
+Last updated: May 10, 2026 03:35 CDT
 
 ## Current Cycle
 
-- Task chosen: Dirty-worktree reconciliation plan requested by the user; documentation/analysis portion only.
-- Why this was next: The dirty tree is now documented as the main blocker before commit or release-evidence work, and the user explicitly requested a reconciliation plan without staging, committing, deleting, or reverting.
-- Scope: `HERMES_PROGRESS.md`, git inspection commands, and validation commands only.
-- Safety notes: No product behavior, code implementation, package scripts, config, source data, secrets, auth, billing, migrations, production config, deploy scripts, release evidence, catalog data, samples, or destructive data operations were changed. Release evidence was not refreshed.
+- Task chosen: Finalize the carried-over hackathon realness audit documentation before starting new sequential tasks.
+- Why this was next: `git status --short --branch` showed uncommitted audit state (`TASKS.md` plus new `REALNESS_AUDIT.md`) from the prior audit-only run. Committing it separately keeps later task commits clean and prevents real/mock/local audit findings from being mixed into unrelated demo-readiness work.
+- Scope: `REALNESS_AUDIT.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: No product behavior, source code, package scripts, config, source data, secrets, auth, billing, migrations, production config, deploy scripts, release evidence, catalog data, samples, live API calls, or destructive operations were changed. Release evidence was not refreshed.
 
 ## Files Updated
 
-- `HERMES_PROGRESS.md`: Added a dirty-worktree reconciliation plan with change classifications, generated/local artifact notes, proposed commit groups, validation recommendations, and approval boundaries.
+- `REALNESS_AUDIT.md`: Added the hackathon realness audit table covering persistence, API integrations, media generation, auth/security, user-facing honesty, and validation commands.
+- `TASKS.md`: Added scoped realness follow-up tasks 36-42 and corrected the release-evidence task's audited HEAD reference.
+- `HERMES_PROGRESS.md`: Recorded this carry-over audit commit boundary before sequential task work.
+
+## Sequential Task Plan
+
+1. Task 28, "Write Final Judge Demo Script Covering Core Workflows".
+   - Validation: manual path/link check for referenced docs/routes, `git diff --check`, `pnpm lint`.
+   - Expected commit: `docs: add final judge demo script`.
+2. Task 29, "Add Final Local Demo Readiness Checklist Without Release Evidence Refresh".
+   - Validation: manual path/link check, `git diff --check`, `pnpm lint`.
+   - Expected commit: `docs: add local demo readiness checklist`.
+3. Task 30, "Add Public-Data Live/Fallback Proof Matrix".
+   - Validation: manual path/link check, `git diff --check`, `pnpm governance:audit`, `pnpm lint`.
+   - Expected commit: `docs: add public data fallback proof matrix`.
+4. Task 36, "Clarify Saved-Canvas Validation Stub Honesty", if still safe after the first three tasks.
+   - Validation: `git diff --check`, `pnpm lint`; focused route tests only if test files change.
+   - Expected commit: `docs: clarify saved canvas validation stub`.
 
 ## Dirty Worktree Reconciliation Plan
 

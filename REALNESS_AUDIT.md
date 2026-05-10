@@ -1,0 +1,54 @@
+# Hackathon Realness Audit
+
+Last audited: May 10, 2026
+
+Scope: read `AGENTS.md`, `TASKS.md`, `HERMES_PROGRESS.md`, `README.md`, `ARCHITECTURE_MAP.md`, `CODEBASE_OVERVIEW.md`, `DEVELOPMENT_GUIDE.md`, `.env.example`, package scripts, API routes, shared backend/data code, MCP server code, tests, docs, and current git status. This audit changed documentation/task files only and did not run paid APIs, deploy, mutate production data, reset databases, or touch secrets.
+
+Current git status at audit start: clean working tree on `feat/v1.3-hosted-launch-readiness`.
+
+| Claim | Current implementation | Real/mock/local status | Evidence file/path | Risk | Recommended next task |
+|---|---|---|---|---|---|
+| The app has no database-backed persistence. | Catalog, samples, gallery canvases, and release evidence are checked-in JSON; saved canvases use browser storage; no ORM, migrations, `DATABASE_URL`, Supabase, or persistent user store was found. | Local/static only. No real DB. | `ARCHITECTURE_MAP.md`; `CODEBASE_OVERVIEW.md`; `apps/web/lib/data.ts`; `apps/web/lib/saved-canvases.ts`; `packages/shared/src/persistence/index.ts`; `.env.example` | Demo viewers may assume saved/share URLs are multi-user durable links unless local-only wording remains visible. | Task 40, sample/persistence realness matrix. |
+| `/saved` stores canvases. | Save/import/delete/duplicate/share actions write validated `SavedCanvas` objects to `window.localStorage`; share links encode a validated bundle in the URL hash. | Local browser persistence. | `apps/web/lib/saved-canvases.ts`; `packages/shared/src/persistence/index.ts`; `apps/web/components/saved-canvases.tsx`; `apps/web/app/saved/page.tsx`; `apps/web/test/saved-canvases.test.ts` | Data disappears with browser storage clearing and does not sync across browsers/devices. | Task 36, saved-route/local persistence honesty. |
+| `/api/canvas/save` saves a canvas. | The route parses and validates a `CanvasDocument`, returns `saved: true`, and includes a note that actual persistence is browser-local. It does not write to a server store. | Validation stub only. | `apps/web/app/api/canvas/save/route.ts`; `apps/web/test/canvas-save-route.test.ts`; `ARCHITECTURE_MAP.md` | The endpoint name and `saved: true` field can be misread as server persistence in API demos or future docs. | Task 36, saved-route/local persistence honesty. |
+| `/api/canvas/[id]` retrieves saved canvases. | The route maps two hardcoded seed IDs to demo prompts and regenerates canvases. Unknown IDs return 404. | Seed/demo helper only. | `apps/web/app/api/canvas/[id]/route.ts`; `apps/web/test/canvas-seed-route.test.ts`; `ARCHITECTURE_MAP.md` | Route shape resembles a general object lookup even though no object store exists. | Task 41, seed/save API naming audit. |
+| Dashboard generation is AI/provider-backed. | Prompt handling is deterministic TypeScript: `parsePromptIntent`, supported workflow detection, bounded queries, and validated `CanvasDocument` assembly. No LLM provider env var or SDK path was found. | Rule-based local generation plus optional public-data fetch. | `apps/web/lib/dashboard.ts`; `packages/shared/src/prompt/index.ts`; `packages/shared/src/schemas/index.ts`; `README.md`; package manifests | "Natural language" copy is true at the UI level, but judges may infer LLM generation unless the no-LLM boundary stays explicit. | Task 42, no-LLM/no-provider demo wording pass. |
+| Live public data is generally available. | Live Socrata routing exists, but only catalog entries with `liveAvailable: true` can use it. Dallas is promoted only for verified non-ZIP fields; Dallas ZIP dashboards, Austin monthly dashboards, and Houston dashboards render sample/fallback. | Mixed: real public API for narrow Dallas paths; local sample/fallback for core demo dashboards. | `data/catalog/approved-datasets.json`; `packages/shared/src/adapters/index.ts`; `apps/web/lib/dashboard.ts`; `docs/LIVE_ADAPTERS.md`; `apps/web/test/dashboard.test.ts` | Overclaiming "live data" is the highest demo-honesty risk. Core judge prompts currently demonstrate fallback/sample truth more than live freshness. | Existing Task 30, public-data live/fallback proof matrix. |
+| Static samples are source-owned production data. | Sample files are checked-in synthetic development samples aligned to public schemas. Houston sample intentionally excludes precise addresses and remains sample-first. | Local synthetic sample data. | `data/samples/*.sample.json`; `scripts/data-quality.mjs`; `apps/web/app/demo-readiness/page.tsx`; `README.md` | Demo narration could imply sample rows are complete public extracts instead of synthetic/schema-aligned examples. | Task 40, sample/persistence realness matrix. |
+| Miro export creates or updates Miro boards. | Web and MCP routes generate a validated preview-only `MiroExportSpec` JSON with required Source & Method content. No OAuth, access token, board ID, or write call exists. | Mock/preview spec only; no real third-party side effect. | `packages/shared/src/miro/index.ts`; `apps/web/app/api/export/miro-spec/route.ts`; `apps/mcp-server/src/index.ts`; `apps/web/test/miro-export-route.test.ts`; `docs/MIRO_EXPORT_SPEC.md` | Some historical/spec docs describe eventual board workflows and one extra template, which can sound more real than current code. | Task 37, Miro docs/schema realness alignment. |
+| Image/video/media generation is implemented. | No image/video generation provider path, upload pipeline, artifact ownership model, or credit-spending env gate was found. The app uses static brand assets, SVG map rendering, JSON/CSV downloads, and Miro spec JSON. | Not implemented; no paid media provider. | `rg` audit across package manifests, env examples, API routes, components, shared code, and docs; `apps/web/public/brand`; `apps/web/lib/client-downloads.ts` | Future demo/media claims should not imply generated media assets or paid provider output. | Task 38, no media-provider statement. |
+| Auth/security uses real accounts or demo identities. | No auth provider, login route, session middleware, JWT handling, user model, or demo identity seed was found. Header/docs say no-account/no-auth. | No auth; public app. | `apps/web/components/header.tsx`; `SECURITY.md`; `ARCHITECTURE_MAP.md`; package manifests; `.env.example` | Public hosting still needs platform-level firewall/rate limiting because middleware is only in-memory defense in depth. | Keep QA finding active; future platform rate-limit task requires deployment approval. |
+| API integrations are secret-gated. | Runtime env example contains only public `NEXT_PUBLIC_*` labels and hosting/CI metadata; live Socrata calls use public endpoints and catalog mappings without keys. Vercel token references are docs/workflow-only. | Public/env-light; no runtime secrets required for sample mode. | `.env.example`; `apps/web/app/api/health/route.ts`; `packages/shared/src/adapters/index.ts`; `docs/HOSTED_BETA_DEPLOYMENT.md`; `scripts/verify-vercel-build-output.mjs` | New integrations could accidentally introduce secret requirements without a matching architecture/security update. | Task 42, no-provider/no-secret demo wording pass. |
+| Release evidence proves current HEAD. | `docs/release-evidence.json` records commit `a5ce07a81ee932bdf7a37724af0e7aab3a3d9f0f`; current audited HEAD is `05145a59ac40`. Governance treats this as historical until a gated refresh. | Historical release evidence, not current proof. | `docs/release-evidence.json`; `QA_FINDINGS.md`; `GOVERNANCE_NOTE.md`; `pnpm governance:audit` warning history | Demo/readiness claims should not cite release evidence as current until Task 35 runs the full gate for the intended commit. | Existing Task 35, gated release evidence refresh. |
+
+## Validation Commands
+
+Commands that prove or preserve the current claims without paid/live/deploy/destructive side effects:
+
+```bash
+git status --short --branch
+git diff --check
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm governance:audit
+pnpm data:quality
+```
+
+Optional/network-dependent checks that should be run only when explicitly approved or during release readiness:
+
+```bash
+pnpm smoke:live
+pnpm smoke:deploy -- --url <running-url>
+PLAYWRIGHT_BASE_URL=<public-url> pnpm test:e2e:remote
+pnpm verify:prod-local
+pnpm release:check
+```
+
+Do not use `pnpm clean`, deploy commands, production data mutation, release-evidence refresh, or paid provider calls as part of a routine realness audit.
+
+## Audit Notes
+
+- Current user-facing copy is mostly honest about local saves, sample fallback, preview-only Miro output, no auth, and no database.
+- The main release/demo risks are overclaiming live data, treating synthetic samples as full source extracts, treating release evidence as current, and letting route names imply persistence where none exists.
+- No product behavior was changed by this audit.
