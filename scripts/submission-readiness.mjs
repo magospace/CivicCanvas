@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
@@ -52,11 +53,50 @@ const gatedChecks = [
   }
 ];
 
+
+function runGit(args) {
+  try {
+    return execFileSync("git", args, { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
+  } catch {
+    return "";
+  }
+}
+
+function redactRemoteUrl(remoteUrl) {
+  if (!remoteUrl) {
+    return { configured: false, host: "", path: "", redactedUrl: "", publicRepoReady: false };
+  }
+
+  const sanitized = remoteUrl.replace(/:\/\/[^/@]+@/, "://[REDACTED]@");
+  const httpsMatch = sanitized.match(/^https?:\/\/(?:\[REDACTED\]@)?([^/]+)\/(.+?)(?:\.git)?$/);
+  const sshMatch = sanitized.match(/^(?:git@)?([^:]+):(.+?)(?:\.git)?$/);
+  const match = httpsMatch ?? sshMatch;
+  const host = match?.[1] ?? "unknown";
+  const path = match?.[2] ?? "unknown";
+  const looksPrivateOrLocal = /localhost|127\.0\.0\.1|private|internal/i.test(host) || remoteUrl.includes("[REDACTED]");
+
+  return {
+    configured: true,
+    host,
+    path,
+    redactedUrl: host === "unknown" ? "configured_unparsed" : `${host}/${path.replace(/\.git$/, "")}`,
+    publicRepoReady: !looksPrivateOrLocal && host !== "unknown"
+  };
+}
+
 function readJson(pathFromRoot) {
   return JSON.parse(readFileSync(join(root, pathFromRoot), "utf8"));
 }
 
 const packageJson = readJson("package.json");
+const gitBranch = runGit(["branch", "--show-current"]) || "unknown";
+const remoteUrl = runGit(["config", "--get", "remote.origin.url"]);
+const repoRemote = {
+  branch: gitBranch,
+  remoteName: "origin",
+  ...redactRemoteUrl(remoteUrl),
+  valuesEchoed: false
+};
 const requiredDocs = requiredDocPaths.map((path) => ({
   path,
   present: existsSync(join(root, path))
@@ -77,6 +117,10 @@ const checks = [
   {
     name: "gated risky checks are listed but not run",
     ok: gatedChecks.every((check) => check.status === "not_run_by_this_script")
+  },
+  {
+    name: "git remote submission target is inspectable without network",
+    ok: repoRemote.configured
   }
 ];
 const ok = checks.every((check) => check.ok);
@@ -88,10 +132,11 @@ const output = {
   mutatesFiles: false,
   requiredDocs,
   packageScripts,
+  repoRemote,
   localValidationCommands,
   gatedChecks,
   knownSubmissionTodos: [
-    "Add the final public repo URL in the submission form.",
+    repoRemote.publicRepoReady ? "Confirm the final public repo URL matches the submission form." : "Add the final public repo URL in the submission form.",
     "Add the final Loom URL after recording.",
     "Add team roster/contact fields outside committed secrets.",
     "Only add hosted URL proof if an explicit deployment task is approved and validated."

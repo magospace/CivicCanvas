@@ -268,6 +268,17 @@ describe("release and governance scripts", () => {
       "docs/MCP_DEMO_PROOF.md"
     ]));
     expect(body.localValidationCommands).toEqual(expect.arrayContaining(["pnpm lint", "pnpm typecheck", "pnpm test"]));
+    expect(body.repoRemote).toEqual(expect.objectContaining({
+      branch: expect.any(String),
+      remoteName: "origin",
+      configured: expect.any(Boolean),
+      valuesEchoed: false
+    }));
+    if (body.repoRemote.configured) {
+      expect(body.repoRemote.redactedUrl).not.toContain("@");
+      expect(body.repoRemote.host).not.toContain("@");
+      expect(body.repoRemote.path).not.toContain("@");
+    }
     expect(body.gatedChecks).toEqual(expect.arrayContaining([
       expect.objectContaining({ gate: "Task 35", status: "not_run_by_this_script" }),
       expect.objectContaining({ gate: "live provider spend", status: "not_run_by_this_script" })

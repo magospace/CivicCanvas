@@ -1223,3 +1223,23 @@ Last updated: May 10, 2026 06:17 CDT
 - Action: Added Hackathon Submission Hardening Queue items 89-98 focused on no-network submission readiness, no-spend provider/media honesty, backend persistence gates, live public-data proof templates, MCP demo safety, submission blockers, transcript hygiene, readiness blocker assertions, and artifact hygiene.
 - Dirty tree note: `clauderecommends.md` remains preserved as untracked external feedback input and was not staged.
 - Selected next task: Task 89, `Add Public Repo/Remote Readiness To Submission Script`, because it improves real submission readiness without network calls, deployment mutation, secrets, provider spend, database work, or release evidence refresh.
+
+
+## Task 89 Update
+
+- Task chosen: `TASKS.md` item 89, "Add Public Repo/Remote Readiness To Submission Script".
+- Why this was next: It was the first safe task from the replenished queue and improves real submission readiness without network calls, deployment mutation, secrets, provider spend, database work, or release evidence refresh.
+- Scope: `scripts/submission-readiness.mjs`, `apps/web/test/release-scripts.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Script uses local `git config`/branch inspection only; no remote network request, repo mutation, credential printing, live provider call, deploy, release evidence refresh, database, migration, auth, billing, or production data access occurred.
+
+### Validation
+
+- `pnpm submission:readiness:json`: Passed.
+- `pnpm test -- apps/web/test/release-scripts.test.ts -t "submission bundle readiness"`: Passed.
+- `pnpm lint`: Passed.
+- `pnpm test`: Passed.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 90, `Add Readme Submission Link Consistency Check`, is next.

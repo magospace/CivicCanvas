@@ -1401,6 +1401,8 @@ Last replenished: May 10, 2026 after Task 88. Existing untracked input preserved
 
 ## 89. Add Public Repo/Remote Readiness To Submission Script
 
+Status: Complete on May 10, 2026.
+
 - Owner type: QA / Submission Tooling
 - Goal: Make `pnpm submission:readiness:json` report git remote/public repo readiness without network calls or leaking credentials.
 - Scope: No-network script/test only; do not configure remotes.
@@ -1409,6 +1411,8 @@ Last replenished: May 10, 2026 after Task 88. Existing untracked input preserved
 - Acceptance criteria: JSON reports current branch, whether a remote URL is configured, redacted remote host/path metadata, and a submission TODO if no public repo URL is configured; no remote mutation or network call occurs.
 - Validation commands: `pnpm submission:readiness:json`, focused Vitest command, `pnpm lint`, `pnpm test`, `git diff --check`.
 - Can run in parallel: No with submission readiness script edits.
+- Completed notes: Added no-network git branch/origin inspection to `submission-readiness` output with redacted host/path metadata and no credential echo. Added release-script regression assertions for remote metadata shape and redaction.
+- Validation: `pnpm submission:readiness:json`, focused release-script Vitest, `pnpm lint`, full `pnpm test`, and `git diff --check` passed.
 
 ## 90. Add Readme Submission Link Consistency Check
 
