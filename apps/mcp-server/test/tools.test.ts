@@ -104,11 +104,19 @@ describe("MCP tool handlers", () => {
     expect(attribution.caveats.join(" ")).toContain("sample-first");
   });
 
-  it("generates canvas spec and query audit", async () => {
+  it("generates canvas spec and query audit with governed validation failures", async () => {
     const canvas = (await generateCanvasSpec({ datasetId: "austin_building_permits", mode: "live_if_available" })).canvas;
     expect(canvas.blocks.map((block) => block.type)).toContain("SourceMethodBlock");
     expect(canvas.sources[0].dataMode).toBe("fallback");
     expect(canvas.createdAt).not.toBe("2026-05-09T00:00:00.000Z");
+    const sourceMethod = canvas.blocks.find((block) => block.type === "SourceMethodBlock");
+    expect(sourceMethod?.type).toBe("SourceMethodBlock");
+    if (sourceMethod?.type === "SourceMethodBlock") {
+      expect(sourceMethod.props.attribution.datasetId).toBe("austin_building_permits");
+      expect(sourceMethod.props.methodology).toContain("approved catalog");
+    }
+    expect(validateCanvasSpec(canvas).ok).toBe(true);
+    await expect(generateCanvasSpec({ datasetId: "not_approved" })).rejects.toThrow(UnsupportedDatasetError);
 
     const audit = await auditQuery({
       datasetId: "austin_building_permits",
