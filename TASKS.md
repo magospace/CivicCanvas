@@ -777,6 +777,8 @@ Status: Complete on May 10, 2026 at 05:31 CDT.
 
 ## 50. Consolidate Remaining Historical-Doc Warnings Into Docs Index
 
+Status: Complete on May 10, 2026 at 05:33 CDT.
+
 - Owner type: Docs
 - Goal: Make `docs/README.md` the single clear entry point for current versus historical docs, including release evidence, Miro, live/fallback, and sample/persistence realness notes.
 - Why it matters: Many milestone docs remain intentionally checked in; a stronger index lowers the chance that future agents cite old implementation plans as current facts.
@@ -786,3 +788,5 @@ Status: Complete on May 10, 2026 at 05:31 CDT.
 - Acceptance criteria: Index labels current operational docs, historical milestone docs, and release-gated evidence clearly; no historical doc text is deleted or rewritten.
 - Validation commands: manual path/link check, `git diff --check`, `pnpm lint`.
 - Can run in parallel: Yes with code/test tasks that do not edit docs index.
+- Completed notes: Strengthened `docs/README.md` to identify current operational sections, warn that release proof remains gated, and explicitly say historical milestone docs must not be cited for current architecture, release proof, live-provider support, media generation, Miro board writes, or persistence behavior unless confirmed by current docs. Historical docs were not deleted or rewritten.
+- Validation: `node scripts/docs-consistency.mjs`, `git diff --check`, and `pnpm lint` passed.

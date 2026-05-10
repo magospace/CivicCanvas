@@ -1,6 +1,6 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 05:31 CDT
+Last updated: May 10, 2026 05:33 CDT
 
 ## Current Cycle
 
@@ -49,7 +49,7 @@ Last updated: May 10, 2026 05:31 CDT
 
 ## Recommended Next Task
 
-- Task 50, `Consolidate Remaining Historical-Doc Warnings Into Docs Index`, is the next safe task. Keep it docs-only and do not claim platform firewall/rate-limit controls are configured.
+- No safe non-release task remains in the current `TASKS.md` queue after task 50; replenish the queue before additional feature work, or explicitly approve gated task 35 only when ready for full release evidence refresh. Keep it docs-only and do not claim platform firewall/rate-limit controls are configured.
 
 ## Task 44 Update
 
@@ -131,7 +131,7 @@ Last updated: May 10, 2026 05:31 CDT
 
 ### Recommended Next Task
 
-- Task 50, `Consolidate Remaining Historical-Doc Warnings Into Docs Index`, is the next safe task.
+- No safe non-release task remains in the current `TASKS.md` queue after task 50; replenish the queue before additional feature work, or explicitly approve gated task 35 only when ready for full release evidence refresh.
 
 ## Task 47 Update
 
@@ -156,7 +156,7 @@ Last updated: May 10, 2026 05:31 CDT
 
 ### Recommended Next Task
 
-- Task 50, `Consolidate Remaining Historical-Doc Warnings Into Docs Index`, is the next safe task.
+- No safe non-release task remains in the current `TASKS.md` queue after task 50; replenish the queue before additional feature work, or explicitly approve gated task 35 only when ready for full release evidence refresh.
 
 ## Task 48 Update
 
@@ -182,7 +182,7 @@ Last updated: May 10, 2026 05:31 CDT
 
 ### Recommended Next Task
 
-- Task 50, `Consolidate Remaining Historical-Doc Warnings Into Docs Index`, is the next safe task.
+- No safe non-release task remains in the current `TASKS.md` queue after task 50; replenish the queue before additional feature work, or explicitly approve gated task 35 only when ready for full release evidence refresh.
 
 ## Task 49 Update
 
@@ -206,7 +206,30 @@ Last updated: May 10, 2026 05:31 CDT
 
 ### Recommended Next Task
 
-- Task 50, `Consolidate Remaining Historical-Doc Warnings Into Docs Index`, is the next safe task.
+- No safe non-release task remains in the current `TASKS.md` queue after task 50; replenish the queue before additional feature work, or explicitly approve gated task 35 only when ready for full release evidence refresh.
+
+## Task 50 Update
+
+- Task chosen: `TASKS.md` item 50, "Consolidate Remaining Historical-Doc Warnings Into Docs Index".
+- Why this was next: Item 50 was the next safe task after item 49 and completes the remaining safe hackathon-stabilization queue by making `docs/README.md` the clearest current-versus-historical docs entry point.
+- Scope: `docs/README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Documentation-only index maintenance. Historical docs were not deleted or rewritten. No release evidence refresh, provider calls, media generation, schema/migration changes, database operations, deploy mutation, secrets, auth, billing, or production config changes were made.
+
+### Files Updated
+
+- `docs/README.md`: Strengthened current operational entry-point wording, release-gated evidence warning, and historical-doc warning against citing milestone docs for current architecture, release proof, live-provider support, media generation, Miro board writes, or persistence behavior unless confirmed by current docs.
+- `TASKS.md`: Marks item 50 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records item 50 scope, safety notes, and validation.
+
+### Validation
+
+- `node scripts/docs-consistency.mjs`: Passed, 5/5 checks.
+- `git diff --check`: Passed.
+- `pnpm lint`: Passed.
+
+### Recommended Next Task
+
+- No safe non-release task remains in the current `TASKS.md` queue. Replenish `TASKS.md` with new scoped tasks before feature work, or explicitly approve gated Task 35 only when ready for a full release-evidence refresh gate.
 
 ## Historical Sequential Progress
 

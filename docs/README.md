@@ -1,6 +1,6 @@
 # Documentation Index
 
-Use this index to choose the current source of truth before opening older milestone notes.
+Use this index to choose the current source of truth before opening older milestone notes. Treat the `Current Starting Points`, `Current Domain Docs`, and `Release And Demo Docs` sections as the operational entry points for today's app; treat `Historical And Reference Docs` as background unless a current doc links to a specific historical section.
 
 ## Current Starting Points
 
@@ -29,6 +29,8 @@ Use this index to choose the current source of truth before opening older milest
 
 ## Release And Demo Docs
 
+These are current operational handoff docs, but release proof remains gated. Use checklist and runbook docs for demo preparation; do not treat historical evidence or milestone plans as current proof.
+
 | Document | Use |
 |---|---|
 | [`RELEASE_NOTES.md`](RELEASE_NOTES.md) | Current release notes and version-specific changes. |
@@ -41,7 +43,9 @@ Use this index to choose the current source of truth before opening older milest
 
 ## Historical And Reference Docs
 
-These files are useful background, but they are milestone snapshots rather than the primary current-state docs:
+These files are useful background, but they are milestone snapshots rather than the primary current-state docs. Do not cite them as current architecture, release proof, live-provider support, media-generation support, Miro board-write support, or persistence behavior unless a current operational doc above explicitly confirms the same claim.
+
+Historical docs are intentionally retained for auditability; do not delete or rewrite them as part of index maintenance.
 
 - [`PRD.md`](PRD.md)
 - [`MVP_BUILD_BRIEF.md`](MVP_BUILD_BRIEF.md)
