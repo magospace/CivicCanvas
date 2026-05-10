@@ -1122,6 +1122,8 @@ Status: Complete on May 10, 2026 at 06:52 CDT.
 
 ## 72. Add Demo Artifact Git Hygiene Check
 
+Status: Complete on May 10, 2026 at 06:59 CDT.
+
 - Owner type: QA / Tooling
 - Goal: Add a local check that generated demo artifacts such as screenshots/videos are ignored and not staged accidentally.
 - Scope: Script/tests; no generated artifact commits.
@@ -1130,6 +1132,8 @@ Status: Complete on May 10, 2026 at 06:52 CDT.
 - Acceptance criteria: Check verifies `demo-artifacts` is ignored and reports staged generated media extensions if present; default repo state passes.
 - Validation commands: script command, focused Vitest command, `git diff --check`, `pnpm lint`, `pnpm test`.
 - Can run in parallel: No with package/script edits.
+- Completed notes: Added `scripts/demo-artifact-hygiene.mjs` plus `pnpm demo:artifact-hygiene(:json)` scripts. The check is read-only/no-network, verifies `demo-artifacts` is git-ignored, and reports staged generated media extensions so screenshots/videos/GIFs are not accidentally committed. Added focused release-script coverage.
+- Validation: RED focused test failed before the script existed; GREEN `pnpm demo:artifact-hygiene:json`, focused release-script test, `pnpm lint`, full `pnpm test`, `pnpm typecheck`, and `git diff --check` passed. No generated media artifacts were created or committed.
 
 
 ---

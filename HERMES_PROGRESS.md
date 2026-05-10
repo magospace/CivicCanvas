@@ -992,3 +992,34 @@ Last updated: May 10, 2026 06:17 CDT
 ### Recommended Next Task
 
 - Task 72, `Add Demo Artifact Git Hygiene Check`, is the next safe script/test task. Keep generated artifact files ignored and do not commit screenshots/videos.
+
+
+## Task 72 Update
+
+- Task chosen: `TASKS.md` item 72, "Add Demo Artifact Git Hygiene Check".
+- Why this was next: Task 71 completed cleanly and Task 72 was the next safe script/test task for submission hygiene.
+- Scope: `scripts/demo-artifact-hygiene.mjs`, `package.json`, `apps/web/test/release-scripts.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Script/test-only. No screenshots, videos, GIFs, generated artifacts, release evidence, deployment config, provider calls, database files, or production resources were created or modified.
+
+### Files Updated
+
+- `scripts/demo-artifact-hygiene.mjs`: New read-only check that verifies `demo-artifacts` is ignored and reports staged generated media files/extensions.
+- `package.json`: Added `demo:artifact-hygiene` and `demo:artifact-hygiene:json` scripts.
+- `apps/web/test/release-scripts.test.ts`: Added focused regression coverage for the hygiene check.
+- `TASKS.md`: Marks Task 72 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records Task 72 scope, safety notes, validation, and stop point.
+
+### Validation
+
+- RED: `pnpm test -- apps/web/test/release-scripts.test.ts -t "demo artifact git hygiene"` failed before implementation because `scripts/demo-artifact-hygiene.mjs` did not exist.
+- `pnpm demo:artifact-hygiene:json`: Passed; no network, no mutation, `demo-artifacts` ignored, no staged generated media.
+- GREEN: `pnpm test -- apps/web/test/release-scripts.test.ts -t "demo artifact git hygiene"`: Passed; Vitest discovered 106 tests across 15 files.
+- `pnpm lint`: Passed.
+- `pnpm test`: Passed with 106 tests across 15 files.
+- `pnpm typecheck`: Passed across shared, MCP server, and web.
+- `git diff --check`: Passed.
+
+### Stop Point
+
+- Completed Task 70 and two additional safe tasks (71 and 72) as requested. Remaining untracked file: `clauderecommends.md`, preserved as external feedback input.
+- Next recommended safe task: replenish/triage remaining TASKS.md after Task 72, because the immediate safe mini-queue is complete; continue to avoid gated Task 35 release evidence refresh unless explicitly approved.

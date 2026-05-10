@@ -232,6 +232,25 @@ describe("release and governance scripts", () => {
     )?.prompt).toBe("Show Dallas 311 service requests by category and ZIP code for 2024.");
   });
 
+  it("reports demo artifact git hygiene without generating media", () => {
+    const stdout = execFileSync("node", ["scripts/demo-artifact-hygiene.mjs", "--json"], {
+      cwd: process.cwd(),
+      encoding: "utf8"
+    });
+    const body = JSON.parse(stdout);
+
+    expect(body.ok).toBe(true);
+    expect(body.network).toBe("not_used");
+    expect(body.mutatesFiles).toBe(false);
+    expect(body.ignoredDirectories).toContain("demo-artifacts");
+    expect(body.generatedMediaExtensions).toEqual(expect.arrayContaining([".png", ".jpg", ".jpeg", ".gif", ".mp4", ".webm"]));
+    expect(body.stagedGeneratedMedia).toEqual([]);
+    expect(body.checks.map((check: { name: string }) => check.name)).toEqual(expect.arrayContaining([
+      "demo-artifacts ignored",
+      "no staged generated demo media"
+    ]));
+  });
+
   it("verifies current-doc links and historical-doc labeling", () => {
     const stdout = execFileSync("node", ["scripts/docs-consistency.mjs", "--json"], {
       cwd: process.cwd(),
