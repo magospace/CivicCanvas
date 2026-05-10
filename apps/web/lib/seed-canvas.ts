@@ -38,16 +38,17 @@ export function createSeedCanvasDocument(datasets: DatasetMetadata[]): CanvasDoc
   const byZip = countBy(rows, "zip_code", 6);
   const statusCounts = countBy(rows, "status", 4);
   const topCategory = byCategory[0]?.name ?? "Unknown";
+  const generatedAt = new Date().toISOString();
 
   const source: SourceAttribution = {
     datasetId: dataset.id,
     datasetTitle: dataset.title,
     sourceName: dataset.sourceName,
     sourceUrl: dataset.sourceUrl,
-    accessedAt: "2026-05-09T00:00:00.000Z",
+    accessedAt: generatedAt,
     fieldsUsed: ["created_date", "month", "category", "status", "zip_code"],
     filtersApplied: ["created_date between 2024-01-01 and 2024-12-31"],
-    queryMethod: "Static P1 sample aggregate prepared from approved local JSON.",
+    queryMethod: "Starter sample aggregate prepared from approved local JSON.",
     dataMode: "sample",
     caveats: dataset.caveats,
     license: "Refer to source portal terms"
@@ -56,9 +57,9 @@ export function createSeedCanvasDocument(datasets: DatasetMetadata[]): CanvasDoc
   return validateCanvasDocument({
     id: "canvas_dallas_311_seed",
     title: "Dallas 311 Service Requests Explorer",
-    description: "P1 seed dashboard rendered from validated CanvasDocument JSON.",
-    createdAt: "2026-05-09T00:00:00.000Z",
-    updatedAt: "2026-05-09T00:00:00.000Z",
+    description: "Sample Dallas 311 starter — try your own prompt above to generate a fresh dashboard.",
+    createdAt: generatedAt,
+    updatedAt: generatedAt,
     sources: [source],
     queries: [
       {
@@ -77,7 +78,7 @@ export function createSeedCanvasDocument(datasets: DatasetMetadata[]): CanvasDoc
           bullets: [
             "Built from approved catalog metadata and local sample data.",
             "Uses aggregate views by month, category, status, and ZIP code.",
-            "Live API querying and prompt interpretation are deferred to later phases."
+            "Try your own supported prompt above to generate a fresh governed dashboard."
           ]
         }
       },

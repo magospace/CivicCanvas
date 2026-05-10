@@ -29,6 +29,8 @@ test("explore route loads the governed shell", async ({ page }) => {
   await expect(page.getByText("Guided suggestions / governed data mode")).toBeVisible();
   await expect(page.getByText("AI-assisted suggestions / governed data mode")).toHaveCount(0);
   await expect(page.getByText("Known data boundaries")).toBeVisible();
+  await expect(page.getByText("Sample Dallas 311 starter — try your own prompt above to generate a fresh dashboard.")).toBeVisible();
+  await expect(page.getByText("P1 seed dashboard rendered from validated CanvasDocument JSON.")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Dallas 311 by ZIP" })).toBeVisible();
   await page.getByRole("button", { name: "Austin permits trend" }).click();
   await expect(page.getByLabel("Dashboard prompt")).toHaveValue("Show Austin building permits by month and ZIP code for 2024.");

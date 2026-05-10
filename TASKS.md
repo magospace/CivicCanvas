@@ -2161,7 +2161,7 @@ Status: Pending.
 
 ## 133. Rewrite Seed Starter Dashboard Copy
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: UI Copy / Demo Clarity
 - Goal: Remove first-screen dev jargon from the seeded `/explore` dashboard.
@@ -2172,6 +2172,8 @@ Status: Pending.
 - Acceptance criteria: Seed description tells users it is a sample starter and invites prompt generation; `P1 seed dashboard` and `CanvasDocument JSON` no longer appear in the first loaded dashboard copy.
 - Validation command: `pnpm test -- apps/web/test/dashboard.test.ts`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes with non-seed tasks.
+- Completed notes: Replaced the seed dashboard description and source method copy with user-facing sample-starter wording, switched seed timestamps/source access time to the current generation time, and updated the visible first-screen e2e assertion so the old `P1 seed dashboard`/`CanvasDocument JSON` copy does not reappear.
+- Validation: `pnpm test -- apps/web/test/dashboard.test.ts` passed (repo script executed 123 Vitest tests across 17 files); `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "explore route loads"` passed (project script executed all 20 product-demo browser tests); `pnpm lint` passed; `git diff --check` passed.
 
 ## 134. Deduplicate Inspector Save/Export Controls
 

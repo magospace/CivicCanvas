@@ -1859,3 +1859,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved demo cards prefill|confirmed review no-op"` passed; due the repo script wiring, all 20 product-demo browser tests ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 133, `Rewrite Seed Starter Dashboard Copy`, as a low-risk first-screen clarity fix from the same review.
+
+
+## Task 133 Update - Seed Starter Dashboard Copy
+
+- Task chosen: `TASKS.md` item 133, "Rewrite Seed Starter Dashboard Copy".
+- Why this was next: After mobile nav and no-op control fixes, this was the safest remaining high-value first-screen clarity fix from `REVIEW_RECOMMENDATIONS.md`.
+- Scope: `apps/web/lib/seed-canvas.ts`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Changes: Replaced the seed dashboard description with `Sample Dallas 311 starter — try your own prompt above to generate a fresh dashboard.`, removed `P1 seed dashboard` and `CanvasDocument JSON` from the first loaded seed dashboard copy, updated source method/bullet copy, and aligned seed created/updated/source access timestamps to current generation time.
+- Safety notes: Seed-copy/UI proof only. No catalog/sample rows, provider calls, schema/migration, deployment, release evidence, auth, billing, backend persistence, secrets, or generated artifacts changed. `REVIEW_RECOMMENDATIONS.md` and `clauderecommends.md` remain untracked and unstaged.
+- Validation: `pnpm test -- apps/web/test/dashboard.test.ts` passed; due repo script wiring, 123 Vitest tests across 17 files ran and passed. `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "explore route loads"` passed; due repo script wiring, all 20 product-demo browser tests ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 132 (`Add Toast Severity And Dismiss Behavior`) or Task 134 (`Deduplicate Inspector Save/Export Controls`), depending on whether feedback clarity or information architecture matters more before the next demo.
