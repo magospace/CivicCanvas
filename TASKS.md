@@ -1319,14 +1319,18 @@ Status: Complete on May 10, 2026 at 07:10 CDT.
 
 ## 84. Add Catalog Onboarding Checklist
 
+Status: Complete on May 10, 2026 at 07:11 CDT.
+
 - Owner type: Data Governance / Docs
 - Goal: Add a new-dataset onboarding checklist for field classification, live verification, sample fallback, hidden fields, and validation gates.
 - Scope: Docs only; no catalog mutation.
-- Likely files: `docs/CATALOG_ONBOARDING_CHECKLIST.md`, `docs/README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Likely files: `docs/CATALOG_ONBOARDING_CHECKLIST.md`, `docs/README.md`, `README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
 - Risk level: Low.
 - Acceptance criteria: Checklist requires safe field classifications, fallback samples, live proof or sample-first flag, and governance/data-quality validation.
 - Validation commands: manual path/link check, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes with non-doc tasks.
+- Completed notes: Added `docs/CATALOG_ONBOARDING_CHECKLIST.md` with source/terms review, safe field classifications, live API verification, sample fallback requirements, dashboard/MCP/export boundaries, validation gates, claim language, and rollback notes. Linked it from `README.md` and `docs/README.md`.
+- Validation: Manual path/link/content check passed; `pnpm lint` and `git diff --check` passed.
 
 ## 85. Add No-Spend Provider Proof Notes To Submission Checklist
 

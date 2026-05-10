@@ -1127,3 +1127,21 @@ Last updated: May 10, 2026 06:17 CDT
 - Completed five implemented tasks from the replenished queue (Tasks 79-83) after the queue replenishment commit.
 - Remaining untracked files: root `HACKATHON_SUBMISSION_GUIDE.md` input and `clauderecommends.md`, both preserved unstaged.
 - Next recommended task: Task 84, `Add Catalog Onboarding Checklist`, unless release evidence refresh/hosted proof/live provider/backend work is explicitly approved.
+
+
+## Task 84 Update
+
+- Task chosen: `TASKS.md` item 84, "Add Catalog Onboarding Checklist".
+- Why this was next: Task 83 completed cleanly, and Task 84 was the next safe docs-only task in the hackathon finalization queue. It improves future real-data onboarding readiness without mutating catalog/sample files or making live calls.
+- Scope: `docs/CATALOG_ONBOARDING_CHECKLIST.md`, `docs/README.md`, `README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Documentation only. No catalog data, samples, adapters, schema, live API calls, backend persistence, migrations, release evidence, provider calls, generated media, deploy config, secrets, auth, billing, or production data changed.
+
+### Validation
+
+- Manual path/link/content check: Passed. Confirmed docs links exist and the checklist requires safe field classifications, hidden-field handling, live proof or sample-first status, fallback samples, and governance/data-quality validation.
+- `pnpm lint`: Passed.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 85, `Add No-Spend Provider Proof Notes To Submission Checklist`, is next.

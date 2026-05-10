@@ -24,6 +24,7 @@ Use this index to choose the current source of truth before opening older milest
 | [`LIVE_FALLBACK_PROOF.md`](LIVE_FALLBACK_PROOF.md) | Dallas, Austin, and Houston demo prompt proof matrix for live, sample, and fallback claims. |
 | [`SUPPORTED_PROMPTS.md`](SUPPORTED_PROMPTS.md) | Deterministic prompt grammar, supported synonyms, data modes, and unsupported/sensitive prompt behavior. |
 | [`SOURCE_FRESHNESS_CHECKLIST.md`](SOURCE_FRESHNESS_CHECKLIST.md) | Source freshness, terms, field-review, and evidence checklist before stronger live-data claims. |
+| [`CATALOG_ONBOARDING_CHECKLIST.md`](CATALOG_ONBOARDING_CHECKLIST.md) | New-dataset onboarding checklist for safe field classifications, live verification, sample fallback, hidden fields, and validation gates. |
 | [`SAMPLE_AND_PERSISTENCE_REALNESS.md`](SAMPLE_AND_PERSISTENCE_REALNESS.md) | Sample row provenance, browser-local persistence, share-link, seed API, gallery fixture, and historical release-evidence boundaries. |
 | [`LOCAL_PERSISTENCE_SPIKE.md`](LOCAL_PERSISTENCE_SPIKE.md) | Planning-only local/backend saved-canvas persistence spike with env gate, migration, reset, rollback, and test assumptions. |
 | [`MCP_SERVER_SPEC.md`](MCP_SERVER_SPEC.md) | MCP server tools, contracts, and safety expectations. |
