@@ -461,6 +461,8 @@ Status: Complete on May 10, 2026 at 04:01 CDT.
 
 ## 31. Add Public-Data Live/Fallback Proof Coverage For Core Demo Path
 
+Status: Complete on May 10, 2026 at 04:11 CDT.
+
 - Owner type: QA
 - Goal: Add focused automated coverage proving the three core demo prompts preserve honest live/sample/fallback metadata and source caveats end-to-end.
 - Why it matters: Existing unit and e2e tests cover many pieces, but final demo confidence benefits from a purpose-built proof test for the exact judge-demo prompts.
@@ -470,6 +472,8 @@ Status: Complete on May 10, 2026 at 04:01 CDT.
 - Acceptance criteria: Tests cover Dallas, Austin, and Houston demo prompts; assert rendered `dataMode`, requested mode/fallback reason where applicable, `SourceMethodBlock`, caveats, and absence of hidden fields such as `precise_address`.
 - Validation commands: Focused Vitest command for the new/updated test file, then `pnpm test`; add `pnpm governance:audit` if catalog/sample/gallery assumptions are touched.
 - Can run in parallel: Yes, with docs-only tasks. Avoid parallel edits to the same dashboard/query test files.
+- Completed notes: Added `apps/web/test/demo-proof.test.ts` covering the exact Dallas, Austin, and Houston judge-demo prompts, source/method attribution, rendered data modes, fallback reasons where applicable, sample/fallback caveats, hidden `precise_address` absence, and explicit live-request fallback behavior for Austin and Houston.
+- Validation: `git diff --check` passed; `pnpm test -- apps/web/test/demo-proof.test.ts` passed; `pnpm test` passed.
 
 ## 32. Strengthen Main Judge-Demo E2E Path
 
