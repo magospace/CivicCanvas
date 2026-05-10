@@ -127,6 +127,7 @@ API routes to know:
 | `apps/web/app/api/query/route.ts` | Direct bounded query entry point; do not bypass query validation. |
 | `apps/web/app/api/export/miro-spec/route.ts` | Must remain preview-only unless a real Miro auth/write flow is deliberately added. |
 | `apps/web/app/api/canvas/save/route.ts` | Validation stub only; do not imply server persistence unless implementing storage. |
+| `apps/web/app/api/canvas/[id]/route.ts` | Hardcoded seed/demo helper only; do not imply arbitrary saved-canvas lookup. |
 | `apps/web/app/api/health/route.ts` | Release/smoke scripts depend on this output. |
 
 If you add database-backed behavior later, first introduce explicit schema/migration docs and a test database strategy. Do not quietly repurpose `packages/shared/src/schemas/index.ts` as if it were a persistence schema.
@@ -244,8 +245,7 @@ Maintenance rules:
 - Add route-level tests for all API handlers that currently rely mostly on broader dashboard tests.
 - If server persistence is introduced, add explicit migrations/schema docs and keep saved-canvas import validation at the boundary.
 - Keep Miro as preview-only until auth, user confirmation, and safe write boundaries are designed.
-- Clarify or remove the server `/api/canvas/save` stub if a future backend save flow is not planned.
-- Clarify that `/api/canvas/[id]` is demo seed generation only, not a generic canvas lookup.
+- Keep `/api/canvas/save` and `/api/canvas/[id]` docs/tests explicit if route naming changes; they are not backend persistence today.
 
 ### Data
 
@@ -274,5 +274,5 @@ Fix or consciously accept these first:
 
 1. Public hosted rate limiting is not fully solved in app code; platform controls are required before broad sharing.
 2. `docs/release-evidence.json` is commit-specific evidence; refresh it only after intentionally rerunning the release gate.
-3. `/api/canvas/save` and `/api/canvas/[id]` can be mistaken for backend persistence; document or rename them if persistence work starts.
+3. `/api/canvas/save` and `/api/canvas/[id]` can be mistaken for backend persistence; current docs/tests label them validation-stub and seed-demo helper only. Rename or redesign them before introducing real persistence.
 4. Historical milestone docs can confuse new agents; link this guide and `CODEBASE_OVERVIEW.md` from `README.md` or a current docs index.

@@ -625,6 +625,8 @@ Status: Complete on May 10, 2026 at 04:46 CDT.
 
 ## 41. Add Seed/Save API Naming Honesty Audit
 
+Status: Complete on May 10, 2026 at 04:49 CDT.
+
 - Owner type: QA / API docs
 - Goal: Audit route names and tests for `/api/canvas/[id]` and `/api/canvas/save` so future agents do not infer server-side storage.
 - Why it matters: Both route names resemble durable persistence APIs, but one is a hardcoded seed helper and the other is a validation stub.
@@ -634,6 +636,8 @@ Status: Complete on May 10, 2026 at 04:46 CDT.
 - Acceptance criteria: Docs/tests describe exact behavior and non-persistence boundaries; no route behavior changes; existing tests still pass.
 - Validation commands: focused Vitest commands for the two route tests if touched, `git diff --check`, `pnpm lint`, `pnpm test`.
 - Can run in parallel: Yes with non-API-doc tasks.
+- Completed notes: Updated `ARCHITECTURE_MAP.md`, `DEVELOPMENT_GUIDE.md`, and `REALNESS_AUDIT.md` to audit `/api/canvas/save` and `/api/canvas/[id]` as persistence-looking route names with non-persistence behavior. Existing focused tests already describe the validation-stub and hardcoded seed/demo helper behavior, so no route behavior or tests changed.
+- Validation: `git diff --check`, `pnpm lint`, and `pnpm test` passed.
 
 ## 42. Add No-LLM/No-Secret Provider Demo Wording Pass
 

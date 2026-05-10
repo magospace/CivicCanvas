@@ -148,6 +148,8 @@ All web APIs are Next.js App Router route handlers in `apps/web/app/api`.
 
 `/api/canvas/save` is intentionally not a persistence endpoint. The `saved: true` response means the submitted `CanvasDocument` passed server-side validation; no database row, account record, object-store file, or public share URL is created.
 
+`/api/canvas/[id]` is intentionally not a saved-canvas lookup endpoint. It accepts only hardcoded seed IDs, regenerates known demo canvases from approved prompts, and returns 404 for unknown IDs. It does not read from `localStorage`, a database, a user account, a bucket, or a server-side saved-canvas collection.
+
 API request parsing and public error formatting are centralized in `apps/web/lib/api.ts`. It enforces JSON body size limits from `packages/shared/src/constants.ts` and hides internal error details unless the error is a governed validation error.
 
 `apps/web/middleware.ts` applies best-effort in-memory rate limiting to write-like public POST routes:
@@ -303,6 +305,8 @@ GET /api/canvas/[id]
 ```
 
 This is not a persistence layer. It is a small seed/demo helper with Dallas and Austin IDs.
+
+Naming audit: both `/api/canvas/save` and `/api/canvas/[id]` look like durable storage routes. Treat those names as compatibility/demo API names only. The actual saved-canvas product flow is `/saved` plus browser `localStorage` and URL-hash bundles.
 
 ### Source Catalog Flow
 

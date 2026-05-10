@@ -1,23 +1,21 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 04:46 CDT
+Last updated: May 10, 2026 04:49 CDT
 
 ## Current Cycle
 
-- Task chosen: `TASKS.md` item 40, "Add Sample Data Provenance And Persistence Realness Matrix".
-- Why this was next: Item 35 remains release-evidence work requiring explicit approval, and items 36-39 are complete, so item 40 is the next safe realness-audit follow-up.
-- Scope: `docs/SAMPLE_AND_PERSISTENCE_REALNESS.md`, `docs/DATA_GOVERNANCE.md`, `README.md`, `docs/README.md`, `REALNESS_AUDIT.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Task chosen: `TASKS.md` item 41, "Add Seed/Save API Naming Honesty Audit".
+- Why this was next: Item 41 follows the sample/persistence matrix and closes the remaining route-name honesty risk around persistence-looking canvas APIs.
+- Scope: `ARCHITECTURE_MAP.md`, `DEVELOPMENT_GUIDE.md`, `REALNESS_AUDIT.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
 - Safety notes: Documentation only. No product behavior, runtime source code, tests, package scripts, config, source data, secrets, auth, billing, migrations, production config, deploy scripts, release evidence, catalog data, samples, live API calls, or destructive operations were changed. Release evidence was not refreshed.
 
 ## Files Updated
 
-- `docs/SAMPLE_AND_PERSISTENCE_REALNESS.md`: Added sample row/date/provenance matrix plus persistence/artifact boundaries for catalog, samples, gallery, saved canvases, share links, save/seed APIs, and release evidence.
-- `docs/DATA_GOVERNANCE.md`: Linked the new matrix from the sample provenance policy.
-- `README.md`: Added the matrix to current developer docs.
-- `docs/README.md`: Added the matrix to current domain docs.
-- `REALNESS_AUDIT.md`: Updated persistence and sample-data rows to reference the new matrix.
-- `TASKS.md`: Marked item 40 complete with validation notes.
-- `HERMES_PROGRESS.md`: Recorded item 40 scope, safety notes, and validation.
+- `ARCHITECTURE_MAP.md`: Added explicit `/api/canvas/[id]` non-persistence wording and a naming-audit note for both canvas API names.
+- `DEVELOPMENT_GUIDE.md`: Added `/api/canvas/[id]` to the API route risk table and updated backend/risk notes now that both routes are documented.
+- `REALNESS_AUDIT.md`: Updated the save and seed API rows to record the docs/test audit and lower the naming confusion risk.
+- `TASKS.md`: Marked item 41 complete with validation notes.
+- `HERMES_PROGRESS.md`: Recorded item 41 scope, safety notes, and validation.
 
 ## Sequential Progress
 
@@ -33,7 +31,8 @@ Last updated: May 10, 2026 04:46 CDT
 - Task 37 committed as `452e608` (`docs: align miro preview-only wording`).
 - Task 38 committed as `43e900d` (`docs: document no media provider path`).
 - Task 39 committed as `1987aa8` (`docs: warn release evidence is historical`).
-- Task 40 completed and ready to commit as `docs: add sample persistence realness matrix`.
+- Task 40 committed as `82dcfd6` (`docs: add sample persistence realness matrix`).
+- Task 41 completed and ready to commit as `docs: audit seed save api naming`.
 
 ## Sequential Task Plan
 
@@ -233,6 +232,12 @@ Current `git status --short --branch` shows branch `feat/v1.3-hosted-launch-read
 - `git diff --check`: Passed for Task 39 docs.
 - `pnpm lint`: Passed for Task 39 docs.
 - `pnpm governance:audit`: Passed 19/19 checks and preserved the expected historical release-evidence commit mismatch warning.
+- `git diff --check`: Passed for Task 40 docs.
+- `pnpm lint`: Passed for Task 40 docs.
+- `pnpm data:quality`: Passed for Task 40 docs.
+- `git diff --check`: Passed for Task 41 docs.
+- `pnpm lint`: Passed for Task 41 docs.
+- `pnpm test`: Passed for Task 41 docs.
 
 ## Blockers
 
