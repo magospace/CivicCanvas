@@ -28,6 +28,7 @@ Use this index to choose the current source of truth before opening older milest
 | [`MCP_SERVER_SPEC.md`](MCP_SERVER_SPEC.md) | MCP server tools, contracts, and safety expectations. |
 | [`CANVAS_SPEC.md`](CANVAS_SPEC.md) | Canvas document/block model rendered by the trusted React registry. |
 | [`MIRO_EXPORT_SPEC.md`](MIRO_EXPORT_SPEC.md) | Preview-only Miro export spec boundaries. |
+| [`MIRO_PREVIEW_ARTIFACT_TEMPLATE.md`](MIRO_PREVIEW_ARTIFACT_TEMPLATE.md) | Manual artifact note template for sharing preview-only Miro JSON without claiming OAuth or board writes. |
 
 ## Release And Demo Docs
 
@@ -44,6 +45,7 @@ These are current operational handoff docs, but release proof remains gated. Use
 | [`HACKATHON_SUBMISSION_CHECKLIST.md`](HACKATHON_SUBMISSION_CHECKLIST.md) | Submission metadata and proof checklist that separates local, hosted, live, media, and release-evidence claims. |
 | [`HACKATHON_DEMO_READINESS.md`](HACKATHON_DEMO_READINESS.md) | Local-first judge-demo checklist that does not refresh release evidence. |
 | [`HOSTED_SMOKE_TEMPLATE.md`](HOSTED_SMOKE_TEMPLATE.md) | Optional hosted smoke evidence template that records URL checks without mutating deployment config or release evidence. |
+| [`MIRO_PREVIEW_ARTIFACT_TEMPLATE.md`](MIRO_PREVIEW_ARTIFACT_TEMPLATE.md) | Optional Miro preview artifact template; not release evidence unless Task 35 reruns the full gate and intentionally includes it. |
 | [`ACCEPTANCE_CRITERIA.md`](ACCEPTANCE_CRITERIA.md) | Product acceptance checklist. |
 | [`release-evidence.json`](release-evidence.json) | Historical release evidence consumed by health/demo-readiness/governance checks. It records commit `a5ce07a81ee932bdf7a37724af0e7aab3a3d9f0f`, not the current branch `HEAD`; do not cite it as current proof or refresh it without rerunning the release gate through Task 35. |
 

@@ -1062,6 +1062,8 @@ Status: Complete on May 10, 2026 at 06:17 CDT.
 
 ## 68. Add Miro Preview Artifact Template
 
+Status: Complete on May 10, 2026 at 06:36 CDT.
+
 - Owner type: Integration / Docs
 - Goal: Add a template for saving or sharing Miro preview JSON manually without claiming board writes.
 - Scope: Docs only.
@@ -1070,6 +1072,8 @@ Status: Complete on May 10, 2026 at 06:17 CDT.
 - Acceptance criteria: Template records source dashboard, template type, validation status, no OAuth/no board-write caveat, and artifact handling; not release evidence unless Task 35 runs.
 - Validation commands: manual path/link check, `git diff --check`, `pnpm lint`.
 - Can run in parallel: Yes with non-Miro tasks.
+- Completed notes: Reconciled the pre-existing untracked `docs/MIRO_PREVIEW_ARTIFACT_TEMPLATE.md`, linked it from `docs/README.md` and `docs/MIRO_EXPORT_SPEC.md`, and kept wording explicit that preview artifacts are no-OAuth/no-board-write and not release evidence unless gated Task 35 reruns the full release gate.
+- Validation: Manual path/link/caveat check passed; `pnpm lint` passed; `git diff --check` passed.
 
 ## 69. Add Release Evidence Dry-Run Precheck Script
 

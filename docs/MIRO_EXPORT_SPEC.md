@@ -6,6 +6,8 @@ Miro export currently generates a preview-only `MiroExportSpec` JSON document fr
 
 The current implementation does not authenticate with Miro, create boards, create frames, upload images, or perform any third-party write. The core product works without Miro, and the Miro path is limited to local preview/download/copy of governed JSON.
 
+If a reviewer manually saves or shares preview JSON, use [`MIRO_PREVIEW_ARTIFACT_TEMPLATE.md`](MIRO_PREVIEW_ARTIFACT_TEMPLATE.md) to record the source dashboard, template type, validation status, and no-OAuth/no-board-write caveats. That template is an artifact note only; it is not release evidence unless Task 35 later reruns the full release gate and intentionally includes it.
+
 ## Why this matters
 
 Many users need to present and discuss public-data findings:

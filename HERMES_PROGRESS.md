@@ -790,3 +790,29 @@ Last updated: May 10, 2026 06:17 CDT
 ### Recommended Next Task
 
 - Task 76, `Add Dashboard Partial-Query Fallback And Runtime Fallback Reasons`, is high impact but touches risky dashboard/shared-schema surfaces. Recommended next safe step is to start it only with focused tests and stop if the change expands beyond dashboard fallback/caveat handling.
+
+
+## Task 68 Reconciliation Update
+
+- Task chosen: `TASKS.md` item 68, "Add Miro Preview Artifact Template".
+- Why this was next: The worktree had a pre-existing untracked `docs/MIRO_PREVIEW_ARTIFACT_TEMPLATE.md` matching Task 68. Before starting new feature work, this dirty task group was validated, linked, and committed while preserving unrelated untracked `clauderecommends.md`.
+- Scope: `docs/MIRO_PREVIEW_ARTIFACT_TEMPLATE.md`, `docs/MIRO_EXPORT_SPEC.md`, `docs/README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Documentation only. No Miro OAuth, board write, provider call, generated artifact, deploy mutation, release evidence refresh, secrets, auth, billing, database work, or production config changed.
+
+### Files Updated
+
+- `docs/MIRO_PREVIEW_ARTIFACT_TEMPLATE.md`: New manual template for preview-only Miro JSON artifact notes with no-OAuth/no-board-write caveats.
+- `docs/MIRO_EXPORT_SPEC.md`: Links the artifact template and clarifies it is not release evidence unless Task 35 intentionally includes it after a full gate.
+- `docs/README.md`: Links the template from current domain and release/demo docs.
+- `TASKS.md`: Marks Task 68 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records Task 68 reconciliation, validation, and next task.
+
+### Validation
+
+- Manual path/link/caveat check via `python3`: Passed.
+- `pnpm lint`: Passed.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 76, `Add Dashboard Partial-Query Fallback And Runtime Fallback Reasons`, is the next high-value task from the verified recommendations queue.
