@@ -1341,3 +1341,22 @@ Last updated: May 10, 2026 06:17 CDT
 ### Recommended Next Task
 
 - Task 95, `Add Submission Readiness Known-Blockers Doc Snapshot`, is next.
+
+
+## Task 95 Update
+
+- Task chosen: `TASKS.md` item 95, "Add Submission Readiness Known-Blockers Doc Snapshot".
+- Why this was next: Task 94 completed cleanly, and Task 95 was the next safe submission-readiness docs task. It makes remaining form/proof blockers explicit without implying they are resolved.
+- Scope: `docs/SUBMISSION_BLOCKERS.md`, `docs/README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Documentation only. No deploy, release evidence refresh, live API/provider call, generated media, backend persistence, schema, migration, secrets, auth, billing, production data, or external submission mutation occurred.
+
+### Validation
+
+- Manual path/link/boundary check: Passed. Confirmed doc lists public repo URL, Loom URL, team roster, optional hosted URL, historical release evidence, platform rate limit, and backend/media/live-data boundaries without saying they are fixed.
+- `pnpm submission:readiness:json`: Passed.
+- `pnpm lint`: Passed.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 96, `Add Safe Submission Command Transcript Template`, is next.

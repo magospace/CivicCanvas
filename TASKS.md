@@ -1491,6 +1491,8 @@ Status: Complete on May 10, 2026.
 
 ## 95. Add Submission Readiness Known-Blockers Doc Snapshot
 
+Status: Complete on May 10, 2026.
+
 - Owner type: QA / Docs
 - Goal: Add a concise checked-in doc explaining the current submission blockers emitted by `pnpm submission:readiness:json`.
 - Scope: Docs only.
@@ -1499,6 +1501,8 @@ Status: Complete on May 10, 2026.
 - Acceptance criteria: Doc lists public repo URL, Loom URL, team roster, optional hosted URL, historical release evidence, platform rate limit, and backend/media boundaries without implying they are fixed.
 - Validation commands: manual path/link check, `pnpm submission:readiness:json`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes.
+- Completed notes: Added `docs/SUBMISSION_BLOCKERS.md` and linked it from the docs index. The snapshot records public repo/Loom/team/hosted form items plus historical release evidence, platform rate-limit, backend persistence, media, and live-data boundaries without claiming they are fixed.
+- Validation: Manual path/link/boundary check, `pnpm submission:readiness:json`, `pnpm lint`, and `git diff --check` passed.
 
 ## 96. Add Safe Submission Command Transcript Template
 
