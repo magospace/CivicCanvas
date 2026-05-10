@@ -6,6 +6,7 @@ import { GET as catalogHealthGET } from "../app/api/catalog/health/route";
 import { POST as canvasGeneratePOST } from "../app/api/canvas/generate/route";
 import { POST as miroExportPOST } from "../app/api/export/miro-spec/route";
 import { GET as healthGET } from "../app/api/health/route";
+import { GET as openAISmokeGET } from "../app/api/provider/openai-smoke/route";
 import { POST as queryPOST } from "../app/api/query/route";
 import { middleware, rateLimitBucketCountForTest, resetRateLimitBucketsForTest } from "../middleware";
 import { apiError, parseJsonRequest } from "../lib/api";
@@ -90,6 +91,30 @@ describe("production API contracts", () => {
         }
       }
     }
+  });
+
+
+  it("proves OpenAI assist no-key and mocked-live paths without network or secret echo", async () => {
+    const response = await openAISmokeGET();
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.ok).toBe(true);
+    expect(body.network).toBe("not_used");
+    expect(body.liveCalls).toBe(0);
+    expect(body.defaultReadiness).toMatchObject({
+      provider: "openai",
+      enabled: false,
+      keyStatus: "missing",
+      serverSideOnly: true,
+      secretEcho: false
+    });
+    expect(body.noKey.provider).toBe("deterministic_fallback");
+    expect(body.mockedLive.provider).toBe("openai");
+    expect(body.mockedLive.datasetCandidates).toEqual(["dallas_311_requests"]);
+    expect(body.boundaries.join(" ")).toContain("without network");
+    expect(JSON.stringify(body)).not.toContain("mock-openai-smoke-key");
+    expect(JSON.stringify(body)).not.toContain("OPENAI_API_KEY");
   });
 
   it("returns structured API errors for invalid query fields", async () => {

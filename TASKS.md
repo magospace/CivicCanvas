@@ -1846,7 +1846,7 @@ Status: Complete on May 10, 2026.
 
 ## 115. Add OpenAI No-Key And Mocked-Live Route Smoke
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Provider / QA
 - Goal: Add an API-level smoke route or script proving OpenAI assist remains server-only, no-key deterministic by default, and schema-validated with mocked live-shaped output.
@@ -1857,6 +1857,8 @@ Status: Pending.
 - Acceptance criteria: No-key and mocked-valid/mocked-invalid paths are covered through the same wrapper used by app code; no secrets/env var values leak in output.
 - Validation commands: focused OpenAI provider Vitest, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `git diff --check`.
 - Can run in parallel: No with OpenAI provider tests.
+- Completed notes: Added `/api/provider/openai-smoke`, a no-network route that proves the no-key deterministic fallback and mocked OpenAI-shaped structured-output path through the same server-only wrapper. The route returns readiness, provider mode, catalog dataset candidates, boundaries, and zero live calls without echoing keys or env var names. Added API contract coverage.
+- Validation: Focused API/OpenAI Vitest, `pnpm typecheck`, `pnpm lint`, and `git diff --check` passed. No live OpenAI call was made.
 
 ## 116. Add Optional Live OpenAI Smoke Gate
 

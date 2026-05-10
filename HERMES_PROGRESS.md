@@ -1665,3 +1665,14 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm test -- apps/web/test/saved-canvases.test.ts` passed with 17 files / 119 tests discovered; `pnpm typecheck` passed; first `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved bundle"` failed on a stale expected duplicate title, then passed with 17 browser tests after updating the assertion; `pnpm lint` passed; `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 115, `Add OpenAI No-Key And Mocked-Live Route Smoke`.
+
+## Task 115 Update - OpenAI No-Key And Mocked-Live Route Smoke
+
+- Task chosen: `TASKS.md` item 115, "Add OpenAI No-Key And Mocked-Live Route Smoke".
+- Why this was next: It was the next pending provider/data-realism task after saved-canvas editability and proves optional OpenAI assist is server-only, deterministic by default, and schema-validated when model-shaped output is mocked.
+- Scope: `apps/web/app/api/provider/openai-smoke/route.ts`, `apps/web/test/api-contracts.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: OpenAI remains `provider-gated fallback metadata / acceptable if clearly labeled`. The new smoke route returns no-key deterministic fallback plus mocked-live structured output through the real wrapper while reporting `network=not_used`, `liveCalls=0`, `serverSideOnly=true`, and `secretEcho=false`.
+- Safety notes: No live OpenAI call, no provider spend, no env file reads, no secret printing, no dashboard generation authority change, no schema/migration, backend persistence, deploy, release evidence, Fal/media, production data, or generated artifacts.
+- Validation: `pnpm test -- apps/web/test/api-contracts.test.ts apps/web/test/openai-provider.test.ts` passed with 17 files / 120 tests discovered; `pnpm typecheck` passed; `pnpm lint` passed; `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0 live calls; mocked fetch only.
+- Recommended next task: Task 117, `Reconcile Realness Audit After OpenAI Boundary Change`, before considering the higher-risk optional live OpenAI smoke gate.
