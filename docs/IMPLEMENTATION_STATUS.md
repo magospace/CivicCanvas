@@ -125,3 +125,7 @@ Started on branch `feat/v0.9-public-reliability` from the locally closed-out v0.
   - `pnpm smoke:deploy:json -- --url http://localhost:3006`
 
 The Houston transportation candidate remains coming-later until the governance checklist passes. Release tags remain blocked on public hosted verification.
+
+## v0.9 Hosted Release Closeout
+
+Hosted tagging remains blocked as of May 9, 2026 because this repo context has no public Vercel URL, no Git remote, and no Vercel project linkage/credentials. No deployment secrets or `.vercel` project metadata are committed. Tag `v0.9.0-public-reliability` only after public deployment smoke, remote Playwright, and platform-level firewall/rate-limit checks pass.

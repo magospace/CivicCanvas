@@ -77,3 +77,18 @@ Hosted tagging remains blocked until:
 ## Release Status
 
 v0.9 is an active public-reliability branch. No `v0.9.0-public-reliability` tag should be created until v0.8 is publicly verified or the release docs explicitly record why v0.9 is being verified from the current branch instead.
+
+## Hosted Release Result
+
+Status as of May 9, 2026: blocked by operations, not code.
+
+- No public Vercel URL is available in this repo context.
+- No Git remote is configured.
+- No Vercel project linkage or credential environment is available.
+- No `.vercel/project.json`, tokens, organization IDs, project IDs, or secret-bearing URLs were committed.
+
+Do not tag `v0.9.0-public-reliability` until a public URL passes:
+
+- `pnpm smoke:deploy -- --url <public-url> --expect-version v0.9.0-public-reliability`
+- `PLAYWRIGHT_BASE_URL=<public-url> pnpm test:e2e:remote`
+- Platform-level Vercel firewall/rate-limit confirmation.

@@ -139,6 +139,7 @@ Active branch: `feat/v0.9-public-reliability`. This pass focuses on public relia
 5. Extended CSV/JSON export affordances to gallery and saved canvases.
 6. Keep Houston transportation as the default third-dataset candidate, but do not wire it into dashboard generation until catalog metadata, field classification, local fallback sample, source caveats, adapter mapping, and bounded query tests are complete.
 7. Verified locally on May 9, 2026 with `pnpm verify`, `pnpm smoke:deploy -- --url http://localhost:3006`, and `pnpm smoke:deploy:json -- --url http://localhost:3006`.
+8. Hosted tag remains blocked because no public Vercel URL, Git remote, or Vercel project linkage is available in this repo context.
 
 ## Release Gate
 

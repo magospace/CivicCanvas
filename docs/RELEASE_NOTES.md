@@ -7,6 +7,7 @@
 - Extends gallery and saved-canvas views with client-side table CSV and validated CanvasDocument JSON export affordances.
 - Documents Dallas ZIP sample fallback, Austin sample-first monthly aggregation, and the Houston transportation candidate policy.
 - Keeps hosted release tags blocked until a real public URL passes hosted smoke and remote Playwright.
+- Hosted tag is not created because no public Vercel URL, Git remote, or Vercel project linkage is configured in this repo context.
 
 ## v0.8.0-product-readiness (locally complete / untagged)
 
