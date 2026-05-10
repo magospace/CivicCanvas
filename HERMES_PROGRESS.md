@@ -2190,3 +2190,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm test -- apps/web/test/dashboard.test.ts` passed; due repo script wiring, 128 tests across 18 files ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 158, `Add No-Generated Artifact Commit Guard`, to protect local proof artifacts and secrets from accidental staging.
+
+
+## Task 158 Update - No-Generated Artifact Commit Guard
+
+- Task chosen: `TASKS.md` item 158, "Add No-Generated Artifact Commit Guard".
+- Why this was next: It was the next submission-safety task after metadata-only source guarding and protects local proof artifacts, generated reports, provider outputs, and env files from accidental staging.
+- Scope: `scripts/check-generated-artifact-hygiene.mjs`, `package.json`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Repo hygiene; protects proof artifacts/secrets from accidental commit.
+- Changes: Added `pnpm hygiene:artifacts` and `pnpm hygiene:artifacts:json`. The script checks staged and untracked generated/provider/media/report/env-like paths, allows `.env.example` as a documented public env example, and classifies `REVIEW_RECOMMENDATIONS.md` plus `clauderecommends.md` as intentionally untracked external recommendation inputs.
+- Validation: Initial `pnpm hygiene:artifacts` failed on over-broad tracked-artifact classification of existing `.env.example` and historical docs screenshots. Narrowed the guard to staged/untracked hazards plus `.env.example` allowance. Final `pnpm hygiene:artifacts` passed with 0 issues and reported the two external recommendation files as intentionally untracked. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 159, `Add Final Push-Readiness Diff Summary Command`, to summarize local branch state without pushing.

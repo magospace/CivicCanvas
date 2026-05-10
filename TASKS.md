@@ -2565,7 +2565,7 @@ Status: Complete on May 10, 2026.
 
 ## 158. Add No-Generated Artifact Commit Guard
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Repo Hygiene / Submission Safety
 - Goal: Add a no-network guard that fails if generated screenshots, Playwright reports, provider artifacts, or `.env` files are staged/committed by mistake.
@@ -2576,6 +2576,8 @@ Status: Pending.
 - Acceptance criteria: Script passes current tree, classifies intentionally untracked external recommendation files separately, and fails on staged generated artifact or env-like paths.
 - Validation command: `pnpm hygiene:artifacts`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with package script edits.
+- Completed notes: Added `pnpm hygiene:artifacts` / `pnpm hygiene:artifacts:json`, a no-network git hygiene guard that checks staged and untracked generated/provider/media/report/env-like paths, allows `.env.example`, and classifies `REVIEW_RECOMMENDATIONS.md` plus `clauderecommends.md` as intentionally untracked external recommendation inputs.
+- Validation: Initial `pnpm hygiene:artifacts` correctly failed on over-broad tracked artifact classification; narrowed it to staged/untracked hazards and `.env.example` allowance. Final `pnpm hygiene:artifacts` passed with 0 issues and reported the two external recommendation files as intentionally untracked. `pnpm lint` passed; `git diff --check` passed.
 
 ## 159. Add Final Push-Readiness Diff Summary Command
 

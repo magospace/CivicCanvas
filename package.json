@@ -29,6 +29,8 @@
     "demo:screenshots:json": "node scripts/capture-demo-screenshots.mjs --json",
     "demo:artifact-hygiene": "node scripts/demo-artifact-hygiene.mjs",
     "demo:artifact-hygiene:json": "node scripts/demo-artifact-hygiene.mjs --json",
+    "hygiene:artifacts": "node scripts/check-generated-artifact-hygiene.mjs",
+    "hygiene:artifacts:json": "node scripts/check-generated-artifact-hygiene.mjs --json",
     "submission:readiness": "node scripts/submission-readiness.mjs",
     "submission:readiness:json": "node scripts/submission-readiness.mjs --json",
     "submission:todo-scan": "node scripts/submission-todo-scan.mjs",
