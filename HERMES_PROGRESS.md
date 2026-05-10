@@ -1,21 +1,23 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 04:49 CDT
+Last updated: May 10, 2026 04:52 CDT
 
 ## Current Cycle
 
-- Task chosen: `TASKS.md` item 41, "Add Seed/Save API Naming Honesty Audit".
-- Why this was next: Item 41 follows the sample/persistence matrix and closes the remaining route-name honesty risk around persistence-looking canvas APIs.
-- Scope: `ARCHITECTURE_MAP.md`, `DEVELOPMENT_GUIDE.md`, `REALNESS_AUDIT.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Task chosen: `TASKS.md` item 42, "Add No-LLM/No-Secret Provider Demo Wording Pass".
+- Why this was next: Item 42 is the final safe realness-audit follow-up after the seed/save naming audit and keeps natural-language claims from implying provider-backed generation.
+- Scope: `README.md`, `docs/DEMO_SCRIPT.md`, `CODEBASE_OVERVIEW.md`, `ARCHITECTURE_MAP.md`, `REALNESS_AUDIT.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
 - Safety notes: Documentation only. No product behavior, runtime source code, tests, package scripts, config, source data, secrets, auth, billing, migrations, production config, deploy scripts, release evidence, catalog data, samples, live API calls, or destructive operations were changed. Release evidence was not refreshed.
 
 ## Files Updated
 
-- `ARCHITECTURE_MAP.md`: Added explicit `/api/canvas/[id]` non-persistence wording and a naming-audit note for both canvas API names.
-- `DEVELOPMENT_GUIDE.md`: Added `/api/canvas/[id]` to the API route risk table and updated backend/risk notes now that both routes are documented.
-- `REALNESS_AUDIT.md`: Updated the save and seed API rows to record the docs/test audit and lower the naming confusion risk.
-- `TASKS.md`: Marked item 41 complete with validation notes.
-- `HERMES_PROGRESS.md`: Recorded item 41 scope, safety notes, and validation.
+- `README.md`: Clarified that natural-language prompts are parsed by deterministic local TypeScript rules and no LLM/provider API key or model-generated dashboard execution exists.
+- `docs/DEMO_SCRIPT.md`: Added deterministic local prompt parsing to the opening pitch.
+- `CODEBASE_OVERVIEW.md`: Added no-LLM/no-model-provider wording and corrected the lint command description to the current ESLint CLI.
+- `ARCHITECTURE_MAP.md`: Added an integration row saying LLM/model providers are not implemented.
+- `REALNESS_AUDIT.md`: Updated the AI/provider and secret-gated integration rows to record the new wording.
+- `TASKS.md`: Marked item 42 complete with validation notes.
+- `HERMES_PROGRESS.md`: Recorded item 42 scope, safety notes, and validation.
 
 ## Sequential Progress
 
@@ -32,7 +34,8 @@ Last updated: May 10, 2026 04:49 CDT
 - Task 38 committed as `43e900d` (`docs: document no media provider path`).
 - Task 39 committed as `1987aa8` (`docs: warn release evidence is historical`).
 - Task 40 committed as `82dcfd6` (`docs: add sample persistence realness matrix`).
-- Task 41 completed and ready to commit as `docs: audit seed save api naming`.
+- Task 41 committed as `7825404` (`docs: audit seed save api naming`).
+- Task 42 committed as `446f81c` (`docs: clarify deterministic no-provider generation`).
 
 ## Sequential Task Plan
 
@@ -238,6 +241,8 @@ Current `git status --short --branch` shows branch `feat/v1.3-hosted-launch-read
 - `git diff --check`: Passed for Task 41 docs.
 - `pnpm lint`: Passed for Task 41 docs.
 - `pnpm test`: Passed for Task 41 docs.
+- `git diff --check`: Passed for Task 42 docs.
+- `pnpm lint`: Passed for Task 42 docs.
 
 ## Blockers
 
@@ -245,4 +250,4 @@ Current `git status --short --branch` shows branch `feat/v1.3-hosted-launch-read
 
 ## Recommended Next Task
 
-- Do not run `TASKS.md` item 35, "Refresh Release Evidence Only After Full Validation Gate", without explicit approval. The next safe non-release task is item 40, "Add Sample Data Provenance And Persistence Realness Matrix".
+- No safe non-release task remains in the current `TASKS.md` queue. Do not run `TASKS.md` item 35, "Refresh Release Evidence Only After Full Validation Gate", without explicit approval and the full release gate.

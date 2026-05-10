@@ -6,7 +6,7 @@ Last inspected: May 10, 2026
 
 Texas Data Canvas is a no-account, no-database public-data explorer for Texas civic datasets. Users type plain-English prompts about approved public datasets, and the app generates source-cited dashboards made from trusted React blocks: summaries, metrics, charts, ZIP bubble maps, tables, filters, dataset cards, and source/method cards.
 
-The app is intentionally not a generic chatbot or arbitrary code generator. It turns supported prompts into validated `BoundedQuerySpec` objects, queries approved static samples or verified live public APIs, then renders a validated `CanvasDocument` through an allowlisted block registry.
+The app is intentionally not a generic chatbot or arbitrary code generator. It parses supported prompts with deterministic local TypeScript rules rather than an LLM/provider call, turns them into validated `BoundedQuerySpec` objects, queries approved static samples or verified live public APIs, then renders a validated `CanvasDocument` through an allowlisted block registry.
 
 Current supported dashboard workflows:
 
@@ -113,7 +113,7 @@ Run commands from the repo root unless noted.
 | `pnpm install` | Install workspace dependencies. | Requires network if dependencies are not already installed. |
 | `pnpm dev` | Start the Next.js app through the workspace filter. | Opens the main app at `http://localhost:3000/explore` by default. |
 | `pnpm start:web` | Start a previously built web app. | Requires `apps/web/.next` from a prior build. |
-| `pnpm lint` | Run Next lint for `apps/web`. | Safe check. |
+| `pnpm lint` | Run the ESLint CLI for `apps/web`. | Safe check; uses Next core-web-vitals rules through `.eslintrc.json`. |
 | `pnpm typecheck` | Typecheck all workspace packages. | Safe check. |
 | `pnpm test` | Run Vitest unit/API tests. | Safe check. |
 | `pnpm build` | Build all workspace packages. | Writes generated build output under ignored build directories. |
@@ -143,7 +143,7 @@ Only public/runtime metadata variables are required for hosted-style builds. Sam
 
 `.env.example` currently uses `NEXT_PUBLIC_APP_VERSION=v1.3.0-hosted-launch-readiness`, matching the active release metadata in `packages/shared/src/release/index.ts`. The public runtime label may still use `hosted-beta` for deployment context; do not treat that label as a release-version mismatch.
 
-No `DATABASE_URL`, Supabase, Prisma, OAuth, API-key, or app-secret environment variable is used by current runtime code. Vercel token/org/project values are mentioned only in deployment docs and are explicitly checked so they are not committed.
+No `DATABASE_URL`, Supabase, Prisma, OAuth, OpenAI/Anthropic/model-provider API key, or app-secret environment variable is used by current runtime code. Vercel token/org/project values are mentioned only in deployment docs and are explicitly checked so they are not committed.
 
 ## External Services And APIs
 
@@ -155,6 +155,7 @@ No `DATABASE_URL`, Supabase, Prisma, OAuth, API-key, or app-secret environment v
 | Vercel | Intended hosting target and smoke/deployment docs. No committed Vercel secrets or `.vercel/project.json`. |
 | Miro | Preview-only `MiroExportSpec` generation. No Miro API writes are implemented. |
 | MCP clients | The stdio MCP server exposes safe tools for dataset search, query, canvas generation, validation, audit, and Miro preview specs. |
+| LLM/model providers | Not implemented. Prompt support is deterministic/rule-based local TypeScript with no provider SDK, model secret, or paid inference path. |
 
 ## Current Risks, Incomplete Areas, And Confusing Patterns
 

@@ -4,7 +4,7 @@ Open-source, MCP-powered visual explorer for Texas public datasets.
 
 ## What it does
 
-Users ask natural-language questions about Texas public data. The app discovers approved public datasets, runs safe bounded queries, and renders interactive dashboards with maps, charts, tables, filters, summaries, and source attribution.
+Users ask natural-language questions about Texas public data. The app parses supported prompts with deterministic local TypeScript rules, discovers approved public datasets, runs safe bounded queries, and renders interactive dashboards with maps, charts, tables, filters, summaries, and source attribution. There is no LLM provider, paid inference path, hidden prompt API key, or model-generated dashboard execution in the current app.
 
 Optional stretch: generate preview-only MiroExportSpec JSON for briefing boards, slide-like frames, or workshop boards. The app does not create or update Miro boards.
 
@@ -17,6 +17,7 @@ Optional stretch: generate preview-only MiroExportSpec JSON for briefing boards,
 ## Core safety model
 
 - No arbitrary AI-generated runtime HTML/JavaScript.
+- No LLM-backed dashboard generation or required model/provider secret.
 - No arbitrary SQL.
 - Use CanvasSpec JSON + trusted React block registry.
 - Use BoundedQuerySpec + approved dataset catalog.

@@ -404,6 +404,7 @@ These are repository automation, not app runtime jobs.
 | Miro | Preview-only JSON spec. No auth or writes. |
 | Vercel | Deployment/runbook/check scripts and health metadata. No project metadata or secrets committed. |
 | MCP | Implemented stdio server with typed tools. |
+| LLM/model providers | Not implemented. Prompt parsing is deterministic local TypeScript; no provider SDK, model API key, paid inference path, or generated executable dashboard output exists. |
 
 ## Architecture Reviewer Notes
 

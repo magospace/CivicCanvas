@@ -641,6 +641,8 @@ Status: Complete on May 10, 2026 at 04:49 CDT.
 
 ## 42. Add No-LLM/No-Secret Provider Demo Wording Pass
 
+Status: Complete on May 10, 2026 at 04:52 CDT.
+
 - Owner type: Docs / Demo honesty
 - Goal: Ensure current demo script and public docs describe natural-language support as deterministic/rule-based and do not imply LLM/provider-backed generation.
 - Why it matters: The app accepts prompts, but current generation uses local TypeScript parsing and no OpenAI/Anthropic/provider secret path.
@@ -650,3 +652,5 @@ Status: Complete on May 10, 2026 at 04:49 CDT.
 - Acceptance criteria: Demo wording says "rule-based" or "deterministic" where relevant; no docs imply paid AI inference, hidden API keys, or model-generated dashboards; natural-language UI copy remains accurate.
 - Validation commands: `git diff --check`, `pnpm lint`.
 - Can run in parallel: Yes with non-demo-doc tasks.
+- Completed notes: Updated `README.md`, `docs/DEMO_SCRIPT.md`, `CODEBASE_OVERVIEW.md`, `ARCHITECTURE_MAP.md`, and `REALNESS_AUDIT.md` to explain that plain-English prompts are parsed locally by deterministic TypeScript rules; there is no LLM/model provider SDK, hidden prompt API key, paid inference path, or model-generated dashboard execution in the current app. Also corrected the codebase overview lint command description to the current ESLint CLI.
+- Validation: `git diff --check` passed; `pnpm lint` passed.
