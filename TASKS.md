@@ -2211,7 +2211,7 @@ Status: Complete on May 10, 2026.
 
 ## 136. Improve Chart And Map Accessibility Copy
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Accessibility / UI Polish
 - Goal: Add SVG `<title>`/`<desc>` and clearer chart/map labels without adopting a new map/chart library.
@@ -2222,6 +2222,8 @@ Status: Pending.
 - Acceptance criteria: Chart and map SVGs expose useful text alternatives and the map legend explains the metric context.
 - Validation command: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "accessibility"`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes with non-canvas-block tasks.
+- Completed notes: Added SVG `<title>` and `<desc>` text alternatives for line charts and centroid maps, clarified map legend copy to state ZIP geography uses approximate governed centroids, and kept hook order stable by using deterministic IDs instead of React hooks inside registry-called block render functions.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "accessibility"` passed after fixing strict text selectors and the hook-order issue; due repo script wiring, all 21 product-demo browser tests ran and passed. `pnpm lint` passed; `git diff --check` passed.
 
 ## 137. Add Sources-to-Explore CTA Links
 

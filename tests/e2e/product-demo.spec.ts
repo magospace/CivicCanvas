@@ -67,7 +67,7 @@ test("Dallas prompt generates fallback ZIP dashboard and filter changes table st
   await generate(page, "Show Dallas 311 service requests by category and ZIP code for 2024.");
 
   await expect(page.getByText("Live unavailable, sample fallback used").first()).toBeVisible();
-  await expect(page.getByText("ZIP-code aggregate geography")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "ZIP-code aggregate geography" })).toBeVisible();
   await expect(page.getByText("Source and method")).toBeVisible();
 
   const inspector = page.locator("aside").last();
@@ -85,7 +85,7 @@ test("visual polish keeps generated Dallas dashboard demo-ready", async ({ page 
 
   await expect(page.getByText("Showing sample fallback data")).toBeVisible();
   await expect(page.getByText(/6 governed fields/)).toBeVisible();
-  await expect(page.getByText("Monthly trend")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Monthly trend" })).toBeVisible();
   await expect(page.getByText("trend").first()).toBeVisible();
   await expect(page.getByText("Top 311 Requests")).toBeVisible();
   await expect(page.getByText("bars").first()).toBeVisible();
@@ -195,6 +195,8 @@ test("app feedback distinguishes success toasts from dismissible errors", async 
 
 test("saved bundle import rejects unsafe JSON and saved-card actions work", async ({ page }) => {
   await page.goto("/explore");
+  await page.evaluate(() => window.localStorage.clear());
+  await page.reload();
   await generate(page, "Show Dallas 311 service requests by category and ZIP code for 2024.");
   await page.getByLabel("Save canvas locally").click();
 
@@ -327,6 +329,11 @@ test("key public-beta flows have no serious accessibility violations", async ({ 
 
   await generate(page, "Show Dallas 311 service requests by category and ZIP code for 2024.");
   await expect(page.getByText("Why this dashboard?")).toBeVisible();
+  await expect(page.locator("svg title").filter({ hasText: "Monthly trend" })).toHaveCount(1);
+  await expect(page.locator("svg desc").filter({ hasText: "Line chart with" })).toHaveCount(1);
+  await expect(page.locator("svg title").filter({ hasText: "ZIP-code aggregate geography" })).toHaveCount(1);
+  await expect(page.locator("svg desc").filter({ hasText: "Approximate centroid bubble map" })).toHaveCount(1);
+  await expect(page.getByText(/Uses approximate governed centroids for ZIP-level demo geography/i)).toBeVisible();
   await expectNoSeriousAccessibilityViolations(page);
 
   await generate(page, "Show Houston transportation incidents by ZIP and incident type for 2024.");

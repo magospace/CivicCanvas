@@ -73,7 +73,13 @@ function presentationColumnLabel(label: string) {
   return label.replace(/\s+desc$/i, "");
 }
 
+function accessibleId(prefix: string, label: string) {
+  return `${prefix}-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "visual"}`;
+}
+
 export function ChartBlockView({ props }: ChartBlock) {
+  const chartTitleId = accessibleId("chart-title", props.title);
+  const chartDescriptionId = accessibleId("chart-description", props.title);
   const max = Math.max(...props.data.map((item) => asNumber(item[props.yField])), 1);
   const chartValues = props.data.map((item, index) => ({
     label: compactChartLabel(item[props.xField]),
@@ -104,7 +110,13 @@ export function ChartBlockView({ props }: ChartBlock) {
       {chartValues.length > 0 ? (
         props.chartType === "line" ? (
           <div className="rounded-md border border-slate-200 bg-white p-3">
-            <svg viewBox="0 0 368 224" role="img" aria-label={props.title} className="h-56 w-full">
+            <svg viewBox="0 0 368 224" role="img" aria-labelledby={`${chartTitleId} ${chartDescriptionId}`} className="h-56 w-full">
+              <title id={chartTitleId}>{props.title}</title>
+              <desc id={chartDescriptionId}>
+                {props.subtitle
+                  ? `${props.subtitle} Line chart with ${chartValues.length} points. Highest visible value is ${max}.`
+                  : `Line chart with ${chartValues.length} points. Highest visible value is ${max}.`}
+              </desc>
               <rect x="0" y="0" width="368" height="224" rx="8" fill="#ffffff" />
               {[0, 1, 2, 3].map((tick) => {
                 const y = 36 + tick * 48;
@@ -156,6 +168,8 @@ export function ChartBlockView({ props }: ChartBlock) {
 }
 
 export function MapBlockView({ props }: MapBlock) {
+  const mapTitleId = accessibleId("map-title", props.title);
+  const mapDescriptionId = accessibleId("map-description", props.title);
   const max = Math.max(...props.data.map((item) => asNumber(item[props.metricField])), 1);
   const mappedZipIds = new Set(props.features.map((feature) => feature.id));
   const missingZipCount = props.data.filter((item) => !mappedZipIds.has(String(item[props.geographyField]))).length;
@@ -173,7 +187,11 @@ export function MapBlockView({ props }: MapBlock) {
       <h2 className="text-sm font-semibold text-ink">{props.title}</h2>
       {props.features.length > 0 ? (
         <div className="mt-4 overflow-hidden rounded-md border border-slate-200 bg-civic-50">
-          <svg viewBox="0 0 368 248" role="img" aria-label={props.title} className="h-64 w-full">
+          <svg viewBox="0 0 368 248" role="img" aria-labelledby={`${mapTitleId} ${mapDescriptionId}`} className="h-64 w-full">
+            <title id={mapTitleId}>{props.title}</title>
+            <desc id={mapDescriptionId}>
+              Approximate centroid bubble map for {props.metricField} by {props.geographyField}. Larger bubbles mean larger values; max visible value is {max}.
+            </desc>
             <rect x="0" y="0" width="368" height="248" fill="#f6f8fb" />
             <path
               d="M70 28 L298 36 L340 92 L318 196 L222 224 L98 214 L42 156 L52 78 Z"
@@ -229,7 +247,7 @@ export function MapBlockView({ props }: MapBlock) {
           </svg>
           {props.legend ? (
             <div className="flex flex-wrap items-center justify-between gap-2 border-t border-slate-200 px-3 py-2 text-xs font-medium text-slate-600">
-              <span>{props.legend}</span>
+              <span>{props.legend} Uses approximate governed centroids for ZIP-level demo geography.</span>
               <span className="rounded bg-white px-2 py-1 text-[11px] text-slate-500">
                 Max bubble: {max}
               </span>

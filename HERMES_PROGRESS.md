@@ -1919,3 +1919,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts` passed, 21/21 browser tests. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 136, `Improve Chart And Map Accessibility Copy`, if continuing UI polish.
+
+
+## Task 136 Update - Chart And Map Accessibility Copy
+
+- Task chosen: `TASKS.md` item 136, "Improve Chart And Map Accessibility Copy".
+- Why this was next: It was the next safe UI polish task after public-jargon cleanup and improves screen-reader/legend clarity for the core dashboard visuals used in the Loom flow.
+- Scope: `apps/web/components/canvas-blocks.tsx`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Not data-path-related. Map remains stylized/approximate and is now labeled more clearly; no dataset/query/sample/live behavior changed.
+- Changes: Added SVG `title` and `desc` elements to line-chart and map SVGs with `aria-labelledby`, added visible map legend copy explaining that ZIP geography uses approximate governed centroids, and strengthened e2e assertions for chart/map text alternatives. Used deterministic accessible IDs rather than React hooks because block render functions are invoked through the registry as plain functions and hooks there caused a hook-order error when block sequences changed.
+- Validation: Initial focused Playwright run exposed strict text-selector collisions from SVG titles and a React hook-order issue from using `useId` in registry-called block render functions. Fixed the selectors and replaced `useId` with deterministic ID generation. `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "accessibility"` then passed; due repo script wiring, all 21 product-demo browser tests ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 138, `Improve Focus Ring Contrast`, if continuing accessibility polish; otherwise stop for review because five tasks have been completed in this cycle.
