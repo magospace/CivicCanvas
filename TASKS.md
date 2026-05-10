@@ -1244,6 +1244,8 @@ Last replenished: May 10, 2026 after Task 72. Existing untracked input preserved
 
 ## 79. Adopt Hackathon Submission Guide As Current Docs
 
+Status: Complete on May 10, 2026 at 07:02 CDT.
+
 - Owner type: Docs / Submission
 - Goal: Convert the existing root-level hackathon submission guide input into a current linked docs page without staging unrelated external feedback.
 - Scope: Docs/index links only; preserve the untracked root input unless explicitly archiving it.
@@ -1252,6 +1254,8 @@ Last replenished: May 10, 2026 after Task 72. Existing untracked input preserved
 - Acceptance criteria: Current docs link to the submission guide; guide copy preserves honest local/sample/browser-local/MCP boundaries; untracked external feedback remains unstaged.
 - Validation commands: manual path/link check, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes with non-doc tasks.
+- Completed notes: Adopted the root-level submission guide input into `docs/HACKATHON_SUBMISSION_GUIDE.md`, added a source/boundary note, and linked it from `README.md` and `docs/README.md`. The original root untracked input and `clauderecommends.md` remain unstaged.
+- Validation: Manual path/link/boundary check passed; `pnpm lint` and `git diff --check` passed.
 
 ## 80. Add README Architecture Diagram For Submission Reviewers
 

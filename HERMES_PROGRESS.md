@@ -1031,3 +1031,21 @@ Last updated: May 10, 2026 06:17 CDT
 - Action: Added Hackathon Finalization Queue items 79-88 focused on submission readiness, real/demo functionality proof, provider-gated honesty, local/backend boundary guardrails, and no-spend/no-deploy defaults.
 - Dirty tree note: `clauderecommends.md` remains preserved as untracked external feedback. A root `HACKATHON_SUBMISSION_GUIDE.md` input was also present and is treated as candidate source material for Task 79; do not stage unrelated untracked files accidentally.
 - Gated work remains blocked unless explicitly approved: Task 35 release evidence refresh, hosted deployment mutation/proof, live provider spend, backend persistence/migrations, production data operations, secrets/auth/billing.
+
+
+## Task 79 Update
+
+- Task chosen: `TASKS.md` item 79, "Adopt Hackathon Submission Guide As Current Docs".
+- Why this was next: After replenishment, this was the first safe/high-value task and reconciled an existing root-level untracked submission guide input without staging unrelated external feedback.
+- Scope: `docs/HACKATHON_SUBMISSION_GUIDE.md`, `docs/README.md`, `README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Docs only. No release evidence refresh, deploy, provider call, generated media, database, backend persistence, production data, secrets, or `.env` changes. The root `HACKATHON_SUBMISSION_GUIDE.md` input and `clauderecommends.md` remain untracked.
+
+### Validation
+
+- Manual path/link/boundary check: Passed. Confirmed docs path exists, README/docs index link it, and guide retains browser-local/sample/MCP/preview-only/historical-evidence boundary language.
+- `pnpm lint`: Passed.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 80, `Add README Architecture Diagram For Submission Reviewers`, is next.
