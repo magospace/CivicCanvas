@@ -48,6 +48,21 @@ test("Dallas prompt generates fallback ZIP dashboard and filter changes table st
   await expect(page.getByRole("columnheader", { name: /Sort by status/i })).toBeVisible();
 });
 
+test("visual polish keeps generated Dallas dashboard demo-ready", async ({ page }) => {
+  await page.goto("/explore");
+  await generate(page, "Show Dallas 311 service requests by category and ZIP code for 2024.");
+
+  await expect(page.getByText("Showing sample fallback data")).toBeVisible();
+  await expect(page.getByText(/6 governed fields/)).toBeVisible();
+  await expect(page.getByText("Monthly trend")).toBeVisible();
+  await expect(page.getByText("trend").first()).toBeVisible();
+  await expect(page.getByText("Top 311 Requests")).toBeVisible();
+  await expect(page.getByText("bars").first()).toBeVisible();
+  await expect(page.getByText("Code Compliance").first()).toBeVisible();
+  await expect(page.getByRole("columnheader", { name: /Sort by Request count/i })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Apply filters" }).first()).toBeVisible();
+});
+
 test("explicit sample data mode is visible in the dashboard flow", async ({ page }) => {
   await page.goto("/explore");
   await page.getByLabel("Data mode", { exact: true }).selectOption("sample");

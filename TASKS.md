@@ -1558,7 +1558,7 @@ Last replenished: May 10, 2026 after the Loom visual UI/UX audit and localized d
 
 ## 99. Add Visual Polish Regression Coverage For Generated Dashboard
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: QA / UI
 - Goal: Add browser-level regression coverage that protects the Loom-polished generated dashboard surfaces.
@@ -1568,6 +1568,8 @@ Status: Pending.
 - Acceptance criteria: E2E coverage asserts the Dallas generated dashboard shows the new sample/fallback status strip, visible trend/bar chart labels or values, friendly `Request count` sort label, and `Apply filters` copy without relying on screenshots.
 - Validation commands: `PLAYWRIGHT_BASE_URL=http://localhost:<port> pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "visual polish"`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with other edits to `tests/e2e/product-demo.spec.ts`.
+- Completed notes: Added a product-demo Playwright regression covering the generated Dallas dashboard status strip, governed fields summary, trend/bar chart labels, `Request count` table sort label, and `Apply filters` copy without committing screenshots.
+- Validation: Targeted Playwright command ran the product-demo spec and passed 17 browser tests; `pnpm lint` and `git diff --check` passed.
 
 ## 100. Add Saved Empty-State Explore CTA
 

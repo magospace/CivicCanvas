@@ -1442,3 +1442,13 @@ Last updated: May 10, 2026 06:17 CDT
 - Action: Replenished `TASKS.md` with Tasks 99-108 focused on Loom demo polish, visual regression coverage, saved empty-state UX, submission readiness metadata, responsive prompt-first behavior, sources summary clarity, active nav state, ignored screenshot tooling, optional live API transcript stubs, provider-gated media honesty, and visual-risk reconciliation.
 - Safety notes: Replenishment is planning only. No live APIs, Fal/media generation, schema/migrations, backend persistence, auth, billing, deployment mutation, production data, secrets, or release-evidence refresh. Existing untracked `clauderecommends.md` remains preserved and unstaged.
 - Selected next tasks: 99, 100, 101, 102, and 103 are the highest-priority sequence, with Task 99 first because it protects the just-completed Loom-polish surface before further UI changes.
+
+## Task 99 Update
+
+- Task chosen: `TASKS.md` item 99, "Add Visual Polish Regression Coverage For Generated Dashboard".
+- Why this was next: The previous Loom-polish implementation completed cleanly, and Task 99 protects those high-impact visual changes before making additional UI edits.
+- Scope: `tests/e2e/product-demo.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Test-only product-demo coverage. No screenshots, provider/media calls, schema/migrations, backend persistence, live APIs, release evidence, deploy mutation, secrets, auth, billing, or production data changes.
+- Files updated: `tests/e2e/product-demo.spec.ts` now asserts the Dallas generated dashboard shows sample fallback status, governed fields summary, visible trend/bar chart labels, friendly `Request count` sort label, and `Apply filters` copy.
+- Validation: `PLAYWRIGHT_BASE_URL=http://localhost:3015 pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "visual polish"` passed; the project script ran the full product-demo spec with 17 browser tests. `pnpm lint` and `git diff --check` passed.
+- Next recommended task: Task 100, `Add Saved Empty-State Explore CTA`.
