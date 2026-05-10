@@ -1476,6 +1476,8 @@ Status: Complete on May 10, 2026.
 
 ## 94. Add MCP Inspect No-Secret Submission Note
 
+Status: Complete on May 10, 2026.
+
 - Owner type: MCP / Docs
 - Goal: Add a safe note for demonstrating MCP inspect/build in Loom without dumping env vars or implying arbitrary SQL/provider access.
 - Scope: Docs only.
@@ -1484,6 +1486,8 @@ Status: Complete on May 10, 2026.
 - Acceptance criteria: Docs include exact safe commands, safe narration, no-secret/no-arbitrary-SQL caveat, and preview-only Miro boundary.
 - Validation commands: manual wording check, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes.
+- Completed notes: Added no-secret MCP inspect demo guidance with exact build/inspect/test commands, safe narration, no env/secrets/provider dashboard caveats, arbitrary SQL disclaimer, and preview-only Miro boundary. Updated submission guide Loom step to point to the safe MCP proof doc.
+- Validation: Manual wording check, `pnpm lint`, and `git diff --check` passed.
 
 ## 95. Add Submission Readiness Known-Blockers Doc Snapshot
 

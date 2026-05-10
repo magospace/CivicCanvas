@@ -1323,3 +1323,21 @@ Last updated: May 10, 2026 06:17 CDT
 - Completed five tasks from the replenished queue: Tasks 89, 90, 91, 92, and 93.
 - Remaining untracked file: `clauderecommends.md`, preserved as external feedback input.
 - Next recommended task: Task 94, `Add MCP Inspect No-Secret Submission Note`, unless a gated live/deploy/provider/backend/release-evidence task is explicitly approved.
+
+
+## Task 94 Update
+
+- Task chosen: `TASKS.md` item 94, "Add MCP Inspect No-Secret Submission Note".
+- Why this was next: Task 93 completed cleanly, and Task 94 was the next safe MCP/demo docs task. It improves Brainforge submission readiness without changing MCP behavior or requiring secrets.
+- Scope: `docs/MCP_DEMO_PROOF.md`, `docs/HACKATHON_SUBMISSION_GUIDE.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Documentation only. No MCP code changed, no inspector command was run, no secrets or env files were read, no arbitrary SQL/provider access added, no deploy, release evidence refresh, live API/provider call, generated media, backend persistence, schema, migration, auth, billing, or production data changed.
+
+### Validation
+
+- Manual wording check: Passed. Confirmed exact safe commands, safe narration, no-secret/no-arbitrary-SQL caveat, and preview-only Miro boundary are present.
+- `pnpm lint`: Passed.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 95, `Add Submission Readiness Known-Blockers Doc Snapshot`, is next.

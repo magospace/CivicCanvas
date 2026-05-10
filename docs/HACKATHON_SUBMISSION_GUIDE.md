@@ -70,7 +70,7 @@ Target: 3 minutes.
 3. Show the map, chart, table, Source & Method card, and query audit. Say the ZIP view uses visible sample fallback because the verified live Socrata view does not expose ZIP.
 4. Run one secondary prompt: `Show Austin building permits by month and ZIP code for 2024.` or `Show Houston transportation incidents by ZIP and incident type for 2024.`
 5. Save locally, open `/saved`, and mention saved canvases are browser-local, not a database.
-6. Show the MCP/agent angle briefly: mention the repo ships a custom MCP server plus agent skill for safe discovery, bounded query, summaries, canvas generation, and preview-only Miro export specs.
+6. Show the MCP/agent angle briefly with the safe commands from `docs/MCP_DEMO_PROOF.md`: mention the repo ships a custom MCP server plus agent skill for safe discovery, bounded query, summaries, canvas generation, and preview-only Miro export specs. Do not show secrets, environment dumps, arbitrary SQL, provider dashboards, OAuth tokens, or Miro board-write claims.
 7. Close with: "CivicCanvas makes Texas public data explorable without hiding source limitations."
 
 ## README Requirement Check

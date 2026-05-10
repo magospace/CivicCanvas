@@ -15,6 +15,28 @@ If an inspector is unavailable in the local environment, show the MCP server pac
 pnpm test -- apps/mcp-server/test/tools.test.ts
 ```
 
+
+## No-Secret Inspect Demo
+
+For a Loom or judge walkthrough, keep the MCP proof limited to local build/inspect commands and safe narration. Do not show `.env` files, shell history with tokens, provider dashboards, billing pages, private browser tabs, or full environment dumps.
+
+Safe commands to show or cite:
+
+```bash
+pnpm --filter @texas-data-canvas/mcp-server build
+pnpm --filter @texas-data-canvas/mcp-server inspect
+pnpm test -- apps/mcp-server/test/tools.test.ts
+```
+
+Safe narration:
+
+- "The MCP server exposes approved Texas public-data tools backed by the same catalog and Zod contracts as the app."
+- "Queries are bounded and catalog-validated; this is not arbitrary SQL or database shell access."
+- "Miro output is preview-only JSON with no OAuth, token, board ID, or board write."
+- "The demo does not require provider keys or production credentials."
+
+If the inspector prints local paths, keep them out of the public transcript unless they are needed for debugging. If it prints environment details, stop the recording and rerun with a clean terminal.
+
 ## What To Show In 15-30 Seconds
 
 - The repo ships a custom MCP server under `apps/mcp-server`.
