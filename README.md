@@ -171,6 +171,8 @@ Set hosted beta `NEXT_PUBLIC_*` values before building; Next.js captures them in
 
 Sample mode requires no secrets. Live Socrata adapters use verified catalog field mappings and keep sample fallbacks for demos.
 
+The health route exposes media-generation status. Current dashboard generation does not create image/video artifacts, upload media, or call Fal by default. `pnpm media:fal:smoke:json` is an optional script-level proof path; the app health metadata labels it as `RUN_LIVE_FAL_SMOKE=1` gated and separate from normal dashboard rendering.
+
 After deploying, smoke-check the public URL:
 
 ```bash

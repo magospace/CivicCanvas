@@ -24,8 +24,19 @@ describe("production API contracts", () => {
       requiresProviderSecret: false,
       provider: null
     });
+    expect(healthBody.mediaGeneration).toEqual({
+      appGeneratesMedia: false,
+      dashboardMediaOutput: "not_implemented",
+      defaultProviderCall: false,
+      optionalProofProvider: "fal",
+      optionalProofGate: "RUN_LIVE_FAL_SMOKE=1",
+      proofCommand: "pnpm media:fal:smoke:json",
+      secretEcho: false,
+      note: "Dashboards render validated UI and client exports only. Fal media proof is an optional script path, not normal app generation."
+    });
     expect(JSON.stringify(healthBody).toLowerCase()).not.toContain("openai");
     expect(JSON.stringify(healthBody).toLowerCase()).not.toContain("anthropic");
+    expect(JSON.stringify(healthBody)).not.toContain("FAL_KEY");
     expect(healthBody.catalogCount).toBeGreaterThan(0);
 
     const catalogHealth = await catalogHealthGET();

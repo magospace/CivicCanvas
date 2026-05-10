@@ -39,6 +39,16 @@ export function GET() {
       requiresProviderSecret: false,
       provider: null
     },
+    mediaGeneration: {
+      appGeneratesMedia: false,
+      dashboardMediaOutput: "not_implemented",
+      defaultProviderCall: false,
+      optionalProofProvider: "fal",
+      optionalProofGate: "RUN_LIVE_FAL_SMOKE=1",
+      proofCommand: "pnpm media:fal:smoke:json",
+      secretEcho: false,
+      note: "Dashboards render validated UI and client exports only. Fal media proof is an optional script path, not normal app generation."
+    },
     runtime: "nextjs",
     deploymentProvider: deploymentProvider(),
     deploymentUrl: deploymentUrl(),

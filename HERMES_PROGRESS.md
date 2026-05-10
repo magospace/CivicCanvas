@@ -1,6 +1,6 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 05:38 CDT
+Last updated: May 10, 2026 05:40 CDT
 
 ## Current Cycle
 
@@ -265,6 +265,33 @@ Last updated: May 10, 2026 05:38 CDT
 ### Recommended Next Task
 
 - Task 52, `Add Media Provider Status API Boundary`, is the next safe task.
+
+## Task 52 Update
+
+- Task chosen: `TASKS.md` item 52, "Add Media Provider Status API Boundary".
+- Why this was next: It was the next task after item 51 and exposes the new Fal proof path honestly through public health metadata without wiring media generation into dashboard requests.
+- Scope: `apps/web/app/api/health/route.ts`, `apps/web/test/api-contracts.test.ts`, `README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: No live provider call was made. Request handlers do not call Fal. Health metadata states dashboard media generation is not implemented and optional Fal proof is script-only/env-gated.
+
+### Files Updated
+
+- `apps/web/app/api/health/route.ts`: Added `mediaGeneration` metadata for no default media generation, no default provider calls, optional Fal proof gate, proof command, and no secret echo.
+- `apps/web/test/api-contracts.test.ts`: Added assertions for the media-generation metadata and no `FAL_KEY` leakage.
+- `README.md`: Documented that health metadata labels Fal proof as optional/script-level and separate from normal dashboard rendering.
+- `TASKS.md`: Marks item 52 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records item 52 scope, safety notes, and validation.
+
+### Validation
+
+- `pnpm test -- apps/web/test/api-contracts.test.ts -t "returns health"`: Passed. The command discovered the full Vitest suite and reported 15 files, 92 tests passed.
+- `pnpm lint`: Passed.
+- `pnpm typecheck`: Passed.
+- `pnpm test`: Passed with 15 files, 92 tests.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 53, `Add Live Public API Proof Report For Supported Dallas Aggregate`, is the next safe task.
 
 ## Historical Sequential Progress
 
