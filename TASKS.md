@@ -2276,7 +2276,7 @@ Status: Complete on May 10, 2026.
 
 ## 140. Add Hardcoded Demo Data Audit Guard
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Data Realism / Test Guard
 - Goal: Add a repeatable no-spend audit that flags likely component-local demo/mock arrays so future UI polish does not bypass catalog/sample/gallery/saved-data paths.
@@ -2287,6 +2287,8 @@ Status: Pending.
 - Acceptance criteria: Script scans app components/routes for suspicious `mock`, `demo`, `sample`, and inline object-array patterns, allowlists known static UI lists, fails only on actionable findings, and prints a concise classification summary.
 - Validation command: `pnpm audit:demo-data`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes with docs-only tasks; no with package script edits.
+- Completed notes: Added `pnpm audit:demo-data`, a no-spend static audit that scans app routes/components for likely hardcoded mock/demo/sample object arrays, classifies static navigation separately, and fails on actionable hardcoded UI mock data findings.
+- Validation: `pnpm audit:demo-data` passed with 0 actionable findings and classified `header.tsx` `navItems` as static UI / acceptable. `pnpm lint` passed; `git diff --check` passed.
 
 ## 141. Add MCP Judge Demo Transcript Proof
 

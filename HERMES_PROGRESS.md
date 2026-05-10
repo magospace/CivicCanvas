@@ -1965,3 +1965,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 140, `Add Hardcoded Demo Data Audit Guard`, because it directly addresses the current prompt's data-realism policy without touching product data paths.
+
+
+## Task 140 Update - Hardcoded Demo Data Audit Guard
+
+- Task chosen: `TASKS.md` item 140, "Add Hardcoded Demo Data Audit Guard".
+- Why this was next: It directly addresses the continuation prompt's data-realism policy by adding repeatable proof that component-local mock/demo arrays are not silently introduced.
+- Scope: `scripts/audit-hardcoded-demo-data.mjs`, `package.json`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Audit/proof guard. It scans UI routes/components for likely hardcoded mock/demo/sample object arrays, classifies static UI separately, and requires future actionable demo records to flow through catalog/sample/gallery/saved-data paths or be explicitly reviewed.
+- Changes: Added `pnpm audit:demo-data`. The script scans `apps/web/app` and `apps/web/components`, reports classified static/non-actionable arrays, and exits non-zero if suspicious hardcoded UI mock/demo data appears. Current result classifies `apps/web/components/header.tsx` `navItems` as static route navigation / acceptable and reports 0 actionable findings.
+- Validation: `pnpm audit:demo-data` passed; `pnpm lint` passed; `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 145, `Add Gallery Fixture Loader Regression Proof`, because it proves checked-in demo records flow through data loaders and validation rather than component-local mocks.
