@@ -1935,7 +1935,7 @@ Last replenished: May 10, 2026 after Tasks 116 and 118 completed and no pending 
 
 ## 120. Add MCP Demo Transcript Fixture
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: MCP / Submission Proof
 - Goal: Add a paste-safe, no-secret transcript template showing the exact MCP commands/tools judges should see for Brainforge proof.
@@ -1946,6 +1946,8 @@ Status: Pending.
 - Acceptance criteria: Template includes source discovery, bounded query, catalog health, canvas spec generation, Miro preview-only caveat, no secret fields, and sample/live labels; README/docs index link it.
 - Validation commands: manual path/wording check, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes with non-doc tasks that do not edit README/docs index.
+- Completed notes: Added `docs/MCP_DEMO_TRANSCRIPT_TEMPLATE.md` with paste-safe command/tool transcript scaffolding, data-realism classifications, Miro preview-only caveat, and redaction rules. Linked it from `README.md` and `docs/README.md`.
+- Validation: Manual path/wording check, `pnpm lint`, and `git diff --check` passed.
 
 ## 121. Add Submission Readiness Script OpenAI Smoke Coverage
 

@@ -268,6 +268,7 @@ Brand assets live under `apps/web/public/brand/`. The header uses the compact Ci
 - [Fal live proof template](docs/FAL_LIVE_PROOF_TEMPLATE.md)
 - [Hosted smoke template](docs/HOSTED_SMOKE_TEMPLATE.md)
 - [MCP demo proof checklist](docs/MCP_DEMO_PROOF.md)
+- [MCP demo transcript template](docs/MCP_DEMO_TRANSCRIPT_TEMPLATE.md)
 - [Sample and persistence realness matrix](docs/SAMPLE_AND_PERSISTENCE_REALNESS.md)
 - [Local persistence spike plan](docs/LOCAL_PERSISTENCE_SPIKE.md)
 - [Agent instructions](AGENTS.md)

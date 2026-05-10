@@ -1765,3 +1765,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "demo readiness route"` passed; the project script ran all 17 product-demo browser tests. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 120, `Add MCP Demo Transcript Fixture`, if the next session prioritizes Loom/judge proof; otherwise Task 123 for README MCP quick-proof commands.
+
+
+## Task 120 Update - MCP Demo Transcript Fixture
+
+- Task chosen: `TASKS.md` item 120, "Add MCP Demo Transcript Fixture".
+- Why this was next: Task 122 completed cleanly and Task 120 is the highest-value remaining Brainforge/Vicinity proof task for Loom/judge review without live calls, deployment, schema changes, or provider spend.
+- Scope: `docs/MCP_DEMO_TRANSCRIPT_TEMPLATE.md`, `README.md`, `docs/README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: MCP transcript proof is documented as catalog/source metadata through fixture/data-loader paths, bounded query/sample-live adapters through existing MCP tools, deterministic sample fallback where applicable, browser-local saved canvases, provider-gated OpenAI metadata, and preview-only Miro JSON. No hardcoded UI mock data was added.
+- Safety notes: Docs/template only. No MCP client was run, no live API/provider call was made, no `.env` files were read, no secrets printed, and no generated artifacts/release evidence/deploy changes were created. `clauderecommends.md` and `REVIEW_RECOMMENDATIONS.md` remain untracked and unstaged.
+- Validation: Manual path/wording check passed; `pnpm lint` passed; `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 123, `Add README MCP Quick-Proof Commands`, to make MCP proof even more judge-scannable from the repository landing page.
