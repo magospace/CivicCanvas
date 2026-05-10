@@ -43,6 +43,8 @@
     "smoke:deploy:json": "node scripts/smoke-deploy.mjs --json",
     "media:fal:smoke": "node scripts/fal-media-smoke.mjs",
     "media:fal:smoke:json": "node scripts/fal-media-smoke.mjs --json",
+    "provider:openai:smoke": "node scripts/openai-smoke.mjs",
+    "provider:openai:smoke:json": "node scripts/openai-smoke.mjs --json",
     "test": "vitest run",
     "test:e2e": "playwright test",
     "test:e2e:remote": "node scripts/require-playwright-base-url.mjs && playwright test",

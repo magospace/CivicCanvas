@@ -1862,7 +1862,7 @@ Status: Complete on May 10, 2026.
 
 ## 116. Add Optional Live OpenAI Smoke Gate
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Provider / Live proof
 - Goal: Add a tiny env-gated `RUN_LIVE_OPENAI_SMOKE=1` proof script that makes one minimal server-side OpenAI structured-output call when credentials are available.
@@ -1873,6 +1873,8 @@ Status: Pending.
 - Acceptance criteria: Default script reports skipped/no-key without network; live mode makes one minimal call, validates schema, writes no committed artifact, and redacts all secrets; tests cover no-key and redaction.
 - Validation commands: no-key script JSON, focused release-script Vitest, `pnpm lint`, `pnpm test`; optional live run only with `RUN_LIVE_OPENAI_SMOKE=1` and key present; `git diff --check`.
 - Can run in parallel: No with provider smoke script edits.
+- Completed notes: Added `scripts/openai-smoke.mjs` plus `pnpm provider:openai:smoke`/`:json`. Default mode is no-spend/no-network and reports skipped fallback proof. Live mode requires `RUN_LIVE_OPENAI_SMOKE=1` plus a server-side OpenAI key, makes at most one structured-output call, validates provider/catalog/safety shape, redacts secret values, and writes no artifacts. In this environment the shell key was missing, so live proof was blocked at the missing-key gate and no OpenAI request was made.
+- Validation: Initial no-spend script run failed because the catalog JSON is an array rather than an object with `datasets`; fixed the loader, then `pnpm provider:openai:smoke:json`, missing-key live-gate check, focused OpenAI smoke release-script tests, `pnpm lint`, focused release-script Vitest, and `git diff --check` passed. Live OpenAI call count: 0 due missing key.
 
 ## 117. Reconcile Realness Audit After OpenAI Boundary Change
 

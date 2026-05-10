@@ -449,6 +449,63 @@ describe("release and governance scripts", () => {
     }
   });
 
+  it("reports OpenAI smoke as skipped by default with no spend", () => {
+    const stdout = execFileSync("node", ["scripts/openai-smoke.mjs", "--json"], {
+      cwd: process.cwd(),
+      encoding: "utf8",
+      env: { ...process.env, RUN_LIVE_OPENAI_SMOKE: "0", OPENAI_API_KEY: "" }
+    });
+    const body = JSON.parse(stdout);
+
+    expect(body.ok).toBe(true);
+    expect(body.status).toBe("skipped_no_spend");
+    expect(body.liveGateEnabled).toBe(false);
+    expect(body.liveCallCount).toBe(0);
+    expect(body.network).toBe("not_used");
+    expect(body.serverSideOnly).toBe(true);
+  });
+
+  it("blocks live OpenAI smoke without a provider key and does not print secrets", () => {
+    try {
+      execFileSync("node", ["scripts/openai-smoke.mjs", "--json"], {
+        cwd: process.cwd(),
+        encoding: "utf8",
+        stdio: "pipe",
+        env: { ...process.env, RUN_LIVE_OPENAI_SMOKE: "1", OPENAI_API_KEY: "" }
+      });
+      throw new Error("Expected OpenAI smoke to fail without a provider key.");
+    } catch (error) {
+      const stdout = String((error as { stdout?: string }).stdout ?? "");
+      const body = JSON.parse(stdout);
+      expect(body.ok).toBe(false);
+      expect(body.status).toBe("blocked_missing_key");
+      expect(body.liveCallCount).toBe(0);
+      expect(stdout).not.toContain("openai_secret_value_do_not_print");
+    }
+  });
+
+  it("redacts fake OpenAI provider keys in no-spend smoke output", () => {
+    const fakeKey = "openai_secret_value_do_not_print";
+    const stdout = execFileSync("node", ["scripts/openai-smoke.mjs", "--json"], {
+      cwd: process.cwd(),
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        RUN_LIVE_OPENAI_SMOKE: "0",
+        OPENAI_API_KEY: fakeKey,
+        FAL_KEY: "fal_secret_value_do_not_print"
+      }
+    });
+    const body = JSON.parse(stdout);
+
+    expect(body.ok).toBe(true);
+    expect(body.status).toBe("skipped_no_spend");
+    expect(body.keyStatus).toBe("present");
+    expect(body.liveCallCount).toBe(0);
+    expect(stdout).not.toContain(fakeKey);
+    expect(stdout).not.toContain("fal_secret_value_do_not_print");
+  });
+
   it("verifies Vercel output safely when no local output exists", () => {
     const stdout = execFileSync("node", ["scripts/verify-vercel-build-output.mjs", "--json"], {
       cwd: process.cwd(),

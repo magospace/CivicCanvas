@@ -123,7 +123,14 @@ pnpm media:fal:smoke:json
 RUN_LIVE_FAL_SMOKE=1 FAL_KEY=<redacted> pnpm media:fal:smoke:json
 ```
 
-The first command makes no provider call. The second command is explicitly live/paid-provider-gated, performs at most one minimal proof request, and must not be used unless billing risk and credentials are intentionally approved.
+Optional OpenAI prompt-assist proof is also no-spend by default. The live form makes one minimal server-side structured-output call when the key and gate are deliberately present:
+
+```bash
+pnpm provider:openai:smoke:json
+RUN_LIVE_OPENAI_SMOKE=1 OPENAI_API_KEY=<redacted> pnpm provider:openai:smoke:json
+```
+
+The default provider smoke commands make no provider calls. The live commands are explicitly gated, perform at most one minimal proof request each, validate or summarize only provider readiness/proof metadata, and must not be used unless billing risk and credentials are intentionally approved.
 
 `pnpm smoke:live` is optional and only checks catalog entries with `liveAvailable: true`.
 `pnpm smoke:deploy` requires a running local or hosted URL.

@@ -1710,3 +1710,22 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm test:e2e -- tests/e2e/sources.spec.ts` passed; `pnpm lint` passed; `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 116, `Add Optional Live OpenAI Smoke Gate`, because the shell reports an OpenAI key is present and the task can be implemented with a no-spend default plus one env-gated structured-output call.
+
+
+## Task 116 Update - Optional Live OpenAI Smoke Gate
+
+- Task chosen: `TASKS.md` item 116, "Add Optional Live OpenAI Smoke Gate".
+- Why this was next: Task 118 completed cleanly and Task 116 was the only remaining pending data-realism/provider-proof task. It improves submission credibility with a no-spend default script and a clearly gated live path.
+- Scope: `scripts/openai-smoke.mjs`, `package.json`, `apps/web/test/release-scripts.test.ts`, `README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Optional OpenAI assist remains `provider-gated fallback metadata / acceptable if clearly labeled`. The default script uses no network. The live path is server-side, env-gated, structured-output validated, catalog allowlisted, and writes no artifacts.
+- Safety notes: Checked shell key presence without printing values; `OPENAI_API_KEY` was missing in this environment. No `.env` files were read or committed. The live-gated missing-key command exited before network. No Fal/media calls, public live API calls, schema/migrations, backend persistence, deployment mutation, release evidence, production data, generated artifacts, auth, or billing changes. `clauderecommends.md` and `REVIEW_RECOMMENDATIONS.md` remain untracked and unstaged.
+- Validation:
+  - RED: First `pnpm provider:openai:smoke:json` failed because `data/catalog/approved-datasets.json` is an array, not an object with `datasets`.
+  - GREEN: Fixed the loader, then `pnpm provider:openai:smoke:json` passed with `status=skipped_no_spend`, `network=not_used`, and `liveCallCount=0`.
+  - GREEN: `RUN_LIVE_OPENAI_SMOKE=1 OPENAI_API_KEY= pnpm provider:openai:smoke:json` failed as expected with missing-key gate and `liveCallCount=0`.
+  - GREEN: `pnpm test -- apps/web/test/release-scripts.test.ts -t "OpenAI smoke|fake OpenAI"` passed.
+  - GREEN: `pnpm lint` passed.
+  - GREEN: `pnpm test -- apps/web/test/release-scripts.test.ts` passed with 17 files / 123 tests discovered.
+  - GREEN: `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0; live OpenAI proof blocked by missing shell credential.
+- Recommended next task: No pending useful task remains in `TASKS.md`; replenish the queue before implementing further work.
