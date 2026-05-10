@@ -19,17 +19,17 @@ Use this checklist before recording the CivicCanvas Loom or doing an in-person l
    ```
 
 3. Confirm the generated dashboard shows source/method attribution, caveats, and query audit.
-4. Save the canvas locally.
+4. Use the Canvas Tools `Save` action and wait for the saved-locally success toast.
 5. Open `/saved`.
-6. Confirm the saved card appears with browser-local copy.
-7. Edit the saved title and prompt metadata.
-8. Confirm the edited title/prompt remain visible on the saved card.
-9. Reopen the edited saved canvas in `/explore`.
+6. Confirm the saved card appears with browser-local copy. Say clearly that this is a real local record in this browser, not an account-backed record.
+7. Edit the saved title and prompt metadata in the visible `Saved title` and `Saved prompt` fields.
+8. Use `Save local edits` and confirm the edited title/prompt remain visible on the saved card.
+9. Reopen the edited saved canvas in `/explore` through the card's normal Open action.
 10. Confirm the reopened dashboard uses the edited metadata while preserving validated source/method content.
 11. Return to `/saved` and export the saved bundle JSON.
-12. Generate/copy the URL-hash share link.
+12. Generate/copy the URL-hash share link and say that the bundle is encoded in the hash, not stored on a hosted backend.
 13. If showing import, use the normal saved-canvas JSON import control and validate that unsafe JSON is rejected.
-14. Delete the saved record if you need a clean ending state.
+14. Duplicate and delete a saved record if you want to prove editable local CRUD behavior; otherwise delete the saved record at the end for a clean state.
 
 ## What To Say
 

@@ -2001,3 +2001,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm provenance:summary` passed with 0 issues and reported 0 network calls. `pnpm data:quality` passed: 3 samples, 280 rows, 4 gallery canvases. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 143, `Tighten Saved Demo Checklist Around Editable Local Records`, to make the browser-local saved-record demo path more judge-proof.
+
+
+## Task 143 Update - Saved Demo Checklist Editable Local Records
+
+- Task chosen: `TASKS.md` item 143, "Tighten Saved Demo Checklist Around Editable Local Records".
+- Why this was next: It improves the Loom/in-person saved-record proof path and aligns the checklist with the data-realism policy: browser-local records are acceptable only when shown as editable through normal UI flows and labeled as local.
+- Scope: `docs/LOCAL_DEMO_SMOKE_CHECKLIST.md`, `HACKATHON_SUBMISSION_GUIDE.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Browser-local editable records / acceptable when labeled. This is docs/checklist guidance only; no product data paths changed.
+- Changes: Updated the checklist to mention the Canvas Tools save action, saved-locally toast, visible saved title/prompt edit fields, `Save local edits`, normal Open action, URL-hash share link boundary, invalid import rejection, and optional duplicate/delete proof. Updated the submission guide saved-flow note to include duplicate/delete and invalid-import proof when time permits.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved bundle"` passed; due repo script wiring, all 21 product-demo browser tests ran and passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 144, `Add README Data Realism Table`, to make these local/sample/live/preview boundaries scannable in the public README.

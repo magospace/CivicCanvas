@@ -2324,7 +2324,7 @@ Status: Complete on May 10, 2026.
 
 ## 143. Tighten Saved Demo Checklist Around Editable Local Records
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Demo Flow / Data Realism Docs
 - Goal: Ensure local saved-record demo instructions emphasize editable browser-local data through normal UI flows.
@@ -2335,6 +2335,8 @@ Status: Pending.
 - Acceptance criteria: Checklist covers save, edit title/prompt, reopen, export/share, delete, and explicitly says no backend account/database/public share service.
 - Validation command: `git diff --check`, focused Playwright saved flow if test copy changes.
 - Can run in parallel: Yes with non-doc package tasks.
+- Completed notes: Tightened the local demo checklist to call out Canvas Tools save, saved-locally toast, visible title/prompt edit fields, Save local edits, normal Open action, URL-hash share link, invalid import rejection, and optional duplicate/delete proof while repeating browser-local/no-backend boundaries.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved bundle"` passed; due repo script wiring, all 21 product-demo browser tests ran and passed. `git diff --check` passed.
 
 ## 144. Add README Data Realism Table
 

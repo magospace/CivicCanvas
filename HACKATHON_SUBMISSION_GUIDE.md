@@ -118,7 +118,7 @@ Status: strong local Brainforge submission, but repo/deploy form fields remain i
 - Must do before Airtable: record Loom with camera on.
 - Should do if possible: deploy to Vercel and smoke-check the URL.
 - Should do if possible: run `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm governance:audit`, and `pnpm data:quality` before recording.
-- Saved-flow checklist: use `docs/LOCAL_DEMO_SMOKE_CHECKLIST.md` to show save, edit title/prompt, reopen, export/share, and delete while saying it is browser-local only.
+- Saved-flow checklist: use `docs/LOCAL_DEMO_SMOKE_CHECKLIST.md` to show save, edit title/prompt, reopen, export/share, duplicate/delete if time permits, and invalid-import rejection while saying it is browser-local only.
 - Be careful: do not claim complete live Texas coverage, database persistence, LLM-generated dashboards, or live Miro board writes.
 
 ## Scoring Estimate
