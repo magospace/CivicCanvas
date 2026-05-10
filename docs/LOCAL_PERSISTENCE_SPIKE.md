@@ -129,12 +129,15 @@ Validation commands for a future implementation:
 
 ```bash
 git diff --check
+pnpm persistence:readiness:json
 pnpm lint
 pnpm typecheck
 pnpm test
 pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved"
 pnpm governance:audit
 ```
+
+`pnpm persistence:readiness:json` is a read-only pre-implementation check. It does not create a database, run migrations, or enable persistence; it records that browser-local storage remains the default and points back to this plan plus Task 55.
 
 If migrations are added, also run the migration command, seed command, and reset command against a temporary local database.
 

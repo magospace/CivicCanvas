@@ -68,6 +68,28 @@ describe("release and governance scripts", () => {
     )?.distinctMonths).toBe(12);
   });
 
+  it("reports local persistence readiness without creating a database", () => {
+    const stdout = execFileSync("node", ["scripts/local-persistence-readiness.mjs", "--json"], {
+      cwd: process.cwd(),
+      encoding: "utf8",
+      env: { ...process.env, DATABASE_URL: "postgres://fake-secret-value", ENABLE_LOCAL_CANVAS_PERSISTENCE: "0" }
+    });
+    const body = JSON.parse(stdout);
+
+    expect(body.ok).toBe(true);
+    expect(body.mutatesFiles).toBe(false);
+    expect(body.network).toBe("not_used");
+    expect(body.persistenceImplemented).toBe(false);
+    expect(body.browserLocalDefaultPreserved).toBe(true);
+    expect(body.apiSaveBehavior).toBe("validation_stub_no_server_write");
+    expect(body.plan.path).toBe("docs/LOCAL_PERSISTENCE_SPIKE.md");
+    expect(body.plan.present).toBe(true);
+    expect(body.databaseRuntimeFiles.found).toEqual([]);
+    expect(body.databaseEnv.presentNames).toContain("DATABASE_URL");
+    expect(body.databaseEnv.valuesEchoed).toBe(false);
+    expect(stdout).not.toContain("fake-secret-value");
+  });
+
   it("reports no-network live/fallback proof for core demo claims", () => {
     const stdout = execFileSync("node", ["scripts/live-fallback-proof.mjs", "--json"], {
       cwd: process.cwd(),
