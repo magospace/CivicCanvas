@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 import { releaseMetadata } from "@texas-data-canvas/shared";
 import { GET as catalogHealthGET } from "../app/api/catalog/health/route";
@@ -7,7 +7,7 @@ import { POST as canvasGeneratePOST } from "../app/api/canvas/generate/route";
 import { POST as miroExportPOST } from "../app/api/export/miro-spec/route";
 import { GET as healthGET } from "../app/api/health/route";
 import { POST as queryPOST } from "../app/api/query/route";
-import { middleware } from "../middleware";
+import { middleware, rateLimitBucketCountForTest, resetRateLimitBucketsForTest } from "../middleware";
 import { apiError, parseJsonRequest } from "../lib/api";
 
 describe("production API contracts", () => {
@@ -156,6 +156,14 @@ describe("production API contracts", () => {
 });
 
 describe("middleware contracts", () => {
+  beforeEach(() => {
+    resetRateLimitBucketsForTest();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    resetRateLimitBucketsForTest();
+  });
   it("passes public GET navigation through without rate-limit headers", () => {
     const response = middleware(new NextRequest("http://localhost/explore", {
       method: "GET",
@@ -203,5 +211,28 @@ describe("middleware contracts", () => {
 
     expect(response?.status).toBe(429);
     expect(response?.headers.get("X-RateLimit-Limit")).toBe("20");
+  });
+
+  it("evicts stale rate-limit buckets from long-running middleware processes", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-05-10T12:00:00.000Z"));
+
+    for (let index = 0; index < 3; index += 1) {
+      middleware(new NextRequest("http://localhost/api/query", {
+        method: "POST",
+        headers: { "x-forwarded-for": `203.0.113.${210 + index}` }
+      }));
+    }
+
+    expect(rateLimitBucketCountForTest()).toBe(3);
+
+    vi.setSystemTime(new Date("2026-05-10T12:02:01.000Z"));
+    const response = middleware(new NextRequest("http://localhost/api/query", {
+      method: "POST",
+      headers: { "x-forwarded-for": "203.0.113.220" }
+    }));
+
+    expect(response.status).toBe(200);
+    expect(rateLimitBucketCountForTest()).toBe(1);
   });
 });

@@ -734,3 +734,30 @@ Last updated: May 10, 2026 06:17 CDT
 ### Recommended Next Task
 
 - Task 74, `Add Middleware Rate-Limit Bucket Eviction`, is the next safe task.
+
+
+## Task 74 Update
+
+- Task chosen: `TASKS.md` item 74, "Add Middleware Rate-Limit Bucket Eviction".
+- Why this was next: It was the next confirmed safe critical finding from `clauderecommends.md` and improves long-running demo/local middleware reliability while preserving the documented boundary that broad hosted sharing still requires platform firewall/rate limiting.
+- Scope: `apps/web/middleware.ts`, `apps/web/test/api-contracts.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Middleware behavior and headers remain the same for active rate-limit windows. No hosted/platform config, deploy mutation, auth hardening, secrets, billing, database work, provider call, or release evidence refresh occurred.
+
+### Files Updated
+
+- `apps/web/middleware.ts`: Added stale bucket cleanup before rate-limit checks and test-only bucket count/reset helpers.
+- `apps/web/test/api-contracts.test.ts`: Added per-test bucket reset and fake-timer coverage that proves stale bucket eviction in long-running middleware processes.
+- `TASKS.md`: Marks Task 74 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records Task 74 scope, safety notes, validation, and next task.
+
+### Validation
+
+- `pnpm test -- apps/web/test/api-contracts.test.ts -t "middleware contracts"`: Passed; Vitest discovered the full suite and reported 99 tests across 15 files.
+- `pnpm lint`: Passed.
+- `pnpm typecheck`: Passed across shared, MCP server, and web.
+- `pnpm test`: Passed with 99 tests across 15 files.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 75, `Harden Browser-Local Saved-Canvas Client Boundaries`, is the next safe task if the cycle continues.

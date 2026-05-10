@@ -1147,6 +1147,8 @@ Status: Complete on May 10, 2026 at 06:24 CDT.
 
 ## 74. Add Middleware Rate-Limit Bucket Eviction
 
+Status: Complete on May 10, 2026 at 06:26 CDT.
+
 - Owner type: API / Reliability
 - Goal: Keep in-memory middleware throttling bounded for long-running local/demo processes by evicting expired buckets.
 - Scope: `apps/web/middleware.ts`, middleware contract tests.
@@ -1154,6 +1156,8 @@ Status: Complete on May 10, 2026 at 06:24 CDT.
 - Acceptance criteria: Expired buckets are culled after their reset window, active buckets still rate-limit, headers are unchanged, and docs still state platform firewall/rate limiting is required for broad hosted sharing.
 - Validation commands: focused middleware Vitest test, `git diff --check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`.
 - Can run in parallel: No with middleware edits.
+- Completed notes: Added stale bucket cleanup before middleware rate-limit checks, preserving current rate-limit headers and active-window behavior. Added test-only bucket reset/count helpers and focused Vitest coverage proving stale buckets are evicted after the configured window horizon.
+- Validation: Focused middleware Vitest command passed with 99 tests across 15 files; `pnpm lint` passed; `pnpm typecheck` passed; full `pnpm test` passed with 99 tests across 15 files; `git diff --check` passed.
 
 ## 75. Harden Browser-Local Saved-Canvas Client Boundaries
 

@@ -15,6 +15,24 @@ const rules: RateLimitRule[] = [
 ];
 
 const buckets = new Map<string, { count: number; resetAt: number }>();
+const maxWindowMs = Math.max(...rules.map((rule) => rule.windowMs));
+
+function cleanupExpiredBuckets(now: number) {
+  const staleResetAt = now - maxWindowMs;
+  buckets.forEach((bucket, key) => {
+    if (bucket.resetAt <= staleResetAt) {
+      buckets.delete(key);
+    }
+  });
+}
+
+export function rateLimitBucketCountForTest() {
+  return buckets.size;
+}
+
+export function resetRateLimitBucketsForTest() {
+  buckets.clear();
+}
 
 function clientKey(request: NextRequest, rule: RateLimitRule) {
   const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
@@ -24,6 +42,7 @@ function clientKey(request: NextRequest, rule: RateLimitRule) {
 
 function rateLimit(request: NextRequest, rule: RateLimitRule) {
   const now = Date.now();
+  cleanupExpiredBuckets(now);
   const key = clientKey(request, rule);
   const bucket = buckets.get(key);
 
