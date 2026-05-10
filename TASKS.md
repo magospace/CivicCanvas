@@ -713,6 +713,8 @@ Status: Complete on May 10, 2026 at 05:14 CDT.
 
 ## 46. Add Current Docs Cross-Link Consistency Check
 
+Status: Complete on May 10, 2026 at 05:18 CDT.
+
 - Owner type: Docs / QA
 - Goal: Add a lightweight docs consistency test or script check for current-doc links in `README.md`, `docs/README.md`, `DEVELOPMENT_GUIDE.md`, and `CODEBASE_OVERVIEW.md`.
 - Why it matters: The repo has many historical docs; current-doc pointers reduce future agent and demo confusion.
@@ -722,6 +724,8 @@ Status: Complete on May 10, 2026 at 05:14 CDT.
 - Acceptance criteria: Check verifies referenced current docs exist and historical docs are not presented as the first-stop architecture source. If implemented as docs-only, manually verify referenced paths instead.
 - Validation commands: focused script/test if added, `git diff --check`, `pnpm lint`, `pnpm test` if Vitest coverage changes.
 - Can run in parallel: Yes with code/test tasks that do not edit current docs.
+- Completed notes: Added `scripts/docs-consistency.mjs` to verify current docs exist, docs index current starting-point links are present, historical docs are labeled away from current starting points, root README links current developer docs, and development guide/codebase overview warn about historical docs. Added release-scripts Vitest coverage for the new check.
+- Validation: RED release-scripts test failed before the script existed; focused release-scripts command passed after implementation and ran the full 90-test Vitest suite; `node scripts/docs-consistency.mjs`, `pnpm lint`, `pnpm typecheck`, and `git diff --check` passed.
 
 ## 47. Add Platform Rate-Limit Readiness Note To Demo Checklist
 

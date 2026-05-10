@@ -1,6 +1,6 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 05:14 CDT
+Last updated: May 10, 2026 05:18 CDT
 
 ## Current Cycle
 
@@ -49,7 +49,7 @@ Last updated: May 10, 2026 05:14 CDT
 
 ## Recommended Next Task
 
-- Task 46, `Add Current Docs Cross-Link Consistency Check`, is the next safe task. Keep it local and docs/test focused; do not delete or rewrite historical docs.
+- Task 47, `Add Platform Rate-Limit Readiness Note To Demo Checklist`, is the next safe task. Keep it docs-only and do not claim platform firewall/rate-limit controls are configured.
 
 ## Task 44 Update
 
@@ -105,6 +105,33 @@ Last updated: May 10, 2026 05:14 CDT
 ### Recommended Next Task
 
 - Task 46, `Add Current Docs Cross-Link Consistency Check`, is the next safe task if a future cycle continues.
+
+## Task 46 Update
+
+- Task chosen: `TASKS.md` item 46, "Add Current Docs Cross-Link Consistency Check".
+- Why this was next: Item 46 was the next safe task after item 45 and protects current-doc pointers from drifting while keeping historical milestone docs labeled correctly.
+- Scope: `scripts/docs-consistency.mjs`, `apps/web/test/release-scripts.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Local docs/test/script only. No historical docs were deleted or rewritten. No provider calls, schema/migration changes, database operations, media generation, release evidence refresh, deploy mutation, secrets, auth, billing, or production config changes were made.
+
+### Files Updated
+
+- `scripts/docs-consistency.mjs`: New local check for current docs existence, docs index current starting-point links, historical-doc labeling, root README current-doc links, and historical-doc warnings in the guide/overview.
+- `apps/web/test/release-scripts.test.ts`: Added Vitest coverage for the docs consistency script.
+- `TASKS.md`: Marks item 46 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records item 46 scope, safety notes, and validation.
+
+### Validation
+
+- RED: `pnpm test -- apps/web/test/release-scripts.test.ts -t "verifies current-doc links"` failed before `scripts/docs-consistency.mjs` existed. The command discovered the full Vitest suite and reported 1 failed / 89 passed.
+- GREEN: `pnpm test -- apps/web/test/release-scripts.test.ts -t "verifies current-doc links"` passed after implementation. The command ran the full Vitest suite: 15 files, 90 tests passed.
+- `node scripts/docs-consistency.mjs`: Passed, 5/5 checks.
+- `pnpm lint`: Passed.
+- `pnpm typecheck`: Passed.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 47, `Add Platform Rate-Limit Readiness Note To Demo Checklist`, is the next safe task.
 
 ## Historical Sequential Progress
 

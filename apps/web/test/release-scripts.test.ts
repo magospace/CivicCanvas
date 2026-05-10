@@ -68,6 +68,29 @@ describe("release and governance scripts", () => {
     )?.distinctMonths).toBe(12);
   });
 
+  it("verifies current-doc links and historical-doc labeling", () => {
+    const stdout = execFileSync("node", ["scripts/docs-consistency.mjs", "--json"], {
+      cwd: process.cwd(),
+      encoding: "utf8"
+    });
+    const body = JSON.parse(stdout);
+
+    expect(body.ok).toBe(true);
+    expect(body.currentDocs).toEqual(expect.arrayContaining([
+      "README.md",
+      "CODEBASE_OVERVIEW.md",
+      "ARCHITECTURE_MAP.md",
+      "DEVELOPMENT_GUIDE.md",
+      "docs/README.md"
+    ]));
+    expect(body.historicalDocs).toEqual(expect.arrayContaining([
+      "docs/PRD.md",
+      "docs/MVP_BUILD_BRIEF.md",
+      "docs/AGENT_DEVELOPMENT_PLAN.md"
+    ]));
+    expect(body.checks.map((check: { name: string }) => check.name)).toContain("historical docs are labeled away from current starting points");
+  });
+
   it("verifies Vercel output safely when no local output exists", () => {
     const stdout = execFileSync("node", ["scripts/verify-vercel-build-output.mjs", "--json"], {
       cwd: process.cwd(),
