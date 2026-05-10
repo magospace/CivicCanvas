@@ -249,7 +249,7 @@ Maintenance rules:
 
 - Replace in-memory middleware throttling with platform-level rate limiting for public hosted deployments.
 - Add route-level tests for all API handlers that currently rely mostly on broader dashboard tests.
-- If server persistence is introduced, add explicit migrations/schema docs and keep saved-canvas import validation at the boundary.
+- If server persistence is introduced, start from `docs/LOCAL_PERSISTENCE_SPIKE.md`, add explicit migrations/schema docs, keep saved-canvas import validation at the boundary, and preserve browser-local fallback unless explicitly replacing it.
 - Keep Miro as preview-only until auth, user confirmation, and safe write boundaries are designed.
 - Keep `/api/canvas/save` and `/api/canvas/[id]` docs/tests explicit if route naming changes; they are not backend persistence today.
 
