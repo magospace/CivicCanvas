@@ -1,7 +1,11 @@
 import { execFileSync } from "node:child_process";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { NextRequest } from "next/server";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
+import { releaseMetadata } from "@texas-data-canvas/shared";
 import { GET as catalogHealthGET } from "../app/api/catalog/health/route";
 import { POST as canvasGeneratePOST } from "../app/api/canvas/generate/route";
 import { POST as miroExportPOST } from "../app/api/export/miro-spec/route";
@@ -197,7 +201,10 @@ describe("production API contracts", () => {
     const health = await healthGET();
     const healthBody = await health.json();
     expect(healthBody.ok).toBe(true);
-    expect(healthBody.appVersion).toBe("v1.1.0-product-depth-dev");
+    expect(healthBody.appVersion).toBe(releaseMetadata.devFallbackVersion);
+    expect(healthBody.releaseVersion).toBe(releaseMetadata.releaseVersion);
+    expect(healthBody.releaseChannel).toBe(releaseMetadata.releaseChannel);
+    expect(healthBody.packageVersion).toBe(releaseMetadata.packageVersion);
     expect(healthBody.catalogCount).toBeGreaterThan(0);
 
     const catalogHealth = await catalogHealthGET();
@@ -217,21 +224,21 @@ describe("production API contracts", () => {
     };
 
     process.env.NEXT_PUBLIC_APP_ENV = "hosted-beta";
-    process.env.NEXT_PUBLIC_APP_VERSION = "v1.1.0-product-depth";
+    process.env.NEXT_PUBLIC_APP_VERSION = releaseMetadata.releaseVersion;
     process.env.NEXT_PUBLIC_SITE_URL = "https://texas-data-canvas.example";
     process.env.VERCEL = "1";
     process.env.VERCEL_GIT_COMMIT_SHA = "abc123";
-    process.env.VERCEL_GIT_COMMIT_REF = "feat/v1.1-product-depth";
+    process.env.VERCEL_GIT_COMMIT_REF = "feat/v1.2-hosted-trust";
 
     try {
       const health = await healthGET();
       const body = await health.json();
       expect(body.appEnvironment).toBe("hosted-beta");
-      expect(body.appVersion).toBe("v1.1.0-product-depth");
+      expect(body.appVersion).toBe(releaseMetadata.releaseVersion);
       expect(body.deploymentProvider).toBe("vercel");
       expect(body.deploymentUrl).toBe("https://texas-data-canvas.example");
       expect(body.gitCommitSha).toBe("abc123");
-      expect(body.gitBranch).toBe("feat/v1.1-product-depth");
+      expect(body.gitBranch).toBe("feat/v1.2-hosted-trust");
     } finally {
       for (const [key, value] of Object.entries(previous)) {
         if (value === undefined) {
@@ -341,5 +348,65 @@ describe("production API contracts", () => {
     const invalidBody = await invalidMiro.json();
     expect(invalidMiro.status).toBe(400);
     expect(invalidBody.ok).toBe(false);
+  });
+
+  it("passes the governance audit for current fixtures and metadata", () => {
+    const stdout = execFileSync("node", ["scripts/governance-audit.mjs", "--json"], {
+      cwd: process.cwd(),
+      encoding: "utf8"
+    });
+    const body = JSON.parse(stdout);
+
+    expect(body.ok).toBe(true);
+    expect(body.releaseVersion).toBe(releaseMetadata.releaseVersion);
+    expect(body.checks.map((check: { name: string }) => check.name)).toContain("hidden fields stay out of canvas/export fixtures");
+  });
+
+  it("governance audit rejects controlled hidden-field leakage", () => {
+    const dir = mkdtempSync(join(tmpdir(), "tdc-governance-"));
+    const fixturePath = join(dir, "leaky.canvas.json");
+
+    writeFileSync(fixturePath, JSON.stringify({
+      id: "leaky",
+      title: "Leaky fixture",
+      schemaVersion: "1.0",
+      createdAt: "2026-05-09T00:00:00.000Z",
+      updatedAt: "2026-05-09T00:00:00.000Z",
+      prompt: "leak check",
+      sources: [],
+      blocks: [
+        {
+          id: "table",
+          type: "TableBlock",
+          props: {
+            title: "Unsafe table",
+            columns: [{ field: "precise_address", label: "Precise address" }],
+            rows: [{ precise_address: "123 Main St" }]
+          }
+        },
+        {
+          id: "source",
+          type: "SourceMethodBlock",
+          props: {
+            title: "Source",
+            source: "fixture",
+            method: "fixture",
+            caveats: []
+          }
+        }
+      ]
+    }));
+
+    try {
+      expect(() =>
+        execFileSync("node", ["scripts/governance-audit.mjs", "--json", "--extra-canvas", fixturePath], {
+          cwd: process.cwd(),
+          encoding: "utf8",
+          stdio: "pipe"
+        })
+      ).toThrow();
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 });

@@ -33,7 +33,7 @@ Last updated: May 9, 2026
 
 ## Current Milestone
 
-`v1.1.0-product-depth` is active on branch `feat/v1.1-product-depth`. The v0.6 through v1.0 code milestones remain locally implemented, but their public release tags are still blocked because this repo context has no public Vercel URL, Git remote, or Vercel project linkage/credentials.
+`v1.2.0-hosted-trust` is active on branch `feat/v1.2-hosted-trust`. The v0.6 through v1.1 code milestones remain locally implemented, but their public release tags are still blocked because this repo context has no public Vercel URL, Git remote, or Vercel project linkage/credentials.
 
 The v0.6 release gate is a verified public deployment. The repo has no configured Git remote today, so the first supported deployment path is manual Vercel CLI deployment. Do not tag `v0.6.0-hosted-beta` until a public URL passes deployment smoke checks and remote browser smoke tests.
 
@@ -173,3 +173,26 @@ Started on branch `feat/v1.1-product-depth` from locally verified `feat/v1-publi
   - `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3008 pnpm test:e2e:remote` — 14 checks passed.
 
 The v1.1 release remains subject to the same hosted gate: no `v1.1.0-product-depth` tag until local gates pass and public deployment smoke, remote Playwright, and platform-level firewall/rate-limit checks pass or are explicitly documented as blocked.
+
+## v1.2 Hosted Trust Status
+
+Started on branch `feat/v1.2-hosted-trust` from locally verified `feat/v1.1-product-depth`:
+
+- Added `docs/V1_2_HOSTED_TRUST_PLAN.md`.
+- Centralized release metadata in `@texas-data-canvas/shared`: `v1.2.0-hosted-trust`, `v1.2.0-hosted-trust-dev`, release channel `hosted-trust`, and package version `1.2.0`.
+- Aligned root, web, MCP, and shared package versions to `1.2.0`.
+- Updated `/api/health` and MCP `get_server_status` to consume shared release metadata while still honoring hosted env vars.
+- Added `pnpm verify:prod-local` for production-local hosted verification against `next start`.
+- Added `pnpm governance:audit` and `pnpm governance:audit:json`; preflight now runs the governance audit before lint/typecheck/test/build.
+- Added release-proof and v1.2 gate-copy surfaces to `/demo-readiness`.
+- Added an `/explore` known-boundaries accordion for Dallas ZIP sample fallback, Austin monthly aggregation blocker, and Houston TranStar live-access blocker.
+- Local verification passed on May 9, 2026:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test` — 54 tests passed.
+  - `pnpm build`
+  - `pnpm governance:audit` — 8/8 checks passed.
+  - `pnpm verify` — preflight, live smoke, and 14 Playwright checks passed.
+  - `pnpm verify:prod-local` — production build, `next start`, 17/17 deploy smoke checks, and 14 remote-mode Playwright checks passed against localhost.
+
+The v1.2 release remains subject to the same hosted gate: no `v1.2.0-hosted-trust` tag until public deployment smoke, remote Playwright, and platform-level firewall/rate-limit checks pass.

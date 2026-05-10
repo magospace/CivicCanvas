@@ -46,7 +46,9 @@ pnpm lint
 pnpm typecheck
 pnpm test
 pnpm build
+pnpm governance:audit
 pnpm preflight
+pnpm verify:prod-local
 pnpm smoke:live
 pnpm smoke:live:json
 pnpm smoke:deploy -- --url http://localhost:3000
@@ -57,6 +59,8 @@ pnpm verify
 ```
 
 `pnpm smoke:live` is optional and only checks catalog entries with `liveAvailable: true`.
+`pnpm governance:audit` checks catalog fallback policy, hidden-field leakage, governance-limit drift, and active release-version consistency.
+`pnpm verify:prod-local` builds `apps/web`, runs `next start` on an available local port, then runs hosted-style smoke and remote-mode Playwright against that production server.
 `pnpm verify` runs the local release gate: preflight, live smoke, and Playwright browser smoke.
 
 ## MVP demo prompts
@@ -99,7 +103,7 @@ Production-pilot health surfaces are available at `/api/health`, `/api/catalog/h
 
 ## Deployment
 
-The web app is ready for Vercel-style deployment from this monorepo. For v0.6 hosted-beta deployment, use the manual runbook in `docs/HOSTED_BETA_DEPLOYMENT.md`; this repo has no configured Git remote, so Git-integrated Vercel deployment workflows are intentionally not committed yet. A manual hosted verification workflow is present for checking an already-deployed URL.
+The web app is ready for Vercel-style deployment from this monorepo. For hosted deployment, use the manual runbook in `docs/HOSTED_BETA_DEPLOYMENT.md`; this repo has no configured Git remote, so Git-integrated Vercel deployment workflows remain manual. A manual hosted verification workflow is present for checking an already-deployed URL.
 
 ```bash
 pnpm preflight
@@ -113,7 +117,7 @@ Recommended Vercel settings:
 - Output framework: Next.js
 - Required secrets: none for sample mode
 - Hosted beta env: `NEXT_PUBLIC_APP_ENV=hosted-beta`
-- Hosted beta version: set the release being verified, for example `NEXT_PUBLIC_APP_VERSION=v1.1.0-product-depth`
+- Hosted beta version: set the release being verified, for example `NEXT_PUBLIC_APP_VERSION=v1.2.0-hosted-trust`
 - Optional site URL: `NEXT_PUBLIC_SITE_URL=https://your-public-beta.example`
 
 Set hosted beta `NEXT_PUBLIC_*` values before building; Next.js captures them into the production bundle.
@@ -123,7 +127,7 @@ Sample mode requires no secrets. Live Socrata adapters use verified catalog fiel
 After deploying, smoke-check the public URL:
 
 ```bash
-pnpm smoke:deploy -- --url https://your-deployment.example --expect-version v1.1.0-product-depth
+pnpm smoke:deploy -- --url https://your-deployment.example --expect-version v1.2.0-hosted-trust
 ```
 
 Saved canvases remain browser-local. Use `/saved` to export/import portable saved-canvas bundles for demos and handoffs. Share links place the validated bundle in the URL hash and import only after schema validation; they are not public database-backed URLs.

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ClipboardList, Download, FileJson, Save, Share2, Workflow } from "lucide-react";
+import { ClipboardList, Download, FileJson, Info, Save, Share2, Workflow } from "lucide-react";
 import type { BoundedQuerySpec, CanvasDocument, DataMode, DataModePreference, DatasetMetadata, MiroExportSpec, PromptIntent, QueryAudit } from "@texas-data-canvas/shared";
 import { CanvasRenderer } from "./canvas/canvas-renderer";
 import { DatasetSidebar } from "./dataset-sidebar";
@@ -274,6 +274,28 @@ export function AppShell({
               </button>
             </div>
           </div>
+          <details className="rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm">
+            <summary className="flex cursor-pointer list-none items-center gap-2 font-semibold text-ink marker:hidden">
+              <Info className="h-4 w-4 text-civic-700" />
+              Known data boundaries
+            </summary>
+            <div className="mt-3 grid gap-3 text-xs leading-5 text-slate-600 md:grid-cols-3">
+              <div className="rounded-md bg-civic-50 p-3">
+                <span className="font-semibold text-ink">Dallas ZIP fallback.</span> Live Dallas 311
+                aggregates are promoted for verified non-ZIP fields; ZIP dashboard views use sample
+                fallback because the verified live source does not expose ZIP.
+              </div>
+              <div className="rounded-md bg-civic-50 p-3">
+                <span className="font-semibold text-ink">Austin month blocker.</span> Austin permits
+                remain sample-first for monthly views until a source-owned month grouping is safely verified.
+              </div>
+              <div className="rounded-md bg-civic-50 p-3">
+                <span className="font-semibold text-ink">Houston TranStar access.</span> Houston transportation
+                stays sample-first until live feed access, terms, aggregate-safe fields, and precise-location
+                handling are approved.
+              </div>
+            </div>
+          </details>
           {fallbackReason ? (
             <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900 shadow-sm">
               <span className="font-semibold">Sample fallback active.</span>{" "}

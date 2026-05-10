@@ -7,3 +7,4 @@ export * from "./adapters/index.js";
 export * from "./prompt/index.js";
 export * from "./miro/index.js";
 export * from "./persistence/index.js";
+export * from "./release/index.js";

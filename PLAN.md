@@ -2,18 +2,19 @@
 
 Last updated: May 9, 2026
 
-This plan tracks the active `feat/v1.1-product-depth` branch. The v0.6 through v1.0 code work remains locally complete but untagged because no public deployment URL is available. v1.1 product-depth work improves the Dallas, Austin, and Houston public-pilot experience while keeping the no-auth, no hosted persistence, no LLM parsing, no arbitrary generated UI, no arbitrary SQL/SoQL, no external map layers, and no live Miro writes boundary.
+This plan tracks the active `feat/v1.2-hosted-trust` branch. The v0.6 through v1.1 code work remains locally complete but untagged because no public deployment URL is available. v1.2 hosted-trust work tightens version hygiene, production-local verification, governance auditability, and public-demo release surfaces while keeping the no-auth, no hosted persistence, no KV, no LLM parsing, no arbitrary generated UI, no arbitrary SQL/SoQL, no external map layers, and no live Miro writes boundary.
 
 ## Current State
 
 - `main` has been fast-forwarded to `v0.5.0-public-beta`.
-- Active branch: `feat/v1.1-product-depth`.
+- Active branch: `feat/v1.2-hosted-trust`.
 - v0.6 local hosted-beta work is implemented, including the external review hardening backlog listed below.
 - v0.7 local public-hardening work is implemented and verified locally, but v0.6/v0.7 are not tagged because there is no public Vercel URL, no Git remote, and no Vercel credential environment in this repo context.
 - v0.8 product-readiness work is locally closed out on the same branch with screenshots and release-gate documentation.
 - v0.9 public-reliability work is locally complete and remains untagged until hosted verification exists.
 - v1.0 public-pilot work adds Houston transportation as a governed sample-first third dataset with tests and visible readiness status.
-- v1.1 product-depth work attempts Houston live verification through official/source-owned endpoints, keeps Houston sample-first, and deepens Houston dashboard/readiness/source UX.
+- v1.1 product-depth work is locally verified and keeps Houston sample-first after official/source-owned verification.
+- v1.2 hosted-trust work centralizes release metadata, adds production-local verification, adds governance audit scripts, and makes hosted blockers visible in the demo console.
 - All dashboard output must remain validated `CanvasDocument` JSON rendered through the allowlisted React block registry.
 
 ## Implemented v0.6 Review Hardening
@@ -173,7 +174,7 @@ Branch: `feat/v1-public-pilot`. This pass converts the single third-dataset cand
 - `pnpm smoke:deploy -- --url http://localhost:3007` — 17/17 checks passed.
 - `pnpm smoke:deploy:json -- --url http://localhost:3007` — `passed: 17`, `failed: 0`.
 
-## v1.1 Product Depth Active
+## v1.1 Product Depth Locally Complete
 
 Active branch: `feat/v1.1-product-depth`. This pass deepens the public-pilot experience without adding new infrastructure:
 
@@ -202,9 +203,41 @@ Active branch: `feat/v1.1-product-depth`. This pass deepens the public-pilot exp
 
 Hosted release remains blocked because no public Vercel URL, Git remote, or Vercel project linkage/credentials are available in this repo context.
 
+## v1.2 Hosted Trust Active
+
+Active branch: `feat/v1.2-hosted-trust`. This pass focuses on repeatable hosted-style release proof without adding new infrastructure:
+
+1. Added `docs/V1_2_HOSTED_TRUST_PLAN.md`.
+2. Centralize release metadata in `@texas-data-canvas/shared`:
+   - `packageVersion: 1.2.0`
+   - `releaseVersion: v1.2.0-hosted-trust`
+   - `devFallbackVersion: v1.2.0-hosted-trust-dev`
+   - `releaseChannel: hosted-trust`
+3. Align root and workspace package versions to `1.2.0`.
+4. Use shared release metadata in `/api/health`, MCP `get_server_status`, README examples, and release-gate docs.
+5. Add `pnpm verify:prod-local` to build the web app, run `next start`, then execute hosted-style deploy smoke and remote-mode Playwright against localhost.
+6. Add `pnpm governance:audit` and `pnpm governance:audit:json`; preflight now includes the governance audit before lint/typecheck/test/build.
+7. Improve `/demo-readiness` with release proof, active branch/commit/version/package metadata, hosted blocker status, and copyable v1.2 release gate commands.
+8. Add an `/explore` known-boundaries accordion for Dallas ZIP fallback, Austin monthly aggregation, and Houston TranStar access boundaries.
+9. Keep Houston sample-first. No new adapter is added until official live feed access, terms, field mapping, and precise-location handling are verified.
+
+### Local v1.2 Verification
+
+- `pnpm lint`
+- `pnpm typecheck`
+- `pnpm test` — 54 tests passed.
+- `pnpm build`
+- `pnpm governance:audit` — 8/8 checks passed.
+- `pnpm verify` — preflight, live smoke, and 14 Playwright checks passed.
+- `pnpm verify:prod-local` — production build, `next start`, 17/17 deploy smoke checks, and 14 remote-mode Playwright checks passed against localhost.
+
+### Remaining v1.2 Work
+
+- Do not tag `v1.2.0-hosted-trust` until a real public URL passes hosted smoke and remote Playwright.
+
 ## Release Gate
 
-Do not tag `v0.6.0-hosted-beta`, `v0.7.0-public-hardening`, `v0.8.0-product-readiness`, `v0.9.0-public-reliability`, `v1.0.0-public-pilot`, or `v1.1.0-product-depth` until:
+Do not tag `v0.6.0-hosted-beta`, `v0.7.0-public-hardening`, `v0.8.0-product-readiness`, `v0.9.0-public-reliability`, `v1.0.0-public-pilot`, `v1.1.0-product-depth`, or `v1.2.0-hosted-trust` until:
 
 - v0.6 must-fix items above are resolved or explicitly waived in docs.
 - `pnpm verify` passes.

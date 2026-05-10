@@ -1,6 +1,16 @@
 # Release Notes
 
-## v1.1.0-product-depth (active)
+## v1.2.0-hosted-trust (active)
+
+- Centralizes active release metadata in `@texas-data-canvas/shared` with package version `1.2.0`, release version `v1.2.0-hosted-trust`, dev fallback `v1.2.0-hosted-trust-dev`, and release channel `hosted-trust`.
+- Adds production-local hosted verification through `pnpm verify:prod-local`.
+- Adds governance audit scripts for fallback policy, hidden-field leakage, governance-limit drift, release-version drift, package-version drift, and SourceMethodBlock coverage.
+- Extends `/demo-readiness` with release proof, v1.2 gate-copy actions, and hosted-blocker status.
+- Keeps Houston sample-first and documents the Houston TranStar access request checklist before any live promotion.
+- Local verification passed with lint, typecheck, 54 unit/API/MCP tests, build, governance audit, `pnpm verify`, and `pnpm verify:prod-local`.
+- Release tag remains blocked until a real public URL passes hosted smoke and remote Playwright.
+
+## v1.1.0-product-depth (locally complete / untagged)
 
 - Deepens the Dallas, Austin, and Houston public-pilot experience without adding auth, hosted persistence, LLM parsing, arbitrary generated UI/query execution, external map layers, or live Miro writes.
 - Records the Houston live verification boundary against official/source-owned pages: Houston TranStar provides sample JSON feeds, but live feed access requires contacting TranStar, so Houston remains sample-first.

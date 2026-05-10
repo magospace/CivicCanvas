@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { releaseMetadata } from "@texas-data-canvas/shared";
 import { getCatalogHealth } from "../../../lib/data";
 
 function deploymentUrl() {
@@ -28,7 +29,10 @@ export function GET() {
   return NextResponse.json({
     ok: catalog.status !== "failed",
     appEnvironment: process.env.NEXT_PUBLIC_APP_ENV ?? process.env.VERCEL_ENV ?? "local",
-    appVersion: process.env.NEXT_PUBLIC_APP_VERSION ?? "v1.1.0-product-depth-dev",
+    appVersion: process.env.NEXT_PUBLIC_APP_VERSION ?? releaseMetadata.devFallbackVersion,
+    releaseVersion: releaseMetadata.releaseVersion,
+    releaseChannel: releaseMetadata.releaseChannel,
+    packageVersion: releaseMetadata.packageVersion,
     runtime: "nextjs",
     deploymentProvider: deploymentProvider(),
     deploymentUrl: deploymentUrl(),

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { generateMiroExportSpec as generateSharedMiroExportSpec, UnsupportedDatasetError } from "@texas-data-canvas/shared";
+import { generateMiroExportSpec as generateSharedMiroExportSpec, releaseMetadata, UnsupportedDatasetError } from "@texas-data-canvas/shared";
 import {
   auditQuery,
   generateCanvasSpec,
@@ -24,7 +24,9 @@ describe("MCP tool handlers", () => {
     expect(listSupportedSources().sources.length).toBeGreaterThan(0);
     expect(searchDatasets({ query: "Dallas 311" }).datasets[0].datasetId).toBe("dallas_311_requests");
     expect(getServerStatus().ok).toBe(true);
-    expect(getServerStatus().version).toBe("1.1.0-product-depth");
+    expect(getServerStatus().version).toBe(releaseMetadata.releaseVersion);
+    expect(getServerStatus().releaseChannel).toBe(releaseMetadata.releaseChannel);
+    expect(getServerStatus().packageVersion).toBe(releaseMetadata.packageVersion);
     expect(getServerStatus().dataModeControls).toContain("live_if_available");
     expect(validateCatalog().health.status).toBe("ok");
     const liveSources = listLiveSources().liveSources;

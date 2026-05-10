@@ -4,6 +4,7 @@ import {
   catalogHealthReportSchema,
   createSourceAttribution,
   generateMiroExportSpec as generateSharedMiroExportSpec,
+  releaseMetadata,
   queryModeSchema,
   safeValidateCanvasDocument,
   validateCanvasDocument,
@@ -14,7 +15,7 @@ import {
 } from "@texas-data-canvas/shared";
 import { getAdapter, getCatalog } from "./data.js";
 
-export const MCP_SERVER_VERSION = "1.1.0-product-depth";
+export const MCP_SERVER_VERSION = releaseMetadata.releaseVersion;
 
 export function getServerStatus() {
   const catalog = getCatalog();
@@ -23,6 +24,9 @@ export function getServerStatus() {
     ok: true,
     name: "texas-public-data-mcp",
     version: MCP_SERVER_VERSION,
+    releaseChannel: releaseMetadata.releaseChannel,
+    packageVersion: releaseMetadata.packageVersion,
+    devFallbackVersion: releaseMetadata.devFallbackVersion,
     datasetCount: catalog.length,
     liveEnabledDatasets: catalog.filter((dataset) => dataset.liveAvailable).map((dataset) => dataset.id),
     dataModeControls: ["auto", "live_if_available", "sample_only"],

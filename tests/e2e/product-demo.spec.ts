@@ -25,6 +25,7 @@ test("explore route loads the governed shell", async ({ page }) => {
   await expect(page.getByAltText("CivicCanvas logo").first()).toBeVisible();
   await expect(page.getByText("Texas Data Canvas").first()).toBeVisible();
   await expect(page.getByLabel("Dashboard prompt")).toBeVisible();
+  await expect(page.getByText("Known data boundaries")).toBeVisible();
 });
 
 test("Dallas prompt generates fallback ZIP dashboard and filter changes table state", async ({ page }) => {
@@ -150,6 +151,9 @@ test("demo readiness route shows public release boundaries", async ({ page }) =>
   await expect(page.getByText("Known sample/live boundaries")).toBeVisible();
   await expect(page.getByText("Dataset readiness")).toBeVisible();
   await expect(page.getByRole("button", { name: "Copy demo checklist" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Copy release gates" })).toBeVisible();
+  await expect(page.getByText("Release proof")).toBeVisible();
+  await expect(page.getByText("v1.2.0-hosted-trust").first()).toBeVisible();
   await expect(page.getByText("Hosted blocker", { exact: true })).toBeVisible();
   await expect(page.getByText("Houston live verification")).toBeVisible();
   await expect(page.getByText(/Houston TranStar publishes sample JSON feeds/i)).toBeVisible();

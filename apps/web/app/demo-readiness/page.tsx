@@ -1,7 +1,8 @@
 import Link from "next/link";
+import { execSync } from "node:child_process";
 import { AlertTriangle, CheckCircle2, ClipboardCheck, ExternalLink, ShieldCheck } from "lucide-react";
-import type { DatasetMetadata } from "@texas-data-canvas/shared";
-import { DemoChecklistActions } from "../../components/demo-checklist-actions";
+import { releaseMetadata, type DatasetMetadata } from "@texas-data-canvas/shared";
+import { DemoChecklistActions, ReleaseGateActions } from "../../components/demo-checklist-actions";
 import { Header } from "../../components/header";
 import { getCatalogHealth, getDatasetCatalog } from "../../lib/data";
 
@@ -10,12 +11,14 @@ const localGateCommands = [
   "pnpm typecheck",
   "pnpm test",
   "pnpm build",
+  "pnpm governance:audit",
   "pnpm verify",
+  "pnpm verify:prod-local",
   "pnpm smoke:deploy -- --url http://localhost:<port>"
 ];
 
 const hostedGateCommands = [
-  "pnpm smoke:deploy -- --url <public-url> --expect-version <version>",
+  "pnpm smoke:deploy -- --url <public-url> --expect-version v1.2.0-hosted-trust",
   "PLAYWRIGHT_BASE_URL=<public-url> pnpm test:e2e:remote"
 ];
 
@@ -40,12 +43,24 @@ function readinessStatus(dataset: DatasetMetadata | undefined) {
   return { label: "coming later", className: "bg-slate-100 text-slate-600", detail: "Metadata exists, but query governance is not complete." };
 }
 
+function gitValue(command: string) {
+  try {
+    return execSync(command, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
+  } catch {
+    return "unavailable";
+  }
+}
+
 export default function DemoReadinessPage() {
   const health = getCatalogHealth();
   const datasets = getDatasetCatalog();
   const dallas = datasets.find((dataset) => dataset.id === "dallas_311_requests");
   const austin = datasets.find((dataset) => dataset.id === "austin_building_permits");
   const thirdCandidate = datasets.find((dataset) => dataset.id === "houston_transportation_incidents");
+  const activeBranch = process.env.VERCEL_GIT_COMMIT_REF ?? process.env.GITHUB_REF_NAME ?? gitValue("git branch --show-current");
+  const currentCommit = process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 12) ?? process.env.GITHUB_SHA?.slice(0, 12) ?? gitValue("git rev-parse --short=12 HEAD");
+  const activeAppVersion = process.env.NEXT_PUBLIC_APP_VERSION ?? releaseMetadata.devFallbackVersion;
+  const hostedStatus = process.env.NEXT_PUBLIC_SITE_URL ? "pending hosted verification" : "blocked: no public URL configured";
 
   return (
     <main className="min-h-screen bg-civic-50">
@@ -70,7 +85,48 @@ export default function DemoReadinessPage() {
             Open gallery
           </Link>
           <DemoChecklistActions />
+          <ReleaseGateActions />
         </div>
+
+        <section className="mb-6 rounded-lg border border-slate-200 bg-white p-5 shadow-panel">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-civic-700">
+                Release proof
+              </p>
+              <h2 className="mt-2 text-xl font-semibold text-ink">{releaseMetadata.releaseVersion}</h2>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
+                v1.2 makes hosted-style verification repeatable before any manual Vercel release.
+                The package version, health route, MCP status, docs, and audit scripts all derive from shared release metadata.
+              </p>
+            </div>
+            <span className="rounded-md bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-900">
+              Hosted status: {hostedStatus}
+            </span>
+          </div>
+          <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-md border border-slate-200 bg-civic-50 p-3">
+              <div className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Branch</div>
+              <div className="mt-1 text-sm font-semibold text-ink">{activeBranch}</div>
+            </div>
+            <div className="rounded-md border border-slate-200 bg-civic-50 p-3">
+              <div className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Commit</div>
+              <div className="mt-1 text-sm font-semibold text-ink">{currentCommit}</div>
+            </div>
+            <div className="rounded-md border border-slate-200 bg-civic-50 p-3">
+              <div className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">App version</div>
+              <div className="mt-1 text-sm font-semibold text-ink">{activeAppVersion}</div>
+            </div>
+            <div className="rounded-md border border-slate-200 bg-civic-50 p-3">
+              <div className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Package version</div>
+              <div className="mt-1 text-sm font-semibold text-ink">{releaseMetadata.packageVersion}</div>
+            </div>
+          </div>
+          <div className="mt-4 rounded-md border border-mint/30 bg-mint/10 px-3 py-2 text-xs leading-5 text-civic-900">
+            Latest local gate record: v1.1 passed lint, typecheck, tests, build, verify, local deploy smoke,
+            smoke JSON, and remote-mode Playwright against localhost. v1.2 adds governance audit and production-local verification gates.
+          </div>
+        </section>
 
         <div className="grid gap-4 lg:grid-cols-3">
           <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-panel">
