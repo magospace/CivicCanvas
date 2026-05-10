@@ -212,6 +212,7 @@ test("gallery route renders checked-in validated canvases", async ({ page }) => 
   await expect(page.getByText("Houston Transportation Sample Dashboard")).toBeVisible();
   await expect(page.getByText("Unsupported Sensitive Prompt Example")).toBeVisible();
   await expect(page.getByText(/Safety proof: gallery dashboards are checked-in CanvasDocument JSON/i)).toBeVisible();
+  await expect(page.getByLabel(/Open .* in explore/)).toHaveCount(4);
   await page.getByLabel("Open Dallas 311 Sample Dashboard in explore").click();
   await expect(page).toHaveURL(/\/explore/);
   await expect(page.getByRole("heading", { name: "Dallas 311 Sample Dashboard" })).toBeVisible();

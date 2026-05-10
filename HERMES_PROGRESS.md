@@ -1644,3 +1644,13 @@ Last updated: May 10, 2026 06:17 CDT
 - Safety notes: Documentation/durable-state only. No live API calls, OpenAI calls, Fal/media calls, deployment mutation, release-evidence refresh, backend persistence, schema/migrations, secrets, auth, billing, production data, generated artifacts, or `.env` files touched. `clauderecommends.md` remains untracked and unstaged.
 - Validation: `pnpm lint` passed; `git diff --check` passed.
 - Recommended next task: If validation passes, no additional P0/P1 implementation is required for the local CivicCanvas submission path; remaining blockers are external submission logistics, optional hosted smoke, and gated release-evidence refresh if explicitly requested.
+
+## Task 113 Update - Gallery Fixture Read Path Proof
+
+- Task chosen: `TASKS.md` item 113, "Strengthen Gallery Fixture Read Path Proof".
+- Why this was next: It was the next pending data-realism task after Task 112 and proves gallery demo records flow through the normal data loader and rendered gallery route rather than component-local mocks.
+- Scope: `apps/web/test/dashboard.test.ts`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Gallery canvases remain `fixture file through data loader / acceptable`; `/gallery` uses `getCuratedGalleryCanvases()` and `GalleryCanvasList` receives validated canvases rather than importing concrete demo objects.
+- Safety notes: Test/durable-state only. No gallery fixture data, catalog data, live API calls, OpenAI calls, Fal/media calls, schema/migrations, backend persistence, deploy config, secrets, or generated artifacts changed. `clauderecommends.md` remains untracked and unstaged.
+- Validation: `pnpm test -- apps/web/test/dashboard.test.ts` passed with 17 files / 118 tests discovered; `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "gallery route"` passed with the project script running 17 browser tests; `git diff --check` passed before commit.
+- Recommended next task: Task 114, `Add Browser-Local Saved Canvas Edit Proof`.

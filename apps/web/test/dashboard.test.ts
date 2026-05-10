@@ -264,9 +264,12 @@ describe("dashboard generation", () => {
     expect(JSON.stringify(canvas)).toContain("No approved suggestion datasets are available");
   });
 
-  it("loads curated gallery canvases from checked-in validated JSON", () => {
+  it("loads curated gallery canvases from checked-in validated JSON through the data loader", () => {
+    const galleryDir = join(process.cwd(), "data/gallery");
+    const galleryFiles = readdirSync(galleryDir).filter((fileName) => fileName.endsWith(".canvas.json"));
     const canvases = getCuratedGalleryCanvases();
 
+    expect(canvases).toHaveLength(galleryFiles.length);
     expect(canvases.map((canvas) => canvas.id)).toEqual([
       "gallery_dallas_311_sample",
       "gallery_austin_permits_sample",
@@ -275,6 +278,22 @@ describe("dashboard generation", () => {
     ]);
     expect(canvases.every((canvas) => canvas.blocks.some((block) => block.type === "SourceMethodBlock"))).toBe(true);
     expect(canvases.map((canvas) => canvas.prompt).join(" ")).toContain("personal contact details");
+  });
+
+  it("keeps gallery fixtures behind the data loader instead of direct component imports", () => {
+    const scannedFiles = [
+      "apps/web/app/gallery/page.tsx",
+      "apps/web/components/gallery-canvas-list.tsx"
+    ];
+
+    for (const filePath of scannedFiles) {
+      const source = readFileSync(join(process.cwd(), filePath), "utf8");
+      expect(source, `${filePath} must not import gallery fixture files directly`).not.toContain("data/gallery");
+      expect(source, `${filePath} must not name concrete gallery fixture JSON files`).not.toMatch(/\.canvas\.json/);
+    }
+
+    const galleryPage = readFileSync(join(process.cwd(), "apps/web/app/gallery/page.tsx"), "utf8");
+    expect(galleryPage).toContain("getCuratedGalleryCanvases");
   });
 
   it("validates every checked-in gallery fixture against governed canvas boundaries", () => {

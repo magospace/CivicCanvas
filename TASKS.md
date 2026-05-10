@@ -1814,7 +1814,7 @@ Status: Complete on May 10, 2026.
 
 ## 113. Strengthen Gallery Fixture Read Path Proof
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: QA / Data realism
 - Goal: Prove checked-in gallery canvases are loaded through the normal data loader and rendered through `/gallery`, not imported directly by UI components.
@@ -1825,6 +1825,8 @@ Status: Pending.
 - Acceptance criteria: Tests assert gallery route/card count matches data-loader fixture count, fixtures validate with source/method attribution, and hidden fields remain absent.
 - Validation commands: focused Vitest, targeted gallery Playwright, `pnpm lint`, `pnpm test`, `git diff --check`.
 - Can run in parallel: Yes unless editing the same gallery tests.
+- Completed notes: Strengthened data-loader proof for checked-in gallery canvases. Unit coverage now asserts `getCuratedGalleryCanvases()` count matches `data/gallery/*.canvas.json`, validates source/method attribution, and guards `/gallery` route/component files against direct fixture JSON imports. Browser coverage now asserts the gallery route renders four normal "Open in explore" actions from the loaded canvases.
+- Validation: `pnpm test -- apps/web/test/dashboard.test.ts`, targeted gallery Playwright command (project script ran full product-demo spec with 17 browser tests), and `git diff --check` passed.
 
 ## 114. Add Browser-Local Saved Canvas Edit Proof
 
