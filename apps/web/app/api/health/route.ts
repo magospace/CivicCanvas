@@ -34,6 +34,11 @@ export function GET() {
     releaseVersion: releaseMetadata.releaseVersion,
     releaseChannel: releaseMetadata.releaseChannel,
     packageVersion: releaseMetadata.packageVersion,
+    promptProcessing: {
+      mode: "deterministic_rule_based",
+      requiresProviderSecret: false,
+      provider: null
+    },
     runtime: "nextjs",
     deploymentProvider: deploymentProvider(),
     deploymentUrl: deploymentUrl(),

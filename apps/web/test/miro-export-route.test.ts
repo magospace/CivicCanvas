@@ -22,7 +22,10 @@ describe("Miro export route", () => {
     expect(body.spec.frames.map((frame: { title: string }) => frame.title)).toContain("Source & Method");
     expect(JSON.stringify(body)).not.toContain("accessToken");
     expect(JSON.stringify(body)).not.toContain("oauth");
+    expect(JSON.stringify(body)).not.toContain("oauthUrl");
     expect(JSON.stringify(body)).not.toContain("boardId");
+    expect(JSON.stringify(body)).not.toContain("boardWriteUrl");
+    expect(JSON.stringify(body).toLowerCase()).not.toContain("modelprovider");
   });
 
   it("returns governed errors for invalid Miro export canvases", async () => {

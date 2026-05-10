@@ -56,6 +56,9 @@ describe("canvas save API validation stub", () => {
     expect(body.canvasId).toBe(canvas.id);
     expect(body.note).toContain("validates CanvasDocument");
     expect(body.note).toContain("browser-local persistence");
+    expect(JSON.stringify(body).toLowerCase()).not.toContain("database");
+    expect(JSON.stringify(body).toLowerCase()).not.toContain("object-store");
+    expect(JSON.stringify(body).toLowerCase()).not.toContain("public share service");
   });
 
   it("rejects invalid canvases through structured route validation", async () => {

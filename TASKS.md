@@ -681,6 +681,8 @@ Status: Complete on May 10, 2026 at 05:09 CDT.
 
 ## 44. Add No-Provider/No-Persistence Contract Tests For Public Metadata
 
+Status: Complete on May 10, 2026 at 05:12 CDT.
+
 - Owner type: QA / API honesty
 - Goal: Add tests that public metadata surfaces do not imply LLM providers, server-side saved-canvas persistence, or Miro board writes.
 - Why it matters: Recent docs made these boundaries explicit; small contract tests can prevent future copy or route metadata drift.
@@ -690,6 +692,8 @@ Status: Complete on May 10, 2026 at 05:09 CDT.
 - Acceptance criteria: Tests assert `/api/canvas/save` remains a validation stub, Miro output remains preview-only/no OAuth/no board ID, and health/status metadata does not advertise model-provider requirements.
 - Validation commands: focused Vitest command for changed tests, `git diff --check`, `pnpm lint`, `pnpm test`.
 - Can run in parallel: Yes with docs-only tasks. Avoid parallel edits to the same test files.
+- Completed notes: Added explicit health metadata for deterministic rule-based prompt processing with no provider secret and expanded route tests so health, canvas-save, and Miro-preview responses do not advertise model providers, database/object-store/public-share persistence, OAuth, board IDs, or board-write URLs.
+- Validation: RED health contract failed before `promptProcessing` metadata existed; focused route-test command passed after implementation and ran the full 89-test Vitest suite; `pnpm lint`, `pnpm typecheck`, and `git diff --check` passed.
 
 ## 45. Add Sample Provenance Regression Test
 

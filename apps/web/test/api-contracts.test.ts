@@ -19,6 +19,13 @@ describe("production API contracts", () => {
     expect(healthBody.releaseVersion).toBe(releaseMetadata.releaseVersion);
     expect(healthBody.releaseChannel).toBe(releaseMetadata.releaseChannel);
     expect(healthBody.packageVersion).toBe(releaseMetadata.packageVersion);
+    expect(healthBody.promptProcessing).toEqual({
+      mode: "deterministic_rule_based",
+      requiresProviderSecret: false,
+      provider: null
+    });
+    expect(JSON.stringify(healthBody).toLowerCase()).not.toContain("openai");
+    expect(JSON.stringify(healthBody).toLowerCase()).not.toContain("anthropic");
     expect(healthBody.catalogCount).toBeGreaterThan(0);
 
     const catalogHealth = await catalogHealthGET();

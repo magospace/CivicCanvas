@@ -1,6 +1,6 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 05:09 CDT
+Last updated: May 10, 2026 05:12 CDT
 
 ## Current Cycle
 
@@ -21,8 +21,8 @@ Last updated: May 10, 2026 05:09 CDT
    - Status: Complete.
    - Validation: RED/green Playwright product-demo route coverage, `pnpm lint`, `pnpm typecheck`, `git diff --check`.
 2. Task 44, `Add No-Provider/No-Persistence Contract Tests For Public Metadata`.
-   - Status: Next safe task.
-   - Validation: focused Vitest command, `git diff --check`, `pnpm lint`, `pnpm test`.
+   - Status: Complete.
+   - Validation: RED/green health-route contract, full Vitest suite, `pnpm lint`, `pnpm typecheck`, `git diff --check`.
 3. Task 45, `Add Sample Provenance Regression Test`.
    - Status: Planned after task 44 if validation stays green and scope remains safe.
    - Validation: focused test or `pnpm data:quality`, `git diff --check`, `pnpm lint`, `pnpm test` if Vitest coverage is added.
@@ -49,7 +49,35 @@ Last updated: May 10, 2026 05:09 CDT
 
 ## Recommended Next Task
 
-- Task 44, `Add No-Provider/No-Persistence Contract Tests For Public Metadata`, is the next safe task. It should stay test-only unless a test exposes misleading public metadata that can be corrected safely without changing architecture boundaries.
+- Task 45, `Add Sample Provenance Regression Test`, is the next safe task. Keep it local and data-governance focused; do not edit catalog/sample data unless a test exposes a safe, scoped mismatch.
+
+## Task 44 Update
+
+- Task chosen: `TASKS.md` item 44, "Add No-Provider/No-Persistence Contract Tests For Public Metadata".
+- Why this was next: Item 44 was the next safe test-focused task after task 43 and preserves real/mock/local/live boundaries in public metadata surfaces.
+- Scope: `apps/web/app/api/health/route.ts`, `apps/web/test/api-contracts.test.ts`, `apps/web/test/canvas-save-route.test.ts`, `apps/web/test/miro-export-route.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: No architecture boundary changed. No LLM/provider integration, database persistence, Miro write path, auth, billing, migrations, production config, deploy scripts, secrets, live API spend, or release evidence refresh was added.
+
+### Files Updated
+
+- `apps/web/app/api/health/route.ts`: Added explicit `promptProcessing` metadata showing deterministic rule-based parsing, no provider secret, and no provider.
+- `apps/web/test/api-contracts.test.ts`: Added health contract assertions for deterministic/no-provider metadata and no OpenAI/Anthropic leakage.
+- `apps/web/test/canvas-save-route.test.ts`: Strengthened the validation-stub test so the response does not imply database/object-store/public-share persistence.
+- `apps/web/test/miro-export-route.test.ts`: Strengthened preview-only assertions to exclude OAuth URL, board write URL, board ID, and provider metadata.
+- `TASKS.md`: Marked item 44 complete with validation notes.
+- `HERMES_PROGRESS.md`: Recorded item 44 scope, safety notes, and validation.
+
+### Validation
+
+- RED: `pnpm test -- apps/web/test/api-contracts.test.ts -t "returns health and catalog health reports"` failed because `healthBody.promptProcessing` was undefined before implementation. The command discovered the full Vitest suite and reported 1 failed / 88 passed.
+- GREEN: `pnpm test -- apps/web/test/api-contracts.test.ts apps/web/test/canvas-save-route.test.ts apps/web/test/miro-export-route.test.ts` passed after implementation. The command ran the full Vitest suite: 15 files, 89 tests passed.
+- `pnpm lint`: Passed.
+- `pnpm typecheck`: Passed.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 45, `Add Sample Provenance Regression Test`, is the next safe task if the cycle continues.
 
 ## Historical Sequential Progress
 
