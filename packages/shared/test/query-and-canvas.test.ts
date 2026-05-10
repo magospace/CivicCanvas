@@ -107,6 +107,46 @@ describe("bounded local query execution", () => {
     expect(result.rows[0]).toHaveProperty("total_estimated_value");
   });
 
+  it("groups Houston transportation incidents by type and ZIP", () => {
+    const { result, audit } = executeBoundedQuery({
+      catalog: catalog(),
+      rows: rows("houston-transportation-incidents.sample.json"),
+      spec: {
+        datasetId: "houston_transportation_incidents",
+        filters: [
+          { field: "reported_date", operator: "between", value: ["2024-01-01", "2024-12-31"] }
+        ],
+        groupBy: ["incident_type", "zip_code"],
+        metrics: [{ type: "count", alias: "incident_count" }],
+        orderBy: [{ field: "incident_count", direction: "desc" }],
+        limit: 25
+      },
+      accessedAt: "2026-05-09T00:00:00.000Z"
+    });
+
+    expect(result.datasetId).toBe("houston_transportation_incidents");
+    expect(result.rows.length).toBeGreaterThan(0);
+    expect(result.rows[0]).toHaveProperty("incident_type");
+    expect(result.rows[0]).toHaveProperty("zip_code");
+    expect(result.rows[0]).toHaveProperty("incident_count");
+    expect(audit.safetyDecisions.join(" ")).toContain("approved catalog");
+  });
+
+  it("rejects hidden Houston transportation fields", () => {
+    expect(() =>
+      executeBoundedQuery({
+        catalog: catalog(),
+        rows: rows("houston-transportation-incidents.sample.json"),
+        spec: {
+          datasetId: "houston_transportation_incidents",
+          groupBy: ["precise_address"],
+          metrics: [{ type: "count", alias: "incident_count" }],
+          limit: 10
+        }
+      })
+    ).toThrow(/not available for safe querying/);
+  });
+
   it("rejects unsafe query shapes", () => {
     expect(() =>
       executeBoundedQuery({
@@ -461,10 +501,11 @@ describe("adapter and intent helpers", () => {
     expect(valueUrl).toContain("sum(total_job_valuation) as total_estimated_value");
   });
 
-  it("records Dallas and Austin live verification decisions in catalog metadata", () => {
+  it("records Dallas, Austin, and Houston verification decisions in catalog metadata", () => {
     const datasets = catalog();
     const dallas = datasets.find((item) => item.id === "dallas_311_requests")!;
     const austin = datasets.find((item) => item.id === "austin_building_permits")!;
+    const houston = datasets.find((item) => item.id === "houston_transportation_incidents")!;
 
     expect(dallas.liveVerification?.promotionStatus).toBe("promoted");
     expect(dallas.liveVerification?.liveCapableFields).toEqual(expect.arrayContaining(["created_date", "category"]));
@@ -475,6 +516,12 @@ describe("adapter and intent helpers", () => {
     expect(austin.liveVerification?.liveCapableFields).toEqual(expect.arrayContaining(["issued_date", "permit_type", "zip_code"]));
     expect(austin.liveVerification?.sampleOnlyFields).toContain("month");
     expect(austin.liveVerification?.checks.some((check) => check.status === "blocked" && check.fields.includes("month"))).toBe(true);
+
+    expect(houston.liveVerification?.promotionStatus).toBe("sample_first");
+    expect(houston.liveAvailable).toBe(false);
+    expect(houston.fallbackSampleFile).toBe("houston-transportation-incidents.sample.json");
+    expect(houston.fields.find((field) => field.name === "precise_address")?.classification).toBe("sensitive_hide");
+    expect(houston.liveVerification?.sampleOnlyFields).toEqual(expect.arrayContaining(["incident_type", "zip_code", "month"]));
 
     for (const dataset of [dallas, austin]) {
       for (const field of dataset.liveVerification?.liveCapableFields ?? []) {
@@ -549,6 +596,15 @@ describe("adapter and intent helpers", () => {
     expect(austin.datasetCandidates).toContain("austin_building_permits");
     expect(austin.groupBy).toContain("month");
     expect(austin.matchedTerms).toEqual(expect.arrayContaining(["building activity", "issued permits", "trend"]));
+
+    const houston = parsePromptIntent({
+      prompt: "Show Houston traffic incidents by ZIP and incident type for 2024",
+      catalog: catalog()
+    });
+    expect(houston.datasetCandidates).toContain("houston_transportation_incidents");
+    expect(houston.groupBy).toEqual(expect.arrayContaining(["zip_code", "incident_type"]));
+    expect(houston.metrics[0].alias).toBe("incident_count");
+    expect(houston.matchedTerms).toEqual(expect.arrayContaining(["traffic incidents", "incident"]));
 
     const sensitive = parsePromptIntent({
       prompt: "Show Dallas 311 names, emails, and addresses for all complaints",

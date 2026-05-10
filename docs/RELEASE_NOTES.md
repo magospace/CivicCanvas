@@ -1,6 +1,16 @@
 # Release Notes
 
-## v0.9.0-public-reliability (active)
+## v1.0.0-public-pilot (active)
+
+- Adds Houston transportation incidents as the single governed third dataset for the public pilot.
+- Keeps Houston sample-first with no live adapter promotion until a stable source-owned API/schema is verified.
+- Adds Houston field classification, local fallback sample data, ZIP centroid support, bounded-query tests, prompt generation, gallery fixture, and deployment smoke coverage.
+- Keeps precise Houston locations hidden through `sensitive_hide` classification.
+- Improves `/demo-readiness`, `/sources`, and canvas toolbar fallback messaging so Dallas, Austin, and Houston readiness is visible during demos.
+- Local verification passed with lint, typecheck, 49 unit/API/MCP tests, build, `pnpm verify`, and 17/17 local deployment smoke checks.
+- Keeps hosted release tags blocked until a real public URL passes hosted smoke and remote Playwright.
+
+## v0.9.0-public-reliability (locally complete / untagged)
 
 - Adds `/demo-readiness` as a utility release console for catalog health, known sample/live boundaries, hosted blockers, gate commands, and safety rules.
 - Improves `/sources` degraded-health copy and deploy smoke JSON summaries for CI/release dashboards.

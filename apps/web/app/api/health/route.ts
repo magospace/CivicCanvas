@@ -28,7 +28,7 @@ export function GET() {
   return NextResponse.json({
     ok: catalog.status !== "failed",
     appEnvironment: process.env.NEXT_PUBLIC_APP_ENV ?? process.env.VERCEL_ENV ?? "local",
-    appVersion: process.env.NEXT_PUBLIC_APP_VERSION ?? "v0.6.0-hosted-beta-dev",
+    appVersion: process.env.NEXT_PUBLIC_APP_VERSION ?? "v1.0.0-public-pilot-dev",
     runtime: "nextjs",
     deploymentProvider: deploymentProvider(),
     deploymentUrl: deploymentUrl(),

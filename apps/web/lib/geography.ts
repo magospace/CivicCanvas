@@ -25,7 +25,23 @@ const texasZipCentroids: Record<string, { longitude: number; latitude: number }>
   "78745": { longitude: -97.792, latitude: 30.207 },
   "78748": { longitude: -97.823, latitude: 30.162 },
   "78749": { longitude: -97.855, latitude: 30.216 },
-  "78750": { longitude: -97.802, latitude: 30.414 }
+  "78750": { longitude: -97.802, latitude: 30.414 },
+  "77002": { longitude: -95.369, latitude: 29.756 },
+  "77003": { longitude: -95.344, latitude: 29.749 },
+  "77004": { longitude: -95.36, latitude: 29.724 },
+  "77006": { longitude: -95.389, latitude: 29.741 },
+  "77007": { longitude: -95.413, latitude: 29.772 },
+  "77008": { longitude: -95.411, latitude: 29.798 },
+  "77009": { longitude: -95.363, latitude: 29.794 },
+  "77011": { longitude: -95.308, latitude: 29.743 },
+  "77017": { longitude: -95.257, latitude: 29.69 },
+  "77023": { longitude: -95.319, latitude: 29.724 },
+  "77024": { longitude: -95.515, latitude: 29.771 },
+  "77027": { longitude: -95.445, latitude: 29.741 },
+  "77030": { longitude: -95.4, latitude: 29.704 },
+  "77046": { longitude: -95.43, latitude: 29.733 },
+  "77056": { longitude: -95.47, latitude: 29.748 },
+  "77057": { longitude: -95.488, latitude: 29.744 }
 };
 
 export function zipFeaturesForRows(rows: SampleRow[], geographyField: string) {

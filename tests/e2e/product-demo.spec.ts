@@ -62,12 +62,24 @@ test("Austin prompt generates a governed permits dashboard", async ({ page }) =>
   await expect(page.locator("aside").getByText("Sample fallback").first()).toBeVisible();
 });
 
+test("Houston prompt generates a governed transportation dashboard", async ({ page }) => {
+  await page.goto("/explore");
+  await generate(page, "Show Houston transportation incidents by ZIP and incident type for 2024.");
+
+  await expect(page.getByText("Houston Transportation Incidents Explorer")).toBeVisible();
+  await expect(page.getByText("City: Houston")).toBeVisible();
+  await expect(page.locator("aside").getByText("Sample fallback").first()).toBeVisible();
+  await expect(page.getByText("precise locations").first()).toBeVisible();
+});
+
 test("sources route shows live verification status", async ({ page }) => {
   await page.goto("/sources");
 
   await expect(page.getByText("Live verification").first()).toBeVisible();
   await expect(page.getByText("live promoted").first()).toBeVisible();
   await expect(page.getByText("sample fallback required").first()).toBeVisible();
+  await expect(page.getByText("sample first").first()).toBeVisible();
+  await expect(page.getByText("precise_address · hidden")).toBeVisible();
 });
 
 test("unsupported sensitive prompt returns suggestions instead of a dashboard", async ({ page }) => {
@@ -113,6 +125,7 @@ test("gallery route renders checked-in validated canvases", async ({ page }) => 
   await expect(page.getByText("Validated sample canvases")).toBeVisible();
   await expect(page.getByText("Dallas 311 Sample Dashboard")).toBeVisible();
   await expect(page.getByText("Austin Permits Sample Dashboard")).toBeVisible();
+  await expect(page.getByText("Houston Transportation Sample Dashboard")).toBeVisible();
   await expect(page.getByText("Unsupported Sensitive Prompt Example")).toBeVisible();
   await expect(page.getByLabel("Download Dallas 311 Sample Dashboard table CSV")).toBeVisible();
   await expect(page.getByLabel("Download Austin Permits Sample Dashboard CanvasDocument JSON")).toBeVisible();
@@ -123,8 +136,10 @@ test("demo readiness route shows public release boundaries", async ({ page }) =>
 
   await expect(page.getByText("Demo readiness")).toBeVisible();
   await expect(page.getByText("Known sample/live boundaries")).toBeVisible();
+  await expect(page.getByText("Dataset readiness")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Copy demo checklist" })).toBeVisible();
   await expect(page.getByText("Hosted blocker", { exact: true })).toBeVisible();
-  await expect(page.getByText("Houston Transportation Incidents and Road Projects")).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Houston Transportation/ })).toBeVisible();
 });
 
 test("key public-beta flows have no serious accessibility violations", async ({ page }) => {
@@ -133,6 +148,10 @@ test("key public-beta flows have no serious accessibility violations", async ({ 
 
   await generate(page, "Show Dallas 311 service requests by category and ZIP code for 2024.");
   await expect(page.getByText("Why this dashboard?")).toBeVisible();
+  await expectNoSeriousAccessibilityViolations(page);
+
+  await generate(page, "Show Houston transportation incidents by ZIP and incident type for 2024.");
+  await expect(page.getByText("Houston Transportation Incidents Explorer")).toBeVisible();
   await expectNoSeriousAccessibilityViolations(page);
 
   await page.getByLabel("Generate Miro export preview").click();

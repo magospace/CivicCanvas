@@ -1,0 +1,137 @@
+{
+  "schemaVersion": "1.0",
+  "id": "gallery_houston_transportation_sample",
+  "title": "Houston Transportation Sample Dashboard",
+  "description": "Curated sample dashboard showing Houston transportation incidents through governed aggregate blocks.",
+  "prompt": "Show Houston transportation incidents by ZIP and incident type for 2024.",
+  "createdAt": "2026-05-09T00:00:00.000Z",
+  "updatedAt": "2026-05-09T00:00:00.000Z",
+  "sources": [
+    {
+      "datasetId": "houston_transportation_incidents",
+      "datasetTitle": "Houston Transportation Incidents and Road Projects",
+      "sourceName": "City of Houston Active Incidents",
+      "sourceUrl": "https://www.houstontx.gov/activeincidents/index.html",
+      "accessedAt": "2026-05-09T00:00:00.000Z",
+      "fieldsUsed": ["incident_type", "zip_code", "month", "status"],
+      "filtersApplied": ["reported_date in 2024"],
+      "queryMethod": "Curated gallery sample rendered from a validated CanvasDocument fixture.",
+      "dataMode": "sample",
+      "caveats": [
+        "Houston transportation is sample-first until a stable public live adapter and field mapping are verified.",
+        "The pilot sample excludes precise addresses and should not be treated as a complete incident feed."
+      ]
+    }
+  ],
+  "queries": [],
+  "blocks": [
+    {
+      "id": "houston_summary",
+      "type": "SummaryBlock",
+      "props": {
+        "heading": "Houston transportation incidents are shown as sample-first aggregate context.",
+        "text": "This curated example demonstrates the v1 public-pilot pattern for a third dataset without exposing precise incident locations.",
+        "bullets": [
+          "Sample fallback is mandatory until live schema verification passes.",
+          "Precise addresses are classified hidden and never rendered.",
+          "ZIP geography is approximate and aggregate-only."
+        ]
+      }
+    },
+    {
+      "id": "houston_metric_total",
+      "type": "MetricBlock",
+      "props": {
+        "label": "Sample incidents",
+        "value": 40,
+        "helperText": "Rows in the local fallback sample",
+        "tone": "neutral"
+      }
+    },
+    {
+      "id": "houston_type_chart",
+      "type": "ChartBlock",
+      "props": {
+        "title": "Top incident types",
+        "subtitle": "Sample counts by aggregate-safe incident type",
+        "chartType": "bar",
+        "xField": "incident_type",
+        "yField": "count",
+        "data": [
+          { "incident_type": "Crash", "count": 9 },
+          { "incident_type": "Lane closure", "count": 5 },
+          { "incident_type": "Road hazard", "count": 5 },
+          { "incident_type": "Signal outage", "count": 5 },
+          { "incident_type": "High water", "count": 4 }
+        ]
+      }
+    },
+    {
+      "id": "houston_zip_map",
+      "type": "MapBlock",
+      "props": {
+        "title": "ZIP-level transportation context",
+        "geographyMode": "zip_bubble",
+        "geographyField": "zip_code",
+        "metricField": "count",
+        "legend": "Bubble size reflects sample incident count.",
+        "note": "ZIP geography is approximate and not parcel-level analysis.",
+        "features": [
+          { "id": "77002", "label": "77002", "longitude": -95.369, "latitude": 29.756 },
+          { "id": "77003", "label": "77003", "longitude": -95.344, "latitude": 29.749 },
+          { "id": "77004", "label": "77004", "longitude": -95.36, "latitude": 29.724 },
+          { "id": "77006", "label": "77006", "longitude": -95.389, "latitude": 29.741 }
+        ],
+        "data": [
+          { "zip_code": "77002", "count": 3 },
+          { "zip_code": "77003", "count": 3 },
+          { "zip_code": "77004", "count": 3 },
+          { "zip_code": "77006", "count": 3 }
+        ]
+      }
+    },
+    {
+      "id": "houston_table",
+      "type": "TableBlock",
+      "props": {
+        "title": "Sample transportation aggregates",
+        "caption": "Aggregate-safe table excerpt for the curated gallery.",
+        "pageSize": 5,
+        "sortBy": "count",
+        "columns": [
+          { "field": "incident_type", "label": "Incident type" },
+          { "field": "zip_code", "label": "ZIP" },
+          { "field": "count", "label": "Incidents" }
+        ],
+        "rows": [
+          { "incident_type": "Crash", "zip_code": "77002", "count": 2 },
+          { "incident_type": "Signal outage", "zip_code": "77006", "count": 2 },
+          { "incident_type": "Lane closure", "zip_code": "77007", "count": 2 },
+          { "incident_type": "Road hazard", "zip_code": "77023", "count": 2 }
+        ]
+      }
+    },
+    {
+      "id": "houston_source",
+      "type": "SourceMethodBlock",
+      "props": {
+        "attribution": {
+          "datasetId": "houston_transportation_incidents",
+          "datasetTitle": "Houston Transportation Incidents and Road Projects",
+          "sourceName": "City of Houston Active Incidents",
+          "sourceUrl": "https://www.houstontx.gov/activeincidents/index.html",
+          "accessedAt": "2026-05-09T00:00:00.000Z",
+          "fieldsUsed": ["incident_type", "zip_code", "month", "status"],
+          "filtersApplied": ["reported_date in 2024"],
+          "queryMethod": "Curated gallery sample rendered from a validated CanvasDocument fixture.",
+          "dataMode": "sample",
+          "caveats": [
+            "Houston transportation is sample-first until a stable public live adapter and field mapping are verified.",
+            "The pilot sample excludes precise addresses and should not be treated as a complete incident feed."
+          ]
+        },
+        "methodology": "The gallery fixture is checked in as validated CanvasDocument JSON and rendered only through the allowlisted block registry."
+      }
+    }
+  ]
+}

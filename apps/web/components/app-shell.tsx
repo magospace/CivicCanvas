@@ -268,6 +268,12 @@ export function AppShell({
               </button>
             </div>
           </div>
+          {fallbackReason ? (
+            <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900 shadow-sm">
+              <span className="font-semibold">Sample fallback active.</span>{" "}
+              {fallbackReason}
+            </div>
+          ) : null}
           {isGenerating ? (
             <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-panel">
               <div className="h-4 w-48 animate-pulse rounded bg-civic-100" />

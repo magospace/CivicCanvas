@@ -266,23 +266,123 @@
     "title": "Houston Transportation Incidents and Road Projects",
     "city": "Houston",
     "topic": "Transportation",
-    "sourceName": "City of Houston Open Data",
-    "sourceUrl": "https://data.houstontx.gov/",
-    "dataAccess": "stretch_adapter",
-    "adapter": "socrata",
-    "apiBaseUrl": "https://data.houstontx.gov",
+    "sourceName": "City of Houston Active Incidents",
+    "sourceUrl": "https://www.houstontx.gov/activeincidents/index.html",
+    "dataAccess": "sample_first_governance_candidate",
+    "adapter": "static_json",
     "lastVerifiedAt": "2026-05-09T00:00:00.000Z",
     "liveAvailable": false,
-    "description": "Transportation incident and road project data for map-heavy analysis.",
-    "fields": [],
+    "liveQueryNotes": [
+      "v1.0 public pilot keeps Houston transportation sample-first until a stable source-owned live API/schema is verified.",
+      "The public Active Incidents page is current-state oriented and may include precise locations; the pilot sample intentionally exposes only aggregate-safe fields."
+    ],
+    "liveVerification": {
+      "promotionStatus": "sample_first",
+      "lastCheckedAt": "2026-05-09T23:59:00.000Z",
+      "testedFields": [
+        "reported_date",
+        "month",
+        "zip_code",
+        "incident_type",
+        "status",
+        "corridor_area",
+        "mode",
+        "severity_score"
+      ],
+      "liveCapableFields": [],
+      "sampleOnlyFields": [
+        "reported_date",
+        "month",
+        "zip_code",
+        "incident_type",
+        "status",
+        "corridor_area",
+        "mode",
+        "severity_score"
+      ],
+      "checks": [
+        {
+          "label": "Pilot sample governance",
+          "queryShape": "sample fallback grouped by incident_type, zip_code, status, and month",
+          "fields": [
+            "reported_date",
+            "month",
+            "zip_code",
+            "incident_type",
+            "status"
+          ],
+          "status": "skipped",
+          "dataMode": "sample",
+          "reason": "No stable live adapter is promoted for v1.0; local sample fallback is mandatory."
+        }
+      ]
+    },
+    "fallbackSampleFile": "houston-transportation-incidents.sample.json",
+    "description": "Aggregate-safe Houston transportation incident sample for map-heavy public pilot analysis.",
+    "fields": [
+      {
+        "name": "incident_id",
+        "type": "string",
+        "classification": "safe_public"
+      },
+      {
+        "name": "reported_date",
+        "type": "date",
+        "classification": "safe_public"
+      },
+      {
+        "name": "month",
+        "type": "string",
+        "classification": "safe_public"
+      },
+      {
+        "name": "zip_code",
+        "type": "string",
+        "classification": "safe_public"
+      },
+      {
+        "name": "incident_type",
+        "type": "string",
+        "classification": "safe_public"
+      },
+      {
+        "name": "status",
+        "type": "string",
+        "classification": "safe_public"
+      },
+      {
+        "name": "corridor_area",
+        "type": "string",
+        "classification": "safe_public"
+      },
+      {
+        "name": "mode",
+        "type": "string",
+        "classification": "safe_public"
+      },
+      {
+        "name": "severity_score",
+        "type": "number",
+        "classification": "safe_public"
+      },
+      {
+        "name": "precise_address",
+        "type": "string",
+        "classification": "sensitive_hide",
+        "description": "Precise incident locations are not exposed by Texas Data Canvas."
+      }
+    ],
     "recommendedVisuals": [
       "map",
       "line_chart",
       "bar_chart",
+      "metric",
       "table"
     ],
     "caveats": [
-      "Stretch dataset; confirm exact schema before implementation."
+      "Houston transportation is sample-first until a stable public live adapter and field mapping are verified.",
+      "The pilot sample excludes precise addresses and should not be treated as a complete incident feed.",
+      "ZIP-level geography is approximate and intended for aggregate context only."
     ]
   },
   {

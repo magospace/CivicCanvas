@@ -14,7 +14,7 @@ import {
 } from "@texas-data-canvas/shared";
 import { getAdapter, getCatalog } from "./data.js";
 
-export const MCP_SERVER_VERSION = "0.6.0-hosted-beta";
+export const MCP_SERVER_VERSION = "1.0.0-public-pilot";
 
 export function getServerStatus() {
   const catalog = getCatalog();

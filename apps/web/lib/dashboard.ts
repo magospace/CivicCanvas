@@ -31,7 +31,7 @@ export type DashboardGeneration = {
 };
 
 type DemoIntent = {
-  datasetId: "dallas_311_requests" | "austin_building_permits";
+  datasetId: "dallas_311_requests" | "austin_building_permits" | "houston_transportation_incidents";
   title: string;
   summaryHeading: string;
   metricLabel: string;
@@ -70,6 +70,19 @@ const demoIntents: DemoIntent[] = [
     statusField: "status",
     topLabel: "Top permit type",
     caveatLead: "Permit records are administrative data and may not represent construction starts."
+  },
+  {
+    datasetId: "houston_transportation_incidents",
+    title: "Houston Transportation Incidents Explorer",
+    summaryHeading: "Houston transportation incidents by type and ZIP",
+    metricLabel: "Sample incidents",
+    countAlias: "incident_count",
+    dateField: "reported_date",
+    geographyField: "zip_code",
+    categoryField: "incident_type",
+    statusField: "status",
+    topLabel: "Top incident type",
+    caveatLead: "Houston transportation pilot data is sample-first and excludes precise locations."
   }
 ];
 
@@ -95,12 +108,33 @@ function detectIntent(prompt: string): DemoIntent | null {
     "issued permit",
     "issued permits"
   ];
+  const houstonTopicTerms = [
+    "transportation",
+    "transportation incident",
+    "transportation incidents",
+    "traffic",
+    "traffic incident",
+    "traffic incidents",
+    "road hazard",
+    "road hazards",
+    "lane closure",
+    "lane closures",
+    "road project",
+    "road projects",
+    "crash",
+    "crashes",
+    "incident",
+    "incidents"
+  ];
 
   if (normalized.includes("austin") && austinTopicTerms.some((term) => normalized.includes(term))) {
     return demoIntents[1];
   }
   if (normalized.includes("dallas") && dallasTopicTerms.some((term) => normalized.includes(term))) {
     return demoIntents[0];
+  }
+  if (normalized.includes("houston") && houstonTopicTerms.some((term) => normalized.includes(term))) {
+    return demoIntents[2];
   }
   return null;
 }
@@ -584,7 +618,7 @@ export function createDatasetSuggestionCanvas(prompt: string): CanvasDocument {
     queryMethod: `No supported rule-based prompt match for: "${prompt}"`,
     dataMode: "sample",
     caveats: [
-      "The current parser only generates dashboards for approved Dallas 311 and Austin permits workflows."
+      "The current parser only generates dashboards for approved Dallas 311, Austin permits, and Houston transportation workflows."
     ],
     license: "Refer to source portal terms"
   };
@@ -608,11 +642,12 @@ export function createDatasetSuggestionCanvas(prompt: string): CanvasDocument {
           text: "Try the Dallas 311 or Austin building permit demo prompt. Unknown prompts return suggestions instead of hallucinated dashboards.",
           bullets: [
             "Show Dallas 311 service requests by category and ZIP code for 2024.",
-            "Show Austin building permits by month and ZIP code."
+            "Show Austin building permits by month and ZIP code.",
+            "Show Houston transportation incidents by ZIP and incident type for 2024."
           ]
         }
       },
-      ...datasets.slice(0, 2).map((candidate) => ({
+      ...datasets.slice(0, 3).map((candidate) => ({
         id: `dataset-${candidate.id}`,
         type: "DatasetCardBlock" as const,
         props: { dataset: candidate }

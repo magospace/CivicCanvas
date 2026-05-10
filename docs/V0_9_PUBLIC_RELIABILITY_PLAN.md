@@ -42,6 +42,8 @@ Houston transportation incidents remains the default v0.9 candidate because it a
 
 Texas spending remains the alternate candidate if accountability/finance becomes the preferred story.
 
+Follow-on note: the Houston governance checklist is implemented on the `feat/v1-public-pilot` branch, where Houston becomes a sample-first dataset with hidden precise addresses and bounded query coverage. v0.9 remains locally complete and untagged pending hosted verification.
+
 ## Acceptance Criteria
 
 - `/demo-readiness` renders without a marketing landing-page pattern.

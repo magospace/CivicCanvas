@@ -5,6 +5,13 @@ import { Database, ExternalLink } from "lucide-react";
 import type { DatasetMetadata } from "@texas-data-canvas/shared";
 
 function fieldStatus(dataset: DatasetMetadata, fieldName: string) {
+  const field = dataset.fields.find((candidate) => candidate.name === fieldName);
+  if (field?.classification === "sensitive_hide") {
+    return { label: "hidden", className: "border-signal/30 bg-signal/10 text-signal" };
+  }
+  if (field?.classification === "unknown_review") {
+    return { label: "review", className: "border-amber-200 bg-amber-50 text-amber-900" };
+  }
   const verification = dataset.liveVerification;
   if (verification?.liveCapableFields.includes(fieldName)) {
     return { label: "live-capable", className: "border-mint/30 bg-mint/10 text-mint" };
@@ -67,7 +74,7 @@ export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
         {filtered.map((dataset) => {
           const verification = dataset.liveVerification;
           const fields = dataset.fields.length > 0
-            ? dataset.fields.slice(0, 9).map((field) => ({ name: field.name, status: fieldStatus(dataset, field.name) }))
+            ? dataset.fields.map((field) => ({ name: field.name, status: fieldStatus(dataset, field.name) }))
             : [{ name: "Approved metadata pending", status: fieldStatus(dataset, "pending") }];
           const promotionLabel = verification?.promotionStatus === "promoted"
             ? "live promoted"
@@ -117,6 +124,10 @@ export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
               {verification ? (
                 <span className="rounded-md bg-civic-100 px-2.5 py-1 text-xs font-medium text-civic-700">
                   checked {new Date(verification.lastCheckedAt).toLocaleDateString("en-US")}
+                </span>
+              ) : dataset.lastVerifiedAt ? (
+                <span className="rounded-md bg-civic-100 px-2.5 py-1 text-xs font-medium text-civic-700">
+                  checked {new Date(dataset.lastVerifiedAt).toLocaleDateString("en-US")}
                 </span>
               ) : null}
               {dataset.recommendedVisuals.map((visual) => (

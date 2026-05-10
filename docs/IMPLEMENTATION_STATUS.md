@@ -33,7 +33,7 @@ Last updated: May 9, 2026
 
 ## Current Milestone
 
-`v0.7.0-public-hardening` is locally complete on branch `feat/v0.7-public-hardening`. The same branch now includes early `v0.8.0-product-readiness` work for brand polish, no-backend sharing, curated gallery fixtures, and demo confidence.
+`v1.0.0-public-pilot` is active on branch `feat/v1-public-pilot`. The v0.6 through v0.9 code milestones remain locally implemented, but their public release tags are still blocked because this repo context has no public Vercel URL, Git remote, or Vercel project linkage/credentials.
 
 The v0.6 release gate is a verified public deployment. The repo has no configured Git remote today, so the first supported deployment path is manual Vercel CLI deployment. Do not tag `v0.6.0-hosted-beta` until a public URL passes deployment smoke checks and remote browser smoke tests.
 
@@ -124,8 +124,30 @@ Started on branch `feat/v0.9-public-reliability` from the locally closed-out v0.
   - `pnpm smoke:deploy -- --url http://localhost:3006`
   - `pnpm smoke:deploy:json -- --url http://localhost:3006`
 
-The Houston transportation candidate remains coming-later until the governance checklist passes. Release tags remain blocked on public hosted verification.
+The Houston transportation candidate moved from coming-later to governed sample-first work on the v1.0 branch. Release tags remain blocked on public hosted verification.
 
 ## v0.9 Hosted Release Closeout
 
 Hosted tagging remains blocked as of May 9, 2026 because this repo context has no public Vercel URL, no Git remote, and no Vercel project linkage/credentials. No deployment secrets or `.vercel` project metadata are committed. Tag `v0.9.0-public-reliability` only after public deployment smoke, remote Playwright, and platform-level firewall/rate-limit checks pass.
+
+## v1.0 Public Pilot Status
+
+Started on branch `feat/v1-public-pilot` from locally verified `feat/v0.9-public-reliability`:
+
+- Added `docs/V1_PUBLIC_PILOT_PLAN.md`.
+- Added Houston transportation incidents as the single governed third dataset for the public pilot.
+- Houston is sample-first and live-disabled until a stable source-owned API/schema is verified.
+- Catalog metadata classifies public incident fields and keeps `precise_address` hidden with `sensitive_hide`.
+- Added local Houston fallback sample data and ZIP centroid support for governed map rendering.
+- Deterministic Houston prompt handling now generates a validated dashboard with a required `SourceMethodBlock`.
+- `/demo-readiness`, `/sources`, deploy smoke, unit tests, and Playwright coverage now include Houston readiness and governance checks.
+- Local verification passed on May 9, 2026:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test` — 49 tests passed.
+  - `pnpm build`
+  - `pnpm verify` — 13 Playwright checks passed.
+  - `pnpm smoke:deploy -- --url http://localhost:3007` — 17/17 checks passed.
+  - `pnpm smoke:deploy:json -- --url http://localhost:3007` — `passed: 17`, `failed: 0`.
+
+The v1.0 release remains subject to the same hosted gate: no `v1.0.0-public-pilot` tag until public deployment smoke, remote Playwright, and platform-level firewall/rate-limit checks pass.

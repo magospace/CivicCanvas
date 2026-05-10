@@ -24,7 +24,7 @@ describe("MCP tool handlers", () => {
     expect(listSupportedSources().sources.length).toBeGreaterThan(0);
     expect(searchDatasets({ query: "Dallas 311" }).datasets[0].datasetId).toBe("dallas_311_requests");
     expect(getServerStatus().ok).toBe(true);
-    expect(getServerStatus().version).toBe("0.6.0-hosted-beta");
+    expect(getServerStatus().version).toBe("1.0.0-public-pilot");
     expect(getServerStatus().dataModeControls).toContain("live_if_available");
     expect(validateCatalog().health.status).toBe("ok");
     const liveSources = listLiveSources().liveSources;

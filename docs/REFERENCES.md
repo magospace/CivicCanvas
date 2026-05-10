@@ -13,5 +13,6 @@ These are useful external references for the developer handoff.
 - City of Austin Open Data: https://data.austintexas.gov/
 - Dallas Open Data: https://www.dallasopendata.com/
 - Houston Open Data: https://data.houstontx.gov/
+- City of Houston Active Incidents: https://www.houstontx.gov/activeincidents/index.html
 - San Antonio Open Data: https://data.sanantonio.gov/
 - Texas Open Data Portal: https://data.texas.gov/

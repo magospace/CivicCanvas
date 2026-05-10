@@ -2,15 +2,17 @@
 
 Last updated: May 9, 2026
 
-This plan tracks the active `feat/v0.7-public-hardening` branch. The v0.6 hosted-beta and v0.7 public-hardening code work remain locally complete but untagged because no public deployment URL is available. v0.8 product-readiness is now locally closed out: CivicCanvas brand polish, no-backend sharing, curated demo canvases, richer Miro preview, catalog-confidence copy, screenshot evidence, and local verification are complete without adding auth, hosted persistence, LLM parsing, arbitrary generated UI, arbitrary SQL/SoQL, external map layers, or live Miro writes.
+This plan tracks the active `feat/v1-public-pilot` branch. The v0.6 through v0.9 code work remains locally complete but untagged because no public deployment URL is available. v1.0 public-pilot work now focuses on one governed third dataset, clearer release proof, and public-demo confidence without adding auth, hosted persistence, LLM parsing, arbitrary generated UI, arbitrary SQL/SoQL, external map layers, or live Miro writes.
 
 ## Current State
 
 - `main` has been fast-forwarded to `v0.5.0-public-beta`.
-- Active branch: `feat/v0.7-public-hardening`.
+- Active branch: `feat/v1-public-pilot`.
 - v0.6 local hosted-beta work is implemented, including the external review hardening backlog listed below.
 - v0.7 local public-hardening work is implemented and verified locally, but v0.6/v0.7 are not tagged because there is no public Vercel URL, no Git remote, and no Vercel credential environment in this repo context.
 - v0.8 product-readiness work is locally closed out on the same branch with screenshots and release-gate documentation.
+- v0.9 public-reliability work is locally complete and remains untagged until hosted verification exists.
+- v1.0 public-pilot work adds Houston transportation as a governed sample-first third dataset with tests and visible readiness status.
 - All dashboard output must remain validated `CanvasDocument` JSON rendered through the allowlisted React block registry.
 
 ## Implemented v0.6 Review Hardening
@@ -128,22 +130,51 @@ The May 9, 2026 external review was accepted where it applied to the hosted-beta
 - Add a third verified dataset only after Dallas/Austin hosted reliability is solid.
 - Keep `v0.7.0-public-hardening` and future `v0.8.0-product-readiness` tags blocked until the required hosted public URL checks pass.
 
-## v0.9 Public Reliability Active
+## v0.9 Public Reliability Locally Complete
 
-Active branch: `feat/v0.9-public-reliability`. This pass focuses on public reliability rather than infrastructure expansion:
+Branch: `feat/v0.9-public-reliability`. This pass focused on public reliability rather than infrastructure expansion:
 
 1. Added `docs/V0_9_PUBLIC_RELIABILITY_PLAN.md`.
 2. Added clearer degraded-health UI and a utility-focused `/demo-readiness` route.
 3. Improved deploy smoke JSON output for CI dashboards.
 4. Documented known Dallas/Austin sample/live boundaries in the README.
 5. Extended CSV/JSON export affordances to gallery and saved canvases.
-6. Keep Houston transportation as the default third-dataset candidate, but do not wire it into dashboard generation until catalog metadata, field classification, local fallback sample, source caveats, adapter mapping, and bounded query tests are complete.
+6. Kept Houston transportation as the default third-dataset candidate until the v1.0 governance checklist could be completed.
 7. Verified locally on May 9, 2026 with `pnpm verify`, `pnpm smoke:deploy -- --url http://localhost:3006`, and `pnpm smoke:deploy:json -- --url http://localhost:3006`.
 8. Hosted tag remains blocked because no public Vercel URL, Git remote, or Vercel project linkage is available in this repo context.
 
+## v1.0 Public Pilot Active
+
+Active branch: `feat/v1-public-pilot`. This pass converts the single third-dataset candidate into a governed sample-first public-pilot workflow:
+
+1. Added `docs/V1_PUBLIC_PILOT_PLAN.md`.
+2. Added Houston transportation incidents catalog metadata with public source attribution, local fallback sample data, field classifications, source caveats, and `sample_first` live verification status.
+3. Kept Houston live-disabled until a stable source-owned API/schema is verified.
+4. Classified `precise_address` as `sensitive_hide` so it is rejected by bounded queries and excluded from dashboards/exports.
+5. Added Houston ZIP centroid coverage for governed map rendering.
+6. Added deterministic Houston transportation prompt support with sample-first fallback, required `SourceMethodBlock`, and visible caveats.
+7. Added a validated Houston gallery fixture.
+8. Extended `/demo-readiness`, `/sources`, deploy smoke, unit tests, and Playwright coverage for Houston readiness and safety.
+
+### Remaining v1.0 Work
+
+- Public hosted deployment and remote Playwright are still required before tagging.
+- Record the public hosted verification result once a URL exists.
+- Do not tag `v1.0.0-public-pilot` until a real public URL passes hosted smoke and remote Playwright.
+
+### Local v1.0 Verification
+
+- `pnpm lint`
+- `pnpm typecheck`
+- `pnpm test` — 49 tests passed.
+- `pnpm build`
+- `pnpm verify` — preflight, live smoke, and 13 Playwright checks passed.
+- `pnpm smoke:deploy -- --url http://localhost:3007` — 17/17 checks passed.
+- `pnpm smoke:deploy:json -- --url http://localhost:3007` — `passed: 17`, `failed: 0`.
+
 ## Release Gate
 
-Do not tag `v0.6.0-hosted-beta`, `v0.7.0-public-hardening`, or a future `v0.8.0-product-readiness` milestone until:
+Do not tag `v0.6.0-hosted-beta`, `v0.7.0-public-hardening`, `v0.8.0-product-readiness`, `v0.9.0-public-reliability`, or `v1.0.0-public-pilot` until:
 
 - v0.6 must-fix items above are resolved or explicitly waived in docs.
 - `pnpm verify` passes.

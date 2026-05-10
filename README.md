@@ -12,6 +12,7 @@ Optional stretch: export dashboards to Miro as briefing boards, slide-like frame
 
 1. Dallas 311 service requests by category and ZIP code for 2024.
 2. Austin building permits by month and ZIP code.
+3. Houston transportation incidents by incident type and ZIP code for 2024.
 
 ## Core safety model
 
@@ -65,6 +66,7 @@ Use `/explore` and run:
 ```text
 Show Dallas 311 service requests by category and ZIP code for 2024.
 Show Austin building permits by month and ZIP code.
+Show Houston traffic incidents by ZIP and incident type for 2024.
 ```
 
 Unsupported prompts return approved dataset suggestions instead of hallucinated dashboards.
@@ -81,7 +83,7 @@ The dashboard prompt bar and inspector expose the same governed data modes used 
 
 - Dallas 311 live aggregates are promoted only for verified non-ZIP mapped fields. Dallas ZIP dashboard views intentionally use sample fallback because the verified live Socrata view does not expose ZIP.
 - Austin permit metadata is verified, but monthly live aggregation remains sample-first until a source-owned month grouping is safely verified.
-- Houston transportation incidents is the default v0.9 third-dataset candidate, but it stays in coming-later/suggestion mode until catalog metadata, field classification, fallback samples, source caveats, adapter mapping, and bounded query tests are complete.
+- Houston transportation incidents is the v1.0 public-pilot third dataset. It is sample-first, excludes precise locations, and remains live-disabled until a stable source-owned API/schema is verified.
 - Sample fallback remains mandatory for every live-enabled dataset so public demos stay reliable when live portals time out or reject a safe aggregate.
 
 ## MCP server
@@ -111,7 +113,7 @@ Recommended Vercel settings:
 - Output framework: Next.js
 - Required secrets: none for sample mode
 - Hosted beta env: `NEXT_PUBLIC_APP_ENV=hosted-beta`
-- Hosted beta version: `NEXT_PUBLIC_APP_VERSION=v0.6.0-hosted-beta`
+- Hosted beta version: set the release being verified, for example `NEXT_PUBLIC_APP_VERSION=v1.0.0-public-pilot`
 - Optional site URL: `NEXT_PUBLIC_SITE_URL=https://your-public-beta.example`
 
 Set hosted beta `NEXT_PUBLIC_*` values before building; Next.js captures them into the production bundle.
@@ -121,7 +123,7 @@ Sample mode requires no secrets. Live Socrata adapters use verified catalog fiel
 After deploying, smoke-check the public URL:
 
 ```bash
-pnpm smoke:deploy -- --url https://your-deployment.example --expect-version v0.6.0-hosted-beta
+pnpm smoke:deploy -- --url https://your-deployment.example --expect-version v1.0.0-public-pilot
 ```
 
 Saved canvases remain browser-local. Use `/saved` to export/import portable saved-canvas bundles for demos and handoffs. Share links place the validated bundle in the URL hash and import only after schema validation; they are not public database-backed URLs.
@@ -156,4 +158,5 @@ Brand assets live under `apps/web/public/brand/`. The header uses the compact Ci
 - `docs/MCP_SERVER_SPEC.md`
 - `docs/DATA_GOVERNANCE.md`
 - `docs/ACCEPTANCE_CRITERIA.md`
+- `docs/V1_PUBLIC_PILOT_PLAN.md`
 - `.agents/skills/texas-public-data-explorer/SKILL.md`

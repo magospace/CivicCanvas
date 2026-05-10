@@ -51,24 +51,43 @@ Narration:
 
 ## Demo 3 - Sources browser
 
+1. Enter: `Show Houston traffic incidents by ZIP and incident type for 2024.`
+2. Click Generate View.
+3. Point out the sample-first data-mode badge and the Source & Method caveat that precise locations are excluded.
+
+Narration:
+
+- Houston is the v1.0 third dataset and remains sample-first until a stable source-owned live API/schema is verified.
+- The precise address field is classified as hidden and cannot be queried or exported.
+- The same CanvasDocument and BoundedQuerySpec rules govern the new dataset.
+
+## Demo 4 - Sources browser
+
 1. Open `/sources`.
 2. Filter by city or topic.
-3. Show source, city, topic, update/access status, fields, caveats, and recommended visual types.
+3. Show source, city, topic, update/access status, field status, caveats, and recommended visual types.
+4. Point out the Dallas ZIP sample fallback, Austin monthly aggregation blocker, and Houston sample-first status.
 
-## Demo 4 - Unsupported prompt safety
+## Demo 5 - Demo readiness
+
+1. Open `/demo-readiness`.
+2. Show dataset readiness for Dallas, Austin, and Houston.
+3. Use Copy demo checklist if you need a plain-text release flow.
+
+## Demo 6 - Unsupported prompt safety
 
 1. Return to `/explore`.
 2. Enter: `Compare tax abatements across El Paso.`
 3. Show that the app returns approved dataset suggestions instead of inventing a dashboard.
 
-## Demo 5 - Miro stretch preview
+## Demo 7 - Miro stretch preview
 
 1. Generate the Dallas dashboard.
 2. Choose a Miro template in the inspector or use the main canvas toolbar.
 3. Explain that the app generates frame cards plus preview-only MiroExportSpec JSON with a required Source & Method frame.
 4. No Miro board write occurs in the MVP.
 
-## Demo 6 - Saved bundle workflow
+## Demo 8 - Saved bundle workflow
 
 1. Save the Dallas dashboard.
 2. Open `/saved`.
@@ -82,10 +101,10 @@ Narration:
 - Portable bundles are validated on import.
 - Unsafe CanvasSpec JSON is rejected before render.
 
-## Demo 7 - Curated gallery
+## Demo 9 - Curated gallery
 
 1. Open `/gallery`.
-2. Show the checked-in Dallas, Austin, and unsupported-sensitive prompt examples.
+2. Show the checked-in Dallas, Austin, Houston, and unsupported-sensitive prompt examples.
 3. Explain that the gallery is static validated CanvasDocument JSON rendered through the same allowlisted registry.
 
 ## MCP server check

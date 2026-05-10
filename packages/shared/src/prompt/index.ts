@@ -94,6 +94,16 @@ export function parsePromptIntent({
     "construction permits",
     "issued permit",
     "issued permits",
+    "transportation incident",
+    "transportation incidents",
+    "traffic incident",
+    "traffic incidents",
+    "road hazard",
+    "road hazards",
+    "lane closure",
+    "lane closures",
+    "road project",
+    "road projects",
     "status breakdown",
     "top categories"
   ];
@@ -160,6 +170,12 @@ export function parsePromptIntent({
     matchedTerms.add(normalized.includes("permit") ? "permit" : "type");
     reasonCodes.add("type_grouping_requested");
   }
+  if (normalized.includes("incident") || normalized.includes("traffic") || normalized.includes("road") || normalized.includes("transportation")) {
+    groupBy.add("incident_type");
+    requestedVisuals.add("chart");
+    matchedTerms.add(normalized.includes("incident") ? "incident" : "transportation");
+    reasonCodes.add("incident_type_grouping_requested");
+  }
   if (normalized.includes("top")) {
     requestedVisuals.add("chart");
     matchedTerms.add("top");
@@ -190,7 +206,7 @@ export function parsePromptIntent({
     topic: dataset?.topic,
     dateRange: yearRange(prompt, referenceDate),
     metrics: dataset
-      ? [{ type: "count", alias: dataset.id.includes("permit") ? "permit_count" : "request_count" }]
+      ? [{ type: "count", alias: dataset.id.includes("permit") ? "permit_count" : dataset.id.includes("transportation") ? "incident_count" : "request_count" }]
       : [],
     groupBy: supportedGroupBy.length > 0 ? supportedGroupBy : dataset ? ["month"] : [],
     filters: [],
@@ -220,7 +236,7 @@ export function intentToBoundedQuerySpec(intent: PromptIntent, dataset: DatasetM
     groupBy: intent.groupBy.filter((field) => dataset.fields.some((candidate) => candidate.name === field)),
     metrics: intent.metrics.length > 0
       ? intent.metrics
-      : [{ type: "count", alias: dataset.id.includes("permit") ? "permit_count" : "request_count" }],
+      : [{ type: "count", alias: dataset.id.includes("permit") ? "permit_count" : dataset.id.includes("transportation") ? "incident_count" : "request_count" }],
     orderBy: [],
     mode: intent.reasonCodes.includes("mode_sample_requested")
       ? "sample_only"

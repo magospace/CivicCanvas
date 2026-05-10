@@ -35,6 +35,7 @@ Default handling:
 - ZIP code/city/county: allowed
 - Request/permit IDs: allow only when clearly public and useful
 - Public safety incident details: aggregate by geography/time/category
+- Transportation incident details: aggregate by ZIP/time/type/status; hide precise street addresses unless a later governance review explicitly approves a generalized field.
 
 ## Query policy
 
@@ -90,3 +91,7 @@ Miro export must:
 - Not create a board without user confirmation.
 - Preserve dataset and query attribution.
 - Prefer aggregate results over raw records.
+
+## Houston v1.0 pilot policy
+
+Houston transportation is sample-first in v1.0. The public source is documented, but no live adapter is promoted until a stable source-owned API/schema is verified. The `precise_address` field is classified `sensitive_hide`; it must remain unavailable to bounded queries, dashboard blocks, CSV/JSON exports, Miro previews, gallery fixtures, and saved-canvas bundles.

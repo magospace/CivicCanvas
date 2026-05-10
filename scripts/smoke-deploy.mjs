@@ -55,6 +55,19 @@ const dashboardPromptChecks = [
     }
   },
   {
+    name: "houston_canvas_generation",
+    prompt: "Show Houston traffic incidents by ZIP and incident type for 2024.",
+    expect: (body) => {
+      const blockTypes = body?.canvas?.blocks?.map((block) => block.type) ?? [];
+      return {
+        ok: Boolean(body?.canvas?.title?.includes("Houston Transportation")) &&
+          blockTypes.includes("SourceMethodBlock") &&
+          body?.dataMode === "sample",
+        reason: "Expected governed Houston sample-first dashboard with required SourceMethodBlock."
+      };
+    }
+  },
+  {
     name: "unsupported_prompt_suggestions",
     prompt: "Show private phone numbers for bridge repairs on Mars.",
     expect: (body) => ({
@@ -95,8 +108,10 @@ const checks = [
     expect: (body) => {
       const datasetIds = body?.datasets?.map((dataset) => dataset.id) ?? [];
       return {
-        ok: datasetIds.includes("dallas_311_requests") && datasetIds.includes("austin_building_permits"),
-        reason: "Expected datasets API to return Dallas and Austin approved datasets."
+        ok: datasetIds.includes("dallas_311_requests") &&
+          datasetIds.includes("austin_building_permits") &&
+          datasetIds.includes("houston_transportation_incidents"),
+        reason: "Expected datasets API to return Dallas, Austin, and Houston approved datasets."
       };
     }
   },
@@ -109,6 +124,22 @@ const checks = [
       return {
         ok: body?.dataset?.id === "dallas_311_requests" && fields.includes("category"),
         reason: "Expected Dallas dataset metadata with allowlisted category field."
+      };
+    }
+  },
+  {
+    name: "dataset_metadata_houston",
+    path: "/api/datasets/houston_transportation_incidents",
+    kind: "json",
+    expect: (body) => {
+      const fields = body?.dataset?.fields ?? [];
+      const fieldNames = fields.map((field) => field.name);
+      const preciseAddress = fields.find((field) => field.name === "precise_address");
+      return {
+        ok: body?.dataset?.id === "houston_transportation_incidents" &&
+          fieldNames.includes("incident_type") &&
+          preciseAddress?.classification === "sensitive_hide",
+        reason: "Expected Houston dataset metadata with governed incident fields and hidden precise address."
       };
     }
   },
@@ -133,6 +164,29 @@ const checks = [
         body.result.rows.length > 0 &&
         Array.isArray(body?.audit?.safetyDecisions),
       reason: "Expected query endpoint to return bounded Dallas rows and audit decisions."
+    })
+  },
+  {
+    name: "query_endpoint_houston",
+    path: "/api/query",
+    method: "POST",
+    kind: "json",
+    body: {
+      schemaVersion: "1.0",
+      datasetId: "houston_transportation_incidents",
+      mode: "sample_only",
+      filters: [{ field: "reported_date", operator: "between", value: ["2024-01-01", "2024-12-31"] }],
+      groupBy: ["incident_type", "zip_code"],
+      metrics: [{ type: "count", alias: "incident_count" }],
+      orderBy: [{ field: "incident_count", direction: "desc" }],
+      limit: 8
+    },
+    expect: (body) => ({
+      ok: body?.result?.datasetId === "houston_transportation_incidents" &&
+        Array.isArray(body?.result?.rows) &&
+        body.result.rows.length > 0 &&
+        Array.isArray(body?.audit?.safetyDecisions),
+      reason: "Expected Houston sample-first query to return bounded incident rows and audit decisions."
     })
   },
   {
@@ -167,7 +221,9 @@ const checks = [
     path: "/gallery",
     kind: "text",
     expect: (body) => ({
-      ok: body.includes("Validated sample canvases") && body.includes("Dallas 311 Sample Dashboard"),
+      ok: body.includes("Validated sample canvases") &&
+        body.includes("Dallas 311 Sample Dashboard") &&
+        body.includes("Houston Transportation Sample Dashboard"),
       reason: "Expected curated gallery canvases to render."
     })
   },

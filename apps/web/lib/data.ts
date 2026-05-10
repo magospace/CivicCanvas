@@ -20,12 +20,14 @@ const sampleFileSchema = z.object({
 
 const sampleFiles: Record<string, string> = {
   austin_building_permits: "austin-building-permits.sample.json",
-  dallas_311_requests: "dallas-311.sample.json"
+  dallas_311_requests: "dallas-311.sample.json",
+  houston_transportation_incidents: "houston-transportation-incidents.sample.json"
 };
 
 const galleryCanvasFiles = [
   "dallas-311-sample.canvas.json",
   "austin-permits-sample.canvas.json",
+  "houston-transportation-sample.canvas.json",
   "unsupported-sensitive-prompt.canvas.json"
 ];
 

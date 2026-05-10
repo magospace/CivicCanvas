@@ -11,6 +11,7 @@
 - [x] Approved dataset catalog exists.
 - [x] Dataset cards show source, city, topic, update status, and fields.
 - [x] At least Austin building permits and Dallas 311 are represented.
+- [x] Houston transportation is represented as a governed sample-first public-pilot dataset.
 
 ## Query flow
 
@@ -20,6 +21,7 @@
 - [x] Query result includes source attribution and caveats.
 - [x] Row limits are enforced.
 - [x] Unknown fields/operators are rejected.
+- [x] Hidden/sensitive fields such as precise Houston addresses are rejected.
 
 ## Canvas flow
 
@@ -60,5 +62,6 @@
 
 - [x] Dallas 311 demo works.
 - [x] Austin permits demo works.
+- [x] Houston transportation sample-first demo works.
 - [x] README includes setup and demo commands.
 - [x] Demo script includes fallback instructions if live API is unavailable.

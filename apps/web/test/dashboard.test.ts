@@ -44,6 +44,17 @@ describe("dashboard generation", () => {
     expect(generation.canvas.sources[0].datasetId).toBe("austin_building_permits");
   });
 
+  it("generates the governed Houston transportation dashboard", async () => {
+    const generation = await generateCanvasForPrompt("Show Houston transportation incidents by ZIP and incident type for 2024.");
+
+    expect(generation.canvas.title).toContain("Houston Transportation");
+    expect(generation.canvas.sources[0].datasetId).toBe("houston_transportation_incidents");
+    expect(generation.dataMode).toBe("sample");
+    expect(generation.audits.length).toBeGreaterThan(0);
+    expect(generation.intent?.matchedTerms).toEqual(expect.arrayContaining(["transportation", "incident"]));
+    expect(generation.canvas.blocks.map((block) => block.type)).toContain("SourceMethodBlock");
+  });
+
   it("returns dataset suggestions for unsupported prompts", async () => {
     const generation = await generateCanvasForPrompt("Compare tax abatements across El Paso.");
 
@@ -60,6 +71,10 @@ describe("dashboard generation", () => {
     const austin = await generateCanvasForPrompt("Show Austin building activity trend for issued permits.");
     expect(austin.canvas.sources[0].datasetId).toBe("austin_building_permits");
     expect(austin.intent?.matchedTerms).toEqual(expect.arrayContaining(["building activity", "issued permits", "trend"]));
+
+    const houston = await generateCanvasForPrompt("Show Houston traffic incidents by ZIP and top incident types for 2024.");
+    expect(houston.canvas.sources[0].datasetId).toBe("houston_transportation_incidents");
+    expect(houston.intent?.matchedTerms).toEqual(expect.arrayContaining(["traffic incidents", "zip", "top"]));
   });
 
   it("respects explicit dashboard data-mode preferences", async () => {
@@ -81,6 +96,15 @@ describe("dashboard generation", () => {
     expect(austinLive.dataMode).toBe("fallback");
     expect(austinLive.fallbackReason).toContain("not live-enabled");
     expect(austinLive.canvas.sources[0].caveats.join(" ")).toContain("Approved sample fallback");
+
+    const houstonLive = await generateCanvasForPrompt(
+      "Show Houston transportation incidents by ZIP and incident type for 2024.",
+      {},
+      "live"
+    );
+    expect(houstonLive.requestedDataMode).toBe("live");
+    expect(houstonLive.dataMode).toBe("fallback");
+    expect(houstonLive.fallbackReason).toContain("not live-enabled");
   });
 
   it("exports a preview-only Miro spec with source method frame", async () => {
@@ -136,6 +160,7 @@ describe("dashboard generation", () => {
     expect(canvases.map((canvas) => canvas.id)).toEqual([
       "gallery_dallas_311_sample",
       "gallery_austin_permits_sample",
+      "gallery_houston_transportation_sample",
       "gallery_unsupported_sensitive_prompt"
     ]);
     expect(canvases.every((canvas) => canvas.blocks.some((block) => block.type === "SourceMethodBlock"))).toBe(true);
@@ -148,7 +173,7 @@ describe("production API contracts", () => {
     const health = await healthGET();
     const healthBody = await health.json();
     expect(healthBody.ok).toBe(true);
-    expect(healthBody.appVersion).toBe("v0.6.0-hosted-beta-dev");
+    expect(healthBody.appVersion).toBe("v1.0.0-public-pilot-dev");
     expect(healthBody.catalogCount).toBeGreaterThan(0);
 
     const catalogHealth = await catalogHealthGET();
@@ -168,21 +193,21 @@ describe("production API contracts", () => {
     };
 
     process.env.NEXT_PUBLIC_APP_ENV = "hosted-beta";
-    process.env.NEXT_PUBLIC_APP_VERSION = "v0.6.0-hosted-beta";
+    process.env.NEXT_PUBLIC_APP_VERSION = "v1.0.0-public-pilot";
     process.env.NEXT_PUBLIC_SITE_URL = "https://texas-data-canvas.example";
     process.env.VERCEL = "1";
     process.env.VERCEL_GIT_COMMIT_SHA = "abc123";
-    process.env.VERCEL_GIT_COMMIT_REF = "feat/v0.6-hosted-beta";
+    process.env.VERCEL_GIT_COMMIT_REF = "feat/v1-public-pilot";
 
     try {
       const health = await healthGET();
       const body = await health.json();
       expect(body.appEnvironment).toBe("hosted-beta");
-      expect(body.appVersion).toBe("v0.6.0-hosted-beta");
+      expect(body.appVersion).toBe("v1.0.0-public-pilot");
       expect(body.deploymentProvider).toBe("vercel");
       expect(body.deploymentUrl).toBe("https://texas-data-canvas.example");
       expect(body.gitCommitSha).toBe("abc123");
-      expect(body.gitBranch).toBe("feat/v0.6-hosted-beta");
+      expect(body.gitBranch).toBe("feat/v1-public-pilot");
     } finally {
       for (const [key, value] of Object.entries(previous)) {
         if (value === undefined) {
