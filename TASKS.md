@@ -2501,7 +2501,7 @@ Status: Complete on May 10, 2026.
 
 ## 154. Add Saved-Canvas Legacy Normalization Test
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Data Realism / Persistence Test
 - Goal: Prove browser-local saved records remain editable/exportable when older saved snapshots lack newer metadata fields.
@@ -2512,6 +2512,8 @@ Status: Pending.
 - Acceptance criteria: Test covers legacy/minimal saved bundle import or storage normalization and verifies reopened/exported records still validate through normal persistence helpers.
 - Validation command: `pnpm test -- apps/web/test/saved-canvases.test.ts`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with persistence helper edits.
+- Completed notes: Added a saved-canvas regression test proving legacy `CanvasDocument` JSON imports normalize through the normal import/storage path into editable browser-local saved records, can be edited via `updateSavedCanvasMetadata`, and export back through the saved-canvas bundle path with edited metadata.
+- Validation: `pnpm test -- apps/web/test/saved-canvases.test.ts` passed; due repo script wiring, 127 tests across 18 files ran and passed. `pnpm lint` passed; `git diff --check` passed.
 
 ## 155. Add API Validation Stub Honesty Test
 

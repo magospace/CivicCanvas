@@ -6,7 +6,9 @@ import {
 } from "@texas-data-canvas/shared";
 import {
   createSavedCanvasShareLink,
+  exportSavedCanvasesBundleJson,
   importSavedCanvasHash,
+  importSavedCanvasJson,
   savedCanvasImportLimitBytes,
   savedCanvasShareHashKey,
   savedCanvasShareHashLimitChars,
@@ -155,6 +157,31 @@ describe("saved canvas share hash import and export", () => {
     expect(updated[0].canvas.title).toBe("Edited civic demo title");
     expect(updated[0].canvas.prompt).toBe("Edited local prompt wording");
     expect(JSON.parse(storage.getItem(savedCanvasStorageKey) ?? "[]")[0].title).toBe("Edited civic demo title");
+  });
+
+  it("normalizes legacy canvas-document imports into editable browser-local saved records", () => {
+    const legacyCanvas = createSavedCanvasFixture().canvas;
+    const imported = importSavedCanvasJson(JSON.stringify(legacyCanvas));
+
+    expect(imported).toHaveLength(1);
+    expect(imported[0].canvasId).toBe(legacyCanvas.id);
+    expect(imported[0].title).toBe(legacyCanvas.title);
+    expect(imported[0].prompt).toBe(legacyCanvas.prompt ?? legacyCanvas.title);
+    expect(imported[0].canvas.title).toBe(legacyCanvas.title);
+    expect(JSON.parse(storage.getItem(savedCanvasStorageKey) ?? "[]")[0].canvasId).toBe(legacyCanvas.id);
+
+    const updated = updateSavedCanvasMetadata({
+      canvasId: legacyCanvas.id,
+      title: "Edited imported legacy title",
+      prompt: "Edited imported legacy prompt"
+    });
+    const exportedBundle = JSON.parse(exportSavedCanvasesBundleJson(updated));
+
+    expect(updated[0].title).toBe("Edited imported legacy title");
+    expect(updated[0].prompt).toBe("Edited imported legacy prompt");
+    expect(updated[0].canvas.title).toBe("Edited imported legacy title");
+    expect(updated[0].canvas.prompt).toBe("Edited imported legacy prompt");
+    expect(exportedBundle.canvases[0].title).toBe("Edited imported legacy title");
   });
 
   it("surfaces browser-local storage quota failures without masking the local-only boundary", () => {

@@ -2142,3 +2142,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 154, `Add Saved-Canvas Legacy Normalization Test`, for executable browser-local persistence/data-realism coverage.
+
+
+## Task 154 Update - Saved-Canvas Legacy Normalization Test
+
+- Task chosen: `TASKS.md` item 154, "Add Saved-Canvas Legacy Normalization Test".
+- Why this was next: It is the next high-value data-realism task because browser-local saved records are acceptable only if normal import/storage/edit/export paths continue to work for older saved/demo shapes.
+- Scope: `apps/web/test/saved-canvases.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Browser-local editable records / acceptable when labeled. No product persistence code changed.
+- Changes: Added a regression test that imports legacy `CanvasDocument` JSON through `importSavedCanvasJson`, verifies it becomes a normalized browser-local saved record in storage, edits it with `updateSavedCanvasMetadata`, and exports it through `exportSavedCanvasesBundleJson` with edited title/prompt metadata preserved.
+- Validation: `pnpm test -- apps/web/test/saved-canvases.test.ts` passed; due repo script wiring, 127 tests across 18 files ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 155, `Add API Validation Stub Honesty Test`, to keep the `/api/canvas/save` backend boundary explicit.
