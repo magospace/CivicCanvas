@@ -53,6 +53,9 @@ describe("dashboard generation", () => {
     expect(generation.audits.length).toBeGreaterThan(0);
     expect(generation.intent?.matchedTerms).toEqual(expect.arrayContaining(["transportation", "incident"]));
     expect(generation.canvas.blocks.map((block) => block.type)).toContain("SourceMethodBlock");
+    expect(generation.canvas.blocks.find((block) => block.id === "status-chart")?.type).toBe("ChartBlock");
+    expect(generation.canvas.blocks.some((block) => block.type === "DatasetCardBlock")).toBe(false);
+    expect(JSON.stringify(generation.canvas)).not.toContain("precise_address");
   });
 
   it("returns dataset suggestions for unsupported prompts", async () => {
@@ -61,6 +64,15 @@ describe("dashboard generation", () => {
     expect(generation.suggestedDatasets?.length).toBeGreaterThan(0);
     expect(generation.audits).toEqual([]);
     expect(generation.canvas.title).toContain("Choose");
+  });
+
+  it("refuses Houston exact-location prompts before dashboard generation", async () => {
+    const generation = await generateCanvasForPrompt("Show Houston exact addresses and raw incident locations by ZIP for 2024.");
+
+    expect(generation.canvas.title).toContain("Choose");
+    expect(generation.audits).toEqual([]);
+    expect(generation.intent?.rejectedFields).toEqual(expect.arrayContaining(["exact address", "raw incident"]));
+    expect(generation.intent?.safetyWarnings.join(" ")).toContain("governed dashboards");
   });
 
   it("routes supported synonym prompts through governed deterministic dashboards", async () => {
@@ -154,6 +166,18 @@ describe("dashboard generation", () => {
     expect(csv).toContain("Sanitation");
   });
 
+  it("keeps hidden Houston fields out of client exports", async () => {
+    const generation = await generateCanvasForPrompt("Show Houston transportation incidents by ZIP and incident type for 2024.");
+    const canvasJson = canvasDocumentJson(generation.canvas);
+    const specJson = boundedQuerySpecJson(generation.querySpec);
+    const csv = tableCsv(generation.canvas);
+
+    expect(canvasJson).not.toContain("precise_address");
+    expect(specJson).not.toContain("precise_address");
+    expect(csv).not.toContain("precise_address");
+    expect(csv).toContain("incident count");
+  });
+
   it("loads curated gallery canvases from checked-in validated JSON", () => {
     const canvases = getCuratedGalleryCanvases();
 
@@ -173,7 +197,7 @@ describe("production API contracts", () => {
     const health = await healthGET();
     const healthBody = await health.json();
     expect(healthBody.ok).toBe(true);
-    expect(healthBody.appVersion).toBe("v1.0.0-public-pilot-dev");
+    expect(healthBody.appVersion).toBe("v1.1.0-product-depth-dev");
     expect(healthBody.catalogCount).toBeGreaterThan(0);
 
     const catalogHealth = await catalogHealthGET();
@@ -193,21 +217,21 @@ describe("production API contracts", () => {
     };
 
     process.env.NEXT_PUBLIC_APP_ENV = "hosted-beta";
-    process.env.NEXT_PUBLIC_APP_VERSION = "v1.0.0-public-pilot";
+    process.env.NEXT_PUBLIC_APP_VERSION = "v1.1.0-product-depth";
     process.env.NEXT_PUBLIC_SITE_URL = "https://texas-data-canvas.example";
     process.env.VERCEL = "1";
     process.env.VERCEL_GIT_COMMIT_SHA = "abc123";
-    process.env.VERCEL_GIT_COMMIT_REF = "feat/v1-public-pilot";
+    process.env.VERCEL_GIT_COMMIT_REF = "feat/v1.1-product-depth";
 
     try {
       const health = await healthGET();
       const body = await health.json();
       expect(body.appEnvironment).toBe("hosted-beta");
-      expect(body.appVersion).toBe("v1.0.0-public-pilot");
+      expect(body.appVersion).toBe("v1.1.0-product-depth");
       expect(body.deploymentProvider).toBe("vercel");
       expect(body.deploymentUrl).toBe("https://texas-data-canvas.example");
       expect(body.gitCommitSha).toBe("abc123");
-      expect(body.gitBranch).toBe("feat/v1-public-pilot");
+      expect(body.gitBranch).toBe("feat/v1.1-product-depth");
     } finally {
       for (const [key, value] of Object.entries(previous)) {
         if (value === undefined) {

@@ -83,7 +83,7 @@ The dashboard prompt bar and inspector expose the same governed data modes used 
 
 - Dallas 311 live aggregates are promoted only for verified non-ZIP mapped fields. Dallas ZIP dashboard views intentionally use sample fallback because the verified live Socrata view does not expose ZIP.
 - Austin permit metadata is verified, but monthly live aggregation remains sample-first until a source-owned month grouping is safely verified.
-- Houston transportation incidents is the v1.0 public-pilot third dataset. It is sample-first, excludes precise locations, and remains live-disabled until a stable source-owned API/schema is verified.
+- Houston transportation incidents is the public-pilot third dataset. It is sample-first, excludes precise locations, and remains live-disabled. Houston TranStar provides sample feed documentation, but live feed access and aggregate-safe mappings are not promoted yet.
 - Sample fallback remains mandatory for every live-enabled dataset so public demos stay reliable when live portals time out or reject a safe aggregate.
 
 ## MCP server
@@ -113,7 +113,7 @@ Recommended Vercel settings:
 - Output framework: Next.js
 - Required secrets: none for sample mode
 - Hosted beta env: `NEXT_PUBLIC_APP_ENV=hosted-beta`
-- Hosted beta version: set the release being verified, for example `NEXT_PUBLIC_APP_VERSION=v1.0.0-public-pilot`
+- Hosted beta version: set the release being verified, for example `NEXT_PUBLIC_APP_VERSION=v1.1.0-product-depth`
 - Optional site URL: `NEXT_PUBLIC_SITE_URL=https://your-public-beta.example`
 
 Set hosted beta `NEXT_PUBLIC_*` values before building; Next.js captures them into the production bundle.
@@ -123,7 +123,7 @@ Sample mode requires no secrets. Live Socrata adapters use verified catalog fiel
 After deploying, smoke-check the public URL:
 
 ```bash
-pnpm smoke:deploy -- --url https://your-deployment.example --expect-version v1.0.0-public-pilot
+pnpm smoke:deploy -- --url https://your-deployment.example --expect-version v1.1.0-product-depth
 ```
 
 Saved canvases remain browser-local. Use `/saved` to export/import portable saved-canvas bundles for demos and handoffs. Share links place the validated bundle in the URL hash and import only after schema validation; they are not public database-backed URLs.
@@ -143,6 +143,7 @@ The `/demo-readiness` route is a utility page for checking release gates and pub
 - `data/catalog/approved-datasets.json`
 - `data/samples/dallas-311.sample.json`
 - `data/samples/austin-building-permits.sample.json`
+- `data/samples/houston-transportation-incidents.sample.json`
 - `data/gallery/*.canvas.json`
 
 The frontend validates catalog data and renders dashboards through a trusted React block registry. It does not execute AI-generated HTML, JavaScript, external scripts, SQL, or arbitrary components.
@@ -159,4 +160,5 @@ Brand assets live under `apps/web/public/brand/`. The header uses the compact Ci
 - `docs/DATA_GOVERNANCE.md`
 - `docs/ACCEPTANCE_CRITERIA.md`
 - `docs/V1_PUBLIC_PILOT_PLAN.md`
+- `docs/V1_1_PRODUCT_DEPTH_PLAN.md`
 - `.agents/skills/texas-public-data-explorer/SKILL.md`

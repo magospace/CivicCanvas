@@ -14,7 +14,7 @@ import {
 } from "@texas-data-canvas/shared";
 import { getAdapter, getCatalog } from "./data.js";
 
-export const MCP_SERVER_VERSION = "1.0.0-public-pilot";
+export const MCP_SERVER_VERSION = "1.1.0-product-depth";
 
 export function getServerStatus() {
   const catalog = getCatalog();
@@ -203,7 +203,11 @@ export async function generateCanvasSpec(input: unknown) {
   const dataset = findDataset(datasetId);
   const dateField = dataset.fields.find((field) => field.type === "date")?.name ?? "month";
   const categoryField = dataset.fields.find((field) => field.name.includes("category") || field.name.includes("type"))?.name ?? "status";
-  const countAlias = datasetId.includes("permit") ? "permit_count" : "request_count";
+  const countAlias = datasetId.includes("permit")
+    ? "permit_count"
+    : datasetId.includes("transportation") || datasetId.includes("incident")
+      ? "incident_count"
+      : "request_count";
   const execution = await getAdapter().queryDataset({
     datasetId,
     mode,

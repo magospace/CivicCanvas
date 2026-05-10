@@ -266,19 +266,20 @@
     "title": "Houston Transportation Incidents and Road Projects",
     "city": "Houston",
     "topic": "Transportation",
-    "sourceName": "City of Houston Active Incidents",
-    "sourceUrl": "https://www.houstontx.gov/activeincidents/index.html",
-    "dataAccess": "sample_first_governance_candidate",
+    "sourceName": "Houston TranStar Traffic Data Feeds",
+    "sourceUrl": "https://traffic.houstontranstar.org/api/api_doc.aspx",
+    "dataAccess": "sample_first_verified_boundary",
     "adapter": "static_json",
     "lastVerifiedAt": "2026-05-09T00:00:00.000Z",
     "liveAvailable": false,
     "liveQueryNotes": [
-      "v1.0 public pilot keeps Houston transportation sample-first until a stable source-owned live API/schema is verified.",
-      "The public Active Incidents page is current-state oriented and may include precise locations; the pilot sample intentionally exposes only aggregate-safe fields."
+      "Houston TranStar documents JSON sample feeds for incidents, lane closures, travel times, and roadway flood warnings.",
+      "TranStar documentation says live data feed access requires contacting Houston TranStar, so no public live adapter is promoted.",
+      "The City Active Incidents HTML page is current-state oriented and includes precise addresses; Texas Data Canvas does not scrape it or expose precise locations."
     ],
     "liveVerification": {
       "promotionStatus": "sample_first",
-      "lastCheckedAt": "2026-05-09T23:59:00.000Z",
+      "lastCheckedAt": "2026-05-10T00:30:00.000Z",
       "testedFields": [
         "reported_date",
         "month",
@@ -302,6 +303,56 @@
       ],
       "checks": [
         {
+          "label": "Houston TranStar sample incident JSON",
+          "queryShape": "public sample JSON feed shape review",
+          "fields": [
+            "desc",
+            "status",
+            "date",
+            "time",
+            "location",
+            "lat",
+            "lng"
+          ],
+          "status": "passed",
+          "dataMode": "sample",
+          "url": "https://traffic.houstontranstar.org/api/incidents_sample.json",
+          "rowCount": 11,
+          "reason": "Sample JSON feed is documented, but it is not the live feed and includes location/coordinate fields that require stricter governance before promotion."
+        },
+        {
+          "label": "Houston TranStar live feed access",
+          "queryShape": "live incident and lane closure JSON feeds",
+          "fields": [
+            "incident_type",
+            "status",
+            "reported_date",
+            "location",
+            "lat",
+            "lng"
+          ],
+          "status": "blocked",
+          "dataMode": "sample",
+          "url": "https://traffic.houstontranstar.org/api/api_doc.aspx",
+          "reason": "Official documentation says users must contact Houston TranStar to gain access to live data feeds; no public live endpoint was available to verify."
+        },
+        {
+          "label": "City active incidents HTML boundary",
+          "queryShape": "current-state active incidents HTML table",
+          "fields": [
+            "agency",
+            "address",
+            "cross_street",
+            "key_map",
+            "call_time",
+            "incident_type"
+          ],
+          "status": "blocked",
+          "dataMode": "sample",
+          "url": "https://www.houstontx.gov/activeincidents/index.html",
+          "reason": "The page is HTML, includes precise addresses, and archived listings require a public information request; it is documented but not used as an app adapter."
+        },
+        {
           "label": "Pilot sample governance",
           "queryShape": "sample fallback grouped by incident_type, zip_code, status, and month",
           "fields": [
@@ -313,7 +364,7 @@
           ],
           "status": "skipped",
           "dataMode": "sample",
-          "reason": "No stable live adapter is promoted for v1.0; local sample fallback is mandatory."
+          "reason": "No stable live adapter is promoted for v1.1; local sample fallback is mandatory."
         }
       ]
     },
@@ -380,7 +431,7 @@
       "table"
     ],
     "caveats": [
-      "Houston transportation is sample-first until a stable public live adapter and field mapping are verified.",
+      "Houston transportation is sample-first until Houston TranStar live feed access and aggregate-safe field mapping are verified.",
       "The pilot sample excludes precise addresses and should not be treated as a complete incident feed.",
       "ZIP-level geography is approximate and intended for aggregate context only."
     ]

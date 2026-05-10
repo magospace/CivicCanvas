@@ -92,6 +92,6 @@ Miro export must:
 - Preserve dataset and query attribution.
 - Prefer aggregate results over raw records.
 
-## Houston v1.0 pilot policy
+## Houston pilot policy
 
-Houston transportation is sample-first in v1.0. The public source is documented, but no live adapter is promoted until a stable source-owned API/schema is verified. The `precise_address` field is classified `sensitive_hide`; it must remain unavailable to bounded queries, dashboard blocks, CSV/JSON exports, Miro previews, gallery fixtures, and saved-canvas bundles.
+Houston transportation is sample-first. The preferred source boundary is Houston TranStar traffic feed documentation and sample JSON, but no live adapter is promoted until stable live feed access and aggregate-safe field mappings are verified. The City Active Incidents page is not scraped into the app. The `precise_address` field is classified `sensitive_hide`; it must remain unavailable to bounded queries, dashboard blocks, CSV/JSON exports, Miro previews, gallery fixtures, and saved-canvas bundles.

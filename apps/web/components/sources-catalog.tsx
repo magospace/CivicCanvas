@@ -76,6 +76,7 @@ export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
           const fields = dataset.fields.length > 0
             ? dataset.fields.map((field) => ({ name: field.name, status: fieldStatus(dataset, field.name) }))
             : [{ name: "Approved metadata pending", status: fieldStatus(dataset, "pending") }];
+          const hiddenFields = dataset.fields.filter((field) => field.classification === "sensitive_hide");
           const promotionLabel = verification?.promotionStatus === "promoted"
             ? "live promoted"
             : verification?.promotionStatus === "blocked"
@@ -181,6 +182,11 @@ export function SourcesCatalog({ datasets }: { datasets: DatasetMetadata[] }) {
                 </span>
               ))}
               </div>
+              {hiddenFields.length > 0 ? (
+                <p className="mt-2 rounded-md bg-signal/10 px-3 py-2 text-xs leading-5 text-signal">
+                  Hidden fields such as {hiddenFields.map((field) => field.name).join(", ")} are intentionally excluded from queries, exports, and generated dashboards.
+                </p>
+              ) : null}
             </div>
             <p className="mt-4 text-xs leading-5 text-slate-500">{dataset.caveats[0]}</p>
           </article>

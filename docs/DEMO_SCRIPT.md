@@ -57,7 +57,7 @@ Narration:
 
 Narration:
 
-- Houston is the v1.0 third dataset and remains sample-first until a stable source-owned live API/schema is verified.
+- Houston is the third public-pilot dataset and remains sample-first. Houston TranStar provides sample feed documentation, but live feed access and aggregate-safe mappings are not promoted yet.
 - The precise address field is classified as hidden and cannot be queried or exported.
 - The same CanvasDocument and BoundedQuerySpec rules govern the new dataset.
 

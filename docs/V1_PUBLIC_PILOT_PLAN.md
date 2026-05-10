@@ -26,7 +26,7 @@ Until then, release docs should record the operational blocker rather than creat
 Houston transportation incidents is the single v1.0 third-dataset candidate. It is intentionally sample-first:
 
 - Approved catalog metadata is present.
-- The public source is documented as the City of Houston Active Incidents page.
+- The v1.0 public source was initially documented as the City of Houston Active Incidents page; the v1.1 verification pass moved the preferred source boundary to Houston TranStar sample JSON/feed documentation while keeping Houston sample-first.
 - Exposed fields are classified before query use.
 - `precise_address` is classified `sensitive_hide` and is not available to queries, exports, Miro previews, gallery canvases, or tables.
 - A local fallback sample powers demos and tests.

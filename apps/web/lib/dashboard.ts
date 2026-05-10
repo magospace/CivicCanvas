@@ -442,7 +442,9 @@ async function createDashboardForIntent({
           bullets: [
             "Dataset, fields, filters, and row limits were validated before querying.",
             "Visuals are rendered through the allowlisted React block registry.",
-            dataModeText
+            intent.datasetId === "houston_transportation_incidents"
+              ? "Houston remains sample-first until Houston TranStar live feed access and aggregate-safe mappings are verified."
+              : dataModeText
           ]
         }
       },
@@ -489,8 +491,9 @@ async function createDashboardForIntent({
           data: zipRows,
           features: zipFeaturesForRows(zipRows, intent.geographyField),
           legend: `${intent.countAlias.replace(/_/g, " ")} by ZIP code`,
-          note:
-            "ZIP-level coordinates are approximate centroids for aggregate context. Sample mode may not represent full live public records."
+          note: intent.datasetId === "houston_transportation_incidents"
+            ? "ZIP-level coordinates are approximate centroids for aggregate context. Precise incident locations are excluded from this sample-first pilot."
+            : "ZIP-level coordinates are approximate centroids for aggregate context. Sample mode may not represent full live public records."
         }
       },
       {
@@ -510,7 +513,9 @@ async function createDashboardForIntent({
         type: "TableBlock",
         props: {
           title: "Grouped detail table",
-          caption: "Top grouped rows returned by the bounded query.",
+          caption: intent.datasetId === "houston_transportation_incidents"
+            ? "Top aggregate-safe sample rows returned by the bounded query; precise locations are excluded."
+            : "Top grouped rows returned by the bounded query.",
           pageSize: 10,
           sortBy: intent.countAlias,
           columns: table.result.columns.map((column) => ({
@@ -555,11 +560,28 @@ async function createDashboardForIntent({
           ]
         }
       },
-      {
-        id: "dataset-card",
-        type: "DatasetCardBlock",
-        props: { dataset }
-      },
+      ...(intent.datasetId === "houston_transportation_incidents"
+        ? [
+          {
+            id: "status-chart",
+            type: "ChartBlock" as const,
+            props: {
+              title: "Status breakdown",
+              subtitle: "Grouped by incident status from aggregate-safe sample rows",
+              chartType: "bar" as const,
+              xField: intent.statusField,
+              yField: intent.countAlias,
+              data: chartRows(byStatus.result, intent.statusField, intent.countAlias)
+            }
+          }
+        ]
+        : [
+          {
+            id: "dataset-card",
+            type: "DatasetCardBlock" as const,
+            props: { dataset }
+          }
+        ]),
       {
         id: "source-method",
         type: "SourceMethodBlock",
@@ -588,13 +610,24 @@ export async function generateCanvasForPrompt(
   filterValues: DashboardFilterValues = {},
   dataModePreference: DataModePreference = "auto"
 ): Promise<DashboardGeneration> {
+  const promptIntent = parsePromptIntent({ prompt, catalog: getDatasetCatalog() });
+  if (promptIntent.safetyWarnings.length > 0 || promptIntent.rejectedFields.length > 0) {
+    return {
+      canvas: createDatasetSuggestionCanvas(prompt),
+      audits: [],
+      intent: promptIntent,
+      requestedDataMode: dataModePreference,
+      suggestedDatasets: getDatasetCatalog().filter((dataset) => dataset.fields.length > 0)
+    };
+  }
+
   const intent = detectIntent(prompt);
 
   if (!intent) {
     return {
       canvas: createDatasetSuggestionCanvas(prompt),
       audits: [],
-      intent: parsePromptIntent({ prompt, catalog: getDatasetCatalog() }),
+      intent: promptIntent,
       requestedDataMode: dataModePreference,
       suggestedDatasets: getDatasetCatalog().filter((dataset) => dataset.fields.length > 0)
     };
@@ -639,7 +672,7 @@ export function createDatasetSuggestionCanvas(prompt: string): CanvasDocument {
         type: "SummaryBlock",
         props: {
           heading: "Unsupported prompt for governed generation",
-          text: "Try the Dallas 311 or Austin building permit demo prompt. Unknown prompts return suggestions instead of hallucinated dashboards.",
+          text: "Try the Dallas 311, Austin building permit, or Houston transportation demo prompt. Unknown or sensitive prompts return suggestions instead of hallucinated dashboards.",
           bullets: [
             "Show Dallas 311 service requests by category and ZIP code for 2024.",
             "Show Austin building permits by month and ZIP code.",

@@ -79,7 +79,23 @@ export function parsePromptIntent({
   referenceDate?: Date;
 }): PromptIntent {
   const normalized = prompt.toLowerCase();
-  const sensitiveTerms = ["name", "phone", "email", "address", "applicant", "contractor", "personal", "private"];
+  const sensitiveTerms = [
+    "name",
+    "phone",
+    "email",
+    "address",
+    "street address",
+    "exact address",
+    "precise address",
+    "exact location",
+    "precise location",
+    "raw location",
+    "raw incident",
+    "applicant",
+    "contractor",
+    "personal",
+    "private"
+  ];
   const synonymTerms = [
     "service request",
     "service requests",

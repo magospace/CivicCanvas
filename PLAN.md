@@ -2,17 +2,18 @@
 
 Last updated: May 9, 2026
 
-This plan tracks the active `feat/v1-public-pilot` branch. The v0.6 through v0.9 code work remains locally complete but untagged because no public deployment URL is available. v1.0 public-pilot work now focuses on one governed third dataset, clearer release proof, and public-demo confidence without adding auth, hosted persistence, LLM parsing, arbitrary generated UI, arbitrary SQL/SoQL, external map layers, or live Miro writes.
+This plan tracks the active `feat/v1.1-product-depth` branch. The v0.6 through v1.0 code work remains locally complete but untagged because no public deployment URL is available. v1.1 product-depth work improves the Dallas, Austin, and Houston public-pilot experience while keeping the no-auth, no hosted persistence, no LLM parsing, no arbitrary generated UI, no arbitrary SQL/SoQL, no external map layers, and no live Miro writes boundary.
 
 ## Current State
 
 - `main` has been fast-forwarded to `v0.5.0-public-beta`.
-- Active branch: `feat/v1-public-pilot`.
+- Active branch: `feat/v1.1-product-depth`.
 - v0.6 local hosted-beta work is implemented, including the external review hardening backlog listed below.
 - v0.7 local public-hardening work is implemented and verified locally, but v0.6/v0.7 are not tagged because there is no public Vercel URL, no Git remote, and no Vercel credential environment in this repo context.
 - v0.8 product-readiness work is locally closed out on the same branch with screenshots and release-gate documentation.
 - v0.9 public-reliability work is locally complete and remains untagged until hosted verification exists.
 - v1.0 public-pilot work adds Houston transportation as a governed sample-first third dataset with tests and visible readiness status.
+- v1.1 product-depth work attempts Houston live verification through official/source-owned endpoints, keeps Houston sample-first, and deepens Houston dashboard/readiness/source UX.
 - All dashboard output must remain validated `CanvasDocument` JSON rendered through the allowlisted React block registry.
 
 ## Implemented v0.6 Review Hardening
@@ -143,9 +144,9 @@ Branch: `feat/v0.9-public-reliability`. This pass focused on public reliability 
 7. Verified locally on May 9, 2026 with `pnpm verify`, `pnpm smoke:deploy -- --url http://localhost:3006`, and `pnpm smoke:deploy:json -- --url http://localhost:3006`.
 8. Hosted tag remains blocked because no public Vercel URL, Git remote, or Vercel project linkage is available in this repo context.
 
-## v1.0 Public Pilot Active
+## v1.0 Public Pilot Locally Complete
 
-Active branch: `feat/v1-public-pilot`. This pass converts the single third-dataset candidate into a governed sample-first public-pilot workflow:
+Branch: `feat/v1-public-pilot`. This pass converts the single third-dataset candidate into a governed sample-first public-pilot workflow:
 
 1. Added `docs/V1_PUBLIC_PILOT_PLAN.md`.
 2. Added Houston transportation incidents catalog metadata with public source attribution, local fallback sample data, field classifications, source caveats, and `sample_first` live verification status.
@@ -172,9 +173,38 @@ Active branch: `feat/v1-public-pilot`. This pass converts the single third-datas
 - `pnpm smoke:deploy -- --url http://localhost:3007` — 17/17 checks passed.
 - `pnpm smoke:deploy:json -- --url http://localhost:3007` — `passed: 17`, `failed: 0`.
 
+## v1.1 Product Depth Active
+
+Active branch: `feat/v1.1-product-depth`. This pass deepens the public-pilot experience without adding new infrastructure:
+
+1. Added `docs/V1_1_PRODUCT_DEPTH_PLAN.md`.
+2. Rechecked Houston live-source boundaries against official/source-owned pages.
+3. Recorded Houston TranStar sample-feed support and live-feed access blocker in catalog verification metadata.
+4. Kept Houston `sample_first` and `liveAvailable: false`; no scraping of the City Active Incidents page is used.
+5. Improved Houston dashboard copy, map caveats, table captions, and status breakdown while preserving the 10-block dashboard limit.
+6. Improved `/demo-readiness` and `/sources` so hidden precise-location fields and live verification blockers are visible.
+7. Expanded sensitive/raw prompt detection for exact address and exact-location requests.
+
+### Remaining v1.1 Work
+
+- Do not tag `v1.1.0-product-depth` until local gates pass and the hosted release policy is either satisfied or explicitly documented as blocked.
+
+### Local v1.1 Verification
+
+- `pnpm lint`
+- `pnpm typecheck`
+- `pnpm test` — 52 tests passed.
+- `pnpm build`
+- `pnpm verify` — preflight, live smoke, build, and 14 Playwright checks passed.
+- `pnpm smoke:deploy -- --url http://127.0.0.1:3008` — 17/17 checks passed.
+- `pnpm smoke:deploy:json -- --url http://127.0.0.1:3008` — `passed: 17`, `failed: 0`.
+- `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3008 pnpm test:e2e:remote` — 14 checks passed.
+
+Hosted release remains blocked because no public Vercel URL, Git remote, or Vercel project linkage/credentials are available in this repo context.
+
 ## Release Gate
 
-Do not tag `v0.6.0-hosted-beta`, `v0.7.0-public-hardening`, `v0.8.0-product-readiness`, `v0.9.0-public-reliability`, or `v1.0.0-public-pilot` until:
+Do not tag `v0.6.0-hosted-beta`, `v0.7.0-public-hardening`, `v0.8.0-product-readiness`, `v0.9.0-public-reliability`, `v1.0.0-public-pilot`, or `v1.1.0-product-depth` until:
 
 - v0.6 must-fix items above are resolved or explicitly waived in docs.
 - `pnpm verify` passes.

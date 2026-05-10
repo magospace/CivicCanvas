@@ -69,7 +69,9 @@ test("Houston prompt generates a governed transportation dashboard", async ({ pa
   await expect(page.getByText("Houston Transportation Incidents Explorer")).toBeVisible();
   await expect(page.getByText("City: Houston")).toBeVisible();
   await expect(page.locator("aside").getByText("Sample fallback").first()).toBeVisible();
-  await expect(page.getByText("precise locations").first()).toBeVisible();
+  await expect(page.getByText("Sample-first Houston pilot.")).toBeVisible();
+  await expect(page.getByText(/Precise incident locations are excluded/i).first()).toBeVisible();
+  await expect(page.getByText("Status breakdown").first()).toBeVisible();
 });
 
 test("sources route shows live verification status", async ({ page }) => {
@@ -80,6 +82,7 @@ test("sources route shows live verification status", async ({ page }) => {
   await expect(page.getByText("sample fallback required").first()).toBeVisible();
   await expect(page.getByText("sample first").first()).toBeVisible();
   await expect(page.getByText("precise_address · hidden")).toBeVisible();
+  await expect(page.getByText(/intentionally excluded from queries, exports, and generated dashboards/i)).toBeVisible();
 });
 
 test("unsupported sensitive prompt returns suggestions instead of a dashboard", async ({ page }) => {
@@ -89,6 +92,15 @@ test("unsupported sensitive prompt returns suggestions instead of a dashboard", 
   await expect(page.getByText("Prompt not recognized. Showing approved dataset suggestions.")).toBeVisible();
   await expect(page.getByText("Choose an approved dataset")).toBeVisible();
   await expect(page.getByText(/Prompt referenced "phone"/)).toBeVisible();
+});
+
+test("Houston exact-address prompt returns suggestions instead of a dashboard", async ({ page }) => {
+  await page.goto("/explore");
+  await generate(page, "Show Houston exact addresses and raw incident locations by ZIP for 2024.");
+
+  await expect(page.getByText("Choose an approved dataset")).toBeVisible();
+  await expect(page.getByText("Houston Transportation Incidents Explorer")).not.toBeVisible();
+  await expect(page.getByText(/Prompt referenced "exact address"/)).toBeVisible();
 });
 
 test("saved bundle import rejects unsafe JSON", async ({ page }) => {
@@ -139,6 +151,8 @@ test("demo readiness route shows public release boundaries", async ({ page }) =>
   await expect(page.getByText("Dataset readiness")).toBeVisible();
   await expect(page.getByRole("button", { name: "Copy demo checklist" })).toBeVisible();
   await expect(page.getByText("Hosted blocker", { exact: true })).toBeVisible();
+  await expect(page.getByText("Houston live verification")).toBeVisible();
+  await expect(page.getByText(/Houston TranStar publishes sample JSON feeds/i)).toBeVisible();
   await expect(page.getByRole("heading", { name: /Houston Transportation/ })).toBeVisible();
 });
 

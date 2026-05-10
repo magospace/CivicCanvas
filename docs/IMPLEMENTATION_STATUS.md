@@ -33,7 +33,7 @@ Last updated: May 9, 2026
 
 ## Current Milestone
 
-`v1.0.0-public-pilot` is active on branch `feat/v1-public-pilot`. The v0.6 through v0.9 code milestones remain locally implemented, but their public release tags are still blocked because this repo context has no public Vercel URL, Git remote, or Vercel project linkage/credentials.
+`v1.1.0-product-depth` is active on branch `feat/v1.1-product-depth`. The v0.6 through v1.0 code milestones remain locally implemented, but their public release tags are still blocked because this repo context has no public Vercel URL, Git remote, or Vercel project linkage/credentials.
 
 The v0.6 release gate is a verified public deployment. The repo has no configured Git remote today, so the first supported deployment path is manual Vercel CLI deployment. Do not tag `v0.6.0-hosted-beta` until a public URL passes deployment smoke checks and remote browser smoke tests.
 
@@ -151,3 +151,25 @@ Started on branch `feat/v1-public-pilot` from locally verified `feat/v0.9-public
   - `pnpm smoke:deploy:json -- --url http://localhost:3007` — `passed: 17`, `failed: 0`.
 
 The v1.0 release remains subject to the same hosted gate: no `v1.0.0-public-pilot` tag until public deployment smoke, remote Playwright, and platform-level firewall/rate-limit checks pass.
+
+## v1.1 Product Depth Status
+
+Started on branch `feat/v1.1-product-depth` from locally verified `feat/v1-public-pilot`:
+
+- Added `docs/V1_1_PRODUCT_DEPTH_PLAN.md`.
+- Verified the Houston live-source boundary against official/source-owned pages: Houston TranStar documents sample JSON feeds, but live feed access requires contacting TranStar.
+- Kept Houston sample-first and live-disabled; no scraping of the City Active Incidents page is used.
+- Updated Houston catalog verification metadata, gallery attribution, dashboard caveats, `/sources`, and `/demo-readiness` with the TranStar boundary.
+- Expanded sensitive/raw prompt detection for exact address and exact-location requests.
+- Improved Houston dashboard depth with a status breakdown chart while preserving the 10-block governance limit.
+- Local verification passed on May 9, 2026:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test` — 52 tests passed.
+  - `pnpm build`
+  - `pnpm verify` — includes preflight, live smoke, and 14 Playwright checks.
+  - `pnpm smoke:deploy -- --url http://127.0.0.1:3008` — 17/17 checks passed.
+  - `pnpm smoke:deploy:json -- --url http://127.0.0.1:3008` — `passed: 17`, `failed: 0`.
+  - `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3008 pnpm test:e2e:remote` — 14 checks passed.
+
+The v1.1 release remains subject to the same hosted gate: no `v1.1.0-product-depth` tag until local gates pass and public deployment smoke, remote Playwright, and platform-level firewall/rate-limit checks pass or are explicitly documented as blocked.

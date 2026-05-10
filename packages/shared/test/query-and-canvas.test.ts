@@ -519,9 +519,25 @@ describe("adapter and intent helpers", () => {
 
     expect(houston.liveVerification?.promotionStatus).toBe("sample_first");
     expect(houston.liveAvailable).toBe(false);
+    expect(houston.sourceName).toBe("Houston TranStar Traffic Data Feeds");
+    expect(houston.sourceUrl).toBe("https://traffic.houstontranstar.org/api/api_doc.aspx");
     expect(houston.fallbackSampleFile).toBe("houston-transportation-incidents.sample.json");
     expect(houston.fields.find((field) => field.name === "precise_address")?.classification).toBe("sensitive_hide");
     expect(houston.liveVerification?.sampleOnlyFields).toEqual(expect.arrayContaining(["incident_type", "zip_code", "month"]));
+    expect(houston.liveVerification?.checks.some((check) =>
+      check.label === "Houston TranStar sample incident JSON" &&
+      check.status === "passed" &&
+      check.url === "https://traffic.houstontranstar.org/api/incidents_sample.json"
+    )).toBe(true);
+    expect(houston.liveVerification?.checks.some((check) =>
+      check.label === "Houston TranStar live feed access" &&
+      check.status === "blocked" &&
+      check.reason.includes("contact Houston TranStar")
+    )).toBe(true);
+    expect(houston.liveVerification?.checks.some((check) =>
+      check.label === "City active incidents HTML boundary" &&
+      check.status === "blocked"
+    )).toBe(true);
 
     for (const dataset of [dallas, austin]) {
       for (const field of dataset.liveVerification?.liveCapableFields ?? []) {
@@ -612,6 +628,14 @@ describe("adapter and intent helpers", () => {
     });
     expect(sensitive.safetyWarnings.join(" ")).toContain("governed dashboards");
     expect(sensitive.rejectedFields).toEqual(expect.arrayContaining(["name", "email", "address"]));
+
+    const locationSensitive = parsePromptIntent({
+      prompt: "Show Houston exact addresses and raw incident locations by ZIP",
+      catalog: catalog()
+    });
+    expect(locationSensitive.datasetCandidates).toContain("houston_transportation_incidents");
+    expect(locationSensitive.rejectedFields).toEqual(expect.arrayContaining(["exact address", "raw incident"]));
+    expect(locationSensitive.safetyWarnings.join(" ")).toContain("exact address");
   });
 
   it("falls back to static samples when a live Socrata request fails", async () => {

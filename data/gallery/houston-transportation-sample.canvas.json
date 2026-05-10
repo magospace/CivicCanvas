@@ -10,15 +10,15 @@
     {
       "datasetId": "houston_transportation_incidents",
       "datasetTitle": "Houston Transportation Incidents and Road Projects",
-      "sourceName": "City of Houston Active Incidents",
-      "sourceUrl": "https://www.houstontx.gov/activeincidents/index.html",
+      "sourceName": "Houston TranStar Traffic Data Feeds",
+      "sourceUrl": "https://traffic.houstontranstar.org/api/api_doc.aspx",
       "accessedAt": "2026-05-09T00:00:00.000Z",
       "fieldsUsed": ["incident_type", "zip_code", "month", "status"],
       "filtersApplied": ["reported_date in 2024"],
       "queryMethod": "Curated gallery sample rendered from a validated CanvasDocument fixture.",
       "dataMode": "sample",
       "caveats": [
-        "Houston transportation is sample-first until a stable public live adapter and field mapping are verified.",
+        "Houston transportation is sample-first until Houston TranStar live feed access and aggregate-safe field mapping are verified.",
         "The pilot sample excludes precise addresses and should not be treated as a complete incident feed."
       ]
     }
@@ -118,15 +118,15 @@
         "attribution": {
           "datasetId": "houston_transportation_incidents",
           "datasetTitle": "Houston Transportation Incidents and Road Projects",
-          "sourceName": "City of Houston Active Incidents",
-          "sourceUrl": "https://www.houstontx.gov/activeincidents/index.html",
+          "sourceName": "Houston TranStar Traffic Data Feeds",
+          "sourceUrl": "https://traffic.houstontranstar.org/api/api_doc.aspx",
           "accessedAt": "2026-05-09T00:00:00.000Z",
           "fieldsUsed": ["incident_type", "zip_code", "month", "status"],
           "filtersApplied": ["reported_date in 2024"],
           "queryMethod": "Curated gallery sample rendered from a validated CanvasDocument fixture.",
           "dataMode": "sample",
           "caveats": [
-            "Houston transportation is sample-first until a stable public live adapter and field mapping are verified.",
+            "Houston transportation is sample-first until Houston TranStar live feed access and aggregate-safe field mapping are verified.",
             "The pilot sample excludes precise addresses and should not be treated as a complete incident feed."
           ]
         },

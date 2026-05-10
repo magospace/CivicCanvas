@@ -1,6 +1,16 @@
 # Release Notes
 
-## v1.0.0-public-pilot (active)
+## v1.1.0-product-depth (active)
+
+- Deepens the Dallas, Austin, and Houston public-pilot experience without adding auth, hosted persistence, LLM parsing, arbitrary generated UI/query execution, external map layers, or live Miro writes.
+- Records the Houston live verification boundary against official/source-owned pages: Houston TranStar provides sample JSON feeds, but live feed access requires contacting TranStar, so Houston remains sample-first.
+- Keeps City of Houston Active Incidents out of the app data path because it is a current-state HTML/map surface rather than a bounded dataset API for this milestone.
+- Improves Houston dashboard caveats, table copy, map caveats, status breakdown, `/sources`, and `/demo-readiness` live verification visibility.
+- Expands sensitive/raw prompt refusal for exact address and precise-location phrasing.
+- Local verification passed with lint, typecheck, 52 unit/API/MCP tests, build, `pnpm verify`, 17/17 local deployment smoke checks, and remote-mode Playwright against localhost.
+- Keeps hosted release tags blocked until a real public URL passes hosted smoke and remote Playwright.
+
+## v1.0.0-public-pilot (locally complete / untagged)
 
 - Adds Houston transportation incidents as the single governed third dataset for the public pilot.
 - Keeps Houston sample-first with no live adapter promotion until a stable source-owned API/schema is verified.

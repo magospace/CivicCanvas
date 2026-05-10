@@ -31,6 +31,12 @@ export function AppShell({
   const [status, setStatus] = useState<string | null>(null);
   const [miroSpec, setMiroSpec] = useState<MiroExportSpec | null>(null);
   const [miroTemplate, setMiroTemplate] = useState<MiroExportSpec["template"]>("briefing_board");
+  const activeSource = activeCanvas.sources[0];
+  const sampleModeNotice = !fallbackReason &&
+    activeSource?.datasetId === "houston_transportation_incidents" &&
+    activeSource.dataMode === "sample"
+    ? "Houston is running in sample-first mode. Live promotion is blocked until Houston TranStar live feed access and aggregate-safe mappings are verified."
+    : null;
 
   useEffect(() => {
     function openSavedCanvas(saved: ReturnType<typeof takePendingOpenCanvas>) {
@@ -272,6 +278,12 @@ export function AppShell({
             <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900 shadow-sm">
               <span className="font-semibold">Sample fallback active.</span>{" "}
               {fallbackReason}
+            </div>
+          ) : null}
+          {sampleModeNotice ? (
+            <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900 shadow-sm">
+              <span className="font-semibold">Sample-first Houston pilot.</span>{" "}
+              {sampleModeNotice}
             </div>
           ) : null}
           {isGenerating ? (

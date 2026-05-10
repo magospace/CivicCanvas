@@ -102,7 +102,7 @@ export default function DemoReadinessPage() {
               Hosted blocker
             </div>
             <p className="mt-4 text-sm leading-6 text-slate-600">
-              v0.6 through v1.0 remain untagged until a public URL passes hosted smoke,
+              v0.6 through v1.1 remain untagged until a public URL passes hosted smoke,
               remote Playwright, and platform-level firewall/rate-limit review for the target release.
             </p>
             <div className="mt-3 rounded-md bg-signal/10 px-3 py-2 text-xs font-semibold text-signal">
@@ -155,6 +155,58 @@ export default function DemoReadinessPage() {
         </section>
 
         <section className="mt-6 rounded-lg border border-slate-200 bg-white p-5 shadow-panel">
+          <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+            <div>
+              <h2 className="text-base font-semibold text-ink">Houston live verification</h2>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
+                Houston remains sample-first. Houston TranStar publishes sample JSON feeds, but live feed
+                access requires contacting TranStar and exact locations require governance before promotion.
+              </p>
+            </div>
+            {thirdCandidate ? (
+              <Link
+                href={thirdCandidate.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+              >
+                <ExternalLink className="h-4 w-4" />
+                Source docs
+              </Link>
+            ) : null}
+          </div>
+          <div className="mt-4 grid gap-3 md:grid-cols-3">
+            <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+              <div className="font-semibold">Status</div>
+              <p className="mt-1 text-xs leading-5">
+                {thirdCandidate?.liveVerification?.promotionStatus ?? "missing"} / live disabled
+              </p>
+            </div>
+            <div className="rounded-md border border-slate-200 bg-civic-50 p-3 text-sm text-slate-700">
+              <div className="font-semibold text-ink">Last checked</div>
+              <p className="mt-1 text-xs leading-5">
+                {thirdCandidate?.liveVerification
+                  ? new Date(thirdCandidate.liveVerification.lastCheckedAt).toLocaleString("en-US")
+                  : "not checked"}
+              </p>
+            </div>
+            <div className="rounded-md border border-slate-200 bg-civic-50 p-3 text-sm text-slate-700">
+              <div className="font-semibold text-ink">Next command</div>
+              <code className="mt-1 block text-xs leading-5">pnpm smoke:live:json</code>
+            </div>
+          </div>
+          {thirdCandidate?.liveVerification?.checks ? (
+            <div className="mt-4 grid gap-2 text-xs leading-5 text-slate-600">
+              {thirdCandidate.liveVerification.checks.map((check) => (
+                <div key={check.label} className="rounded-md border border-slate-200 bg-civic-50 px-3 py-2">
+                  <span className="font-semibold text-ink">{check.label}</span>: {check.status} — {check.reason}
+                </div>
+              ))}
+            </div>
+          ) : null}
+        </section>
+
+        <section className="mt-6 rounded-lg border border-slate-200 bg-white p-5 shadow-panel">
           <h2 className="text-base font-semibold text-ink">Known sample/live boundaries</h2>
           <div className="mt-4 grid gap-4 md:grid-cols-3">
             <div className="rounded-md border border-slate-200 bg-civic-50 p-4">
@@ -174,7 +226,7 @@ export default function DemoReadinessPage() {
             <div className="rounded-md border border-slate-200 bg-civic-50 p-4">
               <div className="text-sm font-semibold text-ink">{thirdCandidate?.title ?? "Houston candidate"}</div>
               <p className="mt-2 text-xs leading-5 text-slate-600">
-                Houston transportation is the v1.0 public-pilot third dataset. It remains sample-first
+                Houston transportation is the third public-pilot dataset. It remains sample-first
                 until a stable source-owned live API/schema is verified.
               </p>
             </div>

@@ -24,7 +24,7 @@ describe("MCP tool handlers", () => {
     expect(listSupportedSources().sources.length).toBeGreaterThan(0);
     expect(searchDatasets({ query: "Dallas 311" }).datasets[0].datasetId).toBe("dallas_311_requests");
     expect(getServerStatus().ok).toBe(true);
-    expect(getServerStatus().version).toBe("1.0.0-public-pilot");
+    expect(getServerStatus().version).toBe("1.1.0-product-depth");
     expect(getServerStatus().dataModeControls).toContain("live_if_available");
     expect(validateCatalog().health.status).toBe("ok");
     const liveSources = listLiveSources().liveSources;
@@ -61,6 +61,44 @@ describe("MCP tool handlers", () => {
     expect(fallback.caveats.join(" ")).toContain("not live-enabled");
   });
 
+  it("covers Houston sample-first metadata, queries, and hidden-field governance", async () => {
+    const metadata = getDatasetMetadata({ datasetId: "houston_transportation_incidents" });
+    expect(metadata.sourceName).toBe("Houston TranStar Traffic Data Feeds");
+    expect(metadata.liveAvailable).toBe(false);
+    expect(metadata.liveVerification?.promotionStatus).toBe("sample_first");
+    expect(metadata.fields.find((field) => field.name === "precise_address")?.classification).toBe("sensitive_hide");
+
+    const result = await queryDataset({
+      datasetId: "houston_transportation_incidents",
+      mode: "sample_only",
+      filters: [{ field: "reported_date", operator: "between", value: ["2024-01-01", "2024-12-31"] }],
+      groupBy: ["incident_type", "zip_code"],
+      metrics: [{ type: "count", alias: "incident_count" }],
+      orderBy: [{ field: "incident_count", direction: "desc" }],
+      limit: 10
+    });
+    expect(result.dataMode).toBe("sample");
+    expect(result.rows.length).toBeGreaterThan(0);
+    expect(JSON.stringify(result)).not.toContain("precise_address");
+
+    await expect(queryDataset({
+      datasetId: "houston_transportation_incidents",
+      mode: "sample_only",
+      groupBy: ["precise_address"],
+      metrics: [{ type: "count", alias: "incident_count" }],
+      limit: 10
+    })).rejects.toThrow(/not available for safe querying/);
+
+    const attribution = getSourceAttribution({
+      datasetId: "houston_transportation_incidents",
+      mode: "sample_only",
+      groupBy: ["incident_type"],
+      metrics: [{ type: "count", alias: "incident_count" }],
+      limit: 10
+    });
+    expect(attribution.caveats.join(" ")).toContain("sample-first");
+  });
+
   it("generates canvas spec and query audit", async () => {
     const canvas = (await generateCanvasSpec({ datasetId: "austin_building_permits", mode: "live_if_available" })).canvas;
     expect(canvas.blocks.map((block) => block.type)).toContain("SourceMethodBlock");
@@ -76,6 +114,12 @@ describe("MCP tool handlers", () => {
       limit: 12
     });
     expect(audit.safetyDecisions.join(" ")).toContain("Fields and operators");
+
+    const houstonCanvas = (await generateCanvasSpec({ datasetId: "houston_transportation_incidents" })).canvas;
+    expect(houstonCanvas.blocks.map((block) => block.type)).toContain("SourceMethodBlock");
+    expect(houstonCanvas.sources[0].datasetId).toBe("houston_transportation_incidents");
+    expect(houstonCanvas.sources[0].caveats.join(" ")).toContain("sample-first");
+    expect(JSON.stringify(houstonCanvas)).not.toContain("precise_address");
   });
 
   it("covers sample, summary, visualization, attribution, validation, and Miro tools", async () => {
