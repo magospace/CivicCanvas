@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import { readReleaseMetadata } from "./lib/release-metadata.mjs";
@@ -16,6 +17,22 @@ for (let index = 0; index < args.length; index += 1) {
 
 function readJson(path) {
   return JSON.parse(readFileSync(path, "utf8"));
+}
+
+function readGitValue(args) {
+  try {
+    return execFileSync("git", args, {
+      cwd: root,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"]
+    }).trim();
+  } catch {
+    return null;
+  }
+}
+
+function shortCommit(commit) {
+  return commit ? commit.slice(0, 7) : "unknown";
 }
 
 function collectHiddenFields(catalog) {
@@ -71,6 +88,11 @@ function check(name, detail, fn) {
 const catalogPath = join(root, "data/catalog/approved-datasets.json");
 const catalog = readJson(catalogPath);
 const releaseMetadata = readReleaseMetadata(root);
+const releaseEvidencePath = join(root, "docs/release-evidence.json");
+const releaseEvidence = readJson(releaseEvidencePath);
+const auditWarnings = [];
+const headCommit = readGitValue(["rev-parse", "HEAD"]);
+const currentBranch = readGitValue(["rev-parse", "--abbrev-ref", "HEAD"]);
 const hiddenFields = collectHiddenFields(catalog);
 const hiddenFieldSet = new Set(hiddenFields);
 const galleryDir = join(root, "data/gallery");
@@ -331,6 +353,64 @@ const checks = [
     }
   ),
   check(
+    "release evidence metadata matches active release",
+    "Release evidence records the active version and branch.",
+    () => {
+      if (releaseEvidence.releaseVersion !== releaseMetadata.releaseVersion) {
+        throw new Error(`docs/release-evidence.json releaseVersion ${releaseEvidence.releaseVersion} does not match ${releaseMetadata.releaseVersion}`);
+      }
+      if (currentBranch && releaseEvidence.branch !== currentBranch) {
+        throw new Error(`docs/release-evidence.json branch ${releaseEvidence.branch} does not match ${currentBranch}`);
+      }
+      return `${releaseEvidence.releaseVersion} on ${releaseEvidence.branch}.`;
+    }
+  ),
+  check(
+    "release evidence screenshot files exist",
+    "Every screenshot path listed in release evidence exists in the repo.",
+    () => {
+      const screenshots = releaseEvidence.screenshots ?? [];
+      if (!Array.isArray(screenshots) || screenshots.length === 0) {
+        throw new Error("docs/release-evidence.json has no screenshots.");
+      }
+      for (const screenshot of screenshots) {
+        if (!screenshot.path || typeof screenshot.path !== "string") {
+          throw new Error("A release evidence screenshot is missing a string path.");
+        }
+        if (!existsSync(join(root, screenshot.path))) {
+          throw new Error(`Missing release evidence screenshot: ${screenshot.path}`);
+        }
+      }
+      return `${screenshots.length} screenshot path(s) checked.`;
+    }
+  ),
+  check(
+    "release evidence records a local commit",
+    "Release evidence commit must resolve to a local git commit.",
+    () => {
+      const commit = releaseEvidence.commit;
+      if (!commit || typeof commit !== "string" || commit.startsWith("pending-")) {
+        throw new Error("docs/release-evidence.json commit must be replaced with a real git commit.");
+      }
+      if (!/^[0-9a-f]{7,40}$/.test(commit)) {
+        throw new Error(`docs/release-evidence.json commit is not a git hash: ${commit}`);
+      }
+      const resolvedCommit = readGitValue(["rev-parse", "--verify", `${commit}^{commit}`]);
+      if (!resolvedCommit) {
+        throw new Error(`docs/release-evidence.json commit does not resolve locally: ${commit}`);
+      }
+      if (headCommit && resolvedCommit !== headCommit) {
+        auditWarnings.push({
+          name: "release evidence commit differs from HEAD",
+          detail: `Recorded ${shortCommit(resolvedCommit)}; current HEAD is ${shortCommit(headCommit)}. Refresh hosted release evidence before tagging if this is not intentional.`
+        });
+      }
+      return headCommit && resolvedCommit === headCommit
+        ? `Recorded commit ${shortCommit(resolvedCommit)} matches HEAD.`
+        : `Recorded commit ${shortCommit(resolvedCommit)} resolves locally.`;
+    }
+  ),
+  check(
     "README known boundaries match catalog",
     "README known sample/live boundaries must name the current Dallas, Austin, and Houston catalog limitations.",
     () => {
@@ -360,8 +440,10 @@ const output = {
   summary: {
     total: checks.length,
     passed: checks.length - failed.length,
-    failed: failed.length
+    failed: failed.length,
+    warnings: auditWarnings.length
   },
+  warnings: auditWarnings,
   checks
 };
 
@@ -371,6 +453,9 @@ if (jsonMode) {
   console.log(`${output.ok ? "Governance audit OK" : "Governance audit FAILED"}: ${output.summary.passed}/${output.summary.total} checks passed for ${output.releaseVersion}.`);
   for (const item of checks) {
     console.log(`- ${item.ok ? "PASS" : "FAIL"} ${item.name}: ${item.detail}`);
+  }
+  for (const warning of auditWarnings) {
+    console.log(`- WARN ${warning.name}: ${warning.detail}`);
   }
 }
 

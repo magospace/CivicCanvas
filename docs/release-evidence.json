@@ -2,9 +2,9 @@
   "schemaVersion": "1.0",
   "releaseVersion": "v1.3.0-hosted-launch-readiness",
   "branch": "feat/v1.3-hosted-launch-readiness",
-  "commit": "pending-v1.3-commit",
-  "updatedAt": "2026-05-10T02:30:37.000Z",
-  "localVerifiedAt": "2026-05-10T02:30:37.000Z",
+  "commit": "a5ce07a81ee932bdf7a37724af0e7aab3a3d9f0f",
+  "updatedAt": "2026-05-10T04:12:42.000Z",
+  "localVerifiedAt": "2026-05-10T04:12:42.000Z",
   "localGates": [
     {
       "name": "pnpm lint",
@@ -29,7 +29,7 @@
     {
       "name": "pnpm governance:audit",
       "status": "passed",
-      "detail": "Governance audit passed 16/16 checks."
+      "detail": "Governance audit passed 19/19 checks, including release evidence metadata and screenshot paths."
     },
     {
       "name": "pnpm verify:prod-local",
@@ -58,7 +58,7 @@
   },
   "governanceAudit": {
     "status": "passed",
-    "summary": "Governance audit passed 16/16 checks for v1.3.0-hosted-launch-readiness."
+    "summary": "Governance audit passed 19/19 checks for v1.3.0-hosted-launch-readiness."
   },
   "hosted": {
     "status": "blocked",
@@ -70,31 +70,31 @@
   "screenshots": [
     {
       "label": "Explore shell",
-      "path": "docs/screenshots/v0.8/explore-shell.png"
+      "path": "docs/screenshots/v0.8/explore-shell-desktop.png"
     },
     {
       "label": "Dallas dashboard",
-      "path": "docs/screenshots/v0.8/dallas-dashboard.png"
+      "path": "docs/screenshots/v0.8/dallas-dashboard-desktop.png"
     },
     {
       "label": "Austin dashboard",
-      "path": "docs/screenshots/v0.8/austin-dashboard.png"
+      "path": "docs/screenshots/v0.8/austin-dashboard-laptop.png"
     },
     {
       "label": "Gallery",
-      "path": "docs/screenshots/v0.8/gallery.png"
+      "path": "docs/screenshots/v0.8/gallery-desktop.png"
     },
     {
       "label": "Miro preview",
-      "path": "docs/screenshots/v0.8/miro-preview.png"
+      "path": "docs/screenshots/v0.8/miro-preview-desktop.png"
     },
     {
       "label": "Saved workflow",
-      "path": "docs/screenshots/v0.8/saved-share-workflow.png"
+      "path": "docs/screenshots/v0.8/saved-share-workflow-desktop.png"
     },
     {
       "label": "Mobile explore",
-      "path": "docs/screenshots/v0.8/mobile-explore.png"
+      "path": "docs/screenshots/v0.8/explore-mobile-390.png"
     }
   ]
 }
