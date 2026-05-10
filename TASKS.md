@@ -1947,7 +1947,7 @@ Status: Pending.
 
 ## 121. Add Submission Readiness Script OpenAI Smoke Coverage
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: QA / Provider Readiness
 - Goal: Include the no-spend OpenAI smoke command in the submission readiness report so judges/developers can see provider proof status without spending credits.
@@ -1958,6 +1958,8 @@ Status: Pending.
 - Acceptance criteria: `pnpm submission:readiness:json` reports OpenAI no-spend command, live gate env, default expected live call count 0, and missing/present key status without values or env file reads.
 - Validation commands: `pnpm submission:readiness:json`, focused release-script Vitest, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with submission-readiness script edits.
+- Completed notes: Added OpenAI smoke proof metadata to `pnpm submission:readiness:json`, including no-spend command, live gate, missing/present key status without values, expected default live call count 0, deterministic generation authority, and gated-live caveat. Required package-script checks and local validation command list now include `pnpm provider:openai:smoke:json`.
+- Validation: `pnpm submission:readiness:json`, focused submission-readiness release-script Vitest, `pnpm lint`, and `git diff --check` passed. No network/provider calls were made.
 
 ## 122. Add Demo Readiness UI Link To OpenAI Smoke
 

@@ -1741,3 +1741,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 121 is the highest-value implementation follow-up because it wires the new no-spend OpenAI proof into the existing submission-readiness report without live spend. Task 120 is the highest-value docs-only follow-up if a Loom transcript is urgently needed.
+
+
+## Task 121 Update - Submission Readiness OpenAI Smoke Coverage
+
+- Task chosen: `TASKS.md` item 121, "Add Submission Readiness Script OpenAI Smoke Coverage".
+- Why this was next: After replenishment, this was the highest-value implementation follow-up because Task 116 added the no-spend OpenAI proof script but the aggregate submission-readiness report did not yet expose it.
+- Scope: `scripts/submission-readiness.mjs`, `apps/web/test/release-scripts.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: OpenAI remains `provider-gated fallback metadata / acceptable if clearly labeled`. The readiness report now says default OpenAI proof is no-network/no-spend, live proof is `RUN_LIVE_OPENAI_SMOKE=1` gated, app generation authority remains deterministic parser plus bounded query engine, and key status is present/missing only.
+- Safety notes: No `.env` files were read; no secret values printed; no network/provider call was made. No Fal/media calls, public live API calls, schema/migrations, backend persistence, deployment mutation, release evidence, production data, generated artifacts, auth, or billing changes. `clauderecommends.md` and `REVIEW_RECOMMENDATIONS.md` remain untracked and unstaged.
+- Validation: `pnpm submission:readiness:json` passed and reported `openAIProof.expectedDefaultLiveCallCount=0`; `pnpm test -- apps/web/test/release-scripts.test.ts -t "submission bundle readiness"` passed; `pnpm lint` passed; `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 122, `Add Demo Readiness UI Link To OpenAI Smoke`, to make the same provider boundary visible in the browser demo console.

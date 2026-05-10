@@ -19,6 +19,7 @@ const requiredPackageScripts = [
   "demo:readiness:snapshot:json",
   "demo:artifact-hygiene:json",
   "media:fal:smoke:json",
+  "provider:openai:smoke:json",
   "release:evidence:precheck:json"
 ];
 const localValidationCommands = [
@@ -28,6 +29,7 @@ const localValidationCommands = [
   "pnpm governance:audit",
   "pnpm data:quality",
   "pnpm media:fal:smoke:json",
+  "pnpm provider:openai:smoke:json",
   "pnpm release:evidence:precheck:json",
   "pnpm demo:artifact-hygiene:json"
 ];
@@ -39,6 +41,16 @@ const mediaProof = {
   appMediaWiring: "not_implemented_dashboard_ui_only",
   expectedDefaultLiveCallCount: 0,
   caveat: "No-spend Fal proof is script-level only; normal dashboard generation does not call Fal or generate media artifacts."
+};
+const openAIProof = {
+  noSpendCommand: "pnpm provider:openai:smoke:json",
+  liveGateEnv: "RUN_LIVE_OPENAI_SMOKE",
+  liveGateRequiredValue: "1",
+  liveProofStatus: "not_run_by_this_script",
+  keyStatus: process.env.OPENAI_API_KEY?.trim() ? "present" : "missing",
+  expectedDefaultLiveCallCount: 0,
+  appGenerationAuthority: "deterministic_parser_and_bounded_query_engine",
+  caveat: "No-spend OpenAI proof uses no network; live proof is optional, server-side, structured-output validated, and cannot generate dashboard code, SQL, or hidden-field output."
 };
 const visualAudit = {
   auditDocPath: "docs/VISUAL_UI_UX_AUDIT.md",
@@ -150,6 +162,12 @@ const checks = [
     ok: packageJson.scripts?.["media:fal:smoke:json"] === "node scripts/fal-media-smoke.mjs --json" && mediaProof.expectedDefaultLiveCallCount === 0
   },
   {
+    name: "no-spend OpenAI proof remains server-side and live-gated",
+    ok: packageJson.scripts?.["provider:openai:smoke:json"] === "node scripts/openai-smoke.mjs --json"
+      && openAIProof.expectedDefaultLiveCallCount === 0
+      && ["present", "missing"].includes(openAIProof.keyStatus)
+  },
+  {
     name: "Loom visual audit is documented and artifacts stay ignored",
     ok: visualAudit.status === "present" && visualAudit.screenshotArtifactPolicy === "ignored_not_committed_not_release_evidence"
   }
@@ -165,6 +183,7 @@ const output = {
   packageScripts,
   repoRemote,
   mediaProof,
+  openAIProof,
   visualAudit,
   localValidationCommands,
   gatedChecks,

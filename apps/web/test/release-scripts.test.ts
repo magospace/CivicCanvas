@@ -327,6 +327,14 @@ describe("release and governance scripts", () => {
       appMediaWiring: "not_implemented_dashboard_ui_only",
       expectedDefaultLiveCallCount: 0
     }));
+    expect(body.openAIProof).toEqual(expect.objectContaining({
+      noSpendCommand: "pnpm provider:openai:smoke:json",
+      liveGateEnv: "RUN_LIVE_OPENAI_SMOKE",
+      liveProofStatus: "not_run_by_this_script",
+      expectedDefaultLiveCallCount: 0,
+      appGenerationAuthority: "deterministic_parser_and_bounded_query_engine"
+    }));
+    expect(["present", "missing"]).toContain(body.openAIProof.keyStatus);
     expect(body.visualAudit).toEqual(expect.objectContaining({
       auditDocPath: "docs/VISUAL_UI_UX_AUDIT.md",
       status: "present",
@@ -339,6 +347,7 @@ describe("release and governance scripts", () => {
       expect.stringMatching(/sources/i)
     ]));
     expect(body.checks.map((check: { name: string }) => check.name)).toContain("no-spend media proof remains script-level and live-gated");
+    expect(body.checks.map((check: { name: string }) => check.name)).toContain("no-spend OpenAI proof remains server-side and live-gated");
     expect(body.checks.map((check: { name: string }) => check.name)).toContain("Loom visual audit is documented and artifacts stay ignored");
     expect(body.gatedChecks).toEqual(expect.arrayContaining([
       expect.objectContaining({ gate: "Task 35", status: "not_run_by_this_script" }),
