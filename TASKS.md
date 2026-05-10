@@ -1274,6 +1274,8 @@ Status: Complete on May 10, 2026 at 07:04 CDT.
 
 ## 81. Add MCP Demo Proof Checklist
 
+Status: Complete on May 10, 2026 at 07:06 CDT.
+
 - Owner type: MCP / Submission Docs
 - Goal: Add a short checklist for showing the MCP server and agent skill in the Loom without implying unsafe live/provider behavior.
 - Scope: Docs only.
@@ -1282,6 +1284,8 @@ Status: Complete on May 10, 2026 at 07:04 CDT.
 - Acceptance criteria: Checklist includes build/inspect commands, safe tool examples, no secrets, no arbitrary SQL, and preview-only Miro caveat.
 - Validation commands: manual path/link check, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes with non-doc tasks.
+- Completed notes: Added `docs/MCP_DEMO_PROOF.md` with safe setup commands, MCP/agent narration points, safe tool examples, demo boundary phrases, anti-claims, and local validation commands. Linked it from `README.md` and `docs/README.md`.
+- Validation: Manual path/link/boundary check passed; `pnpm lint` and `git diff --check` passed.
 
 ## 82. Add Submission Bundle Readiness Script
 

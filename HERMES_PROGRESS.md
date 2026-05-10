@@ -1067,3 +1067,21 @@ Last updated: May 10, 2026 06:17 CDT
 ### Recommended Next Task
 
 - Task 81, `Add MCP Demo Proof Checklist`, is next.
+
+
+## Task 81 Update
+
+- Task chosen: `TASKS.md` item 81, "Add MCP Demo Proof Checklist".
+- Why this was next: It was the next safe docs task and improves the Brainforge/MCP judging story while preserving governed boundaries.
+- Scope: `docs/MCP_DEMO_PROOF.md`, `docs/README.md`, `README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Docs only. No MCP behavior changes, no provider calls, no release evidence refresh, no deployment, no backend persistence, no generated media, no secrets.
+
+### Validation
+
+- Manual path/link/boundary check: Passed. Confirmed safe MCP commands, bounded/preview-only/no-OAuth/browser-local/arbitrary-SQL boundary language, and README/docs index links.
+- `pnpm lint`: Passed.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 82, `Add Submission Bundle Readiness Script`, is next if continuing with script/test work.

@@ -26,6 +26,7 @@ Use this index to choose the current source of truth before opening older milest
 | [`SAMPLE_AND_PERSISTENCE_REALNESS.md`](SAMPLE_AND_PERSISTENCE_REALNESS.md) | Sample row provenance, browser-local persistence, share-link, seed API, gallery fixture, and historical release-evidence boundaries. |
 | [`LOCAL_PERSISTENCE_SPIKE.md`](LOCAL_PERSISTENCE_SPIKE.md) | Planning-only local/backend saved-canvas persistence spike with env gate, migration, reset, rollback, and test assumptions. |
 | [`MCP_SERVER_SPEC.md`](MCP_SERVER_SPEC.md) | MCP server tools, contracts, and safety expectations. |
+| [`MCP_DEMO_PROOF.md`](MCP_DEMO_PROOF.md) | Safe MCP/agent demo checklist for Loom or judge walkthroughs. |
 | [`CANVAS_SPEC.md`](CANVAS_SPEC.md) | Canvas document/block model rendered by the trusted React registry. |
 | [`MIRO_EXPORT_SPEC.md`](MIRO_EXPORT_SPEC.md) | Preview-only Miro export spec boundaries. |
 | [`MIRO_PREVIEW_ARTIFACT_TEMPLATE.md`](MIRO_PREVIEW_ARTIFACT_TEMPLATE.md) | Manual artifact note template for sharing preview-only Miro JSON without claiming OAuth or board writes. |

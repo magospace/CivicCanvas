@@ -232,6 +232,7 @@ Brand assets live under `apps/web/public/brand/`. The header uses the compact Ci
 - [Demo video capture checklist](docs/DEMO_VIDEO_CHECKLIST.md)
 - [Hackathon submission checklist](docs/HACKATHON_SUBMISSION_CHECKLIST.md)
 - [Hackathon submission guide](docs/HACKATHON_SUBMISSION_GUIDE.md)
+- [MCP demo proof checklist](docs/MCP_DEMO_PROOF.md)
 - [Sample and persistence realness matrix](docs/SAMPLE_AND_PERSISTENCE_REALNESS.md)
 - [Local persistence spike plan](docs/LOCAL_PERSISTENCE_SPIKE.md)
 - [Agent instructions](AGENTS.md)
