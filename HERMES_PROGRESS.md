@@ -2178,3 +2178,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm test -- apps/web/test/miro-export-route.test.ts` passed; due repo script wiring, 127 tests across 18 files ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 157, `Add Catalog Unsupported Source Route Guard`, to keep metadata-only catalog entries from becoming hardcoded dashboards.
+
+
+## Task 157 Update - Catalog Unsupported Source Route Guard
+
+- Task chosen: `TASKS.md` item 157, "Add Catalog Unsupported Source Route Guard".
+- Why this was next: It was the next data-governance task after Miro preview guarding and protects metadata-only catalog records from becoming accidental hardcoded dashboards.
+- Scope: `apps/web/test/dashboard.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Catalog metadata only / not query-ready until samples/live governance are added. No catalog, prompt parser, dashboard route, sample, or UI behavior changed.
+- Changes: Added a regression test proving `texas_government_spending` is present as catalog metadata with no fallback sample file, but a Texas government spending prompt returns the governed `Choose` suggestion canvas with no query audits and without including `texas_government_spending` in generated sources, suggested datasets, or serialized canvas content.
+- Validation: `pnpm test -- apps/web/test/dashboard.test.ts` passed; due repo script wiring, 128 tests across 18 files ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 158, `Add No-Generated Artifact Commit Guard`, to protect local proof artifacts and secrets from accidental staging.

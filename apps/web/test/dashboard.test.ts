@@ -105,6 +105,23 @@ describe("dashboard generation", () => {
     ]);
   });
 
+  it("keeps metadata-only catalog sources out of generated dashboards", async () => {
+    const catalog = getDatasetCatalog();
+    const spending = catalog.find((dataset) => dataset.id === "texas_government_spending");
+    expect(spending?.title).toBe("Texas Government Spending Explorer");
+    expect(spending?.fallbackSampleFile).toBeUndefined();
+
+    const generation = await generateCanvasForPrompt("Show Texas government spending by agency for 2024.");
+    const serialized = JSON.stringify(generation.canvas);
+
+    expect(generation.audits).toEqual([]);
+    expect(generation.canvas.title).toContain("Choose");
+    expect(generation.canvas.sources.map((source) => source.datasetId)).not.toContain("texas_government_spending");
+    expect(generation.suggestedDatasets?.map((dataset) => dataset.id)).not.toContain("texas_government_spending");
+    expect(serialized).not.toContain("Texas Government Spending Explorer");
+    expect(serialized).not.toContain("texas_government_spending");
+  });
+
   it("refuses Houston exact-location prompts before dashboard generation", async () => {
     const generation = await generateCanvasForPrompt("Show Houston exact addresses and raw incident locations by ZIP for 2024.");
 

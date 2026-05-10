@@ -2549,7 +2549,7 @@ Status: Complete on May 10, 2026.
 
 ## 157. Add Catalog Unsupported Source Route Guard
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Data Governance / Route Test
 - Goal: Protect unsupported/metadata-only sources from accidentally generating dashboards.
@@ -2560,6 +2560,8 @@ Status: Pending.
 - Acceptance criteria: Tests assert Texas Government Spending remains suggestion/coming-later only and is not wired to generated dashboards.
 - Validation command: focused Vitest or Playwright source/prompt tests, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with prompt/dashboard tests.
+- Completed notes: Added a dashboard regression test proving `texas_government_spending` remains metadata-only: it has no fallback sample file, prompts for Texas government spending return the governed `Choose` suggestion canvas with no audits, and neither generated sources nor suggested datasets include the metadata-only source.
+- Validation: `pnpm test -- apps/web/test/dashboard.test.ts` passed; due repo script wiring, 128 tests across 18 files ran and passed. `pnpm lint` passed; `git diff --check` passed.
 
 ## 158. Add No-Generated Artifact Commit Guard
 
