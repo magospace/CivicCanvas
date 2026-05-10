@@ -1,22 +1,21 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 04:20 CDT
+Last updated: May 10, 2026 04:22 CDT
 
 ## Current Cycle
 
-- Task chosen: `TASKS.md` item 36, "Clarify Saved-Canvas Validation Stub Honesty".
-- Why this was next: Item 35 is high-risk release-evidence work requiring explicit approval, so the next safe incomplete task is item 36 from the realness-audit follow-up queue.
-- Scope: `README.md`, `apps/web/README.md`, `ARCHITECTURE_MAP.md`, `REALNESS_AUDIT.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Task chosen: `TASKS.md` item 37, "Align Miro Export Docs With Preview-Only Implementation".
+- Why this was next: Item 37 follows the saved-persistence honesty task and resolves the next realness-audit risk: historical Miro docs implying board workflows beyond the implemented preview JSON.
+- Scope: `docs/MIRO_EXPORT_SPEC.md`, `README.md`, `REALNESS_AUDIT.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
 - Safety notes: Documentation only. No product behavior, runtime source code, tests, package scripts, config, source data, secrets, auth, billing, migrations, production config, deploy scripts, release evidence, catalog data, samples, live API calls, or destructive operations were changed. Release evidence was not refreshed.
 
 ## Files Updated
 
-- `README.md`: Added an explicit `/api/canvas/save` validation-stub note and clarified that visible saves use browser `localStorage`.
-- `apps/web/README.md`: Clarified that `saved: true` does not mean backend persistence.
-- `ARCHITECTURE_MAP.md`: Added route and storage-flow notes distinguishing the validation stub from `/saved` local persistence.
-- `REALNESS_AUDIT.md`: Updated saved-canvas and canvas-save claims with the clearer docs boundary.
-- `TASKS.md`: Marked item 36 complete with validation notes.
-- `HERMES_PROGRESS.md`: Recorded item 36 scope, safety notes, and validation.
+- `docs/MIRO_EXPORT_SPEC.md`: Reframed Miro as preview-only JSON, aligned the type example to the implemented three-template schema, removed unsupported current `research_story_board` wording, and labeled board creation/OAuth/write behavior as future-only.
+- `README.md`: Updated the short Miro description so it does not imply real board creation.
+- `REALNESS_AUDIT.md`: Lowered the Miro-doc mismatch risk and pointed future work at the next media-provider wording task.
+- `TASKS.md`: Marked item 37 complete with validation notes.
+- `HERMES_PROGRESS.md`: Recorded item 37 scope, safety notes, and validation.
 
 ## Sequential Progress
 
@@ -28,7 +27,8 @@ Last updated: May 10, 2026 04:20 CDT
 - Task 32 committed as `2585388` (`test: strengthen judge demo e2e path`).
 - Task 33 committed as `2529af4` (`test: add governed workflow e2e smoke`).
 - Task 34 committed as `2fbcf44` (`chore: migrate web lint to eslint cli`).
-- Task 36 completed and ready to commit as `docs: clarify saved canvas persistence boundary`.
+- Task 36 committed as `476143a` (`docs: clarify saved canvas persistence boundary`).
+- Task 37 completed and ready to commit as `docs: align miro preview-only wording`.
 
 ## Sequential Task Plan
 
@@ -224,6 +224,8 @@ Current `git status --short --branch` shows branch `feat/v1.3-hosted-launch-read
 - `pnpm test`: Passed with 89 tests across 15 files.
 - `git diff --check`: Passed for Task 36 docs.
 - `pnpm lint`: Passed for Task 36 docs.
+- `git diff --check`: Passed for Task 37 docs.
+- `pnpm lint`: Passed for Task 37 docs.
 
 ## Blockers
 

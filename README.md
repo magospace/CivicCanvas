@@ -6,7 +6,7 @@ Open-source, MCP-powered visual explorer for Texas public datasets.
 
 Users ask natural-language questions about Texas public data. The app discovers approved public datasets, runs safe bounded queries, and renders interactive dashboards with maps, charts, tables, filters, summaries, and source attribution.
 
-Optional stretch: export dashboards to Miro as briefing boards, slide-like frames, or workshop boards.
+Optional stretch: generate preview-only MiroExportSpec JSON for briefing boards, slide-like frames, or workshop boards. The app does not create or update Miro boards.
 
 ## MVP workflows
 

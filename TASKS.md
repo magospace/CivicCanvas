@@ -561,6 +561,8 @@ Status: Complete on May 10, 2026 at 04:20 CDT.
 
 ## 37. Align Miro Export Docs With Preview-Only Implementation
 
+Status: Complete on May 10, 2026 at 04:22 CDT.
+
 - Owner type: Docs / Integration honesty
 - Goal: Reconcile Miro docs with the current preview-only `MiroExportSpec` implementation and supported templates.
 - Why it matters: Historical/spec docs describe future board workflows and an extra template, while current code performs no OAuth or board writes.
@@ -570,6 +572,8 @@ Status: Complete on May 10, 2026 at 04:20 CDT.
 - Acceptance criteria: Current docs clearly distinguish implemented preview JSON from future write integration; template list matches the current schema or is labeled future; no docs imply real Miro board creation.
 - Validation commands: `git diff --check`, `pnpm lint`.
 - Can run in parallel: Yes with non-Miro docs/tests.
+- Completed notes: Rewrote `docs/MIRO_EXPORT_SPEC.md` around the implemented preview-only `MiroExportSpec` JSON contract, removed the unsupported `research_story_board` template from the current type example, labeled board/OAuth/write behavior as future-only, and updated `README.md`/`REALNESS_AUDIT.md` to avoid implying real Miro board creation.
+- Validation: `git diff --check` passed; `pnpm lint` passed.
 
 ## 38. Document No Image/Video/Media Provider Path
 

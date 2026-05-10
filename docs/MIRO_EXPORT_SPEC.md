@@ -2,9 +2,9 @@
 
 ## Feature summary
 
-Miro export turns a Texas Data Canvas dashboard into a collaborative board, briefing deck, or workshop space.
+Miro export currently generates a preview-only `MiroExportSpec` JSON document from a validated Texas Data Canvas dashboard.
 
-This is an MVP-plus/stretch feature. The core product must work without Miro.
+The current implementation does not authenticate with Miro, create boards, create frames, upload images, or perform any third-party write. The core product works without Miro, and the Miro path is limited to local preview/download/copy of governed JSON.
 
 ## Why this matters
 
@@ -57,59 +57,58 @@ Frames:
 6. Action planning
 7. Source and method
 
-### Research/story board
-
-Frames:
-
-1. Research question
-2. Dataset/source
-3. Key visual findings
-4. Data limitations
-5. Story leads / hypotheses
-6. Follow-up questions
+No `research_story_board` template is implemented in the current schema. Treat any research/story-board workflow as a future idea until the shared schema, route validation, tests, and docs are updated together.
 
 ## MiroExportSpec
 
 ```ts
 type MiroExportSpec = {
-  canvasId: string;
+  schemaVersion: '1.0';
   title: string;
-  template: 'briefing_board' | 'slide_deck' | 'community_workshop' | 'research_story_board';
+  template: 'briefing_board' | 'slide_deck' | 'community_workshop';
   frames: MiroFrameSpec[];
   sourceMethodFrameRequired: true;
 };
 
 type MiroFrameSpec = {
-  id: string;
   title: string;
-  purpose: string;
   items: MiroItemSpec[];
 };
 
 type MiroItemSpec =
-  | { type: 'text'; title?: string; content: string }
-  | { type: 'table'; title: string; columns: string[]; rows: string[][] }
-  | { type: 'image'; title: string; assetId: string; alt: string }
-  | { type: 'sticky'; content: string; color?: string };
+  | { type: 'text'; content: string }
+  | { type: 'chart'; content: string }
+  | { type: 'map'; content: string }
+  | { type: 'table'; content: string }
+  | { type: 'source_method'; content: string };
 ```
 
 ## Safety rules
 
 - Must include source/method frame.
 - Must not export hidden/sensitive fields.
-- Must not write to Miro without user confirmation.
+- Must not write to Miro in the current implementation.
+- Must not include OAuth tokens, access tokens, board IDs, or write instructions in generated JSON.
 - Must label sample/demo data if used.
 - Must preserve source attribution and caveats.
 - Must not use Miro as a substitute for dataset validation.
 
 ## Implementation approach
 
-1. Implement spec generation first.
-2. Display spec preview in the app.
-3. Add integration instructions for Miro MCP.
-4. If MCP connection exists, create board/frames/docs/tables/images after confirmation.
+Implemented today:
+
+1. Validate an input `CanvasDocument` with `safeValidateCanvasDocument()`.
+2. Require a `SourceMethodBlock`.
+3. Generate `briefing_board`, `slide_deck`, or `community_workshop` preview frames.
+4. Validate output with `miroExportSpecSchema`.
+5. Return preview JSON from `/api/export/miro-spec` with the note: "Preview-only MiroExportSpec. No Miro board write is performed in MVP."
+6. Let users inspect, copy, or download the preview JSON.
+
+Future authenticated Miro integration would be a new architecture boundary requiring OAuth/secrets, explicit user confirmation, API write tests, security docs, and updated governance notes. Do not describe the current feature as creating or updating a Miro board.
 
 ## Optional Miro MCP mapping
+
+Not implemented in this repo today. This section is a future mapping only.
 
 - Board creation: create a board for the briefing/workshop.
 - Layout creation: create frames, text, shapes, and sticky notes.
@@ -122,3 +121,4 @@ type MiroItemSpec =
 - Export spec generated for a saved dashboard.
 - Frames include summary, visuals, source/method, and discussion/action sections.
 - User can inspect before export.
+- Route and browser tests prove no OAuth, access-token, board-ID, or board-write fields are returned.
