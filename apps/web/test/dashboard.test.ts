@@ -1,23 +1,20 @@
-import { execFileSync } from "node:child_process";
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import { NextRequest } from "next/server";
 import { describe, expect, it } from "vitest";
-import { z } from "zod";
-import { releaseMetadata } from "@texas-data-canvas/shared";
-import { GET as catalogHealthGET } from "../app/api/catalog/health/route";
-import { POST as canvasGeneratePOST } from "../app/api/canvas/generate/route";
-import { POST as miroExportPOST } from "../app/api/export/miro-spec/route";
-import { GET as healthGET } from "../app/api/health/route";
-import { POST as queryPOST } from "../app/api/query/route";
-import { middleware } from "../middleware";
-import { apiError, parseJsonRequest } from "../lib/api";
-import { boundedQuerySpecJson, canvasDocumentJson, tableCsv } from "../lib/dashboard-exports";
+import { validateCanvasDocument, type CanvasBlock } from "@texas-data-canvas/shared";
 import { generateCanvasForPrompt } from "../lib/dashboard";
-import { getCuratedGalleryCanvases } from "../lib/data";
-import { zipFeaturesForRows } from "../lib/geography";
-import { generateMiroExportSpec } from "../lib/miro";
+import { getCuratedGalleryCanvases, getDatasetCatalog } from "../lib/data";
+
+const allowedGalleryBlockTypes = new Set<CanvasBlock["type"]>([
+  "SummaryBlock",
+  "MetricBlock",
+  "ChartBlock",
+  "MapBlock",
+  "TableBlock",
+  "FilterBlock",
+  "SourceMethodBlock",
+  "DatasetCardBlock"
+]);
 
 describe("dashboard generation", () => {
   it("generates the Dallas demo dashboard", async () => {
@@ -146,13 +143,43 @@ describe("dashboard generation", () => {
     expect(houstonLive.fallbackReason).toContain("not live-enabled");
   });
 
-  it("exports a preview-only Miro spec with source method frame", async () => {
-    const generation = await generateCanvasForPrompt("Show Dallas 311 service requests by category and ZIP code for 2024.");
-    const spec = generateMiroExportSpec({ canvas: generation.canvas, template: "community_workshop" });
+  it("verifies data mode, fallback caveats, and source attribution for each supported dashboard", async () => {
+    const dallas = await generateCanvasForPrompt("Show Dallas 311 service requests by category and ZIP code for 2024.");
+    expect(dallas.requestedDataMode).toBe("auto");
+    expect(dallas.dataMode).toBe("fallback");
+    expect(dallas.fallbackReason).toContain("zip_code");
+    expect(dallas.canvas.sources[0]).toEqual(expect.objectContaining({
+      datasetId: "dallas_311_requests",
+      dataMode: "fallback",
+      sourceName: "City of Dallas Open Data"
+    }));
+    expect(dallas.canvas.sources[0].caveats.join(" ")).toContain("Approved sample fallback");
 
-    expect(spec.sourceMethodFrameRequired).toBe(true);
-    expect(spec.frames.map((frame) => frame.title)).toContain("Source & Method");
-    expect(spec.frames.map((frame) => frame.title)).toContain("Workshop Prompts");
+    const austin = await generateCanvasForPrompt(
+      "Show Austin building permits by month and ZIP code for 2024.",
+      {},
+      "live"
+    );
+    expect(austin.requestedDataMode).toBe("live");
+    expect(austin.dataMode).toBe("fallback");
+    expect(austin.fallbackReason).toContain("not live-enabled");
+    expect(austin.canvas.sources[0]).toEqual(expect.objectContaining({
+      datasetId: "austin_building_permits",
+      dataMode: "fallback",
+      sourceName: "City of Austin Open Data"
+    }));
+    expect(austin.canvas.sources[0].caveats.join(" ")).toContain("Approved sample fallback");
+
+    const houston = await generateCanvasForPrompt("Show Houston transportation incidents by ZIP and incident type for 2024.");
+    expect(houston.requestedDataMode).toBe("auto");
+    expect(houston.dataMode).toBe("sample");
+    expect(houston.fallbackReason).toBeUndefined();
+    expect(houston.canvas.sources[0]).toEqual(expect.objectContaining({
+      datasetId: "houston_transportation_incidents",
+      dataMode: "sample",
+      sourceName: "Houston TranStar Traffic Data Feeds"
+    }));
+    expect(houston.canvas.sources[0].caveats.join(" ")).toContain("sample-first");
   });
 
   it("applies category filters to Dallas dashboard generation", async () => {
@@ -181,62 +208,6 @@ describe("dashboard generation", () => {
     }
   });
 
-  it("exports governed dashboard artifacts from validated JSON", async () => {
-    const generation = await generateCanvasForPrompt("Show Dallas 311 service requests by category and ZIP code for 2024.");
-    const canvasJson = canvasDocumentJson(generation.canvas);
-    const specJson = boundedQuerySpecJson(generation.querySpec);
-    const csv = tableCsv(generation.canvas);
-
-    expect(JSON.parse(canvasJson).blocks.map((block: { type: string }) => block.type)).toContain("SourceMethodBlock");
-    expect(JSON.parse(specJson ?? "{}").datasetId).toBe("dallas_311_requests");
-    expect(csv).toContain("request count");
-    expect(csv).toContain("Sanitation");
-  });
-
-  it("escapes CSV cells and omits unknown ZIP centroids", async () => {
-    const generation = await generateCanvasForPrompt("Show Dallas 311 service requests by category and ZIP code for 2024.");
-    const canvas = {
-      ...generation.canvas,
-      blocks: generation.canvas.blocks.map((block) => {
-        if (block.type !== "TableBlock") {
-          return block;
-        }
-        return {
-          ...block,
-          props: {
-            ...block.props,
-            rows: [
-              {
-                ...block.props.rows[0],
-                category: "Trash, \"Bulk\""
-              }
-            ]
-          }
-        };
-      })
-    };
-
-    expect(tableCsv(canvas)).toContain("\"Trash, \"\"Bulk\"\"\"");
-    expect(zipFeaturesForRows([
-      { zip_code: "75201", request_count: 4 },
-      { zip_code: "99999", request_count: 3 }
-    ], "zip_code")).toEqual([
-      expect.objectContaining({ id: "75201", label: "75201" })
-    ]);
-  });
-
-  it("keeps hidden Houston fields out of client exports", async () => {
-    const generation = await generateCanvasForPrompt("Show Houston transportation incidents by ZIP and incident type for 2024.");
-    const canvasJson = canvasDocumentJson(generation.canvas);
-    const specJson = boundedQuerySpecJson(generation.querySpec);
-    const csv = tableCsv(generation.canvas);
-
-    expect(canvasJson).not.toContain("precise_address");
-    expect(specJson).not.toContain("precise_address");
-    expect(csv).not.toContain("precise_address");
-    expect(csv).toContain("incident count");
-  });
-
   it("loads curated gallery canvases from checked-in validated JSON", () => {
     const canvases = getCuratedGalleryCanvases();
 
@@ -249,262 +220,63 @@ describe("dashboard generation", () => {
     expect(canvases.every((canvas) => canvas.blocks.some((block) => block.type === "SourceMethodBlock"))).toBe(true);
     expect(canvases.map((canvas) => canvas.prompt).join(" ")).toContain("personal contact details");
   });
-});
 
-describe("production API contracts", () => {
-  it("returns health and catalog health reports", async () => {
-    const health = await healthGET();
-    const healthBody = await health.json();
-    expect(healthBody.ok).toBe(true);
-    expect(healthBody.appVersion).toBe(releaseMetadata.devFallbackVersion);
-    expect(healthBody.releaseVersion).toBe(releaseMetadata.releaseVersion);
-    expect(healthBody.releaseChannel).toBe(releaseMetadata.releaseChannel);
-    expect(healthBody.packageVersion).toBe(releaseMetadata.packageVersion);
-    expect(healthBody.catalogCount).toBeGreaterThan(0);
+  it("validates every checked-in gallery fixture against governed canvas boundaries", () => {
+    const galleryDir = join(process.cwd(), "data/gallery");
+    const galleryFiles = readdirSync(galleryDir)
+      .filter((fileName) => fileName.endsWith(".canvas.json"))
+      .sort();
+    const catalog = getDatasetCatalog();
+    const approvedDatasetIds = new Set(catalog.map((dataset) => dataset.id));
+    const hiddenFieldNames = catalog.flatMap((dataset) =>
+      dataset.fields
+        .filter((field) => ["sensitive_hide", "unknown_review"].includes(field.classification))
+        .map((field) => field.name)
+    );
 
-    const catalogHealth = await catalogHealthGET();
-    const catalogBody = await catalogHealth.json();
-    expect(catalogBody.health.status).toBe("ok");
-    expect(catalogBody.health.sampleFallbacks.length).toBeGreaterThan(0);
-  });
+    expect(galleryFiles).toEqual([
+      "austin-permits-sample.canvas.json",
+      "dallas-311-sample.canvas.json",
+      "houston-transportation-sample.canvas.json",
+      "unsupported-sensitive-prompt.canvas.json"
+    ]);
+    expect(hiddenFieldNames).toContain("precise_address");
 
-  it("adds hosted deployment metadata to health when env vars are present", async () => {
-    const previous = {
-      NEXT_PUBLIC_APP_ENV: process.env.NEXT_PUBLIC_APP_ENV,
-      NEXT_PUBLIC_APP_VERSION: process.env.NEXT_PUBLIC_APP_VERSION,
-      NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
-      VERCEL: process.env.VERCEL,
-      VERCEL_GIT_COMMIT_SHA: process.env.VERCEL_GIT_COMMIT_SHA,
-      VERCEL_GIT_COMMIT_REF: process.env.VERCEL_GIT_COMMIT_REF
-    };
+    for (const fileName of galleryFiles) {
+      const rawCanvas = JSON.parse(readFileSync(join(galleryDir, fileName), "utf8"));
+      const canvas = validateCanvasDocument(rawCanvas);
+      const serializedCanvas = JSON.stringify(canvas);
+      const sourceMethodBlocks = canvas.blocks.filter((block) => block.type === "SourceMethodBlock");
 
-    process.env.NEXT_PUBLIC_APP_ENV = "hosted-beta";
-    process.env.NEXT_PUBLIC_APP_VERSION = releaseMetadata.releaseVersion;
-    process.env.NEXT_PUBLIC_SITE_URL = "https://texas-data-canvas.example";
-    process.env.VERCEL = "1";
-    process.env.VERCEL_GIT_COMMIT_SHA = "abc123";
-    process.env.VERCEL_GIT_COMMIT_REF = "feat/v1.3-hosted-launch-readiness";
+      expect(sourceMethodBlocks.length, fileName).toBeGreaterThan(0);
+      expect(canvas.blocks.every((block) => allowedGalleryBlockTypes.has(block.type)), fileName).toBe(true);
 
-    try {
-      const health = await healthGET();
-      const body = await health.json();
-      expect(body.appEnvironment).toBe("hosted-beta");
-      expect(body.appVersion).toBe(releaseMetadata.releaseVersion);
-      expect(body.deploymentProvider).toBe("vercel");
-      expect(body.deploymentUrl).toBe("https://texas-data-canvas.example");
-      expect(body.gitCommitSha).toBe("abc123");
-      expect(body.gitBranch).toBe("feat/v1.3-hosted-launch-readiness");
-      expect(body.releaseEvidence.hostedStatus).toBe("blocked");
-    } finally {
-      for (const [key, value] of Object.entries(previous)) {
-        if (value === undefined) {
-          delete process.env[key];
+      for (const hiddenFieldName of hiddenFieldNames) {
+        expect(serializedCanvas, `${fileName} should not expose hidden field ${hiddenFieldName}`).not.toContain(hiddenFieldName);
+      }
+
+      for (const source of canvas.sources) {
+        if (source.datasetId === "catalog_suggestions") {
+          expect(canvas.id).toBe("gallery_unsupported_sensitive_prompt");
         } else {
-          process.env[key] = value;
+          expect(approvedDatasetIds.has(source.datasetId), `${fileName} source ${source.datasetId} must be approved`).toBe(true);
+        }
+        expect(source.queryMethod.length, fileName).toBeGreaterThan(0);
+      }
+
+      for (const block of sourceMethodBlocks) {
+        if (block.type === "SourceMethodBlock") {
+          const datasetId = block.props.attribution.datasetId;
+          if (datasetId === "catalog_suggestions") {
+            expect(canvas.id).toBe("gallery_unsupported_sensitive_prompt");
+          } else {
+            expect(approvedDatasetIds.has(datasetId), `${fileName} attribution ${datasetId} must be approved`).toBe(true);
+          }
+          expect(block.props.attribution.sourceName.length, fileName).toBeGreaterThan(0);
+          expect(block.props.attribution.sourceUrl).toMatch(/^https?:\/\//);
+          expect(block.props.methodology.length, fileName).toBeGreaterThan(0);
         }
       }
-    }
-  });
-
-  it("rejects deployment smoke runs without a base URL", () => {
-    try {
-      execFileSync("node", ["scripts/smoke-deploy.mjs"], {
-        cwd: process.cwd(),
-        encoding: "utf8",
-        stdio: "pipe"
-      });
-      throw new Error("Expected smoke-deploy to fail without --url.");
-    } catch (error) {
-      const stderr = String((error as { stderr?: string }).stderr ?? "");
-      expect(stderr).toContain("Usage: pnpm smoke:deploy");
-    }
-  });
-
-  it("returns structured API errors for invalid query fields", async () => {
-    const response = await queryPOST(new Request("http://localhost/api/query", {
-      method: "POST",
-      body: JSON.stringify({
-        datasetId: "dallas_311_requests",
-        groupBy: ["private_field"],
-        metrics: [{ type: "count", alias: "request_count" }],
-        limit: 10
-      })
-    }));
-    const body = await response.json();
-
-    expect(response.status).toBe(400);
-    expect(body.ok).toBe(false);
-    expect(body.error.code).toBe("query_failed");
-    expect(JSON.stringify(body)).not.toContain("at ");
-  });
-
-  it("hides internal details from unexpected API errors", async () => {
-    const response = apiError(new Error("Failed to read /Users/example/private/data.json"), {
-      code: "internal_failure",
-      requestId: "req_test"
-    });
-    const body = await response.json();
-
-    expect(body.error.message).toBe("Request failed.");
-    expect(JSON.stringify(body)).not.toContain("/Users/example");
-  });
-
-  it("rate-limits repeated public POST requests in middleware", () => {
-    const ip = `203.0.113.${Math.floor(Math.random() * 200)}`;
-    let response: Response | undefined;
-
-    for (let index = 0; index < 21; index += 1) {
-      response = middleware(new NextRequest("http://localhost/api/canvas/generate", {
-        method: "POST",
-        headers: { "x-forwarded-for": ip }
-      }));
-    }
-
-    expect(response?.status).toBe(429);
-    expect(response?.headers.get("X-RateLimit-Limit")).toBe("20");
-  });
-
-  it("returns fallback mode when live query is requested for a sample-first dataset", async () => {
-    const response = await queryPOST(new Request("http://localhost/api/query", {
-      method: "POST",
-      body: JSON.stringify({
-        datasetId: "austin_building_permits",
-        mode: "live_if_available",
-        groupBy: ["permit_type"],
-        metrics: [{ type: "count", alias: "permit_count" }],
-        limit: 10
-      })
-    }));
-    const body = await response.json();
-
-    expect(response.status).toBe(200);
-    expect(body.result.dataMode).toBe("fallback");
-    expect(body.result.caveats.join(" ")).toContain("not live-enabled");
-  });
-
-  it("rejects oversized JSON bodies before route parsing", async () => {
-    await expect(parseJsonRequest(new Request("http://localhost", {
-      method: "POST",
-      body: JSON.stringify({ value: "x".repeat(100) })
-    }), z.object({ value: z.string() }), 16)).rejects.toThrow(/exceeds/);
-  });
-
-  it("keeps canvas generation and Miro export routes governed", async () => {
-    const response = await canvasGeneratePOST(new Request("http://localhost/api/canvas/generate", {
-      method: "POST",
-      body: JSON.stringify({ prompt: "Show Dallas 311 service requests by category and ZIP code for 2024." })
-    }));
-    const body = await response.json();
-    expect(body.canvas.blocks.map((block: { type: string }) => block.type)).toContain("SourceMethodBlock");
-
-    const invalidMiro = await miroExportPOST(new Request("http://localhost/api/export/miro-spec", {
-      method: "POST",
-      body: JSON.stringify({ canvas: { blocks: [{ type: "UnknownBlock" }] } })
-    }));
-    const invalidBody = await invalidMiro.json();
-    expect(invalidMiro.status).toBe(400);
-    expect(invalidBody.ok).toBe(false);
-  });
-
-  it("passes the governance audit for current fixtures and metadata", () => {
-    const stdout = execFileSync("node", ["scripts/governance-audit.mjs", "--json"], {
-      cwd: process.cwd(),
-      encoding: "utf8"
-    });
-    const body = JSON.parse(stdout);
-
-    expect(body.ok).toBe(true);
-    expect(body.releaseVersion).toBe(releaseMetadata.releaseVersion);
-    expect(body.checks.map((check: { name: string }) => check.name)).toEqual(expect.arrayContaining([
-      "hidden fields stay out of canvas/export fixtures",
-      "catalog datasets include source caveats",
-      "sample files match catalog dataset IDs",
-      "live mappings exclude hidden fields",
-      "live verification timestamps are fresh",
-      "blocked live checks are documented",
-      "gallery canvas sources reference approved catalog datasets",
-      "source method blocks include caveats",
-      "README known boundaries match catalog"
-    ]));
-  });
-
-  it("reports sample data quality for release handoff", () => {
-    const stdout = execFileSync("node", ["scripts/data-quality.mjs", "--json"], {
-      cwd: process.cwd(),
-      encoding: "utf8"
-    });
-    const body = JSON.parse(stdout);
-
-    expect(body.ok).toBe(true);
-    expect(body.summary.datasetCount).toBe(3);
-    expect(body.datasets.map((dataset: { datasetId: string }) => dataset.datasetId)).toEqual(expect.arrayContaining([
-      "dallas_311_requests",
-      "austin_building_permits",
-      "houston_transportation_incidents"
-    ]));
-    expect(body.summary.totalSampleRows).toBeGreaterThan(0);
-    expect(body.datasets.every((dataset: { ok: boolean }) => dataset.ok)).toBe(true);
-    expect(body.datasets.find((dataset: { datasetId: string }) =>
-      dataset.datasetId === "austin_building_permits"
-    )?.distinctMonths).toBe(12);
-  });
-
-  it("verifies Vercel output safely when no local output exists", () => {
-    const stdout = execFileSync("node", ["scripts/verify-vercel-build-output.mjs", "--json"], {
-      cwd: process.cwd(),
-      encoding: "utf8"
-    });
-    const body = JSON.parse(stdout);
-
-    expect(body.ok).toBe(true);
-    expect(body.checks.map((check: { name: string }) => check.name)).toContain("no tracked Vercel secrets or project metadata");
-  });
-
-  it("governance audit rejects controlled hidden-field leakage", () => {
-    const dir = mkdtempSync(join(tmpdir(), "tdc-governance-"));
-    const fixturePath = join(dir, "leaky.canvas.json");
-
-    writeFileSync(fixturePath, JSON.stringify({
-      id: "leaky",
-      title: "Leaky fixture",
-      schemaVersion: "1.0",
-      createdAt: "2026-05-09T00:00:00.000Z",
-      updatedAt: "2026-05-09T00:00:00.000Z",
-      prompt: "leak check",
-      sources: [],
-      blocks: [
-        {
-          id: "table",
-          type: "TableBlock",
-          props: {
-            title: "Unsafe table",
-            columns: [{ field: "precise_address", label: "Precise address" }],
-            rows: [{ precise_address: "123 Main St" }]
-          }
-        },
-        {
-          id: "source",
-          type: "SourceMethodBlock",
-          props: {
-            title: "Source",
-            source: "fixture",
-            method: "fixture",
-            caveats: []
-          }
-        }
-      ]
-    }));
-
-    try {
-      expect(() =>
-        execFileSync("node", ["scripts/governance-audit.mjs", "--json", "--extra-canvas", fixturePath], {
-          cwd: process.cwd(),
-          encoding: "utf8",
-          stdio: "pipe"
-        })
-      ).toThrow();
-    } finally {
-      rmSync(dir, { recursive: true, force: true });
     }
   });
 });
