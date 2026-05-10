@@ -1243,3 +1243,23 @@ Last updated: May 10, 2026 06:17 CDT
 ### Recommended Next Task
 
 - Task 90, `Add Readme Submission Link Consistency Check`, is next.
+
+
+## Task 90 Update
+
+- Task chosen: `TASKS.md` item 90, "Add Readme Submission Link Consistency Check".
+- Why this was next: Task 89 completed cleanly, and Task 90 was the next safe QA tooling task to preserve submission/demo doc discoverability.
+- Scope: `scripts/docs-consistency.mjs`, `apps/web/test/release-scripts.test.ts`, `README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: No-network script/test/docs changes only. No deploy, release evidence refresh, live API/provider call, generated media, backend persistence, schema, migration, secrets, auth, billing, or production data changed.
+
+### Validation
+
+- `node scripts/docs-consistency.mjs --json`: Passed.
+- `pnpm test -- apps/web/test/release-scripts.test.ts -t "current-doc links"`: Passed.
+- `pnpm lint`: Passed.
+- `pnpm test`: Passed.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 91, `Add No-Spend Media Proof Contract To Submission Readiness`, is next.

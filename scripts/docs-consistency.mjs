@@ -58,6 +58,14 @@ const readme = read("README.md");
 const developmentGuide = read("DEVELOPMENT_GUIDE.md");
 const codebaseOverview = read("CODEBASE_OVERVIEW.md");
 const hostedSmokeTemplate = read("docs/HOSTED_SMOKE_TEMPLATE.md");
+const submissionDocLinks = [
+  { readme: "docs/HACKATHON_SUBMISSION_GUIDE.md", docsIndex: "HACKATHON_SUBMISSION_GUIDE.md" },
+  { readme: "docs/HACKATHON_SUBMISSION_CHECKLIST.md", docsIndex: "HACKATHON_SUBMISSION_CHECKLIST.md" },
+  { readme: "docs/HACKATHON_DEMO_READINESS.md", docsIndex: "HACKATHON_DEMO_READINESS.md" },
+  { readme: "docs/MCP_DEMO_PROOF.md", docsIndex: "MCP_DEMO_PROOF.md" },
+  { readme: "docs/FAL_LIVE_PROOF_TEMPLATE.md", docsIndex: "FAL_LIVE_PROOF_TEMPLATE.md" },
+  { readme: "docs/HOSTED_SMOKE_TEMPLATE.md", docsIndex: "HOSTED_SMOKE_TEMPLATE.md" }
+];
 
 const missingCurrentDocs = currentDocs.filter((path) => !fileExists(path));
 const missingHistoricalDocs = historicalDocs.filter((path) => !fileExists(path));
@@ -91,6 +99,12 @@ const hostedSmokeTemplateRequiredPhrases = [
 const missingHostedSmokeTemplatePhrases = hostedSmokeTemplateRequiredPhrases.filter((phrase) =>
   !hostedSmokeTemplate.includes(phrase)
 );
+const missingSubmissionReadmeLinks = submissionDocLinks
+  .map((link) => link.readme)
+  .filter((link) => !readme.includes(link));
+const missingSubmissionDocsIndexLinks = submissionDocLinks
+  .map((link) => link.docsIndex)
+  .filter((link) => !docsIndex.includes(link));
 
 const checks = [
   check(
@@ -126,6 +140,13 @@ const checks = [
     missingHostedSmokeTemplatePhrases.length === 0
       ? "Hosted smoke template includes required smoke commands, platform caveat, no-release-evidence boundary, and secret warning."
       : `Hosted smoke template missing required phrase(s): ${missingHostedSmokeTemplatePhrases.join(", ")}`
+  ),
+  check(
+    "submission docs stay linked from README and docs index",
+    missingSubmissionReadmeLinks.length === 0 && missingSubmissionDocsIndexLinks.length === 0,
+    missingSubmissionReadmeLinks.length === 0 && missingSubmissionDocsIndexLinks.length === 0
+      ? "README and docs index link the required submission/demo docs."
+      : `Missing README links: ${missingSubmissionReadmeLinks.join(", ") || "none"}; missing docs index links: ${missingSubmissionDocsIndexLinks.join(", ") || "none"}`
   )
 ];
 
@@ -135,6 +156,7 @@ const output = {
   currentDocs,
   historicalDocs,
   hostedSmokeTemplateRequiredPhrases,
+  submissionDocLinks,
   checks
 };
 

@@ -1416,14 +1416,18 @@ Status: Complete on May 10, 2026.
 
 ## 90. Add Readme Submission Link Consistency Check
 
+Status: Complete on May 10, 2026.
+
 - Owner type: Docs / QA Tooling
 - Goal: Extend docs consistency checks so README and docs index retain links to key submission/demo docs.
 - Scope: Script/test only, with docs wording fix only if the check reveals drift.
-- Likely files: `scripts/docs-consistency.mjs`, `apps/web/test/release-scripts.test.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Likely files: `scripts/docs-consistency.mjs`, `apps/web/test/release-scripts.test.ts`, `README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
 - Risk level: Low.
 - Acceptance criteria: Consistency JSON includes submission-doc link checks for README and docs index; current repo passes.
 - Validation commands: `node scripts/docs-consistency.mjs --json`, focused Vitest command, `pnpm lint`, `pnpm test`, `git diff --check`.
 - Can run in parallel: No with docs consistency script edits.
+- Completed notes: Added submission/demo doc link expectations to `scripts/docs-consistency.mjs`, including submission guide/checklist, demo readiness, MCP proof, Fal proof, and hosted smoke template. Added missing README links for Fal proof and hosted smoke templates and test assertions for the new contract.
+- Validation: docs-consistency JSON, focused release-script Vitest, `pnpm lint`, full `pnpm test`, and `git diff --check` passed.
 
 ## 91. Add No-Spend Media Proof Contract To Submission Readiness
 

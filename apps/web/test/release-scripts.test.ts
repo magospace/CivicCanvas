@@ -308,6 +308,15 @@ describe("release and governance scripts", () => {
     ]));
     expect(body.checks.map((check: { name: string }) => check.name)).toContain("historical docs are labeled away from current starting points");
     expect(body.checks.map((check: { name: string }) => check.name)).toContain("hosted smoke template preserves release and secret caveats");
+    expect(body.checks.map((check: { name: string }) => check.name)).toContain("submission docs stay linked from README and docs index");
+    expect(body.submissionDocLinks.map((link: { readme: string }) => link.readme)).toEqual(expect.arrayContaining([
+      "docs/HACKATHON_SUBMISSION_GUIDE.md",
+      "docs/HACKATHON_SUBMISSION_CHECKLIST.md",
+      "docs/HACKATHON_DEMO_READINESS.md",
+      "docs/MCP_DEMO_PROOF.md",
+      "docs/FAL_LIVE_PROOF_TEMPLATE.md",
+      "docs/HOSTED_SMOKE_TEMPLATE.md"
+    ]));
     expect(body.hostedSmokeTemplateRequiredPhrases).toEqual(expect.arrayContaining([
       "pnpm smoke:deploy",
       "PLAYWRIGHT_BASE_URL",

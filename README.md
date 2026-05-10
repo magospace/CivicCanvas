@@ -235,6 +235,8 @@ Brand assets live under `apps/web/public/brand/`. The header uses the compact Ci
 - [Local demo readiness checklist](docs/HACKATHON_DEMO_READINESS.md)
 - [Hackathon submission checklist](docs/HACKATHON_SUBMISSION_CHECKLIST.md)
 - [Hackathon submission guide](docs/HACKATHON_SUBMISSION_GUIDE.md)
+- [Fal live proof template](docs/FAL_LIVE_PROOF_TEMPLATE.md)
+- [Hosted smoke template](docs/HOSTED_SMOKE_TEMPLATE.md)
 - [MCP demo proof checklist](docs/MCP_DEMO_PROOF.md)
 - [Sample and persistence realness matrix](docs/SAMPLE_AND_PERSISTENCE_REALNESS.md)
 - [Local persistence spike plan](docs/LOCAL_PERSISTENCE_SPIKE.md)
