@@ -2049,3 +2049,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "demo readiness"` passed; due repo script wiring, all 21 product-demo browser tests ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 147, `Add Public URL Smoke Placeholder Guard`, to keep public/deployed URL claims honest while this remains local-only and unpushed.
+
+
+## Task 147 Update - Public URL Smoke Placeholder Guard
+
+- Task chosen: `TASKS.md` item 147, "Add Public URL Smoke Placeholder Guard".
+- Why this was next: It was the next pending local-only submission honesty task after no-key provider copy, and it reduces the risk of putting an unvalidated public URL in the hackathon form.
+- Scope: `README.md`, `HACKATHON_SUBMISSION_GUIDE.md`, `docs/HOSTED_BETA_DEPLOYMENT.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Not data-path-related. This is hosted/submission honesty only; no deployment, provider call, schema, migration, persistence, or release-evidence refresh occurred.
+- Changes: Updated docs to say the validated hackathon path is local/Loom first; deployed URL remains TODO unless the exact public URL passes `pnpm smoke:deploy -- --url <public-url> --expect-version v1.3.0-hosted-launch-readiness`; hosted verification workflow/runbook text is not proof that a public URL already passed. Updated the hosted runbook version examples to the current v1.3 label.
+- Validation: `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 149, `Review Release Evidence Warning Placement`, before running the final broad no-spend validation task.

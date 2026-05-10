@@ -228,7 +228,9 @@ Production-pilot health surfaces are available at `/api/health`, `/api/catalog/h
 
 ## Deployment
 
-The web app is ready for Vercel-style deployment from this monorepo. For hosted deployment, use the manual runbook in `docs/HOSTED_BETA_DEPLOYMENT.md`; the public GitHub repo is configured at `https://github.com/magospace/CivicCanvas`. A manual hosted verification workflow is present for checking an already-deployed URL.
+The validated hackathon path is local-first: run the app at `http://localhost:3000/explore`, record the Loom from the local demo, and submit a public URL only after a hosted smoke check passes. The public GitHub repo is configured at `https://github.com/magospace/CivicCanvas`, but this README does not claim a current hosted deployment.
+
+For hosted deployment, use the manual runbook in `docs/HOSTED_BETA_DEPLOYMENT.md`. A manual hosted verification workflow is present for checking an already-deployed URL; it is not proof that a public URL has already passed.
 
 ```bash
 pnpm preflight
@@ -253,11 +255,13 @@ Optional OpenAI support uses `OPENAI_API_KEY` from `.env.local` or the server en
 
 The health route exposes media-generation status. Current dashboard generation does not create image/video artifacts, upload media, or call Fal by default. `pnpm media:fal:smoke:json` is an optional script-level proof path; the app health metadata labels it as `RUN_LIVE_FAL_SMOKE=1` gated and separate from normal dashboard rendering.
 
-After deploying, smoke-check the public URL:
+After deploying, smoke-check the public URL before putting it in a submission form:
 
 ```bash
 pnpm smoke:deploy -- --url https://your-deployment.example --expect-version v1.3.0-hosted-launch-readiness
 ```
+
+Until that command passes against the actual public URL, list the deployed URL as `TODO` and cite only the local demo/Loom path.
 
 Saved canvases remain browser-local. Use `/saved` to export/import portable saved-canvas bundles for demos and handoffs. Share links place the validated bundle in the URL hash and import only after schema validation; they are not public database-backed URLs.
 

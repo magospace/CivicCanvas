@@ -1,8 +1,8 @@
 # Hosted Beta Deployment Runbook
 
-Last updated: May 9, 2026
+Last updated: May 10, 2026
 
-This runbook supports the first `v0.6.0-hosted-beta` deployment path while the repository has no configured Git remote. Use manual Vercel CLI deployment for now. Add Git-integrated preview or production workflows only after a remote exists and Vercel project credentials are available.
+This runbook supports a future hosted-beta deployment. The currently validated hackathon path is local/Loom first, and no public URL should be entered in a submission form until `pnpm smoke:deploy` has passed against that exact URL. Use manual Vercel CLI deployment only when a deployment owner, public URL, and smoke window are available. Add Git-integrated preview or production workflows only after the Vercel project and credential ownership are clear.
 
 ## Safety Rules
 
@@ -19,7 +19,7 @@ Use these values for the hosted beta deployment:
 
 ```bash
 NEXT_PUBLIC_APP_ENV=hosted-beta
-NEXT_PUBLIC_APP_VERSION=v0.6.0-hosted-beta
+NEXT_PUBLIC_APP_VERSION=v1.3.0-hosted-launch-readiness
 ```
 
 Optional:
@@ -49,18 +49,18 @@ For a local production-style hosted smoke check after `pnpm build`, rebuild the 
 
 ```bash
 NEXT_PUBLIC_APP_ENV=hosted-beta \
-NEXT_PUBLIC_APP_VERSION=v0.6.0-hosted-beta \
+NEXT_PUBLIC_APP_VERSION=v1.3.0-hosted-launch-readiness \
 pnpm --dir apps/web exec next build
 
 NEXT_PUBLIC_APP_ENV=hosted-beta \
-NEXT_PUBLIC_APP_VERSION=v0.6.0-hosted-beta \
+NEXT_PUBLIC_APP_VERSION=v1.3.0-hosted-launch-readiness \
 pnpm --dir apps/web exec next start -p 3004
 ```
 
 Then, from another shell:
 
 ```bash
-pnpm smoke:deploy -- --url http://localhost:3004 --expect-version v0.6.0-hosted-beta
+pnpm smoke:deploy -- --url http://localhost:3004 --expect-version v1.3.0-hosted-launch-readiness
 PLAYWRIGHT_BASE_URL=http://localhost:3004 pnpm test:e2e:remote
 ```
 
@@ -84,11 +84,11 @@ Set hosted-beta public env vars in Vercel project settings or during deployment.
 
 ```bash
 NEXT_PUBLIC_APP_ENV=hosted-beta \
-NEXT_PUBLIC_APP_VERSION=v0.6.0-hosted-beta \
+NEXT_PUBLIC_APP_VERSION=v1.3.0-hosted-launch-readiness \
 pnpm install --frozen-lockfile
 
 NEXT_PUBLIC_APP_ENV=hosted-beta \
-NEXT_PUBLIC_APP_VERSION=v0.6.0-hosted-beta \
+NEXT_PUBLIC_APP_VERSION=v1.3.0-hosted-launch-readiness \
 npx vercel@latest build
 
 npx vercel@latest deploy --prebuilt
@@ -107,12 +107,12 @@ Expected Vercel settings:
 After deployment, run:
 
 ```bash
-pnpm smoke:deploy -- --url https://your-public-beta.example --expect-version v0.6.0-hosted-beta
-pnpm smoke:deploy:json -- --url https://your-public-beta.example --expect-version v0.6.0-hosted-beta
+pnpm smoke:deploy -- --url https://your-public-beta.example --expect-version v1.3.0-hosted-launch-readiness
+pnpm smoke:deploy:json -- --url https://your-public-beta.example --expect-version v1.3.0-hosted-launch-readiness
 PLAYWRIGHT_BASE_URL=https://your-public-beta.example pnpm test:e2e:remote
 ```
 
-Do not tag `v0.6.0-hosted-beta` until the hosted deployment smoke and remote browser smoke pass against a public URL.
+Do not claim hosted readiness, tag a hosted release, or put a public URL in the hackathon form until the hosted deployment smoke and remote browser smoke pass against that public URL.
 
 If a Git remote is available, the same checks can be run from GitHub Actions through the manual `Hosted Deploy Verify` workflow. Provide the public deployment URL and expected version when dispatching the workflow.
 

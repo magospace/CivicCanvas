@@ -2388,7 +2388,7 @@ Status: Complete on May 10, 2026.
 
 ## 147. Add Public URL Smoke Placeholder Guard
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Submission Ops / Honesty
 - Goal: Keep submission docs honest when no deployed URL is validated.
@@ -2399,6 +2399,8 @@ Status: Pending.
 - Acceptance criteria: Docs say local demo is validated, public URL remains TODO unless smoke-checked, and no hosted readiness claim is made.
 - Validation command: `git diff --check`.
 - Can run in parallel: Yes with code tasks not editing these docs.
+- Completed notes: Updated README, submission guide, and hosted deployment runbook so the validated path is local/Loom first, deployed URL remains TODO until the exact public URL passes `pnpm smoke:deploy`, and hosted verification workflow/runbook language is not treated as proof that a hosted URL already passed.
+- Validation: `git diff --check` passed.
 
 ## 148. Add Final No-Spend Validation Checklist Task
 

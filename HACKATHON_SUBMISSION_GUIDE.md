@@ -8,7 +8,7 @@ Due: May 10, 2026 at 11:00 AM CST.
 - Suggested team name: CivicCanvas
 - Track: Brainforge / Vicinity Texas Open Data Track
 - Repo link: https://github.com/magospace/CivicCanvas
-- Deployed URL: TODO if deployed. If not deployed, submit the Loom and note local demo at `http://localhost:3000/explore`.
+- Deployed URL: TODO unless an actual public URL has passed `pnpm smoke:deploy -- --url <public-url> --expect-version v1.3.0-hosted-launch-readiness`. If not deployed and smoke-checked, submit the Loom and note the validated local demo at `http://localhost:3000/explore`.
 - Loom video: TODO. Must be recorded with Loom and kept between 2 and 5 minutes.
 - Team roster: TODO. Add names, roles, and contact emails/handles.
 
@@ -116,7 +116,7 @@ Status: strong local Brainforge submission, but repo/deploy form fields remain i
 
 - Repo link is ready: https://github.com/magospace/CivicCanvas
 - Must do before Airtable: record Loom with camera on.
-- Should do if possible: deploy to Vercel and smoke-check the URL.
+- Should do if possible: deploy to Vercel and smoke-check the URL. Do not enter a public URL in the submission form unless the smoke command passed against that exact URL.
 - Should do if possible: run `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm governance:audit`, and `pnpm data:quality` before recording.
 - Saved-flow checklist: use `docs/LOCAL_DEMO_SMOKE_CHECKLIST.md` to show save, edit title/prompt, reopen, export/share, duplicate/delete if time permits, and invalid-import rejection while saying it is browser-local only.
 - Be careful: do not claim complete live Texas coverage, database persistence, LLM-generated dashboards, or live Miro board writes.
