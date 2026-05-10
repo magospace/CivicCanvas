@@ -665,6 +665,8 @@ This queue was added because all safe non-release realness-audit follow-up tasks
 
 ## 43. Add Demo-Readiness Page Copy Test For Historical Release Evidence
 
+Status: Complete on May 10, 2026 at 05:09 CDT.
+
 - Owner type: QA / Docs
 - Goal: Add focused coverage proving `/demo-readiness` presents checked-in release evidence as historical when it does not match the current commit.
 - Why it matters: The demo handoff warns not to cite stale release evidence; the utility page should preserve the same honest boundary.
@@ -674,6 +676,8 @@ This queue was added because all safe non-release realness-audit follow-up tasks
 - Acceptance criteria: Test asserts the page shows a historical/stale evidence warning or equivalent wording when evidence commit differs from current metadata, and does not instruct users to refresh evidence casually.
 - Validation commands: focused test for the touched file/spec, `git diff --check`, `pnpm lint`, `pnpm test` if unit/API coverage changes, or targeted `pnpm test:e2e` if Playwright coverage is used.
 - Can run in parallel: Yes with docs-only tasks. Avoid parallel edits to `demo-readiness` tests or page copy.
+- Completed notes: Added a visible historical release-evidence warning to `/demo-readiness` when the checked-in evidence commit differs from the running commit, and extended the existing demo-readiness Playwright coverage to assert the warning and no-current-proof wording. Release evidence was not refreshed.
+- Validation: RED Playwright assertion failed before the page warning existed; `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "demo readiness route shows public release boundaries"` passed after implementation, running 15 tests because the project script forwarded the arguments as a full product-demo spec run; `pnpm lint`, `pnpm typecheck`, and `git diff --check` passed.
 
 ## 44. Add No-Provider/No-Persistence Contract Tests For Public Metadata
 

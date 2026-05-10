@@ -1,50 +1,55 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 05:03 CDT
+Last updated: May 10, 2026 05:09 CDT
 
 ## Current Cycle
 
-- Task chosen: Replenish `TASKS.md` because no safe non-release task remained.
-- Why this was next: `TASKS.md` items 36-42 were complete and the only prior remaining task was item 35, the high-risk release-evidence refresh that requires explicit approval, a clean/reviewed tree, and the full release gate.
-- Scope: `TASKS.md` and `HERMES_PROGRESS.md` only.
-- Safety notes: Planning/docs-only. No product source, tests, package scripts, config, source data, generated media, secrets, auth, billing, migrations, production config, deploy scripts, live API calls, release evidence, or destructive operations were changed. Release evidence was not refreshed.
-
-## Files Updated
-
-- `TASKS.md`: Added safe hackathon-stabilization tasks 43-50 focused on local docs/tests/realness coverage while keeping task 35 gated.
-- `HERMES_PROGRESS.md`: Recorded context recovery, replenishment rationale, validation plan, and next recommended task.
+- Task chosen: `TASKS.md` item 43, "Add Demo-Readiness Page Copy Test For Historical Release Evidence".
+- Why this was next: The prior replenishment made item 43 the highest-priority safe task. It improves demo/release honesty without touching release evidence, deploy config, auth, persistence, secrets, billing, migrations, production config, or live-provider spend.
+- Scope: `apps/web/app/demo-readiness/page.tsx`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Release evidence was not refreshed. The change only adds visible warning copy and e2e coverage for already-documented historical release-evidence behavior.
 
 ## Context Recovered
 
 - Read `AGENTS.md`, `TASKS.md`, `HERMES_PROGRESS.md`, `QA_FINDINGS.md`, `REALNESS_AUDIT.md`, `README.md`, `CODEBASE_OVERVIEW.md`, `ARCHITECTURE_MAP.md`, `DEVELOPMENT_GUIDE.md`, and `.agents/skills/texas-public-data-explorer/SKILL.md`.
-- Ran `git status --short --branch`: branch `feat/v1.3-hosted-launch-readiness`; worktree was clean before this replenishment.
-- Latest completed safe task before this cycle: item 42, `Add No-LLM/No-Secret Provider Demo Wording Pass`, committed as `446f81c`.
-- Active non-code risks from durable state: release evidence remains historical/stale for current HEAD until gated item 35 is explicitly approved; public hosted rate limiting still depends on platform-level controls outside the repo.
+- Ran `git status --short --branch`: branch `feat/v1.3-hosted-launch-readiness`; worktree was clean before task 43.
+- Active risks from durable state: release evidence remains historical/stale for current HEAD until gated item 35 is explicitly approved; public hosted rate limiting still depends on platform-level controls outside the repo.
 
 ## Sequential Task Plan
 
-No implementation tasks were executed after replenishment because the user instruction says to replenish `TASKS.md` and stop when no safe task remains. The next three safe tasks now available are:
-
 1. Task 43, `Add Demo-Readiness Page Copy Test For Historical Release Evidence`.
-   - Validation: focused test/spec, `git diff --check`, `pnpm lint`, plus `pnpm test` or targeted `pnpm test:e2e` depending on coverage type.
+   - Status: Complete.
+   - Validation: RED/green Playwright product-demo route coverage, `pnpm lint`, `pnpm typecheck`, `git diff --check`.
 2. Task 44, `Add No-Provider/No-Persistence Contract Tests For Public Metadata`.
+   - Status: Next safe task.
    - Validation: focused Vitest command, `git diff --check`, `pnpm lint`, `pnpm test`.
 3. Task 45, `Add Sample Provenance Regression Test`.
+   - Status: Planned after task 44 if validation stays green and scope remains safe.
    - Validation: focused test or `pnpm data:quality`, `git diff --check`, `pnpm lint`, `pnpm test` if Vitest coverage is added.
+
+## Files Updated
+
+- `apps/web/app/demo-readiness/page.tsx`: Shows a historical release-evidence warning when the checked-in evidence commit differs from the running commit, and tells presenters not to cite checked-in evidence as current proof until Task 35 reruns the full gate.
+- `tests/e2e/product-demo.spec.ts`: Extends the demo-readiness Playwright coverage to assert the historical release-evidence warning and no-current-proof wording.
+- `TASKS.md`: Marks item 43 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records item 43 scope, safety notes, validations, and next safe task.
 
 ## Validation
 
-- `git diff --check`: Passed after normalizing the `TASKS.md` EOF newline.
-- `pnpm lint`: Passed through the ESLint CLI with no warnings or errors.
+- RED: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "demo readiness route shows public release boundaries"` failed on the new `Historical release evidence` assertion before page copy existed.
+- GREEN: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "demo readiness route shows public release boundaries"` passed after implementation. The script ran 15 product-demo tests, so the actual scope was the full product-demo spec rather than only the named test.
+- `pnpm lint`: Passed.
+- `pnpm typecheck`: Passed.
+- `git diff --check`: Passed.
 
 ## Blockers
 
-- None for the replenishment.
+- None for task 43.
 - Do not run item 35, `Refresh Release Evidence Only After Full Validation Gate`, without explicit approval and the full release gate.
 
 ## Recommended Next Task
 
-- Task 43, `Add Demo-Readiness Page Copy Test For Historical Release Evidence`, is the next safe task. It improves the local demo/release-honesty path without touching release evidence, deploy configuration, auth, persistence, secrets, billing, migrations, or live-provider spend.
+- Task 44, `Add No-Provider/No-Persistence Contract Tests For Public Metadata`, is the next safe task. It should stay test-only unless a test exposes misleading public metadata that can be corrected safely without changing architecture boundaries.
 
 ## Historical Sequential Progress
 
@@ -63,3 +68,4 @@ No implementation tasks were executed after replenishment because the user instr
 - Task 40 committed as `82dcfd6` (`docs: add sample persistence realness matrix`).
 - Task 41 committed as `7825404` (`docs: audit seed save api naming`).
 - Task 42 committed as `446f81c` (`docs: clarify deterministic no-provider generation`).
+- Safe-queue replenishment committed as `673d1da` (`docs: replenish safe stabilization queue`).

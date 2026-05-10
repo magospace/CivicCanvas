@@ -65,6 +65,8 @@ export default function DemoReadinessPage() {
   const currentCommit = process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 12) ?? process.env.GITHUB_SHA?.slice(0, 12) ?? gitValue("git rev-parse --short=12 HEAD");
   const activeAppVersion = process.env.NEXT_PUBLIC_APP_VERSION ?? releaseMetadata.devFallbackVersion;
   const hostedStatus = process.env.NEXT_PUBLIC_SITE_URL ? "pending hosted verification" : "blocked: no public URL configured";
+  const evidenceCommit = releaseEvidence.commit.slice(0, 12);
+  const evidenceIsCurrent = currentCommit !== "unavailable" && releaseEvidence.commit.startsWith(currentCommit);
 
   return (
     <main id="main-content" className="min-h-screen bg-civic-50">
@@ -131,6 +133,12 @@ export default function DemoReadinessPage() {
             Latest evidence: {releaseEvidence.localVerifiedAt ?? "local v1.3 verification pending"} / hosted {releaseEvidence.hosted.status}.
             Passed gates recorded: {releaseEvidence.localGates.filter((gate) => gate.status === "passed").map((gate) => gate.name).join(", ") || "pending"}.
           </div>
+          {!evidenceIsCurrent ? (
+            <div className="mt-3 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900">
+              <span className="font-semibold">Historical release evidence:</span> checked-in evidence records commit {evidenceCommit}, while this page is running commit {currentCommit}.
+              Do not cite checked-in release evidence as current proof until Task 35 reruns the full release gate and refreshes evidence for the intended commit.
+            </div>
+          ) : null}
         </section>
 
         <section className="mb-6 rounded-lg border border-slate-200 bg-white p-5 shadow-panel">

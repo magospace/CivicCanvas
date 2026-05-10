@@ -196,6 +196,8 @@ test("demo readiness route shows public release boundaries", async ({ page }) =>
   await expect(page.getByRole("button", { name: "Copy hosted handoff" })).toBeVisible();
   await expect(page.getByText("Release proof")).toBeVisible();
   await expect(page.getByText("v1.3.0-hosted-launch-readiness").first()).toBeVisible();
+  await expect(page.getByText(/Historical release evidence/i)).toBeVisible();
+  await expect(page.getByText(/Do not cite checked-in release evidence as current proof/i)).toBeVisible();
   await expect(page.getByText("Sample data quality")).toBeVisible();
   await expect(page.getByText("Hosted blocker", { exact: true })).toBeVisible();
   await expect(page.getByText("Houston live verification")).toBeVisible();
