@@ -1,0 +1,508 @@
+# Tasks
+
+The next executable Hermes/Codex tasks, ordered for safe progress. Each task is scoped for one agent and avoids broad refactors.
+
+## 0. Adapt Development Workflow For Hermes
+
+Status: Complete on May 10, 2026; re-verified by Hermes at 01:08 CDT.
+
+- Goal: Adapt the bounded Codex `/goal` development workflow for Hermes while keeping durable state in repository files instead of chat memory.
+- Files: `AGENTS.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Do not touch: product source code, secrets, production config, auth, billing, migrations, deploy scripts, or release evidence.
+- Acceptance criteria: `AGENTS.md` documents the Hermes safe cycle and durable state files; `TASKS.md` records this completed workflow-adaptation task; `HERMES_PROGRESS.md` exists with session state and validation notes.
+- Suggested validation: `pnpm lint`
+- Latest validation: `pnpm lint` passed on May 10, 2026 at 01:08 CDT.
+
+## 1. Reconcile Stale Onboarding References
+
+Status: Complete on May 10, 2026.
+
+- Goal: Update onboarding docs that still describe `apps/web/README.md` and `.env.example` as stale after the recent refresh.
+- Files: `CODEBASE_OVERVIEW.md`, `DEVELOPMENT_GUIDE.md`, optionally `AGENTS.md`.
+- Do not touch: app source code, runtime env parsing, release evidence.
+- Acceptance criteria: Current docs no longer tell agents to fix already-current README/env examples; docs still mention real risks such as release evidence and hosted rate limiting.
+- Suggested validation: `pnpm lint`
+
+## 2. Add Current Docs Index For Historical Docs
+
+Status: Complete on May 10, 2026.
+
+- Goal: Add a small docs index that points agents to current docs and labels milestone docs as historical.
+- Files: `docs/README.md` if absent, optionally `README.md`.
+- Do not touch: existing historical docs.
+- Acceptance criteria: New developers can identify current architecture, development, governance, release, and historical docs without opening multiple milestone files.
+- Suggested validation: `pnpm lint`
+
+## 3. Add Saved Canvas Hash Import/Export Unit Tests
+
+Status: Complete on May 10, 2026.
+
+- Goal: Add focused tests for web saved-canvas share-link creation and hash import.
+- Files: `apps/web/lib/saved-canvases.ts`, `apps/web/test/*`, `packages/shared/test/*` only if shared helpers need coverage.
+- Do not touch: storage architecture; keep browser `localStorage` and URL-hash bundles.
+- Acceptance criteria: Tests cover valid share-link round trip, missing hash key, malformed payload, and oversized hash/import guard.
+- Suggested validation: `pnpm test`
+
+## 4. Add API Tests For `/api/canvas/save`
+
+Status: Complete on May 10, 2026.
+
+- Goal: Test that `/api/canvas/save` validates canvases but does not imply backend persistence.
+- Files: `apps/web/app/api/canvas/save/route.ts`, `apps/web/test/*`.
+- Do not touch: persistence model or route behavior unless a test exposes a real bug.
+- Acceptance criteria: Tests cover valid canvas validation and invalid canvas rejection; test names or assertions make validation-only behavior clear.
+- Suggested validation: `pnpm test`
+
+## 5. Add API Tests For `/api/query`
+
+Status: Complete on May 10, 2026.
+
+- Goal: Add route-level tests for direct bounded query execution.
+- Files: `apps/web/app/api/query/route.ts`, `apps/web/lib/api.ts`, `apps/web/test/*`.
+- Do not touch: query semantics unless a test exposes a real bug.
+- Acceptance criteria: Tests cover valid `BoundedQuerySpec`, invalid request body, and governed public error behavior.
+- Suggested validation: `pnpm test`
+
+## 6. Add Seed Canvas API Tests
+
+Status: Complete on May 10, 2026.
+
+- Goal: Test `/api/canvas/[id]` as a hardcoded seed/demo helper, not a persistence endpoint.
+- Files: `apps/web/app/api/canvas/[id]/route.ts`, `apps/web/test/*`, optionally `ARCHITECTURE_MAP.md` if docs need one sentence.
+- Do not touch: route behavior except comments/tests.
+- Acceptance criteria: Tests cover a known seed ID returning a generated canvas and an unknown ID returning 404; test names state seed/demo behavior.
+- Suggested validation: `pnpm test`
+
+## 7. Improve Unsupported Prompt Guidance
+
+Status: Complete on May 10, 2026 at 01:14 CDT.
+
+- Goal: Make unsupported prompt output suggest exact supported prompts and approved sources.
+- Files: `packages/shared/src/prompt/index.ts`, `apps/web/lib/dashboard.ts`, `apps/web/components/prompt-bar.tsx`, `apps/web/test/dashboard.test.ts`.
+- Do not touch: arbitrary prompt generation, unsupported dataset access, or hidden field exposure.
+- Acceptance criteria: Unsupported/sensitive prompts remain safe and include actionable examples; tests cover the new response shape or copy.
+- Suggested validation: `pnpm lint && pnpm test`
+- Completed notes: Unsupported and sensitive prompt suggestion canvases now use the exact three supported demo prompts and show approved source names through ordered dataset cards. The dashboard test asserts exact prompt bullets and approved source names.
+- Validation: Focused RED test failed first; focused test passed after implementation; `pnpm lint`, `pnpm typecheck`, and `pnpm test` passed.
+
+## 8. Add Data Mode/Fallback Visibility Test Coverage
+
+Status: Complete on May 10, 2026 at 01:15 CDT.
+
+- Goal: Add tests verifying generated dashboards preserve requested/rendered data mode, fallback reasons, caveats, and source attribution.
+- Files: `apps/web/lib/dashboard.ts`, `apps/web/test/dashboard.test.ts`, `packages/shared/test/query-and-canvas.test.ts`.
+- Do not touch: live adapter promotion, catalog fields, or data samples unless a test exposes a documented mismatch.
+- Acceptance criteria: Dallas, Austin, and Houston paths each have at least one assertion for data mode or fallback/source metadata.
+- Suggested validation: `pnpm test`
+- Completed notes: Added focused dashboard coverage for Dallas fallback ZIP metadata, Austin live-request fallback metadata, and Houston sample-first source attribution/caveats.
+- Validation: Focused dashboard test passed; `pnpm lint`, `pnpm typecheck`, and `pnpm test` passed.
+
+## 9. Split Broad Web Tests Into Focused Files
+
+Status: Complete on May 10, 2026 at 01:17 CDT.
+
+- Goal: Split `apps/web/test/dashboard.test.ts` into clearer focused tests without changing assertions.
+- Files: `apps/web/test/dashboard.test.ts`, new files under `apps/web/test`.
+- Do not touch: app behavior.
+- Acceptance criteria: Test cases are grouped by dashboard generation, API routes, exports, middleware, and release scripts; total test count and assertions are preserved or improved.
+- Suggested validation: `pnpm test`
+- Completed notes: Split broad dashboard tests into focused dashboard generation, dashboard export, API/middleware contract, and release/governance script files. Total test count remained 71.
+- Validation: `pnpm test`, `pnpm lint`, and `pnpm typecheck` passed.
+
+## 10. Document Daily Checks Versus Release Gates
+
+Status: Complete on May 10, 2026 at 01:18 CDT.
+
+- Goal: Clarify which validation commands are routine development checks and which are release/deployment gates.
+- Files: `DEVELOPMENT_GUIDE.md`, `GOVERNANCE_NOTE.md`, optionally `README.md`.
+- Do not touch: `docs/release-evidence.json` unless intentionally refreshing release evidence after full gates.
+- Acceptance criteria: Docs clearly distinguish `pnpm lint/typecheck/test` from `preflight`, `verify:prod-local`, `release:check`, smoke checks, and release evidence refresh steps.
+- Suggested validation: `pnpm lint`
+- Completed notes: `DEVELOPMENT_GUIDE.md` and `GOVERNANCE_NOTE.md` now separate daily checks, focused local checks, release/deployment gates, environment-dependent smoke checks, and release-evidence refresh rules.
+- Validation: `pnpm lint` passed.
+
+---
+
+# Replenished Safe Implementation Queue
+
+Last replenished: May 10, 2026 at 01:23 CDT.
+
+These are the next safe, scoped implementation tasks. They prioritize validation/test gaps, reliability, documentation consistency, core user workflows, and UX polish. Do not touch secrets, auth, billing, migrations, production config, deploy scripts, release evidence, or destructive data operations unless a future task explicitly says so.
+
+## 11. Refresh QA Findings After Completed Coverage Work
+
+Status: Complete on May 10, 2026 at 01:41 CDT.
+
+- Owner type: QA
+- Goal: Update `QA_FINDINGS.md` so it no longer lists completed coverage gaps as active findings.
+- Why it matters: The current QA findings still describe missing `/api/canvas/save`, seed canvas, saved-canvas hash, and broad-test-file coverage even though those tasks are now complete.
+- Likely files: `QA_FINDINGS.md`, optionally `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Dependencies: Completed tasks 3 through 9.
+- Acceptance criteria: Completed findings are moved to a resolved section or annotated as resolved; active findings still include release-evidence mismatch and `next lint` deprecation; current test count/file count is updated from the latest `pnpm test` output.
+- Validation commands: `pnpm lint`.
+- Can run in parallel: Yes, with docs-only tasks. Do not parallelize with another task editing `QA_FINDINGS.md`.
+- Completed notes: `QA_FINDINGS.md` now separates active findings from resolved coverage/test-organization findings and records the latest 71-test/10-file validation baseline.
+- Validation: `pnpm lint` passed.
+
+## 12. Align README Verification Guidance With Daily Checks Versus Release Gates
+
+Status: Complete on May 10, 2026 at 01:48 CDT.
+
+- Owner type: Docs
+- Goal: Clarify the root `README.md` verification section so routine checks are separated from release/deployment gates and network-dependent checks.
+- Why it matters: `DEVELOPMENT_GUIDE.md` and `GOVERNANCE_NOTE.md` now distinguish these categories, but `README.md` still presents a long undifferentiated command list.
+- Likely files: `README.md`, optionally `apps/web/README.md` if it repeats the same guidance.
+- Risk level: Low.
+- Dependencies: Completed task 10.
+- Acceptance criteria: `README.md` has separate sections for daily local checks, data/catalog checks, release/deployment gates, and smoke/remote checks; it preserves all real commands and does not ask readers to refresh release evidence casually.
+- Validation commands: `pnpm lint`.
+- Can run in parallel: Yes, with code/test tasks that do not edit README files.
+- Completed notes: Root `README.md` now separates daily local checks, focused checks, release/deployment gates, network-dependent checks, and cleanup; it also says not to refresh release evidence as part of daily checks.
+- Validation: `pnpm lint` passed.
+
+## 13. Add Focused API Tests For Dataset Catalog Routes
+
+Status: Complete on May 10, 2026 at 01:49 CDT.
+
+- Owner type: QA
+- Goal: Add route-level tests for `GET /api/datasets` and `GET /api/datasets/[id]`.
+- Why it matters: Catalog routes are central to source browsing and public-data boundaries, but the current focused route tests emphasize query, canvas save, seed canvas, and health behavior.
+- Likely files: `apps/web/app/api/datasets/route.ts`, `apps/web/app/api/datasets/[id]/route.ts`, new or existing file under `apps/web/test/*`.
+- Risk level: Low.
+- Dependencies: None.
+- Acceptance criteria: Tests cover catalog list success, known dataset lookup success, unknown dataset 404/error response, and no hidden/sensitive fields being exposed beyond approved catalog metadata.
+- Validation commands: `pnpm test -- apps/web/test/<new-or-existing-dataset-route-test>.test.ts`, then `pnpm test`.
+- Can run in parallel: Yes, with docs-only tasks. Avoid parallel edits to the same route-test file.
+- Completed notes: Added `apps/web/test/dataset-routes.test.ts` covering catalog list metadata, known Dallas dataset lookup, unknown dataset 404, and no sample-row/raw precise-address leakage in catalog responses.
+- Validation: Focused test command passed; `pnpm lint`, `pnpm typecheck`, and `pnpm test` passed with 74 tests across 11 files.
+
+## 14. Add Focused API Tests For Miro Export Route Success And Validation Failures
+
+Status: Complete on May 10, 2026 at 01:51 CDT.
+
+- Owner type: QA
+- Goal: Add route-level tests for `POST /api/export/miro-spec` valid preview output and invalid request handling.
+- Why it matters: Miro must remain preview-only and governed; current tests cover shared spec generation and one invalid route case, but not a focused valid route contract.
+- Likely files: `apps/web/app/api/export/miro-spec/route.ts`, `apps/web/test/api-contracts.test.ts` or `apps/web/test/miro-export-route.test.ts`.
+- Risk level: Low.
+- Dependencies: Existing dashboard fixture/generation helpers.
+- Acceptance criteria: Tests assert a valid canvas returns a `MiroExportSpec`, source/method frame is required, no board write/OAuth fields are implied, and malformed/invalid canvases return governed errors.
+- Validation commands: focused Vitest command for the route test, then `pnpm test`.
+- Can run in parallel: Yes, unless another task is editing Miro export tests.
+- Completed notes: Added `apps/web/test/miro-export-route.test.ts` covering valid preview-only route output, no OAuth/board-write metadata, invalid canvas errors, and malformed template errors.
+- Validation: Focused test command passed; `pnpm lint`, `pnpm typecheck`, and `pnpm test` passed with 77 tests across 12 files.
+
+## 15. Add E2E Coverage For Unsupported Prompt Suggestions
+
+Status: Complete on May 10, 2026 at 01:54 CDT.
+
+- Owner type: QA
+- Goal: Extend Playwright coverage so unsupported or sensitive prompts show exact supported prompt examples and approved source cards in the UI.
+- Why it matters: Unit tests now cover the response shape, but the core user workflow should also prove the guidance is visible and accessible in `/explore`.
+- Likely files: `tests/e2e/product-demo.spec.ts`, possibly `apps/web/components/canvas-blocks.tsx` only if a test exposes an accessibility label issue.
+- Risk level: Low.
+- Dependencies: Completed task 7.
+- Acceptance criteria: Playwright test submits an unsupported prompt, verifies the "Choose an approved dataset" state, exact supported prompt text, and at least the Dallas/Austin/Houston approved source names.
+- Validation commands: `pnpm test:e2e` or targeted Playwright command for `product-demo.spec.ts`; run `pnpm test` if any shared helper changes.
+- Can run in parallel: Yes, with unit-test/docs tasks. Do not parallelize with another task editing `tests/e2e/product-demo.spec.ts`.
+- Completed notes: Extended the unsupported sensitive prompt Playwright test to verify exact Dallas/Austin/Houston supported prompt text and approved source names are visible.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "unsupported sensitive prompt"`, `pnpm lint`, and `pnpm test` passed.
+
+## 16. Add E2E Coverage For Data Mode Fallback Visibility
+
+Status: Complete on May 10, 2026 at 01:57 CDT.
+
+- Owner type: QA
+- Goal: Add browser-level coverage for data-mode selector behavior and fallback/status messaging.
+- Why it matters: Data-mode transparency is a core trust feature; unit tests cover generated metadata, but the UI should visibly communicate sample/fallback state.
+- Likely files: `tests/e2e/product-demo.spec.ts`, optionally `apps/web/components/inspector-panel.tsx` only if labels are not testable.
+- Risk level: Low to Medium.
+- Dependencies: Existing data-mode UI in `/explore`.
+- Acceptance criteria: Test selects Live public API or Sample fallback, generates a supported dashboard, and verifies visible data-mode/fallback copy and source/method attribution without changing generation behavior.
+- Validation commands: `pnpm test:e2e`; run `pnpm lint` and `pnpm test` only if code changes are needed for accessible labels.
+- Can run in parallel: Yes, but not with another task editing the same e2e spec.
+- Completed notes: Added Playwright coverage for a Live public API request on Austin permits that verifies fallback status copy, inspector requested mode, rendered fallback mode, and source/method attribution visibility.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "live data mode"`, `pnpm lint`, and `pnpm test` passed.
+
+## 17. Add Focused Saved-Page Interaction Coverage
+
+Status: Complete on May 10, 2026 at 01:59 CDT.
+
+- Owner type: QA
+- Goal: Add tests for user-visible saved-canvas actions such as duplicate, delete, import error, and share-link affordances.
+- Why it matters: Saved canvases are browser-local and important for handoff/demo workflows; hash import/export helpers have unit tests, but user-facing interactions still have limited coverage.
+- Likely files: `tests/e2e/product-demo.spec.ts` or a new e2e spec under `tests/e2e`, optionally `apps/web/components/saved-canvases.tsx` if accessibility labels are missing.
+- Risk level: Low to Medium.
+- Dependencies: Existing `/saved` page and localStorage helpers.
+- Acceptance criteria: Browser test covers saving/opening a canvas, duplicate/delete behavior, and an invalid import path without requiring a backend or external service.
+- Validation commands: targeted Playwright command or `pnpm test:e2e`; run `pnpm lint` if component labels change.
+- Can run in parallel: Yes, but not with other e2e tasks touching saved-page tests.
+- Completed notes: Extended the saved-page Playwright flow to cover opening a saved canvas in `/explore`, duplicating a saved card, confirming delete for the duplicate, bundle/share-link affordances, and invalid import rejection.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved bundle"`, `pnpm lint`, and `pnpm test` passed.
+
+## 18. Add Focused Source Catalog UI Coverage
+
+Status: Complete on May 10, 2026 at 02:04 CDT.
+
+- Owner type: QA
+- Goal: Add browser coverage for `/sources` showing field classifications, live/sample confidence notes, and hidden-field warnings.
+- Why it matters: Source transparency and hidden-field governance are core safety promises, but most current tests focus on dashboard generation and route contracts.
+- Likely files: `tests/e2e/product-demo.spec.ts` or a new `tests/e2e/sources.spec.ts`, optionally `apps/web/components/sources-catalog.tsx` if accessible names need improvement.
+- Risk level: Low.
+- Dependencies: Existing `/sources` page.
+- Acceptance criteria: Test verifies the approved datasets render, live/sample boundary copy is visible, and hidden/sensitive field messaging is present without exposing private raw fields in generated dashboards.
+- Validation commands: targeted Playwright command or `pnpm test:e2e`.
+- Can run in parallel: Yes, with unit-test/docs tasks. Avoid parallel edits to the same e2e file.
+- Completed notes: Added `tests/e2e/sources.spec.ts` covering approved dataset titles, live/sample confidence labels, hidden precise-address warning copy, absence of raw private address values, and city filtering.
+- Validation: `pnpm test:e2e -- tests/e2e/sources.spec.ts`, `pnpm lint`, and `pnpm test` passed.
+
+## 19. Add MCP Coverage For Canvas Generation Or Validation Tools
+
+Status: Complete on May 10, 2026 at 02:06 CDT.
+
+- Owner type: QA
+- Goal: Extend MCP tests to cover at least one canvas-generation or canvas-validation tool path if exposed by the current MCP handlers.
+- Why it matters: The MCP server is a core integration surface and should preserve the same governed canvas/data boundaries as the web app.
+- Likely files: `apps/mcp-server/src/tools.ts`, `apps/mcp-server/test/tools.test.ts`.
+- Risk level: Medium.
+- Dependencies: Existing MCP tool exports and test helpers.
+- Acceptance criteria: Test exercises an MCP canvas-related handler, validates returned JSON shape, asserts source/method attribution, and confirms invalid/unsupported input returns governed failure behavior.
+- Validation commands: `pnpm test -- apps/mcp-server/test/tools.test.ts`, then `pnpm test`.
+- Can run in parallel: Yes, with web-only tasks. Do not parallelize with another MCP test task.
+- Completed notes: Strengthened the MCP canvas-spec test to assert source/method attribution details, validate the generated canvas, and confirm unsupported dataset canvas generation fails with a governed `UnsupportedDatasetError`.
+- Validation: `pnpm test -- apps/mcp-server/test/tools.test.ts`, `pnpm lint`, `pnpm typecheck`, and `pnpm test` passed.
+
+## 20. Add Unit Coverage For Prompt Intent Edge Cases
+
+Status: Complete on May 10, 2026 at 02:08 CDT.
+
+- Owner type: QA
+- Goal: Add focused tests for `parsePromptIntent` edge cases such as month ranges, "last year"/"this year", sensitive field rejection, and synonym matching.
+- Why it matters: Prompt parsing is deterministic and narrow; explicit tests reduce regression risk without expanding arbitrary prompt behavior.
+- Likely files: `packages/shared/src/prompt/index.ts`, `packages/shared/test/query-and-canvas.test.ts` or a new `packages/shared/test/prompt-intent.test.ts`.
+- Risk level: Low.
+- Dependencies: None.
+- Acceptance criteria: Tests cover date-range parsing, sensitive terms, dataset candidate confidence, and supported synonyms for Dallas/Austin/Houston without adding unsupported datasets.
+- Validation commands: focused Vitest command for the prompt test, then `pnpm test`.
+- Can run in parallel: Yes, with UI/docs tasks. Avoid parallel edits to shared prompt tests.
+- Completed notes: Added `packages/shared/test/prompt-intent.test.ts` covering month ranges, relative years, sensitive rejected fields/safety warnings, dataset confidence, and supported Dallas/Austin/Houston synonyms.
+- Validation: `pnpm test -- packages/shared/test/prompt-intent.test.ts`, `pnpm lint`, `pnpm typecheck`, and `pnpm test` passed with 80 tests across 13 files.
+
+## 21. Add Unit Coverage For Query Audit Safety Decisions
+
+Status: Complete on May 10, 2026 at 02:10 CDT.
+
+- Owner type: QA
+- Goal: Assert that bounded query execution records data mode, row limits, aggregation status, fields used, and safety decisions for representative sample/fallback queries.
+- Why it matters: Query audits power trust/explainability in the inspector and MCP surfaces.
+- Likely files: `packages/shared/src/query/index.ts`, `packages/shared/src/adapters/index.ts`, `packages/shared/test/query-and-canvas.test.ts` or a focused new shared test file.
+- Risk level: Low to Medium.
+- Dependencies: Existing sample datasets and query helpers.
+- Acceptance criteria: Tests cover Dallas/Austin/Houston query audit metadata and at least one rejected hidden/unknown field path.
+- Validation commands: focused shared Vitest command, then `pnpm test`.
+- Can run in parallel: Yes, but not with another shared query test task.
+- Completed notes: Added `packages/shared/test/query-audit.test.ts` covering Dallas sample aggregate audit metadata, Austin fallback audit metadata, Houston sample audit metadata, and hidden-field rejection.
+- Validation: `pnpm test -- packages/shared/test/query-audit.test.ts`, `pnpm lint`, `pnpm typecheck`, and `pnpm test` passed with 83 tests across 14 files.
+
+## 22. Add Middleware Rate-Limit Boundary Tests
+
+Status: Complete on May 10, 2026 at 02:19 CDT.
+
+- Owner type: QA
+- Goal: Add focused tests for middleware allowing safe GET/public routes and limiting only configured write-like POST routes.
+- Why it matters: Middleware is defense-in-depth and easy to over- or under-apply; focused coverage prevents accidental breakage of public read pages.
+- Likely files: `apps/web/middleware.ts`, `apps/web/test/api-contracts.test.ts` or new `apps/web/test/middleware.test.ts`.
+- Risk level: Low.
+- Dependencies: Existing middleware test coverage.
+- Acceptance criteria: Tests verify public GET navigation is not rate-limited, configured POST routes receive rate-limit headers, and unrelated paths are passed through.
+- Validation commands: focused Vitest command, then `pnpm test`.
+- Can run in parallel: Yes, unless another task edits middleware tests.
+- Completed notes: Extended middleware contract tests to verify public GET navigation passes without rate-limit headers, configured write-like POST routes receive rate-limit headers, unrelated POST paths pass through without rate-limit headers, and repeated configured POST requests still return 429.
+- Validation: `pnpm test -- apps/web/test/api-contracts.test.ts`, `pnpm lint`, `pnpm typecheck`, and `pnpm test` passed with 86 tests across 14 files.
+
+## 23. Add Gallery Fixture Regression Coverage
+
+Status: Complete on May 10, 2026 at 02:21 CDT.
+
+- Owner type: QA
+- Goal: Add focused tests asserting every checked-in gallery canvas is valid, contains source/method attribution, avoids hidden fields, and renders through allowed block types.
+- Why it matters: Gallery fixtures are demo surfaces and can drift as schemas evolve.
+- Likely files: `data/gallery/*.canvas.json`, `apps/web/test/dashboard.test.ts` or new `apps/web/test/gallery-fixtures.test.ts`, possibly `packages/shared/test/*`.
+- Risk level: Low.
+- Dependencies: Existing gallery fixtures and canvas validation helpers.
+- Acceptance criteria: Tests iterate all gallery canvases, validate schema, assert `SourceMethodBlock`, assert no hidden field names, and assert source dataset IDs are approved.
+- Validation commands: focused Vitest command, then `pnpm test` and `pnpm governance:audit` if data/gallery checks are touched.
+- Can run in parallel: Yes, with docs and web route tests. Avoid parallel edits to gallery fixtures.
+- Completed notes: Extended `apps/web/test/dashboard.test.ts` to enumerate every checked-in `data/gallery/*.canvas.json` fixture, validate each with `validateCanvasDocument`, assert allowed block types, require source/method attribution, ensure hidden catalog field names such as `precise_address` are absent, and confirm fixture sources/attribution reference approved datasets or the governed catalog-suggestions refusal fixture.
+- Validation: `pnpm test -- apps/web/test/dashboard.test.ts`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm governance:audit` passed with 87 tests across 14 files and 19/19 governance checks.
+
+## 24. Investigate Safe Migration From `next lint` To ESLint CLI
+
+Status: Complete on May 10, 2026 at 02:23 CDT.
+
+- Owner type: DevOps
+- Goal: Create a small non-invasive migration note or spike for replacing deprecated `next lint` before Next.js 16.
+- Why it matters: `pnpm lint` passes but emits a deprecation notice that will eventually become a maintenance issue.
+- Likely files: `QA_FINDINGS.md`, `DEVELOPMENT_GUIDE.md`, optionally `apps/web/package.json` only if the task explicitly chooses to implement the migration after a successful spike.
+- Risk level: Medium if package scripts change; Low if documentation/spike only.
+- Dependencies: Current lint passing baseline.
+- Acceptance criteria: Document the recommended migration path, expected command, risks, and validation plan. If implementation is attempted, `pnpm lint`, `pnpm typecheck`, and `pnpm test` must pass with no new warnings beyond pre-existing dependency/tool notices.
+- Validation commands: docs-only `pnpm lint`; implementation `pnpm lint && pnpm typecheck && pnpm test`.
+- Can run in parallel: Documentation spike can run in parallel; implementation should not run in parallel with package/config changes.
+- Completed notes: Added a non-invasive `next lint` deprecation migration spike to `DEVELOPMENT_GUIDE.md`, documented current lint wiring and existing ESLint dependencies, recommended the official `npx @next/codemod@canary next-lint-to-eslint-cli .` path, and updated `QA_FINDINGS.md` with current test count plus the implementation validation plan. Package scripts/config were not changed.
+- Validation: `pnpm lint` passed with the existing Next.js deprecation notice and no ESLint warnings or errors.
+
+## 25. Create A Lightweight Architecture Diagram Or Mermaid Flow For Current Docs
+
+Status: Complete on May 10, 2026 at 02:25 CDT.
+
+- Owner type: Docs
+- Goal: Add a simple architecture/data-flow diagram for the current no-auth/no-database governed dashboard architecture.
+- Why it matters: Existing docs are thorough but text-heavy; a diagram can reduce onboarding time without changing behavior.
+- Likely files: `ARCHITECTURE_MAP.md`, `docs/README.md`, optionally a new doc under `docs/` if the diagram is too long.
+- Risk level: Low.
+- Dependencies: Current architecture docs.
+- Acceptance criteria: Diagram shows `/explore`, API routes, shared query/canvas validation, catalog/sample data, MCP server, and preview-only Miro export; it explicitly labels no database/auth and no arbitrary HTML/SQL.
+- Validation commands: `pnpm lint`; manually verify referenced paths exist.
+- Can run in parallel: Yes, with code/test tasks that do not edit architecture docs.
+- Completed notes: Added a Mermaid governed data-flow diagram to `ARCHITECTURE_MAP.md` covering `/explore`, API routes, shared query/canvas validation, catalog/sample/live fallback data, MCP server reuse, saved localStorage, preview-only Miro export, and guardrails for no auth, no database, no arbitrary HTML, no raw SQL, and no Miro writes. Updated `docs/README.md` to call out the architecture diagram.
+- Validation: Manually verified 11 referenced paths exist with a Python path check, and `pnpm lint` passed with the existing Next.js deprecation notice and no ESLint warnings or errors.
+
+---
+
+# Replenished Safe Implementation Queue
+
+Last replenished: May 10, 2026 at 02:28 CDT.
+
+This hackathon-stabilization queue is planning-only until a future safe cycle selects exactly one task. The queue is based on the remaining known risks: deprecated `next lint`, release evidence commit mismatch (`a5ce07a` recorded vs `2021b47` current `HEAD`), dirty working tree from prior development cycles, final judge-demo confidence, honest public-data/live-fallback proof, and governed stability for source, MCP, Miro preview, and saved-canvas workflows.
+
+Do not refresh release evidence, touch secrets/auth/billing/migrations/production config/deploy scripts, or run destructive data operations unless a selected future task explicitly requires it.
+
+## 26. Add Dirty-Worktree Handoff Summary
+
+Status: Complete on May 10, 2026 at 03:07 CDT.
+
+- Owner type: Docs / Release coordination
+- Goal: Add a durable handoff summary that explains the current dirty worktree, which files are expected prior-cycle artifacts, and what should be reviewed before commit or release evidence refresh.
+- Why it matters: The working tree contains many intentional docs/test changes plus existing modified files. Future agents need to distinguish expected stabilization work from accidental drift before implementing more code.
+- Likely files: `HERMES_PROGRESS.md`, `QA_FINDINGS.md`, optionally a new `docs/HACKATHON_HANDOFF.md` if the summary is too long.
+- Risk level: Low.
+- Dependencies: Current `git status --short --branch` output.
+- Acceptance criteria: Handoff lists modified tracked files, untracked files, known expected prior-cycle artifacts, unknowns needing human/reviewer attention, and explicitly says not to refresh `docs/release-evidence.json` from a dirty tree.
+- Validation commands: `git status --short --branch`; `pnpm lint` if markdown docs are changed.
+- Can run in parallel: Yes, with test-only tasks. Do not parallelize with another task editing `HERMES_PROGRESS.md` or `QA_FINDINGS.md`.
+- Completed notes: Expanded `HERMES_PROGRESS.md` with a categorized dirty-worktree handoff covering durable workflow docs, architecture/readiness docs, focused route/unit tests, e2e tests, web/MCP behavior-touching changes, known release/governance risks, and files requiring extra caution before release-evidence refresh.
+- Validation: `git status --short --branch` captured the expected dirty worktree; `pnpm lint` passed with the existing Next.js `next lint` deprecation notice and no ESLint warnings or errors.
+
+## 27. Reconcile QA Findings With Latest Completed Tasks And Risks
+
+Status: Complete on May 10, 2026 at 03:11 CDT.
+
+- Owner type: QA / Docs
+- Goal: Refresh `QA_FINDINGS.md` so command counts, resolved coverage work, dirty-worktree risk, `next lint` deprecation, and release-evidence mismatch are current.
+- Why it matters: `QA_FINDINGS.md` still contains older resolved-test counts in some sections and should be the durable reliability handoff before final demo work.
+- Likely files: `QA_FINDINGS.md`, `HERMES_PROGRESS.md`, optionally `TASKS.md` only to mark completion.
+- Risk level: Low.
+- Dependencies: Current validation outputs and dirty-worktree summary from item 26, if completed first.
+- Acceptance criteria: Active findings include only current unresolved risks; resolved findings mention the latest test/file counts; release evidence mismatch and `next lint` deprecation remain active until intentionally fixed; no stale claim says a completed coverage gap is still missing.
+- Validation commands: `pnpm lint`.
+- Can run in parallel: Yes, with code/test tasks that do not edit `QA_FINDINGS.md`; avoid parallel docs work touching the same file.
+- Completed notes: Refreshed `QA_FINDINGS.md` with the dirty-worktree risk from item 26, current command baselines, release-evidence mismatch, `next lint` deprecation, hosted rate-limiting caveat, and resolved coverage summaries using the latest 87-test/14-file baseline.
+- Validation: `pnpm lint` passed with the existing Next.js `next lint` deprecation notice and no ESLint warnings or errors.
+
+## 28. Write Final Judge Demo Script Covering Core Workflows
+
+- Owner type: Docs / Demo
+- Goal: Add a concise final demo script for judges covering `/sources`, `/explore` canvas generation, saved canvases, MCP, and Miro preview-only export.
+- Why it matters: The app has several governed workflows; a scripted demo reduces last-minute mistakes and keeps claims honest about live/sample boundaries.
+- Likely files: `docs/DEMO_SCRIPT.md`, `README.md`, optionally `docs/README.md`.
+- Risk level: Low.
+- Dependencies: Current routes and known MVP prompts in `README.md`.
+- Acceptance criteria: Script includes exact demo prompts, expected visible data-mode/fallback copy, source attribution checkpoints, saved-canvas open/export/import/share flow, MCP talking points, Miro preview-only wording, and explicit no-auth/no-database/no-Miro-write caveats.
+- Validation commands: Manual path/link check for referenced docs and routes; `pnpm lint`.
+- Can run in parallel: Yes, with test-only tasks. Avoid parallel edits to `docs/DEMO_SCRIPT.md` or `README.md`.
+
+## 29. Add Final Local Demo Readiness Checklist Without Release Evidence Refresh
+
+- Owner type: Docs / QA
+- Goal: Add a lightweight local checklist that a presenter can run before a judge demo without refreshing `docs/release-evidence.json`.
+- Why it matters: Final confidence needs repeatable local checks, but release evidence must remain gated behind a separate full validation task.
+- Likely files: `DEVELOPMENT_GUIDE.md`, `GOVERNANCE_NOTE.md`, `docs/README.md`, optionally new `docs/HACKATHON_DEMO_READINESS.md`.
+- Risk level: Low.
+- Dependencies: Current validation guidance in `README.md`, `DEVELOPMENT_GUIDE.md`, and `GOVERNANCE_NOTE.md`.
+- Acceptance criteria: Checklist separates quick local checks (`pnpm lint`, `pnpm typecheck`, `pnpm test`, targeted `pnpm test:e2e`) from optional network checks (`pnpm smoke:live`) and explicitly states not to update release evidence in this task.
+- Validation commands: Manual path/link check; `pnpm lint`.
+- Can run in parallel: Yes, with test-only tasks. Avoid parallel docs edits to the same checklist files.
+
+## 30. Add Public-Data Live/Fallback Proof Matrix
+
+- Owner type: Docs / Data governance
+- Goal: Add or update a concise proof matrix for Dallas, Austin, and Houston showing which demo paths are live, sample fallback, or live-disabled and why.
+- Why it matters: Judge-demo claims must be honest: Dallas has limited live aggregates, Austin monthly grouping is sample-first, and Houston remains sample-first with precise locations excluded.
+- Likely files: `README.md`, `GOVERNANCE_NOTE.md`, `docs/DATA_GOVERNANCE.md`, optionally new `docs/LIVE_FALLBACK_PROOF.md`.
+- Risk level: Low.
+- Dependencies: Current `data/catalog/approved-datasets.json` live metadata and known boundaries in `README.md`.
+- Acceptance criteria: Matrix names each core dataset, demo prompt, requested data mode, actual rendered mode, fallback reason, hidden-field boundary, and source/caveat proof point. It must not claim unverified live support.
+- Validation commands: Manual path/link check; `pnpm governance:audit`; `pnpm lint`.
+- Can run in parallel: Yes, with app/test tasks that do not edit the same docs.
+
+## 31. Add Public-Data Live/Fallback Proof Coverage For Core Demo Path
+
+- Owner type: QA
+- Goal: Add focused automated coverage proving the three core demo prompts preserve honest live/sample/fallback metadata and source caveats end-to-end.
+- Why it matters: Existing unit and e2e tests cover many pieces, but final demo confidence benefits from a purpose-built proof test for the exact judge-demo prompts.
+- Likely files: `apps/web/test/dashboard.test.ts`, `packages/shared/test/query-audit.test.ts`, or a new `apps/web/test/demo-proof.test.ts`.
+- Risk level: Low to Medium.
+- Dependencies: Current dashboard generation helpers and sample/catalog metadata.
+- Acceptance criteria: Tests cover Dallas, Austin, and Houston demo prompts; assert rendered `dataMode`, requested mode/fallback reason where applicable, `SourceMethodBlock`, caveats, and absence of hidden fields such as `precise_address`.
+- Validation commands: Focused Vitest command for the new/updated test file, then `pnpm test`; add `pnpm governance:audit` if catalog/sample/gallery assumptions are touched.
+- Can run in parallel: Yes, with docs-only tasks. Avoid parallel edits to the same dashboard/query test files.
+
+## 32. Strengthen Main Judge-Demo E2E Path
+
+- Owner type: QA / E2E
+- Goal: Add or strengthen Playwright coverage for the exact judge-demo path from `/explore` prompt entry through generated dashboard inspection.
+- Why it matters: Unit tests cannot fully prove the visible judge flow; a stable browser test protects the final narrated demo.
+- Likely files: `tests/e2e/product-demo.spec.ts`, optionally a new `tests/e2e/judge-demo.spec.ts`.
+- Risk level: Low to Medium.
+- Dependencies: Current accessible labels and stable text in `/explore`.
+- Acceptance criteria: Test runs the primary Dallas prompt, verifies generated title/blocks, source/method attribution, data-mode/fallback indicators, inspector query/audit visibility, and no unsupported prompt state for supported input.
+- Validation commands: Targeted Playwright command for the new/updated spec, then `pnpm test:e2e` if runtime permits; run `pnpm lint` if component labels/copy are changed.
+- Can run in parallel: Yes, but not with another task editing `tests/e2e/product-demo.spec.ts` or the new judge-demo spec.
+
+## 33. Add Governed Workflow E2E Coverage For Sources, Saved, And Miro Preview
+
+- Owner type: QA / E2E
+- Goal: Add a focused browser smoke covering `/sources`, saved-canvas handoff, and Miro preview-only export staying governed.
+- Why it matters: Final demo stability depends on secondary workflows not drifting into unsupported claims about hidden fields, server persistence, or real Miro writes.
+- Likely files: `tests/e2e/product-demo.spec.ts`, `tests/e2e/sources.spec.ts`, or a new `tests/e2e/governed-workflows.spec.ts`.
+- Risk level: Low to Medium.
+- Dependencies: Existing `/sources`, `/saved`, and Miro preview UI.
+- Acceptance criteria: Test verifies source catalog hidden-field warning, saves a generated canvas locally, opens or imports it from `/saved`, requests Miro preview, and asserts preview-only/no OAuth/no board-write language or JSON shape.
+- Validation commands: Targeted Playwright command for the new/updated spec; `pnpm test:e2e` if runtime permits; `pnpm lint` if UI copy/accessibility changes are needed.
+- Can run in parallel: Yes, with non-e2e tasks. Avoid parallel edits to the same e2e spec files.
+
+## 34. Migrate From Deprecated `next lint` To ESLint CLI In Isolation
+
+- Owner type: DevOps / Tooling
+- Goal: Replace deprecated `next lint` with the ESLint CLI using the documented migration path, without changing unrelated packages or product behavior.
+- Why it matters: `pnpm lint` passes but warns that `next lint` will be removed in Next.js 16; removing the warning improves final maintenance confidence.
+- Likely files: `apps/web/package.json`, `apps/web/.eslintrc.json` or generated ESLint config, root `package.json` only if needed, `DEVELOPMENT_GUIDE.md`, `QA_FINDINGS.md`.
+- Risk level: Medium.
+- Dependencies: Completed documentation spike in item 24 and current lint passing baseline.
+- Acceptance criteria: `pnpm lint` runs through the ESLint CLI without the Next.js deprecation warning; lint coverage still uses Next core-web-vitals rules; no dependency upgrades or broad package changes are bundled unless required by the official codemod and reviewed.
+- Validation commands: `pnpm lint`, `pnpm typecheck`, `pnpm test`.
+- Can run in parallel: No. Do not parallelize with package/config/tooling changes or another task editing lint config/scripts.
+
+## 35. Refresh Release Evidence Only After Full Validation Gate
+
+- Owner type: Release / Governance
+- Goal: Refresh `docs/release-evidence.json` for the intended final demo/release commit only after the required full validation gate has passed from a clean, reviewed tree.
+- Why it matters: The current evidence records `a5ce07a` while `HEAD` is `2021b47`; blindly editing evidence would break the audit trail and overstate release readiness.
+- Likely files: `docs/release-evidence.json`, `GOVERNANCE_NOTE.md`, `QA_FINDINGS.md`, `HERMES_PROGRESS.md`, optionally `README.md` if public release status changes.
+- Risk level: High.
+- Dependencies: Clean or intentionally reviewed working tree; completed dirty-worktree handoff; passing `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm preflight`, and any required hosted/local release checks for the intended commit.
+- Acceptance criteria: Evidence records the verified commit, branch, timestamps, gate results, hosted status, and screenshot paths for the intended release; `pnpm governance:audit` passes without the commit-mismatch warning; docs explain exactly which gate was rerun.
+- Validation commands: `git status --short --branch`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm preflight`, `pnpm verify:prod-local` if local release evidence is claimed, `pnpm governance:audit`.
+- Can run in parallel: No. This is a final gated release task and must not run alongside unrelated changes.

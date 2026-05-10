@@ -1,0 +1,58 @@
+# Documentation Index
+
+Use this index to choose the current source of truth before opening older milestone notes.
+
+## Current Starting Points
+
+| Document | Use |
+|---|---|
+| [`../README.md`](../README.md) | Product scope, setup, routes, verification commands, deployment notes, and known sample/live boundaries. |
+| [`../CODEBASE_OVERVIEW.md`](../CODEBASE_OVERVIEW.md) | Current system overview, supported workflows, folder ownership, environment variables, and risks. |
+| [`../ARCHITECTURE_MAP.md`](../ARCHITECTURE_MAP.md) | Current architecture diagram, route/API/data-flow map, validation boundaries, persistence model, and side effects. |
+| [`../DEVELOPMENT_GUIDE.md`](../DEVELOPMENT_GUIDE.md) | Local setup, safe change workflows, risky files, validation commands, and recommended next work. |
+| [`../AGENTS.md`](../AGENTS.md) | Repo-specific agent constraints and public-data safety rules. |
+| [`../GOVERNANCE_NOTE.md`](../GOVERNANCE_NOTE.md) | Current release-evidence warning and safe resolution process. |
+| [`../SECURITY.md`](../SECURITY.md) | Security reporting process and product safety boundaries. |
+
+## Current Domain Docs
+
+| Document | Use |
+|---|---|
+| [`IMPLEMENTATION_STATUS.md`](IMPLEMENTATION_STATUS.md) | Current implementation status, supported workflows, and known gaps. |
+| [`DATA_GOVERNANCE.md`](DATA_GOVERNANCE.md) | Dataset approval, hidden-field, aggregation, caveat, and fallback expectations. |
+| [`LIVE_ADAPTERS.md`](LIVE_ADAPTERS.md) | Live public API adapter boundaries and fallback behavior. |
+| [`MCP_SERVER_SPEC.md`](MCP_SERVER_SPEC.md) | MCP server tools, contracts, and safety expectations. |
+| [`CANVAS_SPEC.md`](CANVAS_SPEC.md) | Canvas document/block model rendered by the trusted React registry. |
+| [`MIRO_EXPORT_SPEC.md`](MIRO_EXPORT_SPEC.md) | Preview-only Miro export spec boundaries. |
+
+## Release And Demo Docs
+
+| Document | Use |
+|---|---|
+| [`RELEASE_NOTES.md`](RELEASE_NOTES.md) | Current release notes and version-specific changes. |
+| [`HOSTED_BETA_DEPLOYMENT.md`](HOSTED_BETA_DEPLOYMENT.md) | Manual hosted deployment runbook. |
+| [`V1_3_HOSTED_LAUNCH_READINESS_PLAN.md`](V1_3_HOSTED_LAUNCH_READINESS_PLAN.md) | Current v1.3 hosted launch-readiness plan. |
+| [`DEMO_SCRIPT.md`](DEMO_SCRIPT.md) | Demo prompts and walkthrough steps. |
+| [`ACCEPTANCE_CRITERIA.md`](ACCEPTANCE_CRITERIA.md) | Product acceptance checklist. |
+| [`release-evidence.json`](release-evidence.json) | Historical release evidence consumed by health/demo-readiness/governance checks. Do not refresh without rerunning the release gate. |
+
+## Historical And Reference Docs
+
+These files are useful background, but they are milestone snapshots rather than the primary current-state docs:
+
+- [`PRD.md`](PRD.md)
+- [`MVP_BUILD_BRIEF.md`](MVP_BUILD_BRIEF.md)
+- [`AGENT_DEVELOPMENT_PLAN.md`](AGENT_DEVELOPMENT_PLAN.md)
+- [`REPO_STRUCTURE.md`](REPO_STRUCTURE.md)
+- [`SECURITY_GOVERNANCE_REVIEW.md`](SECURITY_GOVERNANCE_REVIEW.md)
+- [`CODEX_PROMPTS.md`](CODEX_PROMPTS.md)
+- [`REFERENCES.md`](REFERENCES.md)
+- [`HOUSTON_TRANSTAR_ACCESS_PACKET.md`](HOUSTON_TRANSTAR_ACCESS_PACKET.md)
+- [`V0_4_PRODUCTION_PILOT_PLAN.md`](V0_4_PRODUCTION_PILOT_PLAN.md)
+- [`V0_5_PUBLIC_BETA_PLAN.md`](V0_5_PUBLIC_BETA_PLAN.md)
+- [`V0_6_HOSTED_BETA_PLAN.md`](V0_6_HOSTED_BETA_PLAN.md)
+- [`V0_8_PRODUCT_READINESS_PLAN.md`](V0_8_PRODUCT_READINESS_PLAN.md)
+- [`V0_9_PUBLIC_RELIABILITY_PLAN.md`](V0_9_PUBLIC_RELIABILITY_PLAN.md)
+- [`V1_PUBLIC_PILOT_PLAN.md`](V1_PUBLIC_PILOT_PLAN.md)
+- [`V1_1_PRODUCT_DEPTH_PLAN.md`](V1_1_PRODUCT_DEPTH_PLAN.md)
+- [`V1_2_HOSTED_TRUST_PLAN.md`](V1_2_HOSTED_TRUST_PLAN.md)

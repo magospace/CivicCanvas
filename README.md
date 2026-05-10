@@ -41,33 +41,55 @@ Useful routes:
 
 ## Verification
 
+Daily local checks for normal development:
+
 ```bash
 pnpm lint
 pnpm typecheck
 pnpm test
+```
+
+Add focused checks when the change touches specific surfaces:
+
+```bash
+pnpm governance:audit   # catalog/sample/gallery and public-data governance checks
+pnpm data:quality       # sample row counts, date ranges, ZIP gaps, and demo sanity
+pnpm test:e2e           # local browser workflow and accessibility checks
+```
+
+Release and deployment gates are broader than daily checks and may write local build/test output or require a production-style server:
+
+```bash
 pnpm build
-pnpm governance:audit
-pnpm data:quality
 pnpm preflight
 pnpm verify:prod-local
 pnpm verify:vercel-output
 pnpm release:check
+pnpm verify
+```
+
+Network-dependent or environment-dependent checks:
+
+```bash
 pnpm smoke:live
 pnpm smoke:live:json
 pnpm smoke:deploy -- --url http://localhost:3000
 pnpm smoke:deploy:json -- --url http://localhost:3000
-pnpm test:e2e
 PLAYWRIGHT_BASE_URL=https://your-deployment.example pnpm test:e2e:remote
-pnpm verify
-pnpm clean
 ```
 
 `pnpm smoke:live` is optional and only checks catalog entries with `liveAvailable: true`.
-`pnpm governance:audit` checks catalog fallback policy, hidden-field leakage, governance-limit drift, and active release-version consistency.
-`pnpm data:quality` summarizes sample row counts, date ranges, ZIP gaps, and top statuses/categories for demo sanity.
+`pnpm smoke:deploy` requires a running local or hosted URL.
 `pnpm verify:prod-local` builds `apps/web`, runs `next start` on an available local port, then runs hosted-style smoke and remote-mode Playwright against that production server.
 `pnpm verify:vercel-output` inspects `.vercel/output` after `vercel build` when available, and skips output inspection safely when it is absent.
 `pnpm verify` runs the local release gate: preflight, live smoke, and Playwright browser smoke.
+Do not refresh `docs/release-evidence.json` as part of daily checks; refresh it only after intentionally rerunning the relevant release gate for the intended release commit.
+
+Cleanup command, only when intentionally resetting local artifacts:
+
+```bash
+pnpm clean
+```
 
 ## Contributing And Security
 
@@ -168,6 +190,15 @@ The `/demo-readiness` route is a utility page for checking release gates and pub
 The frontend validates catalog data and renders dashboards through a trusted React block registry. It does not execute AI-generated HTML, JavaScript, external scripts, SQL, or arbitrary components.
 
 Brand assets live under `apps/web/public/brand/`. The header uses the compact CivicCanvas mark while the product label remains `Texas Data Canvas`.
+
+## Current developer docs
+
+- [Codebase overview](CODEBASE_OVERVIEW.md)
+- [Architecture map](ARCHITECTURE_MAP.md)
+- [Development guide](DEVELOPMENT_GUIDE.md)
+- [Agent instructions](AGENTS.md)
+- [Roadmap](ROADMAP.md)
+- [Task list](TASKS.md)
 
 ## Key docs
 
