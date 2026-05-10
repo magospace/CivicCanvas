@@ -1931,3 +1931,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: Initial focused Playwright run exposed strict text-selector collisions from SVG titles and a React hook-order issue from using `useId` in registry-called block render functions. Fixed the selectors and replaced `useId` with deterministic ID generation. `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "accessibility"` then passed; due repo script wiring, all 21 product-demo browser tests ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 138, `Improve Focus Ring Contrast`, if continuing accessibility polish; otherwise stop for review because five tasks have been completed in this cycle.
+
+
+## Task 138 Update - Focus Ring Contrast
+
+- Task chosen: `TASKS.md` item 138, "Improve Focus Ring Contrast".
+- Why this was next: It was the next pending safe accessibility/UI polish task after chart/map accessibility and directly improves keyboard demo usability without data or architecture risk.
+- Scope: `apps/web/components/**/*.tsx`, `apps/web/app/demo-readiness/page.tsx`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Not data-path-related. No sample/live/fallback/provider/persistence/schema behavior changed.
+- Changes: Replaced remaining `focus:ring-civic-100` classes in web route/component TSX files with stronger `focus:ring-civic-700`, preserving existing focus borders, hover states, disabled states, labels, and component behavior.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "accessibility"` passed; due repo script wiring, all 21 product-demo browser tests ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 139, `Defer Broad Architecture And Hosted-Ops Recommendations`, before replenishing a new safe queue.

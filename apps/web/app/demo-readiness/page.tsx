@@ -89,7 +89,7 @@ export default function DemoReadinessPage() {
           </div>
           <Link
             href="/gallery"
-            className="inline-flex items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+            className="inline-flex items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
           >
             <ExternalLink className="h-4 w-4" />
             Open gallery
@@ -267,7 +267,7 @@ export default function DemoReadinessPage() {
                 href={thirdCandidate.sourceUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+                className="inline-flex items-center justify-center gap-2 rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
               >
                 <ExternalLink className="h-4 w-4" />
                 Source docs

@@ -55,7 +55,7 @@ export function DemoChecklistActions() {
     <button
       type="button"
       onClick={copyChecklist}
-      className="inline-flex items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+      className="inline-flex items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
     >
       <ClipboardCopy className="h-4 w-4" />
       {copied ? "Checklist copied" : "Copy demo checklist"}
@@ -76,7 +76,7 @@ export function ReleaseGateActions() {
     <button
       type="button"
       onClick={copyCommands}
-      className="inline-flex items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+      className="inline-flex items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
     >
       <ClipboardCopy className="h-4 w-4" />
       {copied ? "Release gates copied" : "Copy release gates"}
@@ -97,7 +97,7 @@ export function HostedHandoffActions() {
     <button
       type="button"
       onClick={copyChecklist}
-      className="inline-flex items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+      className="inline-flex items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
     >
       <ClipboardCopy className="h-4 w-4" />
       {copied ? "Handoff copied" : "Copy hosted handoff"}

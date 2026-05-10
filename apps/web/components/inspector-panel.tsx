@@ -49,7 +49,7 @@ export function InspectorPanel({
             aria-label="Inspector data mode"
             value={dataModePreference ?? "auto"}
             onChange={(event) => onDataModePreferenceChange?.(event.target.value as DataModePreference)}
-            className="rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+            className="rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
           >
             <option value="auto">Auto</option>
             <option value="live">Live public API</option>
@@ -71,7 +71,7 @@ export function InspectorPanel({
                     aria-label={filter.label}
                     value={filterValues?.[filter.field] ?? (filter.field === "__groupBy" ? "category_zip" : "All")}
                     onChange={(event) => onFilterChange?.(filter.field, event.target.value)}
-                    className="rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+                    className="rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
                   >
                     {(filter.options ?? []).map((option) => (
                       <option key={option} value={option}>{option.replace(/_/g, " ")}</option>
@@ -82,7 +82,7 @@ export function InspectorPanel({
                     aria-label={filter.label}
                     value={filterValues?.[filter.field] ?? ""}
                     onChange={(event) => onFilterChange?.(filter.field, event.target.value)}
-                    className="rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+                    className="rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
                     placeholder={filter.type === "dateRange" ? "2024-01-01 to 2024-12-31" : filter.field}
                   />
                 )}

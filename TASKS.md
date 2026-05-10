@@ -2243,7 +2243,7 @@ Status: Complete on May 10, 2026.
 
 ## 138. Improve Focus Ring Contrast
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Accessibility / Visual Polish
 - Goal: Replace low-contrast `focus:ring-civic-100` usage on interactive controls with a stronger visible ring.
@@ -2254,6 +2254,8 @@ Status: Pending.
 - Acceptance criteria: Keyboard focus is visibly stronger on white/civic backgrounds, and no component behavior changes.
 - Validation command: `pnpm lint`, targeted Playwright accessibility check, `git diff --check`.
 - Can run in parallel: No with broad UI class edits.
+- Completed notes: Replaced remaining low-contrast `focus:ring-civic-100` classes in web route/component TSX files with stronger `focus:ring-civic-700` rings while preserving existing focus borders and behavior.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "accessibility"` passed; due repo script wiring, all 21 product-demo browser tests ran and passed. `pnpm lint` passed; `git diff --check` passed.
 
 ## 139. Defer Broad Architecture And Hosted-Ops Recommendations
 

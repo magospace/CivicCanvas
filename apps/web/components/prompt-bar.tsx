@@ -48,7 +48,7 @@ export function PromptBar({
             aria-label="Data mode"
             value={dataModePreference}
             onChange={(event) => onDataModePreferenceChange(event.target.value as DataModePreference)}
-            className="min-h-11 rounded-md border border-slate-200 bg-civic-50 px-3 text-sm font-semibold text-slate-700 outline-none transition focus:border-civic-500 focus:bg-white focus:ring-2 focus:ring-civic-100"
+            className="min-h-11 rounded-md border border-slate-200 bg-civic-50 px-3 text-sm font-semibold text-slate-700 outline-none transition focus:border-civic-500 focus:bg-white focus:ring-2 focus:ring-civic-700"
           >
             <option value="auto">Auto</option>
             <option value="live">Live public API</option>
@@ -72,7 +72,7 @@ export function PromptBar({
               key={example.label}
               type="button"
               onClick={() => onPromptChange(example.prompt)}
-              className="rounded-md border border-slate-200 bg-civic-50 px-2.5 py-1 text-xs font-semibold text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+              className="rounded-md border border-slate-200 bg-civic-50 px-2.5 py-1 text-xs font-semibold text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
             >
               {example.label}
             </button>

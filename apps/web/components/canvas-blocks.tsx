@@ -340,7 +340,7 @@ export function TableBlockView({ props }: TableBlock) {
                   <button
                     type="button"
                     onClick={() => changeSort(column.field)}
-                    className="flex items-center gap-1 text-left uppercase tracking-[0.12em] transition hover:text-civic-700 focus:outline-none focus:ring-2 focus:ring-civic-100"
+                    className="flex items-center gap-1 text-left uppercase tracking-[0.12em] transition hover:text-civic-700 focus:outline-none focus:ring-2 focus:ring-civic-700"
                     aria-label={`Sort by ${presentationColumnLabel(column.label)}`}
                   >
                     {presentationColumnLabel(column.label)}
@@ -376,7 +376,7 @@ export function TableBlockView({ props }: TableBlock) {
             type="button"
             onClick={() => setPage((value) => Math.max(value - 1, 0))}
             disabled={page === 0}
-            className="rounded border border-slate-200 px-2 py-1 font-semibold focus:outline-none focus:ring-2 focus:ring-civic-100 disabled:opacity-40"
+            className="rounded border border-slate-200 px-2 py-1 font-semibold focus:outline-none focus:ring-2 focus:ring-civic-700 disabled:opacity-40"
           >
             Prev
           </button>
@@ -385,7 +385,7 @@ export function TableBlockView({ props }: TableBlock) {
             type="button"
             onClick={() => setPage((value) => Math.min(value + 1, pageCount - 1))}
             disabled={page + 1 >= pageCount}
-            className="rounded border border-slate-200 px-2 py-1 font-semibold focus:outline-none focus:ring-2 focus:ring-civic-100 disabled:opacity-40"
+            className="rounded border border-slate-200 px-2 py-1 font-semibold focus:outline-none focus:ring-2 focus:ring-civic-700 disabled:opacity-40"
           >
             Next
           </button>
@@ -417,7 +417,7 @@ export function FilterBlockView({
                 aria-label={filter.label}
                 value={values[filter.field] ?? filter.options?.[0] ?? ""}
                 onChange={(event) => onChange?.(filter.field, event.target.value)}
-                className="rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-sm text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+                className="rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-sm text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
               >
                 {(filter.options ?? []).map((option, index) => (
                   <option key={`${option}-${index}`}>{option}</option>
@@ -428,7 +428,7 @@ export function FilterBlockView({
                 aria-label={filter.label}
                 value={values[filter.field] ?? ""}
                 onChange={(event) => onChange?.(filter.field, event.target.value)}
-                className="rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-sm text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+                className="rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-sm text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
                 placeholder={filter.type === "dateRange" ? "2024-01-01 to 2024-12-31" : filter.field}
               />
             )}
@@ -438,7 +438,7 @@ export function FilterBlockView({
       {onApply ? (
         <button
           onClick={onApply}
-          className="mt-4 w-full rounded-md bg-civic-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-civic-700 focus:outline-none focus:ring-2 focus:ring-civic-100"
+          className="mt-4 w-full rounded-md bg-civic-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-civic-700 focus:outline-none focus:ring-2 focus:ring-civic-700"
         >
           Apply filters
         </button>

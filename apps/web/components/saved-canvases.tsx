@@ -116,7 +116,7 @@ export function SavedCanvases() {
             </p>
             <Link
               href="/explore"
-              className="inline-flex items-center justify-center rounded-md bg-civic-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-civic-700 focus:outline-none focus:ring-2 focus:ring-civic-100"
+              className="inline-flex items-center justify-center rounded-md bg-civic-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-civic-700 focus:outline-none focus:ring-2 focus:ring-civic-700"
             >
               Go to Explore
             </Link>
@@ -143,13 +143,13 @@ export function SavedCanvases() {
       <div className="flex flex-wrap items-center gap-2">
         <button
           onClick={() => setExportText(exportSavedCanvasesBundleJson(items))}
-          className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+          className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
         >
           Export bundle
         </button>
         <button
           onClick={() => copyShareLink(items)}
-          className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+          className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
         >
           Copy share link
         </button>
@@ -159,7 +159,7 @@ export function SavedCanvases() {
             setExportText(bundle);
             await navigator.clipboard?.writeText(bundle);
           }}
-          className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+          className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
         >
           Copy share bundle
         </button>
@@ -198,7 +198,7 @@ export function SavedCanvases() {
                   aria-label={`Edit saved title for ${item.title}`}
                   value={editFor(item).title}
                   onChange={(event) => updateEdit(item.canvasId, { title: event.target.value })}
-                  className="mt-1 w-full rounded-md border border-slate-200 bg-white px-2 py-2 text-sm text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+                  className="mt-1 w-full rounded-md border border-slate-200 bg-white px-2 py-2 text-sm text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
                 />
               </label>
               <label className="block text-xs font-semibold text-slate-600">
@@ -207,7 +207,7 @@ export function SavedCanvases() {
                   aria-label={`Edit saved prompt for ${item.title}`}
                   value={editFor(item).prompt}
                   onChange={(event) => updateEdit(item.canvasId, { prompt: event.target.value })}
-                  className="mt-1 min-h-20 w-full rounded-md border border-slate-200 bg-white px-2 py-2 text-sm text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+                  className="mt-1 min-h-20 w-full rounded-md border border-slate-200 bg-white px-2 py-2 text-sm text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
                 />
               </label>
               <button
@@ -222,7 +222,7 @@ export function SavedCanvases() {
                   }
                 }}
                 aria-label={`Save local edits for ${item.title}`}
-                className="inline-flex items-center gap-2 rounded-md bg-civic-900 px-3 py-2 text-xs font-semibold text-white transition hover:bg-civic-700 focus:outline-none focus:ring-2 focus:ring-civic-100"
+                className="inline-flex items-center gap-2 rounded-md bg-civic-900 px-3 py-2 text-xs font-semibold text-white transition hover:bg-civic-700 focus:outline-none focus:ring-2 focus:ring-civic-700"
               >
                 <Save className="h-4 w-4" />
                 Save local edits
@@ -245,7 +245,7 @@ export function SavedCanvases() {
                 }}
                 aria-label={`Open ${item.title}`}
                 title={`Open ${item.title}`}
-                className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+                className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
               >
                 <ExternalLink className="h-4 w-4" />
               </Link>
@@ -253,7 +253,7 @@ export function SavedCanvases() {
                 onClick={() => copyShareLink([item])}
                 aria-label={`Copy share link for ${item.title}`}
                 title={`Copy share link for ${item.title}`}
-                className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+                className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
               >
                 <Link2 className="h-4 w-4" />
               </button>
@@ -268,7 +268,7 @@ export function SavedCanvases() {
                 }}
                 aria-label={`Duplicate ${item.title}`}
                 title={`Duplicate ${item.title}`}
-                className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+                className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
               >
                 <Copy className="h-4 w-4" />
               </button>
@@ -276,7 +276,7 @@ export function SavedCanvases() {
                 onClick={() => setExportText(exportSavedCanvasJson(item))}
                 aria-label={`Export ${item.title} JSON`}
                 title={`Export ${item.title} JSON`}
-                className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+                className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
               >
                 <FileJson className="h-4 w-4" />
               </button>
@@ -284,7 +284,7 @@ export function SavedCanvases() {
                 onClick={() => downloadSavedCanvasCsv(item)}
                 aria-label={`Export ${item.title} table CSV`}
                 title={`Export ${item.title} table CSV`}
-                className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+                className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
               >
                 <Download className="h-4 w-4" />
               </button>
@@ -336,7 +336,7 @@ function ImportPanel({
         <button
           onClick={onImport}
           disabled={!importText.trim()}
-          className="rounded-md bg-civic-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-civic-700 focus:outline-none focus:ring-2 focus:ring-civic-100 disabled:cursor-not-allowed disabled:bg-slate-600"
+          className="rounded-md bg-civic-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-civic-700 focus:outline-none focus:ring-2 focus:ring-civic-700 disabled:cursor-not-allowed disabled:bg-slate-600"
         >
           Import
         </button>
@@ -346,7 +346,7 @@ function ImportPanel({
         value={importText}
         onChange={(event) => onChange(event.target.value)}
         maxLength={savedCanvasImportLimitBytes}
-        className="mt-3 min-h-24 w-full rounded-md border border-slate-200 bg-civic-50 p-3 text-xs text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+        className="mt-3 min-h-24 w-full rounded-md border border-slate-200 bg-civic-50 p-3 text-xs text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
         placeholder="Paste exported saved-canvas bundle or JSON"
       />
       <p className="mt-2 text-xs text-slate-500">

@@ -300,7 +300,7 @@ export function AppShell({
               <button
                 onClick={saveCurrentCanvas}
                 aria-label="Save canvas locally"
-                className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+                className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
               >
                 <Save className="h-4 w-4" />
                 Save
@@ -308,7 +308,7 @@ export function AppShell({
               <button
                 onClick={shareCurrentCanvas}
                 aria-label="Copy saved-canvas share link"
-                className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+                className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
               >
                 <Share2 className="h-4 w-4" />
                 Share link
@@ -316,7 +316,7 @@ export function AppShell({
               <button
                 onClick={downloadTableCsv}
                 aria-label="Export current table CSV"
-                className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+                className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
               >
                 <Download className="h-4 w-4" />
                 CSV
@@ -324,7 +324,7 @@ export function AppShell({
               <button
                 onClick={copyCanvasJson}
                 aria-label="Copy dashboard JSON"
-                className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+                className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
               >
                 <FileJson className="h-4 w-4" />
                 Dashboard JSON
@@ -332,7 +332,7 @@ export function AppShell({
               <button
                 onClick={copyQuerySpec}
                 aria-label="Copy query definition"
-                className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+                className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
               >
                 <ClipboardList className="h-4 w-4" />
                 Query definition
@@ -340,7 +340,7 @@ export function AppShell({
               <button
                 onClick={exportMiroSpec}
                 aria-label="Generate Miro export preview"
-                className="inline-flex items-center gap-2 rounded-md bg-civic-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-civic-700 focus:outline-none focus:ring-2 focus:ring-civic-100"
+                className="inline-flex items-center gap-2 rounded-md bg-civic-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-civic-700 focus:outline-none focus:ring-2 focus:ring-civic-700"
               >
                 <Workflow className="h-4 w-4" />
                 Miro preview

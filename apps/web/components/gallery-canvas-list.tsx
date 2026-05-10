@@ -51,7 +51,7 @@ export function GalleryCanvasList({ canvases }: { canvases: CanvasDocument[] }) 
               onClick={() => openInExplore(canvas)}
               aria-label={`Open ${canvas.title} in explore`}
               title={`Open ${canvas.title} in explore`}
-              className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+              className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
             >
               Open in explore
             </button>
@@ -61,7 +61,7 @@ export function GalleryCanvasList({ canvases }: { canvases: CanvasDocument[] }) 
               disabled={!tableCsv(canvas)}
               aria-label={`Download ${canvas.title} table CSV`}
               title={`Download ${canvas.title} table CSV`}
-              className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100 disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700 disabled:cursor-not-allowed disabled:opacity-50"
             >
               <Download className="h-4 w-4" />
               Table CSV
@@ -71,7 +71,7 @@ export function GalleryCanvasList({ canvases }: { canvases: CanvasDocument[] }) 
               onClick={() => exportCanvasJson(canvas)}
               aria-label={`Download ${canvas.title} dashboard JSON`}
               title={`Download ${canvas.title} dashboard JSON`}
-              className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+              className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-700"
             >
               <FileJson className="h-4 w-4" />
               Dashboard JSON
