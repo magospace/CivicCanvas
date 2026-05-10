@@ -1,6 +1,6 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 05:57 CDT
+Last updated: May 10, 2026 05:59 CDT
 
 ## Current Cycle
 
@@ -425,6 +425,36 @@ Last updated: May 10, 2026 05:57 CDT
 ### Recommended Next Task
 
 - Task 59, `Add Gallery Screenshot Capture Script For Submission Assets`, is the next safe task if implemented with a dry-run/help path and without committing generated screenshots.
+
+## Task 59 Update
+
+- Task chosen: `TASKS.md` item 59, "Add Gallery Screenshot Capture Script For Submission Assets".
+- Why this was next: It was the next safe hackathon submission asset task after Task 58, implemented through a dry-run default to avoid committing generated media.
+- Scope: `scripts/capture-demo-screenshots.mjs`, `package.json`, `.gitignore`, `apps/web/test/release-scripts.test.ts`, `docs/DEMO_VIDEO_CHECKLIST.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Default command creates no files and uses no network. Capture mode requires explicit `--run` and a running app. No screenshots were generated or committed. No release evidence refresh, live API call, Fal call, schema/migration change, database operation, deploy mutation, secrets, auth, billing, or production config changed.
+
+### Files Updated
+
+- `scripts/capture-demo-screenshots.mjs`: New screenshot helper with default dry-run JSON/text output and explicit `--run` capture mode for `/sources`, `/explore`, `/saved`, and `/demo-readiness`.
+- `package.json`: Added `demo:screenshots` and `demo:screenshots:json` scripts.
+- `.gitignore`: Added `demo-artifacts` for local generated screenshots/manifests.
+- `apps/web/test/release-scripts.test.ts`: Added dry-run contract coverage for the screenshot plan.
+- `docs/DEMO_VIDEO_CHECKLIST.md`: Documented dry-run and explicit capture commands plus generated-asset no-commit boundary.
+- `TASKS.md`: Marks item 59 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records item 59 scope, safety notes, validation, and next task.
+
+### Validation
+
+- `node scripts/capture-demo-screenshots.mjs --json`: Passed; reported dry-run mode, no file mutation, and 4 planned screenshots.
+- `node scripts/capture-demo-screenshots.mjs --help`: Passed.
+- `pnpm test -- apps/web/test/release-scripts.test.ts -t "screenshot capture"`: Passed; Vitest discovered the full 15-file suite and reported 95 tests passed.
+- `git diff --check`: Passed.
+- `pnpm lint`: Passed.
+- Capture mode was skipped intentionally to avoid creating generated media artifacts in this task.
+
+### Recommended Next Task
+
+- Task 60, `Add Source Freshness And Terms Review Checklist`, is the next safe task.
 
 ## Historical Sequential Progress
 

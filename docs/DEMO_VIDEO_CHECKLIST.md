@@ -115,6 +115,22 @@ Before uploading the video:
 - Confirm Dallas ZIP, Austin month, and Houston incident workflows are described with their sample/live/fallback limits.
 - If using screenshots or video stills as submission assets, keep them as local generated artifacts unless a separate task explicitly approves committing them.
 
+## Optional Local Screenshot Plan
+
+Use the screenshot helper in dry-run mode to preview deterministic submission screenshots without creating files:
+
+```bash
+pnpm demo:screenshots:json
+```
+
+When a local app is already running and generated assets are intentionally needed, capture screenshots under the ignored `demo-artifacts/screenshots/` directory:
+
+```bash
+pnpm demo:screenshots -- --run --base-url=http://localhost:3002
+```
+
+Do not commit files under `demo-artifacts/` unless a separate task explicitly approves committing generated screenshot assets.
+
 ## Optional Separate Proofs Not Part Of The Video
 
 These can be cited only if intentionally run and recorded elsewhere:

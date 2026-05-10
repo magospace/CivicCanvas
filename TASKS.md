@@ -918,6 +918,8 @@ Status: Complete on May 10, 2026 at 05:57 CDT.
 
 ## 59. Add Gallery Screenshot Capture Script For Submission Assets
 
+Status: Complete on May 10, 2026 at 05:59 CDT.
+
 - Owner type: Demo / Media tooling
 - Goal: Add a local Playwright script or documented command to capture deterministic screenshots of `/sources`, `/explore`, `/saved`, and `/demo-readiness` for submission assets.
 - Scope: Local script/docs; generated screenshots must not be committed unless explicitly approved.
@@ -926,6 +928,8 @@ Status: Complete on May 10, 2026 at 05:57 CDT.
 - Acceptance criteria: Script writes to an ignored/local artifact directory, does not require hosted deployment, uses deterministic sample prompts, and docs say generated screenshots are local artifacts not release evidence unless Task 35 runs.
 - Validation commands: dry-run/help command, `git diff --check`, `pnpm lint`; run capture only if local browser/server flow is stable and generated files remain unstaged.
 - Can run in parallel: No with other Playwright tooling edits.
+- Completed notes: Added `scripts/capture-demo-screenshots.mjs` with a no-file default dry-run plan and explicit `--run` capture mode for a running local/hosted app. Added `pnpm demo:screenshots(:json)`, ignored `demo-artifacts/`, documented the flow in the demo video checklist, and added release-script coverage for the dry-run contract. No screenshots were generated or committed.
+- Validation: `node scripts/capture-demo-screenshots.mjs --json`, `node scripts/capture-demo-screenshots.mjs --help`, focused release-scripts Vitest command, `git diff --check`, and `pnpm lint` passed. Capture mode was intentionally not run; no generated media artifacts were created.
 
 ## 60. Add Source Freshness And Terms Review Checklist
 

@@ -11,3 +11,4 @@ out
 pnpm-debug.log*
 playwright-report
 test-results
+demo-artifacts

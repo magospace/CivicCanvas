@@ -110,6 +110,29 @@ describe("release and governance scripts", () => {
     ]));
   });
 
+  it("reports a dry-run screenshot capture plan without creating generated media", () => {
+    const stdout = execFileSync("node", ["scripts/capture-demo-screenshots.mjs", "--json"], {
+      cwd: process.cwd(),
+      encoding: "utf8"
+    });
+    const body = JSON.parse(stdout);
+
+    expect(body.ok).toBe(true);
+    expect(body.mode).toBe("dry_run");
+    expect(body.mutatesFiles).toBe(false);
+    expect(body.generatedMediaArtifact).toBe(false);
+    expect(body.outputDir).toContain("demo-artifacts");
+    expect(body.screenshots.map((shot: { name: string }) => shot.name)).toEqual([
+      "sources-catalog",
+      "explore-dallas-dashboard",
+      "saved-local-boundary",
+      "demo-readiness"
+    ]);
+    expect(body.screenshots.find((shot: { name: string; prompt?: string }) =>
+      shot.name === "explore-dallas-dashboard"
+    )?.prompt).toBe("Show Dallas 311 service requests by category and ZIP code for 2024.");
+  });
+
   it("verifies current-doc links and historical-doc labeling", () => {
     const stdout = execFileSync("node", ["scripts/docs-consistency.mjs", "--json"], {
       cwd: process.cwd(),
