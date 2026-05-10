@@ -729,6 +729,8 @@ Status: Complete on May 10, 2026 at 05:18 CDT.
 
 ## 47. Add Platform Rate-Limit Readiness Note To Demo Checklist
 
+Status: Complete on May 10, 2026 at 05:20 CDT.
+
 - Owner type: Docs / Release coordination
 - Goal: Ensure local demo checklist and public docs distinguish in-repo middleware throttling from required platform firewall/rate limiting before broad hosted sharing.
 - Why it matters: Hosted rate limiting remains the main active QA finding besides release evidence.
@@ -738,6 +740,8 @@ Status: Complete on May 10, 2026 at 05:18 CDT.
 - Acceptance criteria: Docs say local judge demos can use in-repo checks, but public hosted sharing needs platform controls; no Vercel/firewall config is claimed as implemented.
 - Validation commands: `git diff --check`, `pnpm lint`; optionally manual path/link check.
 - Can run in parallel: Yes with test-only tasks. Avoid parallel edits to the same docs.
+- Completed notes: Added hosted rate-limit boundary wording to the local demo checklist, README, development guide, and QA findings. Docs now distinguish local in-repo middleware defense-in-depth from unimplemented provider/platform firewall, WAF, bot-protection, or edge rate-limit controls.
+- Validation: `git diff --check` and `pnpm lint` passed.
 
 ## 48. Add MCP Realness Smoke For Preview-Only And Local-Only Boundaries
 

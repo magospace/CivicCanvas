@@ -99,7 +99,7 @@ pnpm clean
 - Code of conduct: `CODE_OF_CONDUCT.md`.
 - Security reporting and safety boundaries: `SECURITY.md`.
 
-Public deployments must configure platform-level firewall/rate limiting. The in-repo middleware throttle is defense in depth only and is not a substitute for Vercel-native controls in a serverless environment.
+Public deployments must configure platform-level firewall/rate limiting before broad sharing. The in-repo middleware throttle is defense in depth for local/demo checks only and is not a substitute for Vercel-native firewall, WAF, bot-protection, or edge rate-limit controls in a serverless environment. Do not claim hosted abuse protection is configured until a dedicated hosted-readiness task records provider-specific proof.
 
 ## MVP demo prompts
 

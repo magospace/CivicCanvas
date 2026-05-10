@@ -208,6 +208,12 @@ Treat these as situational checks, not routine validation:
 | `pnpm smoke:deploy -- --url <url>` | Requires a running local or hosted deployment URL. |
 | `pnpm test:e2e:remote` | Requires `PLAYWRIGHT_BASE_URL`. |
 
+### Hosted Rate-Limit Readiness
+
+The in-repo middleware is local defense-in-depth for write-like POST routes, not proof of distributed hosted abuse protection. Local judge demos can proceed with the local gates above, but broad public hosted sharing needs platform firewall/rate limiting configured outside the repo.
+
+Do not document Vercel firewall, WAF, bot protection, or edge rate-limit controls as implemented until a dedicated hosted-readiness task records provider-specific proof. Keep this boundary visible in `QA_FINDINGS.md` and demo handoff docs.
+
 ### ESLint CLI Linting
 
 Current state:

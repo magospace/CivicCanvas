@@ -36,8 +36,9 @@ Refresh `docs/release-evidence.json` only during an intentional release-evidence
 
 Evidence:
 
-- `apps/web/middleware.ts` uses in-memory request throttling as defense in depth.
-- `README.md`, `DEVELOPMENT_GUIDE.md`, and `HERMES_PROGRESS.md` all note that public hosted deployments need platform-level firewall/rate limiting before broad sharing.
+- `apps/web/middleware.ts` uses in-memory request throttling as defense in depth for write-like POST routes.
+- `README.md`, `DEVELOPMENT_GUIDE.md`, `docs/HACKATHON_DEMO_READINESS.md`, and `HERMES_PROGRESS.md` all note that local judge demos can use repo-local gates, but broad public hosted sharing still needs provider/platform firewall or rate-limiting proof.
+- No Vercel firewall, WAF, bot-protection, or edge rate-limit rule is claimed as configured in the repo.
 
 Recommended fix:
 

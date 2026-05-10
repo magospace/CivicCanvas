@@ -1,6 +1,6 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 05:18 CDT
+Last updated: May 10, 2026 05:20 CDT
 
 ## Current Cycle
 
@@ -49,7 +49,7 @@ Last updated: May 10, 2026 05:18 CDT
 
 ## Recommended Next Task
 
-- Task 47, `Add Platform Rate-Limit Readiness Note To Demo Checklist`, is the next safe task. Keep it docs-only and do not claim platform firewall/rate-limit controls are configured.
+- Task 48, `Add MCP Realness Smoke For Preview-Only And Local-Only Boundaries`, is the next safe task. Keep it docs-only and do not claim platform firewall/rate-limit controls are configured.
 
 ## Task 44 Update
 
@@ -131,7 +131,32 @@ Last updated: May 10, 2026 05:18 CDT
 
 ### Recommended Next Task
 
-- Task 47, `Add Platform Rate-Limit Readiness Note To Demo Checklist`, is the next safe task.
+- Task 48, `Add MCP Realness Smoke For Preview-Only And Local-Only Boundaries`, is the next safe task.
+
+## Task 47 Update
+
+- Task chosen: `TASKS.md` item 47, "Add Platform Rate-Limit Readiness Note To Demo Checklist".
+- Why this was next: Item 47 was the next safe task after item 46 and addresses the remaining hosted rate-limit QA finding without claiming provider controls are implemented.
+- Scope: `docs/HACKATHON_DEMO_READINESS.md`, `README.md`, `DEVELOPMENT_GUIDE.md`, `QA_FINDINGS.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Documentation only. No deployment config, provider firewall/WAF settings, secrets, live API calls, migrations, database operations, media generation, auth, billing, production config, or release evidence refresh was touched.
+
+### Files Updated
+
+- `docs/HACKATHON_DEMO_READINESS.md`: Added a hosted rate-limit boundary section distinguishing local judge-demo checks from broad hosted sharing requirements.
+- `README.md`: Clarified that in-repo middleware is local/demo defense-in-depth only, not hosted platform protection.
+- `DEVELOPMENT_GUIDE.md`: Added hosted rate-limit readiness notes for future work.
+- `QA_FINDINGS.md`: Updated the active hosted rate-limiting finding with current evidence and no-provider-control claim.
+- `TASKS.md`: Marks item 47 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records item 47 scope, safety notes, and validation.
+
+### Validation
+
+- `git diff --check`: Passed.
+- `pnpm lint`: Passed.
+
+### Recommended Next Task
+
+- Task 48, `Add MCP Realness Smoke For Preview-Only And Local-Only Boundaries`, is the next safe task.
 
 ## Historical Sequential Progress
 
