@@ -11,6 +11,7 @@ const requiredDocPaths = [
   "docs/HACKATHON_SUBMISSION_CHECKLIST.md",
   "docs/MCP_DEMO_PROOF.md",
   "docs/DEMO_VIDEO_CHECKLIST.md",
+  "docs/VISUAL_UI_UX_AUDIT.md",
   "docs/SAMPLE_AND_PERSISTENCE_REALNESS.md",
   "docs/LIVE_FALLBACK_PROOF.md"
 ];
@@ -38,6 +39,18 @@ const mediaProof = {
   appMediaWiring: "not_implemented_dashboard_ui_only",
   expectedDefaultLiveCallCount: 0,
   caveat: "No-spend Fal proof is script-level only; normal dashboard generation does not call Fal or generate media artifacts."
+};
+const visualAudit = {
+  auditDocPath: "docs/VISUAL_UI_UX_AUDIT.md",
+  status: existsSync(join(root, "docs/VISUAL_UI_UX_AUDIT.md")) ? "present" : "missing",
+  screenshotArtifactDirectory: "demo-artifacts/ui-audit",
+  screenshotArtifactPolicy: "ignored_not_committed_not_release_evidence",
+  committedPolishStatus: "localized_dashboard_polish_committed",
+  remainingRisks: [
+    "mobile /explore still benefits from prompt-first ordering",
+    "/sources remains detail-rich and badge-heavy for quick narration",
+    "technical export labels remain visible for governed handoff"
+  ]
 };
 
 const gatedChecks = [
@@ -135,6 +148,10 @@ const checks = [
   {
     name: "no-spend media proof remains script-level and live-gated",
     ok: packageJson.scripts?.["media:fal:smoke:json"] === "node scripts/fal-media-smoke.mjs --json" && mediaProof.expectedDefaultLiveCallCount === 0
+  },
+  {
+    name: "Loom visual audit is documented and artifacts stay ignored",
+    ok: visualAudit.status === "present" && visualAudit.screenshotArtifactPolicy === "ignored_not_committed_not_release_evidence"
   }
 ];
 const ok = checks.every((check) => check.ok);
@@ -148,6 +165,7 @@ const output = {
   packageScripts,
   repoRemote,
   mediaProof,
+  visualAudit,
   localValidationCommands,
   gatedChecks,
   knownSubmissionTodos: [

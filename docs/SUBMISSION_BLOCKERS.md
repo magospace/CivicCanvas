@@ -16,6 +16,7 @@ Use this snapshot with `pnpm submission:readiness:json` before filling out the f
 - Backend persistence: saved canvases are browser-local and URL-hash based today; Task 55 approval is required before local/dev backend persistence work.
 - Media generation: normal dashboard generation does not call Fal or create images/videos; `pnpm media:fal:smoke:json` is no-spend script-level proof only.
 - Live data: Dallas has narrow non-ZIP live support; Dallas ZIP, Austin monthly, and Houston transportation demos remain sample/fallback bounded unless future catalog proof changes that.
+- Loom visual polish: `docs/VISUAL_UI_UX_AUDIT.md` is committed and localized dashboard polish landed, but mobile prompt-first ordering and dense `/sources` cards remain narration risks; screenshot artifacts belong under ignored `demo-artifacts/` and are not release evidence.
 
 ## Safe Commands
 

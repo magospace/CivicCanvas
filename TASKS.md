@@ -1588,7 +1588,7 @@ Status: Complete on May 10, 2026.
 
 ## 101. Add Visual Audit To Submission Readiness Outputs
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Submission / QA Tooling
 - Goal: Make the no-network submission readiness script report the Loom visual audit and localized polish status as part of final recording readiness.
@@ -1598,6 +1598,8 @@ Status: Pending.
 - Acceptance criteria: `pnpm submission:readiness:json` includes visual audit metadata, committed audit doc path, ignored screenshot artifact path guidance, and remaining visual risks without claiming screenshots are release evidence.
 - Validation commands: `pnpm submission:readiness:json`, focused release-script Vitest, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with submission readiness script edits.
+- Completed notes: Submission readiness output now includes `visualAudit` metadata for the committed audit doc, ignored screenshot artifact directory/policy, localized polish status, and remaining visual risks. Submission blockers snapshot records the visual-polish boundary without treating screenshots as release evidence.
+- Validation: `pnpm submission:readiness:json`, focused release-script Vitest, `pnpm lint`, and `git diff --check` passed.
 
 ## 102. Add Mobile Prompt-First Explore Layout
 

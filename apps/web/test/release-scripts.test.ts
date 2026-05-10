@@ -270,7 +270,8 @@ describe("release and governance scripts", () => {
       "README.md",
       "docs/HACKATHON_SUBMISSION_GUIDE.md",
       "docs/HACKATHON_SUBMISSION_CHECKLIST.md",
-      "docs/MCP_DEMO_PROOF.md"
+      "docs/MCP_DEMO_PROOF.md",
+      "docs/VISUAL_UI_UX_AUDIT.md"
     ]));
     expect(body.localValidationCommands).toEqual(expect.arrayContaining(["pnpm lint", "pnpm typecheck", "pnpm test"]));
     expect(body.repoRemote).toEqual(expect.objectContaining({
@@ -291,7 +292,19 @@ describe("release and governance scripts", () => {
       appMediaWiring: "not_implemented_dashboard_ui_only",
       expectedDefaultLiveCallCount: 0
     }));
+    expect(body.visualAudit).toEqual(expect.objectContaining({
+      auditDocPath: "docs/VISUAL_UI_UX_AUDIT.md",
+      status: "present",
+      screenshotArtifactDirectory: "demo-artifacts/ui-audit",
+      screenshotArtifactPolicy: "ignored_not_committed_not_release_evidence",
+      committedPolishStatus: "localized_dashboard_polish_committed"
+    }));
+    expect(body.visualAudit.remainingRisks).toEqual(expect.arrayContaining([
+      expect.stringMatching(/mobile \/explore/i),
+      expect.stringMatching(/sources/i)
+    ]));
     expect(body.checks.map((check: { name: string }) => check.name)).toContain("no-spend media proof remains script-level and live-gated");
+    expect(body.checks.map((check: { name: string }) => check.name)).toContain("Loom visual audit is documented and artifacts stay ignored");
     expect(body.gatedChecks).toEqual(expect.arrayContaining([
       expect.objectContaining({ gate: "Task 35", status: "not_run_by_this_script" }),
       expect.objectContaining({ gate: "live provider spend", status: "not_run_by_this_script" })

@@ -1462,3 +1462,13 @@ Last updated: May 10, 2026 06:17 CDT
 - Files updated: Empty `/saved` state now includes a primary `Go to Explore` link while preserving local/import/no-backend copy. The malformed share-link test asserts the CTA is visible and points to `/explore` without calling `/api/canvas/save`.
 - Validation: `PLAYWRIGHT_BASE_URL=http://localhost:3015 pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved share-link hash|saved bundle"` passed; the project script ran the full product-demo spec with 17 browser tests. `pnpm lint`, `pnpm typecheck`, and `git diff --check` passed.
 - Next recommended task: Task 101, `Add Visual Audit To Submission Readiness Outputs`.
+
+## Task 101 Update
+
+- Task chosen: `TASKS.md` item 101, "Add Visual Audit To Submission Readiness Outputs".
+- Why this was next: Task 100 completed cleanly, and Task 101 makes final submission readiness reflect the committed visual audit and localized polish while preserving screenshot artifact hygiene.
+- Scope: `scripts/submission-readiness.mjs`, `apps/web/test/release-scripts.test.ts`, `docs/SUBMISSION_BLOCKERS.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: No-network/no-mutation script and docs/test update only. No screenshots were committed. No live APIs, provider/media calls, schema/migrations, backend persistence, release evidence refresh, deploy mutation, secrets, auth, billing, or production data changes.
+- Files updated: Submission readiness now includes `visualAudit` metadata for `docs/VISUAL_UI_UX_AUDIT.md`, ignored `demo-artifacts/ui-audit` guidance, localized polish status, and remaining visual risks. Release-script tests assert the metadata and docs list the visual-polish boundary.
+- Validation: `pnpm submission:readiness:json`, `pnpm test -- apps/web/test/release-scripts.test.ts -t "submission bundle readiness"`, `pnpm lint`, and `git diff --check` passed.
+- Next recommended task: Task 102, `Add Mobile Prompt-First Explore Layout`.
