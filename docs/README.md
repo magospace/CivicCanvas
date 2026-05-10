@@ -21,6 +21,7 @@ Use this index to choose the current source of truth before opening older milest
 | [`IMPLEMENTATION_STATUS.md`](IMPLEMENTATION_STATUS.md) | Current implementation status, supported workflows, and known gaps. |
 | [`DATA_GOVERNANCE.md`](DATA_GOVERNANCE.md) | Dataset approval, hidden-field, aggregation, caveat, and fallback expectations. |
 | [`LIVE_ADAPTERS.md`](LIVE_ADAPTERS.md) | Live public API adapter boundaries and fallback behavior. |
+| [`LIVE_FALLBACK_PROOF.md`](LIVE_FALLBACK_PROOF.md) | Dallas, Austin, and Houston demo prompt proof matrix for live, sample, and fallback claims. |
 | [`MCP_SERVER_SPEC.md`](MCP_SERVER_SPEC.md) | MCP server tools, contracts, and safety expectations. |
 | [`CANVAS_SPEC.md`](CANVAS_SPEC.md) | Canvas document/block model rendered by the trusted React registry. |
 | [`MIRO_EXPORT_SPEC.md`](MIRO_EXPORT_SPEC.md) | Preview-only Miro export spec boundaries. |

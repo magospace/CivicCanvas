@@ -1,26 +1,28 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 03:51 CDT
+Last updated: May 10, 2026 04:01 CDT
 
 ## Current Cycle
 
-- Task chosen: `TASKS.md` item 29, "Add Final Local Demo Readiness Checklist Without Release Evidence Refresh".
-- Why this was next: Item 29 is the next incomplete safe task after the final judge demo script and gives presenters a repeatable local check path without touching gated release evidence.
-- Scope: `docs/HACKATHON_DEMO_READINESS.md`, `docs/README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Task chosen: `TASKS.md` item 30, "Add Public-Data Live/Fallback Proof Matrix".
+- Why this was next: Item 30 follows the demo script and local readiness checklist by documenting the exact real/sample/fallback truth judges should hear for Dallas, Austin, and Houston.
+- Scope: `docs/LIVE_FALLBACK_PROOF.md`, `README.md`, `docs/README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
 - Safety notes: No product behavior, source code, package scripts, config, source data, secrets, auth, billing, migrations, production config, deploy scripts, release evidence, catalog data, samples, live API calls, or destructive operations were changed. Release evidence was not refreshed.
 
 ## Files Updated
 
-- `docs/HACKATHON_DEMO_READINESS.md`: Added a local-first checklist for quick validation, manual route smoke, optional e2e/data-governance checks, and release-evidence boundaries.
-- `docs/README.md`: Linked the new checklist from the release/demo docs index.
-- `TASKS.md`: Marked item 29 complete with validation notes.
-- `HERMES_PROGRESS.md`: Recorded item 29 scope, safety notes, and validation.
+- `docs/LIVE_FALLBACK_PROOF.md`: Added a proof matrix for Dallas, Austin, and Houston demo prompts, rendered data modes, fallback reasons, hidden-field boundaries, source proof, and validation commands.
+- `README.md`: Linked the live/fallback proof matrix from the current developer docs.
+- `docs/README.md`: Linked the proof matrix from current domain docs.
+- `TASKS.md`: Marked item 30 complete with validation notes.
+- `HERMES_PROGRESS.md`: Recorded item 30 scope, safety notes, and validation.
 
 ## Sequential Progress
 
 - Carry-over audit state committed as `a4f09c6` (`docs: add hackathon realness audit`).
 - Task 28 committed as `bb42631` (`docs: add final judge demo script`).
-- Task 29 completed and ready to commit as `docs: add local demo readiness checklist`.
+- Task 29 committed as `2563468` (`docs: add local demo readiness checklist`).
+- Task 30 completed and ready to commit as `docs: add public data fallback proof matrix`.
 
 ## Sequential Task Plan
 
@@ -207,8 +209,9 @@ Current `git status --short --branch` shows branch `feat/v1.3-hosted-launch-read
 
 ## Validation
 
-- Manual path/link check: Passed for `docs/HACKATHON_DEMO_READINESS.md`, `docs/README.md`, `docs/release-evidence.json`, and referenced app routes.
+- Manual path/link check: Passed for `docs/LIVE_FALLBACK_PROOF.md`, `README.md`, `docs/README.md`, referenced tests, and referenced catalog/dashboard docs.
 - `git diff --check`: Passed with no whitespace or conflict-marker output.
+- `pnpm governance:audit`: Passed 19/19 checks with the known historical release-evidence commit warning.
 - `pnpm lint`: Passed. Next.js emitted the existing `next lint` deprecation notice, then reported no ESLint warnings or errors.
 
 ## Blockers
@@ -217,4 +220,4 @@ Current `git status --short --branch` shows branch `feat/v1.3-hosted-launch-read
 
 ## Recommended Next Task
 
-- `TASKS.md` item 30, "Add Public-Data Live/Fallback Proof Matrix".
+- `TASKS.md` item 31, "Add Public-Data Live/Fallback Proof Coverage For Core Demo Path", or item 36 if continuing with docs-only realness follow-ups.

@@ -445,6 +445,8 @@ Status: Complete on May 10, 2026 at 03:51 CDT.
 
 ## 30. Add Public-Data Live/Fallback Proof Matrix
 
+Status: Complete on May 10, 2026 at 04:01 CDT.
+
 - Owner type: Docs / Data governance
 - Goal: Add or update a concise proof matrix for Dallas, Austin, and Houston showing which demo paths are live, sample fallback, or live-disabled and why.
 - Why it matters: Judge-demo claims must be honest: Dallas has limited live aggregates, Austin monthly grouping is sample-first, and Houston remains sample-first with precise locations excluded.
@@ -454,6 +456,8 @@ Status: Complete on May 10, 2026 at 03:51 CDT.
 - Acceptance criteria: Matrix names each core dataset, demo prompt, requested data mode, actual rendered mode, fallback reason, hidden-field boundary, and source/caveat proof point. It must not claim unverified live support.
 - Validation commands: Manual path/link check; `pnpm governance:audit`; `pnpm lint`.
 - Can run in parallel: Yes, with app/test tasks that do not edit the same docs.
+- Completed notes: Added `docs/LIVE_FALLBACK_PROOF.md` with a Dallas/Austin/Houston proof matrix covering exact demo prompts, requested modes, rendered live/sample/fallback status, fallback reasons, hidden-field boundaries, source/caveat proof, data-mode definitions, and validation commands. Linked it from `README.md` and `docs/README.md`.
+- Validation: Manual referenced-path check passed; `git diff --check` passed; `pnpm governance:audit` passed with the known historical release-evidence warning; `pnpm lint` passed with the existing `next lint` deprecation notice.
 
 ## 31. Add Public-Data Live/Fallback Proof Coverage For Core Demo Path
 
