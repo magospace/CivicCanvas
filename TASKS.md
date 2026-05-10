@@ -2469,7 +2469,7 @@ Status: Complete on May 10, 2026.
 
 ## 152. Add Provider Smoke Readiness Summary To Submission Guide
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Provider Honesty / Submission Docs
 - Goal: Make no-spend and live-gated OpenAI/Fal proof posture scannable in the submission guide.
@@ -2480,6 +2480,8 @@ Status: Pending.
 - Acceptance criteria: Submission guide names no-key default behavior, optional live gates, and that dashboard generation is deterministic and not media/LLM generated.
 - Validation command: `git diff --check`.
 - Can run in parallel: Yes with non-doc code tasks.
+- Completed notes: Added a submission-guide provider/media boundary section naming the no-key/no-live default path, no-spend OpenAI/Fal smoke commands, explicit live gates, and Loom wording that providers do not generate dashboard code, SQL, media, hidden fields, or public-data coverage claims.
+- Validation: `git diff --check` passed.
 
 ## 153. Add Local Demo Command Transcript Skeleton
 

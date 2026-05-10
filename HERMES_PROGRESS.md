@@ -2118,3 +2118,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm docs:links` passed with 19 local markdown links checked and 0 issues. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 152, `Add Provider Smoke Readiness Summary To Submission Guide`, to keep provider proof posture scannable without live calls.
+
+
+## Task 152 Update - Provider Smoke Readiness Summary
+
+- Task chosen: `TASKS.md` item 152, "Add Provider Smoke Readiness Summary To Submission Guide".
+- Why this was next: It was the next low-risk submission honesty task after link checking and keeps OpenAI/Fal proof posture scannable without running live providers.
+- Scope: `HACKATHON_SUBMISSION_GUIDE.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Provider-gated fallback metadata / acceptable if clearly labeled. Docs only; no live provider calls.
+- Changes: Added a `Provider And Media Proof Boundaries` section documenting the no-key/no-live default path, optional no-spend OpenAI/Fal smoke commands, explicit live gates, and Loom wording that providers do not generate dashboard code, SQL, media, hidden fields, or public-data coverage claims.
+- Validation: `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 153, `Add Local Demo Command Transcript Skeleton`, to make no-spend validation proof paste-safe.
