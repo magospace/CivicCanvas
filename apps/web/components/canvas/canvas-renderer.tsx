@@ -53,6 +53,30 @@ function renderBlock(block: CanvasBlock) {
   }
 }
 
+function dataModeLabel(mode: CanvasDocument["sources"][number]["dataMode"] | undefined) {
+  if (mode === "live") {
+    return "Showing live public API data";
+  }
+
+  if (mode === "fallback") {
+    return "Showing sample fallback data";
+  }
+
+  return "Showing approved sample data";
+}
+
+function sourceStatusSummary(document: CanvasDocument) {
+  const source = document.sources[0];
+  if (!source) {
+    return "Rendered through the trusted canvas registry with no external data source attached.";
+  }
+
+  const fieldCount = source.fieldsUsed.length;
+  const fieldLabel = fieldCount === 1 ? "field" : "fields";
+  const caveat = source.caveats.find((item) => /fallback|sample|live|zip/i.test(item));
+  return `${source.datasetTitle} · ${fieldCount} governed ${fieldLabel}${caveat ? ` · ${caveat}` : ""}`;
+}
+
 export function CanvasRenderer({
   document,
   filterValues = {},
@@ -82,6 +106,7 @@ export function CanvasRenderer({
   const validatedDocument = validation.data;
   const metricBlocks = validatedDocument.blocks.filter((block) => block.type === "MetricBlock");
   const otherBlocks = validatedDocument.blocks.filter((block) => block.type !== "MetricBlock");
+  const primarySource = validatedDocument.sources[0];
 
   return (
     <section className="min-w-0 rounded-lg border border-slate-200 bg-white p-4 shadow-panel">
@@ -94,6 +119,14 @@ export function CanvasRenderer({
           {validatedDocument.description ? (
             <p className="mt-2 text-sm text-slate-600">{validatedDocument.description}</p>
           ) : null}
+          <div className="mt-3 rounded-lg border border-civic-100 bg-civic-50 px-3 py-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="rounded-md bg-white px-2 py-1 text-xs font-semibold text-civic-800 shadow-sm">
+                {dataModeLabel(primarySource?.dataMode)}
+              </span>
+              <span className="text-xs font-medium text-slate-600">{sourceStatusSummary(validatedDocument)}</span>
+            </div>
+          </div>
         </div>
         <div className="rounded-md bg-civic-100 px-3 py-2 text-xs font-semibold text-civic-700">
           {validatedDocument.blocks.length} allowlisted blocks

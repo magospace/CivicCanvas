@@ -1427,3 +1427,11 @@ Last updated: May 10, 2026 06:17 CDT
 - Safety notes: No live APIs, Fal/media generation, schema/migrations, backend persistence, auth, billing, deployment mutation, production data, secrets, or release-evidence refresh. Existing untracked `clauderecommends.md` remains preserved and unstaged. Screenshots stay uncommitted because `demo-artifacts/` is ignored.
 - Initial findings: P0 chart blocks looked blank/placeholder-like in the generated dashboard; generated title area needed concise sample/live status; `/explore` is dense before the prompt on mobile; `/sources` is credible but badge-heavy.
 - Next step: Commit audit notes separately, then implement only low-risk localized P0/P1 fixes in a separate UI polish commit.
+
+## Visual UI Polish Implementation Update
+
+- Scope: Implemented only low-risk/localized P0/P1 fixes from the visual audit.
+- Files changed: `apps/web/components/canvas-blocks.tsx`, `apps/web/components/canvas/canvas-renderer.tsx`, and this progress note.
+- UI changes: Chart blocks now render visible line charts with points/value labels and horizontal bar charts with readable labels/counts; generated canvas headers now include a concise data-mode/source status strip; table sort labels use friendly arrows instead of `desc` text; embedded dashboard filter button now says `Apply filters`.
+- Safety notes: No schema, data, API semantics, persistence, provider/media, auth, billing, deployment, live calls, release evidence, or generated screenshot artifacts were committed. `clauderecommends.md` remains preserved and untracked.
+- Validation: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `PLAYWRIGHT_BASE_URL=http://localhost:3015 pnpm test:e2e -- tests/e2e/product-demo.spec.ts`, `pnpm build`, and `git diff --check` passed.

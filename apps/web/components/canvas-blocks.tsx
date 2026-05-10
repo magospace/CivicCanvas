@@ -64,40 +64,88 @@ export function MetricBlockView({ props }: MetricBlock) {
   );
 }
 
+function compactChartLabel(value: unknown) {
+  const label = String(value ?? "");
+  return label.replace("2024-", "").replace(/_/g, " ");
+}
+
+function presentationColumnLabel(label: string) {
+  return label.replace(/\s+desc$/i, "");
+}
+
 export function ChartBlockView({ props }: ChartBlock) {
   const max = Math.max(...props.data.map((item) => asNumber(item[props.yField])), 1);
+  const chartValues = props.data.map((item, index) => ({
+    label: compactChartLabel(item[props.xField]),
+    rawLabel: String(item[props.xField] ?? `item-${index}`),
+    value: asNumber(item[props.yField])
+  }));
+  const linePoints = chartValues.map((item, index) => {
+    const x = chartValues.length === 1 ? 24 : 24 + (index / (chartValues.length - 1)) * 312;
+    const y = 180 - (item.value / max) * 144;
+    return { ...item, x, y };
+  });
+  const linePath = linePoints.map((point, index) => `${index === 0 ? "M" : "L"}${point.x},${point.y}`).join(" ");
+  const areaPath = linePoints.length > 0
+    ? `${linePath} L${linePoints[linePoints.length - 1].x},184 L${linePoints[0].x},184 Z`
+    : "";
 
   return (
     <article className="rounded-lg border border-slate-200 p-4">
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex items-center justify-between gap-3">
         <div>
           <h2 className="text-sm font-semibold text-ink">{props.title}</h2>
           {props.subtitle ? <p className="mt-1 text-xs text-slate-500">{props.subtitle}</p> : null}
         </div>
         <span className="rounded-md bg-civic-100 px-2 py-1 text-xs font-semibold text-civic-700">
-          {props.chartType}
+          {props.chartType === "line" ? "trend" : "bars"}
         </span>
       </div>
-      {props.data.length > 0 ? (
-        <div className="flex h-56 items-end gap-2 border-b border-l border-slate-200 px-2 pb-2">
-          {props.data.map((item, index) => {
-            const value = asNumber(item[props.yField]);
-            const label = String(item[props.xField]);
-
-            return (
-              <div key={`${label}-${index}`} className="flex min-w-0 flex-1 flex-col items-center gap-2">
-                <div
-                  className="w-full rounded-t-md bg-civic-700"
-                  style={{ height: `${Math.max((value / max) * 100, 8)}%` }}
-                  title={`${label}: ${value}`}
-                />
-                <span className="w-full truncate text-center text-[11px] font-medium text-slate-500">
-                  {label.replace("2024-", "")}
-                </span>
+      {chartValues.length > 0 ? (
+        props.chartType === "line" ? (
+          <div className="rounded-md border border-slate-200 bg-white p-3">
+            <svg viewBox="0 0 368 224" role="img" aria-label={props.title} className="h-56 w-full">
+              <rect x="0" y="0" width="368" height="224" rx="8" fill="#ffffff" />
+              {[0, 1, 2, 3].map((tick) => {
+                const y = 36 + tick * 48;
+                return <line key={tick} x1="24" x2="336" y1={y} y2={y} stroke="#e2e8f0" strokeWidth="1" />;
+              })}
+              <line x1="24" x2="336" y1="184" y2="184" stroke="#cbd5e1" strokeWidth="1.5" />
+              <line x1="24" x2="24" y1="32" y2="184" stroke="#cbd5e1" strokeWidth="1.5" />
+              <path d={areaPath} fill="#2b6b7f" opacity="0.12" />
+              <path d={linePath} fill="none" stroke="#0f3a4a" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" />
+              {linePoints.map((point) => (
+                <g key={point.rawLabel}>
+                  <circle cx={point.x} cy={point.y} r="4" fill="#0f3a4a" stroke="#ffffff" strokeWidth="2" />
+                  <text x={point.x} y={point.y - 9} textAnchor="middle" className="fill-slate-600 text-[9px] font-semibold">
+                    {point.value}
+                  </text>
+                  <text x={point.x} y="205" textAnchor="middle" className="fill-slate-500 text-[9px] font-semibold">
+                    {point.label}
+                  </text>
+                </g>
+              ))}
+            </svg>
+          </div>
+        ) : (
+          <div className="space-y-3 rounded-md border border-slate-200 bg-white p-3">
+            {chartValues.map((item) => (
+              <div key={item.rawLabel} className="grid gap-1.5 sm:grid-cols-[minmax(0,11rem)_1fr_auto] sm:items-center">
+                <div className="truncate text-xs font-semibold text-slate-600" title={item.rawLabel}>
+                  {item.label}
+                </div>
+                <div className="h-3 overflow-hidden rounded-full bg-civic-100">
+                  <div
+                    className="h-full rounded-full bg-civic-800"
+                    style={{ width: `${Math.max((item.value / max) * 100, 6)}%` }}
+                    title={`${item.label}: ${item.value}`}
+                  />
+                </div>
+                <div className="text-right text-xs font-semibold text-ink">{item.value}</div>
               </div>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        )
       ) : (
         <div className="flex h-56 items-center justify-center rounded-md border border-dashed border-slate-200 bg-civic-50 px-4 text-center text-sm text-slate-500">
           No matching rows for this chart after the current filters.
@@ -275,10 +323,10 @@ export function TableBlockView({ props }: TableBlock) {
                     type="button"
                     onClick={() => changeSort(column.field)}
                     className="flex items-center gap-1 text-left uppercase tracking-[0.12em] transition hover:text-civic-700 focus:outline-none focus:ring-2 focus:ring-civic-100"
-                    aria-label={`Sort by ${column.label}`}
+                    aria-label={`Sort by ${presentationColumnLabel(column.label)}`}
                   >
-                    {column.label}
-                    {sortField === column.field ? <span>{sortDirection}</span> : null}
+                    {presentationColumnLabel(column.label)}
+                    {sortField === column.field ? <span aria-hidden="true">{sortDirection === "asc" ? "↑" : "↓"}</span> : null}
                   </button>
                 </th>
               ))}
@@ -374,7 +422,7 @@ export function FilterBlockView({
           onClick={onApply}
           className="mt-4 w-full rounded-md bg-civic-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-civic-700 focus:outline-none focus:ring-2 focus:ring-civic-100"
         >
-          Apply filter state
+          Apply filters
         </button>
       ) : null}
     </article>
