@@ -2084,3 +2084,13 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation results: `pnpm lint` passed. `pnpm typecheck` passed across shared, MCP server, and web packages. `pnpm test` passed: 126 tests across 18 files. `pnpm governance:audit` passed 19/19 checks and emitted the expected historical release-evidence warning: recorded commit `a5ce07a`, current HEAD `68f5ffc` at validation time. `pnpm data:quality` passed: 3 samples, 280 rows, 4 gallery canvases. `pnpm test:e2e -- tests/e2e/product-demo.spec.ts` passed: 21/21 browser tests. `git diff --check` passed.
 - Live API/media/OpenAI calls: 0.
 - Remaining status: The useful pre-existing queue is exhausted after Task 148, so the next step is to replenish `TASKS.md` with a new safe local-only submission/readiness backlog before implementation.
+
+
+## Task Queue Replenishment Update - Local Submission Guardrails
+
+- Task chosen: Replenish `TASKS.md` because the useful pending queue was exhausted after Tasks 147, 149, and 148 completed.
+- Scope: Added Tasks 150-159 covering submission TODO scanning, docs link consistency, provider proof summary docs, paste-safe local transcript skeleton, saved-canvas legacy normalization tests, canvas-save validation-stub honesty, Miro preview no-write guards, unsupported metadata-only source guards, generated-artifact hygiene, and local push-readiness summaries.
+- Data realism classification: Planning/docs only in this commit. New tasks prioritize normal data-loader/persistence/API paths, honest local/sample/live/provider boundaries, and no-push/no-secret guardrails.
+- Validation: `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 150, `Add Submission TODO Scanner`, because it is low-risk, no-network, and protects final submission fields without mutating deployment or secrets.

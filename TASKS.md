@@ -2433,3 +2433,144 @@ Status: Complete on May 10, 2026.
 - Can run in parallel: Yes with non-doc tasks.
 - Completed notes: Reviewed existing `GOVERNANCE_NOTE.md` and `docs/README.md` warning placement, then tightened README validation copy so `docs/release-evidence.json` is clearly historical evidence and not proof for current local `HEAD`. Did not edit `docs/release-evidence.json`.
 - Validation: `git diff --check` passed.
+
+
+## 150. Add Submission TODO Scanner
+
+Status: Pending.
+
+- Owner type: Submission Ops / No-Secret Guard
+- Goal: Add a no-network script that reports remaining submission placeholders and validates that TODO deployed/Loom/team fields are explicit rather than hidden in prose.
+- Scope: Script and package command only; no submission field values or secrets.
+- Likely files: `scripts/submission-todo-scan.mjs`, `package.json`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Documentation/proof guard; not data-path-related.
+- Acceptance criteria: Script exits green when known allowed TODO submission fields are present and fails on new unlabeled hosted/deployment readiness claims or secret-like values in submission docs.
+- Validation command: `pnpm submission:todo-scan`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with package script edits.
+
+## 151. Add README Link Consistency Guard
+
+Status: Pending.
+
+- Owner type: Docs QA / Submission Proof
+- Goal: Add a no-network check that README and submission guide path references resolve locally.
+- Scope: Script/test only; no docs behavior changes unless stale links are found.
+- Likely files: `scripts/check-doc-links.mjs`, `package.json`, `README.md`, `HACKATHON_SUBMISSION_GUIDE.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Documentation guard; not data-path-related.
+- Acceptance criteria: Check validates local markdown/code path links used in public submission docs and reports unresolved links clearly.
+- Validation command: `pnpm docs:links`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with package script edits.
+
+## 152. Add Provider Smoke Readiness Summary To Submission Guide
+
+Status: Pending.
+
+- Owner type: Provider Honesty / Submission Docs
+- Goal: Make no-spend and live-gated OpenAI/Fal proof posture scannable in the submission guide.
+- Scope: Docs only; do not run live providers.
+- Likely files: `HACKATHON_SUBMISSION_GUIDE.md`, `README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Provider-gated fallback metadata / acceptable if clearly labeled.
+- Acceptance criteria: Submission guide names no-key default behavior, optional live gates, and that dashboard generation is deterministic and not media/LLM generated.
+- Validation command: `git diff --check`.
+- Can run in parallel: Yes with non-doc code tasks.
+
+## 153. Add Local Demo Command Transcript Skeleton
+
+Status: Pending.
+
+- Owner type: Judge Proof / Docs
+- Goal: Provide a paste-safe command transcript skeleton for the exact no-spend validations and demo routes.
+- Scope: New docs template only; no generated command outputs committed.
+- Likely files: `docs/LOCAL_SUBMISSION_TRANSCRIPT.md`, `README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Documentation only.
+- Acceptance criteria: Template includes redaction rules, local validation command list, expected known governance warning, and local/Loom/public URL boundaries.
+- Validation command: `git diff --check`.
+- Can run in parallel: Yes with code tasks not editing README.
+
+## 154. Add Saved-Canvas Legacy Normalization Test
+
+Status: Pending.
+
+- Owner type: Data Realism / Persistence Test
+- Goal: Prove browser-local saved records remain editable/exportable when older saved snapshots lack newer metadata fields.
+- Scope: Unit tests only unless normalization gap is found.
+- Likely files: `apps/web/test/saved-canvases.test.ts`, maybe `packages/shared/src/persistence/index.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Medium if a real normalization bug is found.
+- Data realism classification: Browser-local editable records / acceptable when labeled.
+- Acceptance criteria: Test covers legacy/minimal saved bundle import or storage normalization and verifies reopened/exported records still validate through normal persistence helpers.
+- Validation command: `pnpm test -- apps/web/test/saved-canvases.test.ts`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with persistence helper edits.
+
+## 155. Add API Validation Stub Honesty Test
+
+Status: Pending.
+
+- Owner type: Backend Boundary / Test Coverage
+- Goal: Prove `/api/canvas/save` remains a validation stub and does not imply backend persistence.
+- Scope: Route tests and copy assertions only unless stale response metadata is found.
+- Likely files: `apps/web/test/canvas-save-route.test.ts`, `apps/web/app/api/canvas/save/route.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium.
+- Data realism classification: Validation stub only; must remain labeled.
+- Acceptance criteria: Tests assert valid input returns validation success plus no-backend/local-persistence note, invalid input fails, and no persisted lookup is claimed.
+- Validation command: `pnpm test -- apps/web/test/canvas-save-route.test.ts`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with canvas save route edits.
+
+## 156. Add Miro Preview No-Write Guard
+
+Status: Pending.
+
+- Owner type: Third-Party Boundary / Test Coverage
+- Goal: Prove Miro export remains preview-only JSON and contains Source & Method without OAuth/board write claims.
+- Scope: Tests/docs only unless stale route response wording is found.
+- Likely files: `apps/web/test/miro-export-route.test.ts`, `README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Preview-only export / acceptable when labeled.
+- Acceptance criteria: Tests assert preview/spec-only metadata and no board ID/OAuth/write side effects; docs remain honest.
+- Validation command: `pnpm test -- apps/web/test/miro-export-route.test.ts`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes with unrelated docs.
+
+## 157. Add Catalog Unsupported Source Route Guard
+
+Status: Pending.
+
+- Owner type: Data Governance / Route Test
+- Goal: Protect unsupported/metadata-only sources from accidentally generating dashboards.
+- Scope: Tests around prompt suggestions and source CTAs only.
+- Likely files: `apps/web/test/dashboard.test.ts`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium.
+- Data realism classification: Catalog metadata only / not query-ready until samples/live governance are added.
+- Acceptance criteria: Tests assert Texas Government Spending remains suggestion/coming-later only and is not wired to generated dashboards.
+- Validation command: focused Vitest or Playwright source/prompt tests, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with prompt/dashboard tests.
+
+## 158. Add No-Generated Artifact Commit Guard
+
+Status: Pending.
+
+- Owner type: Repo Hygiene / Submission Safety
+- Goal: Add a no-network guard that fails if generated screenshots, Playwright reports, provider artifacts, or `.env` files are staged/committed by mistake.
+- Scope: Script/package command and docs note only.
+- Likely files: `scripts/check-generated-artifact-hygiene.mjs`, `package.json`, `README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Repo hygiene; protects proof artifacts/secrets from accidental commit.
+- Acceptance criteria: Script passes current tree, classifies intentionally untracked external recommendation files separately, and fails on staged generated artifact or env-like paths.
+- Validation command: `pnpm hygiene:artifacts`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with package script edits.
+
+## 159. Add Final Push-Readiness Diff Summary Command
+
+Status: Pending.
+
+- Owner type: GitHub Readiness / Local Ops
+- Goal: Add a local-only command or docs snippet that summarizes branch-ahead status, untracked external files, and last validation before a human decides whether to push.
+- Scope: Script/docs only; do not push.
+- Likely files: `scripts/local-push-readiness.mjs`, `package.json`, `README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Not data-path-related.
+- Acceptance criteria: Command reports current branch, upstream, ahead/behind counts when available, untracked files, and reminds user not to push unless explicitly instructed.
+- Validation command: `pnpm local:push-readiness`, `git diff --check`.
+- Can run in parallel: No with package script edits.
