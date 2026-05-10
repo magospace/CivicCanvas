@@ -1,6 +1,6 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 05:45 CDT
+Last updated: May 10, 2026 05:53 CDT
 
 ## Current Cycle
 
@@ -347,6 +347,31 @@ Last updated: May 10, 2026 05:45 CDT
 ### Recommended Next Task
 
 - Task 55 is high-risk because it would introduce real backend persistence and migrations. Do not start it without explicit approval. The next safe task is Task 56, `Add Demo Video Capture Checklist Without Generated Media Claims`.
+
+## Task 56 Update
+
+- Task chosen: `TASKS.md` item 56, "Add Demo Video Capture Checklist Without Generated Media Claims".
+- Why this was next: Task 55 is high-risk backend persistence and needs explicit approval before migrations/database work; Task 56 was the next safe high-value hackathon submission task after completed Task 54.
+- Scope: `docs/DEMO_VIDEO_CHECKLIST.md`, `docs/README.md`, `README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Documentation only. No generated media artifacts were created or committed. No Fal live call, provider spend, schema/migration change, database operation, deploy mutation, release evidence refresh, secrets, auth, billing, or production config changed.
+
+### Files Updated
+
+- `docs/DEMO_VIDEO_CHECKLIST.md`: New screen-recording checklist with route sequence, exact prompts, timing, fallback/live narration, capture settings, post-capture checks, and explicit no generated-media/provider claim wording.
+- `docs/README.md`: Linked the demo video checklist in release/demo docs.
+- `README.md`: Linked the demo video checklist from current developer docs.
+- `TASKS.md`: Marks item 56 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records item 56 scope, safety notes, validation, and next task.
+
+### Validation
+
+- Manual path check via `python3`: Passed.
+- `git diff --check`: Passed.
+- `pnpm lint`: Passed.
+
+### Recommended Next Task
+
+- Task 57, `Add Submission Metadata Checklist`, is the next safe task.
 
 ## Historical Sequential Progress
 

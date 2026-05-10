@@ -873,6 +873,8 @@ Status: Complete on May 10, 2026 at 05:45 CDT.
 
 ## 56. Add Demo Video Capture Checklist Without Generated Media Claims
 
+Status: Complete on May 10, 2026 at 05:53 CDT.
+
 - Owner type: Demo / Submission
 - Goal: Add a concise checklist for recording a hackathon demo video using the current app without implying generated video/media provider output.
 - Scope: Docs only.
@@ -881,6 +883,8 @@ Status: Complete on May 10, 2026 at 05:45 CDT.
 - Acceptance criteria: Checklist names exact route sequence, prompts, timing, fallback/live wording, screen recording tips, and explicit no generated-media/provider claim unless Task 51 live proof is separately run.
 - Validation commands: manual path/link check, `git diff --check`, `pnpm lint`.
 - Can run in parallel: Yes with non-doc-index code tasks.
+- Completed notes: Added `docs/DEMO_VIDEO_CHECKLIST.md` with a 2-3 minute route sequence, exact demo prompts, fallback/live narration, capture settings, post-capture secret/media-claim checks, and explicit wording that the recording is not generated media and normal app generation does not call Fal. Linked it from README and the docs index.
+- Validation: Manual path check passed; `git diff --check` passed; `pnpm lint` passed.
 
 ## 57. Add Submission Metadata Checklist
 
