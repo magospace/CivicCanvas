@@ -3,13 +3,12 @@ import { z } from "zod";
 import { canvasDocumentSchema } from "@texas-data-canvas/shared";
 import { apiError, createRequestId, parseJsonRequest } from "../../../../lib/api";
 
-const requestSchema = z.object({ canvas: z.unknown() });
+const requestSchema = z.object({ canvas: canvasDocumentSchema });
 
 export async function POST(request: Request) {
   const requestId = createRequestId();
   try {
-    const body = await parseJsonRequest(request, requestSchema);
-    const canvas = canvasDocumentSchema.parse(body.canvas);
+    const { canvas } = await parseJsonRequest(request, requestSchema);
 
     return NextResponse.json({
       saved: true,

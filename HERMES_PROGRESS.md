@@ -706,3 +706,31 @@ Last updated: May 10, 2026 06:17 CDT
 ### Recommended Next Task
 
 - Task 73, `Tighten CanvasDocument Route Boundary Validation`, is the next safe implementation task.
+
+
+## Task 73 Update
+
+- Task chosen: `TASKS.md` item 73, "Tighten CanvasDocument Route Boundary Validation".
+- Why this was next: It was the highest-priority confirmed safe finding from `clauderecommends.md` and closes API request-boundary validation gaps without adding persistence, provider calls, deploy changes, release evidence refresh, secrets, auth, billing, migrations, or production config.
+- Scope: `apps/web/app/api/export/miro-spec/route.ts`, `apps/web/app/api/canvas/save/route.ts`, `apps/web/test/canvas-save-route.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Miro remains preview-only; save remains a browser-local validation stub. No live API/provider call, database write, migration, generated artifact, or deployment mutation occurred.
+
+### Files Updated
+
+- `apps/web/app/api/export/miro-spec/route.ts`: Request schema now validates `canvas` with `canvasDocumentSchema` at the route boundary before calling preview-spec generation.
+- `apps/web/app/api/canvas/save/route.ts`: Request schema now validates `canvas` with `canvasDocumentSchema`; handler uses the validated canvas directly.
+- `apps/web/test/canvas-save-route.test.ts`: Updated malformed-payload expectation to assert nested `canvas.*` validation issue paths.
+- `TASKS.md`: Marks Task 73 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records Task 73 scope, safety notes, validation, and next task.
+
+### Validation
+
+- `pnpm test -- apps/web/test/api-contracts.test.ts apps/web/test/canvas-save-route.test.ts apps/web/test/miro-export-route.test.ts`: Passed; Vitest discovered the full suite and reported 98 tests across 15 files.
+- `pnpm lint`: Passed.
+- `pnpm typecheck`: Passed across shared, MCP server, and web.
+- `pnpm test`: Passed with 98 tests across 15 files.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 74, `Add Middleware Rate-Limit Bucket Eviction`, is the next safe task.

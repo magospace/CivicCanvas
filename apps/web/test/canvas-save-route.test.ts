@@ -86,10 +86,10 @@ describe("canvas save API validation stub", () => {
     expect(body.error.code).toBe("canvas_save_failed");
     expect(body.error.message).toBe("Request validation failed.");
     expect(body.error.issues?.map((issue) => issue.path.join("."))).toEqual(expect.arrayContaining([
-      "createdAt",
-      "updatedAt",
-      "blocks",
-      "sources"
+      "canvas.createdAt",
+      "canvas.updatedAt",
+      "canvas.blocks",
+      "canvas.sources"
     ]));
   });
 });

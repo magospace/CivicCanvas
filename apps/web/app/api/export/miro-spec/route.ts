@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { canvasDocumentSchema } from "@texas-data-canvas/shared";
 import { generateMiroExportSpec } from "../../../../lib/miro";
 import { apiError, createRequestId, parseJsonRequest } from "../../../../lib/api";
 
 const requestSchema = z.object({
-  canvas: z.unknown(),
+  canvas: canvasDocumentSchema,
   template: z.enum(["briefing_board", "slide_deck", "community_workshop"]).default("briefing_board")
 });
 

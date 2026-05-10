@@ -1133,6 +1133,8 @@ Reconciliation summary:
 
 ## 73. Tighten CanvasDocument Route Boundary Validation
 
+Status: Complete on May 10, 2026 at 06:24 CDT.
+
 - Owner type: API / Validation
 - Goal: Replace route-level `z.unknown()` canvas request fields with `canvasDocumentSchema` so malformed canvases are rejected at the API boundary before business logic.
 - Scope: `apps/web/app/api/export/miro-spec/route.ts`, `apps/web/app/api/canvas/save/route.ts`, focused route tests.
@@ -1140,6 +1142,8 @@ Reconciliation summary:
 - Acceptance criteria: Valid canvas save/export still works; malformed Miro/save canvas payloads return structured 400 errors; Miro remains preview-only and save remains browser-local validation stub.
 - Validation commands: focused Vitest route/API tests, `git diff --check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`.
 - Can run in parallel: No with API route validation edits.
+- Completed notes: Changed both Miro export and canvas-save request schemas to parse `canvasDocumentSchema` at the request boundary. The save route now uses the boundary-validated canvas directly, while Miro export still only returns preview-only `MiroExportSpec` JSON. Updated canvas-save validation test expectations for nested `canvas.*` issue paths.
+- Validation: Focused API/route Vitest command passed with 98 tests across 15 files; `pnpm lint` passed; `pnpm typecheck` passed across shared, MCP server, and web; full `pnpm test` passed with 98 tests across 15 files; `git diff --check` passed.
 
 ## 74. Add Middleware Rate-Limit Bucket Eviction
 
