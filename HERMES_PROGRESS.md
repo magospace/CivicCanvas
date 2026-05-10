@@ -1360,3 +1360,21 @@ Last updated: May 10, 2026 06:17 CDT
 ### Recommended Next Task
 
 - Task 96, `Add Safe Submission Command Transcript Template`, is next.
+
+
+## Task 96 Update
+
+- Task chosen: `TASKS.md` item 96, "Add Safe Submission Command Transcript Template".
+- Why this was next: Task 95 completed cleanly, and Task 96 was the next safe submission hygiene docs task. It helps share validation evidence without leaking local paths, secrets, or conflating optional live/deploy proof with local checks.
+- Scope: `docs/SUBMISSION_COMMAND_TRANSCRIPT_TEMPLATE.md`, `docs/HACKATHON_SUBMISSION_CHECKLIST.md`, `docs/README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Documentation only. No commands with external side effects were run beyond lint/diff validation; no deploy, release evidence refresh, live API/provider call, generated media, backend persistence, schema, migration, secrets, auth, billing, production data, or external submission mutation occurred.
+
+### Validation
+
+- Manual path/link/redaction check: Passed. Confirmed template has local no-spend commands, optional hosted/live commands, redaction rules, and not-release-evidence caveats.
+- `pnpm lint`: Passed.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 97, `Add Demo Readiness Snapshot Blocker Assertions`, is next.

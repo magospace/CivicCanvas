@@ -1506,6 +1506,8 @@ Status: Complete on May 10, 2026.
 
 ## 96. Add Safe Submission Command Transcript Template
 
+Status: Complete on May 10, 2026.
+
 - Owner type: Submission / Docs
 - Goal: Add a paste-safe transcript template for final validation commands that redacts local paths/secrets and separates optional live/deploy evidence.
 - Scope: Docs only.
@@ -1514,6 +1516,8 @@ Status: Complete on May 10, 2026.
 - Acceptance criteria: Template has sections for local no-spend commands, optional hosted/live commands, redaction rules, and not-release-evidence caveat.
 - Validation commands: manual path/link check, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes.
+- Completed notes: Added `docs/SUBMISSION_COMMAND_TRANSCRIPT_TEMPLATE.md`, linked it from the docs index, and referenced it from the submission checklist final review. The template separates local no-spend commands from optional hosted/live/provider evidence and includes path/secret/signed-URL redaction plus not-release-evidence caveats.
+- Validation: Manual path/link/redaction check, `pnpm lint`, and `git diff --check` passed.
 
 ## 97. Add Demo Readiness Snapshot Blocker Assertions
 

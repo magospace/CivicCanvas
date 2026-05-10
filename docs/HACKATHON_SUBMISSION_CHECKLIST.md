@@ -178,6 +178,7 @@ Record:
 
 ## Final Review Before Submit
 
+- Use `docs/SUBMISSION_COMMAND_TRANSCRIPT_TEMPLATE.md` when sharing validation output so local paths, secrets, provider tokens, signed URLs, and optional live/deploy evidence stay separated and redacted.
 - Project description mentions governed public-data dashboards, not generic AI chat.
 - Install and run commands are present.
 - Demo URL is either a tested hosted URL or clearly labeled local-only.
