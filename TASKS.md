@@ -413,6 +413,8 @@ Status: Complete on May 10, 2026 at 03:11 CDT.
 
 ## 28. Write Final Judge Demo Script Covering Core Workflows
 
+Status: Complete on May 10, 2026 at 03:43 CDT.
+
 - Owner type: Docs / Demo
 - Goal: Add a concise final demo script for judges covering `/sources`, `/explore` canvas generation, saved canvases, MCP, and Miro preview-only export.
 - Why it matters: The app has several governed workflows; a scripted demo reduces last-minute mistakes and keeps claims honest about live/sample boundaries.
@@ -422,6 +424,8 @@ Status: Complete on May 10, 2026 at 03:11 CDT.
 - Acceptance criteria: Script includes exact demo prompts, expected visible data-mode/fallback copy, source attribution checkpoints, saved-canvas open/export/import/share flow, MCP talking points, Miro preview-only wording, and explicit no-auth/no-database/no-Miro-write caveats.
 - Validation commands: Manual path/link check for referenced docs and routes; `pnpm lint`.
 - Can run in parallel: Yes, with test-only tasks. Avoid parallel edits to `docs/DEMO_SCRIPT.md` or `README.md`.
+- Completed notes: Replaced the older broad walkthrough with a judge-facing script that starts at `/sources`, runs exact Dallas/Austin/Houston prompts, names expected fallback/sample copy, covers unsupported prompt safety, browser-local saved-canvas handoff, preview-only Miro output, and MCP talking points without claiming auth, database, LLM, or Miro writes.
+- Validation: Manual referenced-path check passed; `git diff --check` passed; `pnpm lint` passed with the existing `next lint` deprecation notice.
 
 ## 29. Add Final Local Demo Readiness Checklist Without Release Evidence Refresh
 

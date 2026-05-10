@@ -1,121 +1,167 @@
-# Demo Script
+# Final Judge Demo Script
 
-## Setup
+Use this script for the hackathon judge walkthrough. It keeps the story centered on governed public-data dashboards and avoids overstating persistence, live data, auth, AI/provider output, or Miro integration.
+
+## Pre-Demo Setup
+
+Run the quick local checks before the room opens:
 
 ```bash
-pnpm install
+pnpm lint
 pnpm typecheck
 pnpm test
-pnpm build
-pnpm smoke:live
-pnpm test:e2e
+```
+
+Start the app:
+
+```bash
 pnpm dev
 ```
 
 Open `http://localhost:3000/explore`.
 
-## Demo 1 - Dallas 311 dashboard
+Do not refresh `docs/release-evidence.json` for this demo script. Release evidence is a separate gated task.
 
-1. Enter: `Show Dallas 311 service requests by category and ZIP code for 2024.`
-2. Click Generate View.
-3. Point out:
-   - CivicCanvas mark in the header and the Texas Data Canvas product label.
-   - Summary and metric blocks.
-   - Monthly trend chart.
-   - ZIP-code geography bubble renderer.
-   - Grouped detail table.
-   - Filter definitions.
-   - Required Source & Method card.
-   - Query audit section in the inspector.
-   - Prompt intent transparency: matched terms, reason codes, mode hint, and rejected fields.
+## Opening Pitch
 
-Narration:
+Texas Data Canvas turns approved Texas public datasets into source-cited dashboards. The app is intentionally governed: no accounts, no database, no arbitrary SQL, no arbitrary generated HTML or JavaScript, no LLM-backed dashboard generation, and no live Miro board writes.
 
-- The app found the Dallas 311 dataset from the approved catalog.
-- It ran bounded governed queries with validated fields, operators, metrics, and row limits.
-- The data-mode badge explains when live public data is used and when sample fallback is active.
-- It generated a CanvasDocument and rendered only allowlisted React blocks.
-- Source, method, filters, fields, and caveats stay visible.
+Every dashboard is a validated `CanvasDocument` rendered through the trusted React block registry. Every query is a bounded `BoundedQuerySpec` against the approved catalog, static samples, or narrowly verified live public APIs with sample fallback.
 
-## Demo 2 - Austin permits dashboard
-
-1. Enter: `Show Austin building permits by month and ZIP code.`
-2. Click Generate View.
-3. Point out the same governed CanvasSpec rendering and source/caveat behavior.
-
-Narration:
-
-- The same safe workflow runs over a different city/topic.
-- Permit records are presented as administrative public data with caveats.
-- The app does not imply construction starts or causation.
-
-## Demo 3 - Sources browser
-
-1. Enter: `Show Houston traffic incidents by ZIP and incident type for 2024.`
-2. Click Generate View.
-3. Point out the sample-first data-mode badge and the Source & Method caveat that precise locations are excluded.
-
-Narration:
-
-- Houston is the third public-pilot dataset and remains sample-first. Houston TranStar provides sample feed documentation, but live feed access and aggregate-safe mappings are not promoted yet.
-- The precise address field is classified as hidden and cannot be queried or exported.
-- The same CanvasDocument and BoundedQuerySpec rules govern the new dataset.
-
-## Demo 4 - Sources browser
+## Demo 1 - Sources And Boundaries
 
 1. Open `/sources`.
-2. Filter by city or topic.
-3. Show source, city, topic, update/access status, field status, caveats, and recommended visual types.
-4. Point out the Dallas ZIP sample fallback, Austin monthly aggregation blocker, and Houston sample-first status.
+2. Point out the approved Dallas, Austin, and Houston datasets.
+3. Show the field status badges, hidden-field warning, caveats, and live/sample confidence.
+4. Name the boundary before generating anything:
+   - Dallas has limited live Socrata support for verified non-ZIP aggregate fields.
+   - Dallas ZIP dashboards use sample fallback because the verified live view does not expose ZIP.
+   - Austin monthly dashboards are sample-first until source-owned month grouping is safely verified.
+   - Houston transportation is sample-first and excludes precise locations.
 
-## Demo 5 - Demo readiness
+Checkpoint: judges should see catalog health, live/sample copy, and the hidden `precise_address` warning.
 
-1. Open `/demo-readiness`.
-2. Show dataset readiness for Dallas, Austin, and Houston.
-3. Use Copy demo checklist if you need a plain-text release flow.
+## Demo 2 - Dallas Core Dashboard
 
-## Demo 6 - Unsupported prompt safety
+1. Open `/explore`.
+2. Enter exactly:
 
-1. Return to `/explore`.
-2. Enter: `Compare tax abatements across El Paso.`
-3. Show that the app returns approved dataset suggestions instead of inventing a dashboard.
+   ```text
+   Show Dallas 311 service requests by category and ZIP code for 2024.
+   ```
 
-## Demo 7 - Miro stretch preview
+3. Click Generate View.
+4. Point out:
+   - The generated title, summary, metric, trend, ZIP map, table, filters, and Source & Method card.
+   - The visible data-mode message: `Live unavailable, sample fallback used`.
+   - The fallback reason that the verified live source lacks required ZIP fields.
+   - The "Why this dashboard?" inspector with matched prompt terms, reason codes, query audit, fields, filters, row limits, and active bounded query JSON.
 
-1. Generate the Dallas dashboard.
-2. Choose a Miro template in the inspector or use the main canvas toolbar.
-3. Explain that the app generates frame cards plus preview-only MiroExportSpec JSON with a required Source & Method frame.
-4. No Miro board write occurs in the MVP.
+Narration: The app understood a supported public-data question, selected an approved dataset, built bounded aggregate queries, and kept the fallback caveat visible instead of pretending the ZIP view was live.
 
-## Demo 8 - Saved bundle workflow
+## Demo 3 - Austin And Houston Variants
 
-1. Save the Dallas dashboard.
-2. Open `/saved`.
-3. Export the portable saved-canvas bundle and copy a no-backend share link.
-4. Explain that the share link stores the bundle in the URL hash and validates before import.
-5. Paste invalid JSON containing an unknown block and show the friendly rejection message.
+Run the Austin prompt:
 
-Narration:
+```text
+Show Austin building permits by month and ZIP code for 2024.
+```
 
-- Saved canvases remain browser-local.
-- Portable bundles are validated on import.
-- Unsafe CanvasSpec JSON is rejected before render.
+Expected proof:
 
-## Demo 9 - Curated gallery
+- The dashboard title is `Austin Building Permits Explorer`.
+- The inspector shows sample/fallback status.
+- Source & Method explains the approved sample fallback and caveats for administrative permit data.
 
-1. Open `/gallery`.
-2. Show the checked-in Dallas, Austin, Houston, and unsupported-sensitive prompt examples.
-3. Explain that the gallery is static validated CanvasDocument JSON rendered through the same allowlisted registry.
+Run the Houston prompt:
 
-## MCP server check
+```text
+Show Houston transportation incidents by ZIP and incident type for 2024.
+```
+
+Expected proof:
+
+- The dashboard title is `Houston Transportation Incidents Explorer`.
+- The UI shows sample fallback/sample-first language.
+- Source & Method and the table/map caveats say precise incident locations are excluded.
+
+Narration: These two examples show that the same CanvasDocument and BoundedQuerySpec model works across cities while preserving source-specific caveats.
+
+## Demo 4 - Unsupported Prompt Safety
+
+Enter:
+
+```text
+Show private phone numbers for bridge repairs on Mars.
+```
+
+Expected proof:
+
+- The app returns `Choose an approved dataset`, not a fabricated dashboard.
+- The UI shows exact supported prompt suggestions.
+- Approved source cards for Dallas, Austin, and Houston are visible.
+- Sensitive terms are named as rejected/governed fields.
+
+Narration: Unsupported or sensitive prompts produce safe suggestions instead of hallucinated datasets or private-field output.
+
+## Demo 5 - Saved Canvas Local Handoff
+
+1. Generate the Dallas dashboard again if needed.
+2. Click Save canvas locally.
+3. Open `/saved`.
+4. Show the saved card and the local-only page copy.
+5. Click:
+   - Open in `/explore`.
+   - Duplicate.
+   - Export bundle.
+   - Copy share link.
+6. Paste invalid JSON with an unknown block into the import box and click Import.
+
+Expected proof:
+
+- Saved canvases are browser-local `localStorage`.
+- Share links keep the validated bundle in the URL hash.
+- Imports validate before rendering and reject unsafe blocks.
+- There is no hosted database or public saved-canvas service.
+
+## Demo 6 - Miro Preview Stretch
+
+1. Generate a governed dashboard.
+2. Use the inspector Miro template selector.
+3. Click Generate Miro export preview.
+
+Expected proof:
+
+- The preview includes a Source & Method frame.
+- The output is preview-only `MiroExportSpec` JSON.
+- There is no Miro OAuth, access token, board ID, or board write in the current app.
+
+Narration: Miro export is a safe handoff spec for future collaboration tooling, not a live third-party write integration.
+
+## Demo 7 - MCP Talking Points
+
+Build the MCP server if you want to inspect it locally:
 
 ```bash
 pnpm --filter @texas-data-canvas/mcp-server build
 pnpm --filter @texas-data-canvas/mcp-server inspect
 ```
 
-Show tools such as `get_server_status`, `validate_catalog`, `list_live_sources`, `search_datasets`, `get_dataset_metadata`, `query_dataset`, `generate_canvas_spec`, `validate_canvas_spec`, and `audit_query`.
+Mention the key tools:
 
-## Closing pitch
+- `get_server_status`
+- `validate_catalog`
+- `list_live_sources`
+- `search_datasets`
+- `get_dataset_metadata`
+- `query_dataset`
+- `generate_canvas_spec`
+- `validate_canvas_spec`
+- `audit_query`
+- `generate_miro_export_spec`
 
-Texas Data Canvas is a safe interaction layer for Texas open data. It helps residents, civic teams, businesses, researchers, journalists, and nonprofits move from raw public datasets to visual, source-cited insight without arbitrary code generation.
+Narration: The MCP server reuses the same catalog, bounded query, canvas validation, source attribution, and preview-only Miro spec boundaries as the web app.
+
+## Closing
+
+Texas Data Canvas is not trying to be a generic chatbot. It is a trustworthy civic-data interface: narrow prompts, approved sources, bounded queries, visible caveats, local fallback reliability, and exportable dashboards that keep source and method attached.

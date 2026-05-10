@@ -1,19 +1,24 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 03:35 CDT
+Last updated: May 10, 2026 03:43 CDT
 
 ## Current Cycle
 
-- Task chosen: Finalize the carried-over hackathon realness audit documentation before starting new sequential tasks.
-- Why this was next: `git status --short --branch` showed uncommitted audit state (`TASKS.md` plus new `REALNESS_AUDIT.md`) from the prior audit-only run. Committing it separately keeps later task commits clean and prevents real/mock/local audit findings from being mixed into unrelated demo-readiness work.
-- Scope: `REALNESS_AUDIT.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Task chosen: `TASKS.md` item 28, "Write Final Judge Demo Script Covering Core Workflows".
+- Why this was next: After committing the carried-over realness audit state, item 28 was the highest-priority incomplete safe task and builds directly on the demo-honesty risks documented in `REALNESS_AUDIT.md`.
+- Scope: `docs/DEMO_SCRIPT.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
 - Safety notes: No product behavior, source code, package scripts, config, source data, secrets, auth, billing, migrations, production config, deploy scripts, release evidence, catalog data, samples, live API calls, or destructive operations were changed. Release evidence was not refreshed.
 
 ## Files Updated
 
-- `REALNESS_AUDIT.md`: Added the hackathon realness audit table covering persistence, API integrations, media generation, auth/security, user-facing honesty, and validation commands.
-- `TASKS.md`: Added scoped realness follow-up tasks 36-42 and corrected the release-evidence task's audited HEAD reference.
-- `HERMES_PROGRESS.md`: Recorded this carry-over audit commit boundary before sequential task work.
+- `docs/DEMO_SCRIPT.md`: Replaced the older broad demo walkthrough with a judge-facing script that covers `/sources`, `/explore`, Dallas/Austin/Houston prompts, unsupported prompt safety, saved local handoff, preview-only Miro, and MCP talking points.
+- `TASKS.md`: Marked item 28 complete with validation notes.
+- `HERMES_PROGRESS.md`: Recorded item 28 scope, safety notes, and validation.
+
+## Sequential Progress
+
+- Carry-over audit state committed as `a4f09c6` (`docs: add hackathon realness audit`).
+- Task 28 completed and ready to commit as `docs: add final judge demo script`.
 
 ## Sequential Task Plan
 
@@ -200,6 +205,7 @@ Current `git status --short --branch` shows branch `feat/v1.3-hosted-launch-read
 
 ## Validation
 
+- Manual path/link check: Passed for `/sources`, `/explore`, `/saved`, `docs/release-evidence.json`, MCP package scripts, and referenced route docs.
 - `git diff --check`: Passed with no whitespace or conflict-marker output.
 - `pnpm lint`: Passed. Next.js emitted the existing `next lint` deprecation notice, then reported no ESLint warnings or errors.
 
@@ -209,4 +215,4 @@ Current `git status --short --branch` shows branch `feat/v1.3-hosted-launch-read
 
 ## Recommended Next Task
 
-- `TASKS.md` item 28, "Write Final Judge Demo Script Covering Core Workflows", is the safest next task after QA findings are reconciled.
+- `TASKS.md` item 29, "Add Final Local Demo Readiness Checklist Without Release Evidence Refresh".
