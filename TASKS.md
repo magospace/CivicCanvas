@@ -1691,7 +1691,7 @@ Status: Complete on May 10, 2026.
 
 ## 106. Add Optional Live Public API Smoke Transcript Stub
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Live Data / Submission Docs
 - Goal: Add a paste-safe transcript stub for optional `pnpm smoke:live:json` evidence if the user explicitly chooses to run live public API checks before submission.
@@ -1701,6 +1701,8 @@ Status: Pending.
 - Acceptance criteria: Template includes command, date, row/count summary, Dallas non-ZIP live caveat, Dallas ZIP fallback caveat, Austin/Houston sample-first caveats, and says optional network smoke is not release evidence unless Task 35 runs.
 - Validation commands: manual wording/path check, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes with non-doc tasks.
+- Completed notes: Added `docs/LIVE_API_SMOKE_TEMPLATE.md` with paste-safe fields for optional `pnpm smoke:live:json` output, including Dallas non-ZIP live caveat, Dallas ZIP fallback caveat, Austin monthly sample-first caveat, Houston sample-first/no-precise-location caveat, and release-evidence warning. Linked it from the submission command transcript template.
+- Validation: Path/wording checks, `pnpm lint`, and `git diff --check` passed. No live API smoke was run.
 
 ## 107. Add Provider-Gated Media Honesty Note To Health UI
 

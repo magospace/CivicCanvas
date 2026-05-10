@@ -1523,3 +1523,13 @@ Last updated: May 10, 2026 06:17 CDT
 - Safety notes: No browser capture was run, no generated screenshots/media were created, no provider calls or live APIs were used, and no generated artifacts were committed.
 - Validation: `pnpm demo:screenshots:json` reported dry-run mode with `mutatesFiles: false` and `generatedMediaArtifact: false`; focused release-script Vitest passed; `pnpm lint` and `git diff --check` passed.
 - Recommended next task: Task 106, `Add Optional Live Public API Smoke Transcript Stub`.
+
+## Task 106 Update
+
+- Task chosen: `TASKS.md` item 106, "Add Optional Live Public API Smoke Transcript Stub".
+- Why this was next: It was the next pending safe docs-only live-data submission task after Task 105 and improves optional evidence capture without making a live call.
+- Scope: `docs/LIVE_API_SMOKE_TEMPLATE.md`, `docs/SUBMISSION_COMMAND_TRANSCRIPT_TEMPLATE.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: No live API call was run, no release evidence was refreshed, and no secrets/provider credentials were used or documented.
+- Files updated: Added a paste-safe optional live API smoke template and linked it from the submission command transcript template.
+- Validation: Path/wording checks for the new template and transcript link passed; `pnpm lint` and `git diff --check` passed.
+- Recommended next task: Task 107, `Add Provider-Gated Media Honesty Note To Health UI`.

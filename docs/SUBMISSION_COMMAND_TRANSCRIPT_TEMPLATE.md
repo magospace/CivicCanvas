@@ -63,7 +63,7 @@ PLAYWRIGHT_BASE_URL=<hosted-url> pnpm test:e2e:remote
 [result: not run / pass / fail summary]
 
 pnpm smoke:live:json
-[result: not run / pass / fail summary]
+[result: not run / pass / fail summary; use docs/LIVE_API_SMOKE_TEMPLATE.md for paste-safe details]
 
 RUN_LIVE_FAL_SMOKE=1 FAL_KEY=<redacted> pnpm media:fal:smoke:json
 [result: not run / one-call live proof summary]
