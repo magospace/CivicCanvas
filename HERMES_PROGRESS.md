@@ -1,24 +1,26 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 03:43 CDT
+Last updated: May 10, 2026 03:51 CDT
 
 ## Current Cycle
 
-- Task chosen: `TASKS.md` item 28, "Write Final Judge Demo Script Covering Core Workflows".
-- Why this was next: After committing the carried-over realness audit state, item 28 was the highest-priority incomplete safe task and builds directly on the demo-honesty risks documented in `REALNESS_AUDIT.md`.
-- Scope: `docs/DEMO_SCRIPT.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Task chosen: `TASKS.md` item 29, "Add Final Local Demo Readiness Checklist Without Release Evidence Refresh".
+- Why this was next: Item 29 is the next incomplete safe task after the final judge demo script and gives presenters a repeatable local check path without touching gated release evidence.
+- Scope: `docs/HACKATHON_DEMO_READINESS.md`, `docs/README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
 - Safety notes: No product behavior, source code, package scripts, config, source data, secrets, auth, billing, migrations, production config, deploy scripts, release evidence, catalog data, samples, live API calls, or destructive operations were changed. Release evidence was not refreshed.
 
 ## Files Updated
 
-- `docs/DEMO_SCRIPT.md`: Replaced the older broad demo walkthrough with a judge-facing script that covers `/sources`, `/explore`, Dallas/Austin/Houston prompts, unsupported prompt safety, saved local handoff, preview-only Miro, and MCP talking points.
-- `TASKS.md`: Marked item 28 complete with validation notes.
-- `HERMES_PROGRESS.md`: Recorded item 28 scope, safety notes, and validation.
+- `docs/HACKATHON_DEMO_READINESS.md`: Added a local-first checklist for quick validation, manual route smoke, optional e2e/data-governance checks, and release-evidence boundaries.
+- `docs/README.md`: Linked the new checklist from the release/demo docs index.
+- `TASKS.md`: Marked item 29 complete with validation notes.
+- `HERMES_PROGRESS.md`: Recorded item 29 scope, safety notes, and validation.
 
 ## Sequential Progress
 
 - Carry-over audit state committed as `a4f09c6` (`docs: add hackathon realness audit`).
-- Task 28 completed and ready to commit as `docs: add final judge demo script`.
+- Task 28 committed as `bb42631` (`docs: add final judge demo script`).
+- Task 29 completed and ready to commit as `docs: add local demo readiness checklist`.
 
 ## Sequential Task Plan
 
@@ -205,7 +207,7 @@ Current `git status --short --branch` shows branch `feat/v1.3-hosted-launch-read
 
 ## Validation
 
-- Manual path/link check: Passed for `/sources`, `/explore`, `/saved`, `docs/release-evidence.json`, MCP package scripts, and referenced route docs.
+- Manual path/link check: Passed for `docs/HACKATHON_DEMO_READINESS.md`, `docs/README.md`, `docs/release-evidence.json`, and referenced app routes.
 - `git diff --check`: Passed with no whitespace or conflict-marker output.
 - `pnpm lint`: Passed. Next.js emitted the existing `next lint` deprecation notice, then reported no ESLint warnings or errors.
 
@@ -215,4 +217,4 @@ Current `git status --short --branch` shows branch `feat/v1.3-hosted-launch-read
 
 ## Recommended Next Task
 
-- `TASKS.md` item 29, "Add Final Local Demo Readiness Checklist Without Release Evidence Refresh".
+- `TASKS.md` item 30, "Add Public-Data Live/Fallback Proof Matrix".

@@ -33,6 +33,7 @@ Use this index to choose the current source of truth before opening older milest
 | [`HOSTED_BETA_DEPLOYMENT.md`](HOSTED_BETA_DEPLOYMENT.md) | Manual hosted deployment runbook. |
 | [`V1_3_HOSTED_LAUNCH_READINESS_PLAN.md`](V1_3_HOSTED_LAUNCH_READINESS_PLAN.md) | Current v1.3 hosted launch-readiness plan. |
 | [`DEMO_SCRIPT.md`](DEMO_SCRIPT.md) | Demo prompts and walkthrough steps. |
+| [`HACKATHON_DEMO_READINESS.md`](HACKATHON_DEMO_READINESS.md) | Local-first judge-demo checklist that does not refresh release evidence. |
 | [`ACCEPTANCE_CRITERIA.md`](ACCEPTANCE_CRITERIA.md) | Product acceptance checklist. |
 | [`release-evidence.json`](release-evidence.json) | Historical release evidence consumed by health/demo-readiness/governance checks. Do not refresh without rerunning the release gate. |
 

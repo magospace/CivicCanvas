@@ -429,6 +429,8 @@ Status: Complete on May 10, 2026 at 03:43 CDT.
 
 ## 29. Add Final Local Demo Readiness Checklist Without Release Evidence Refresh
 
+Status: Complete on May 10, 2026 at 03:51 CDT.
+
 - Owner type: Docs / QA
 - Goal: Add a lightweight local checklist that a presenter can run before a judge demo without refreshing `docs/release-evidence.json`.
 - Why it matters: Final confidence needs repeatable local checks, but release evidence must remain gated behind a separate full validation task.
@@ -438,6 +440,8 @@ Status: Complete on May 10, 2026 at 03:43 CDT.
 - Acceptance criteria: Checklist separates quick local checks (`pnpm lint`, `pnpm typecheck`, `pnpm test`, targeted `pnpm test:e2e`) from optional network checks (`pnpm smoke:live`) and explicitly states not to update release evidence in this task.
 - Validation commands: Manual path/link check; `pnpm lint`.
 - Can run in parallel: Yes, with test-only tasks. Avoid parallel docs edits to the same checklist files.
+- Completed notes: Added `docs/HACKATHON_DEMO_READINESS.md` with quick local gate commands, manual route smoke flow, optional Playwright/data-governance checks, network/hosted checks to skip unless needed, and a clear release-evidence no-refresh boundary. Linked it from `docs/README.md`.
+- Validation: Manual referenced-path check passed; `git diff --check` passed; `pnpm lint` passed with the existing `next lint` deprecation notice.
 
 ## 30. Add Public-Data Live/Fallback Proof Matrix
 
