@@ -1943,3 +1943,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "accessibility"` passed; due repo script wiring, all 21 product-demo browser tests ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 139, `Defer Broad Architecture And Hosted-Ops Recommendations`, before replenishing a new safe queue.
+
+
+## Task 139 Update - Deferred Architecture And Hosted-Ops Recommendations
+
+- Task chosen: `TASKS.md` item 139, "Defer Broad Architecture And Hosted-Ops Recommendations".
+- Why this was next: After completing the safe UI polish queue, this planning/risk-control task preserves lower-priority review findings without taking risky architecture, deployment, persistence, or platform actions during local hackathon readiness work.
+- Scope: `TASKS.md` and `HERMES_PROGRESS.md` only.
+- Data realism classification: Keeps claims honest by explicitly not implying production persistence, hosted protection, or real third-party writes.
+- Deferred/rejected for this local-only cycle: Sentry/analytics/CI mandates, large refactors, schema broadening, distributed/platform rate limiting, release-evidence refresh, real database persistence, auth/billing, production deployment mutation, and real Miro board writes. These are useful future/release-readiness recommendations but unsafe or out-of-scope without explicit approval and full validation gates.
+- Validation: `git diff --check` passed before commit. No live/API/media/provider calls.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Replenish `TASKS.md` with a new safe hackathon/submission queue, because the current useful local UI/review queue is exhausted.

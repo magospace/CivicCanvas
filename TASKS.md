@@ -2259,7 +2259,7 @@ Status: Complete on May 10, 2026.
 
 ## 139. Defer Broad Architecture And Hosted-Ops Recommendations
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Planning / Risk Control
 - Goal: Preserve useful non-demo recommendations without implementing risky architecture/ops changes during hackathon submission work.
@@ -2270,3 +2270,5 @@ Status: Pending.
 - Acceptance criteria: Final report explicitly names deferred/rejected recommendations and why.
 - Validation command: `git diff --check`.
 - Can run in parallel: Yes with implementation tasks.
+- Completed notes: Deferred risky/non-demo recommendations for Sentry/analytics/CI mandates, large architecture refactors, schema broadening, platform rate limiting, release-evidence refresh, backend persistence, auth/billing, production deployment mutation, and real Miro writes. These remain future/release-readiness work unless explicitly approved.
+- Validation: `git diff --check` passed. No product files changed.
