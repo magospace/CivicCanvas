@@ -2,6 +2,16 @@
 
 Open-source, MCP-powered visual explorer for Texas public datasets.
 
+## Hackathon Submission Checklist
+
+- Public repo: https://github.com/magospace/CivicCanvas
+- Track: Brainforge / Vicinity Texas Open Data Track.
+- Quick start: `pnpm install` then `pnpm dev`; open `http://localhost:3000/explore`.
+- Demo reproduction: open `/sources`, run the Dallas 311 prompt in `/explore`, show source/method/caveats/query audit, save/share locally, then mention the MCP server and agent skill.
+- Env vars: sample mode requires no secrets. Optional server-side OpenAI prompt-assist uses `OPENAI_API_KEY` from `.env.local` or the server environment; keys are never exposed to the browser.
+- Dataset/synthetic data provenance: approved catalog metadata lives in `data/catalog/approved-datasets.json`; Dallas/Austin/Houston sample rows live in `data/samples/*.sample.json` and are schema-aligned fallback samples with provenance/caveats visible in the UI.
+- Known limitations and next steps: no backend saved-canvas database, no arbitrary SQL/dataset access, no live Miro writes, limited live public API coverage, and hosted firewall/rate-limit proof remains a deployment task.
+
 ## What it does
 
 Users ask natural-language questions about Texas public data. The app parses supported prompts with deterministic local TypeScript rules, discovers approved public datasets, runs safe bounded queries, and renders interactive dashboards with maps, charts, tables, filters, summaries, and source attribution. OpenAI is optional and server-side only for prompt-assist/summary wording when `OPENAI_API_KEY` is configured; it is not required for the default local demo and cannot generate dashboard code, arbitrary SQL, non-catalog dataset access, or hidden-field overrides.
