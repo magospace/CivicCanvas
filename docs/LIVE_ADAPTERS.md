@@ -30,6 +30,8 @@ No secrets are required for sample mode. To enable a live Socrata source later, 
 - `fallbackSampleFile`
 - `liveFieldMap`
 
+Before promoting any new live path, complete the review checklist in `docs/SOURCE_FRESHNESS_CHECKLIST.md`: source endpoint, terms/license, update cadence, field classification, hidden-field exclusions, smoke-query evidence, fallback sample availability, and docs/tests updates.
+
 ## Verified v0.5 Sources
 
 - Dallas 311: `https://www.dallasopendata.com/resource/d7e7-envw.json`, live enabled for mapped non-ZIP aggregates. ZIP-code dashboards intentionally use approved sample fallback because the verified live view does not expose ZIP.

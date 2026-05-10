@@ -22,6 +22,7 @@ Use this index to choose the current source of truth before opening older milest
 | [`DATA_GOVERNANCE.md`](DATA_GOVERNANCE.md) | Dataset approval, hidden-field, aggregation, caveat, and fallback expectations. |
 | [`LIVE_ADAPTERS.md`](LIVE_ADAPTERS.md) | Live public API adapter boundaries and fallback behavior. |
 | [`LIVE_FALLBACK_PROOF.md`](LIVE_FALLBACK_PROOF.md) | Dallas, Austin, and Houston demo prompt proof matrix for live, sample, and fallback claims. |
+| [`SOURCE_FRESHNESS_CHECKLIST.md`](SOURCE_FRESHNESS_CHECKLIST.md) | Source freshness, terms, field-review, and evidence checklist before stronger live-data claims. |
 | [`SAMPLE_AND_PERSISTENCE_REALNESS.md`](SAMPLE_AND_PERSISTENCE_REALNESS.md) | Sample row provenance, browser-local persistence, share-link, seed API, gallery fixture, and historical release-evidence boundaries. |
 | [`LOCAL_PERSISTENCE_SPIKE.md`](LOCAL_PERSISTENCE_SPIKE.md) | Planning-only local/backend saved-canvas persistence spike with env gate, migration, reset, rollback, and test assumptions. |
 | [`MCP_SERVER_SPEC.md`](MCP_SERVER_SPEC.md) | MCP server tools, contracts, and safety expectations. |

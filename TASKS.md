@@ -933,6 +933,8 @@ Status: Complete on May 10, 2026 at 05:59 CDT.
 
 ## 60. Add Source Freshness And Terms Review Checklist
 
+Status: Complete on May 10, 2026 at 06:01 CDT.
+
 - Owner type: Data governance
 - Goal: Add a checklist for reviewing public-data source freshness, terms, live availability, and hidden-field boundaries before making stronger live-data claims.
 - Scope: Docs/scripts optional; no live API mutation.
@@ -941,6 +943,8 @@ Status: Complete on May 10, 2026 at 05:59 CDT.
 - Acceptance criteria: Checklist names Dallas/Austin/Houston current limitations, what evidence is needed to promote live support, and validation commands.
 - Validation commands: manual path/link check, `git diff --check`, `pnpm lint`, `pnpm governance:audit` if governance docs are touched.
 - Can run in parallel: Yes with non-governance tasks.
+- Completed notes: Added `docs/SOURCE_FRESHNESS_CHECKLIST.md` covering Dallas/Austin/Houston current live/fallback limits, terms/freshness review steps, field-classification and hidden-field boundaries, evidence needed before live promotion, validation commands, and safe/unsafe claim language. Linked it from docs index and current governance/live-proof docs.
+- Validation: Manual path/link check passed; `git diff --check` passed; `pnpm lint` passed; `pnpm governance:audit` passed 19/19 with the expected historical release-evidence warning.
 
 ## 61. Add Optional Remote Hosted Smoke Evidence Template
 

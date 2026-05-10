@@ -42,6 +42,8 @@ pnpm test
 
 `pnpm smoke:live` is optional and network-dependent. It checks only catalog entries with `liveAvailable: true`; it is not required for the local judge demo and should not be used to promote Austin or Houston live claims.
 
+Use `docs/SOURCE_FRESHNESS_CHECKLIST.md` before making stronger source freshness, terms, or live-promotion claims. A passing smoke check alone is not enough to promote unsupported fields or new live dashboards.
+
 ## Demo Claim Rules
 
 - Say "limited live support" for Dallas, not "all Dallas dashboards are live".

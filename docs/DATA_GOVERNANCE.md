@@ -67,6 +67,8 @@ Live adapters must generate source-specific query fragments from catalog-owned m
 
 Other expressions such as `lower()`, `upper()`, `substr()`, arbitrary SoQL snippets, and user/model-provided expressions are rejected unless a future governance review adds explicit documentation and tests.
 
+Before promoting stronger live-data claims or adding source mappings, use `docs/SOURCE_FRESHNESS_CHECKLIST.md` to review source freshness, terms/license, field classifications, hidden-field boundaries, fallback requirements, and validation evidence.
+
 ## Attribution policy
 
 Every dashboard must show:

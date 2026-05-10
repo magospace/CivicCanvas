@@ -1,6 +1,6 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 05:59 CDT
+Last updated: May 10, 2026 06:01 CDT
 
 ## Current Cycle
 
@@ -455,6 +455,34 @@ Last updated: May 10, 2026 05:59 CDT
 ### Recommended Next Task
 
 - Task 60, `Add Source Freshness And Terms Review Checklist`, is the next safe task.
+
+## Task 60 Update
+
+- Task chosen: `TASKS.md` item 60, "Add Source Freshness And Terms Review Checklist".
+- Why this was next: It was the next safe data-governance task after Task 59 and supports honest future live-data claims without changing adapters or making network calls.
+- Scope: `docs/SOURCE_FRESHNESS_CHECKLIST.md`, `docs/README.md`, `docs/DATA_GOVERNANCE.md`, `docs/LIVE_ADAPTERS.md`, `docs/LIVE_FALLBACK_PROOF.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Documentation/governance checklist only. No live API call, catalog mapping change, adapter change, schema/migration change, database operation, generated media artifact, deploy mutation, release evidence refresh, secrets, auth, billing, or production config changed.
+
+### Files Updated
+
+- `docs/SOURCE_FRESHNESS_CHECKLIST.md`: New checklist for source terms/freshness review, Dallas/Austin/Houston limitations, evidence required before live promotion, validation commands, and safe claim language.
+- `docs/README.md`: Linked the new checklist in current domain docs.
+- `docs/DATA_GOVERNANCE.md`: Points live-adapter promotion work to the source freshness checklist.
+- `docs/LIVE_ADAPTERS.md`: Adds the checklist as a prerequisite before promoting new live paths.
+- `docs/LIVE_FALLBACK_PROOF.md`: Warns that a passing smoke check alone is insufficient to promote unsupported fields or live dashboards.
+- `TASKS.md`: Marks item 60 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records item 60 scope, safety notes, validation, and next task.
+
+### Validation
+
+- Manual path/link check via `python3`: Passed.
+- `git diff --check`: Passed.
+- `pnpm lint`: Passed.
+- `pnpm governance:audit`: Passed 19/19 checks with the expected warning that release evidence commit differs from current HEAD.
+
+### Recommended Next Task
+
+- Task 61, `Add Optional Remote Hosted Smoke Evidence Template`, is the next safe task. Task 55 remains high-risk and should not start without explicit approval for backend persistence/migrations.
 
 ## Historical Sequential Progress
 
