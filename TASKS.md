@@ -2131,7 +2131,7 @@ Status: Complete on May 10, 2026.
 
 ## 131. Remove Confirmed No-Op Demo Controls
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: UI / Demo Clarity
 - Goal: Remove or make real controls that currently look clickable but do not act.
@@ -2142,6 +2142,8 @@ Status: Pending.
 - Acceptance criteria: No-account is non-interactive, city rows are no longer buttons, saved demo cards link to `/explore?prompt=...`, and `/explore` hydrates the prompt from the query string without auto-running a dashboard.
 - Validation command: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved demo cards prefill"`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with header/app-shell/saved-page edits.
+- Completed notes: Converted `No account mode` from a button to a status pill, changed dataset-sidebar city rows from no-op buttons to static summaries, deep-linked saved demo cards with URL-encoded prompt query values, and hydrated `/explore` prompt input from `?prompt=` without auto-generating or implying persistence.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved demo cards prefill|confirmed review no-op"` passed (project script executed all 20 product-demo browser tests); `pnpm lint` passed; `git diff --check` passed.
 
 ## 132. Add Toast Severity And Dismiss Behavior
 

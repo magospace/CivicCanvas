@@ -79,10 +79,17 @@ export function AppShell({
           openSavedCanvas(shared);
           setStatus(`Imported shared canvas link: ${shared.title}`);
           window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+          return;
         }
       } catch (error) {
         setStatus(error instanceof Error ? error.message : "Shared canvas link was rejected.");
       }
+    }
+
+    const promptFromQuery = new URLSearchParams(window.location.search).get("prompt")?.trim();
+    if (promptFromQuery) {
+      setPrompt(promptFromQuery);
+      setStatus("Prompt prefilled from demo link. Generate the dashboard when ready.");
     }
   }, []);
 

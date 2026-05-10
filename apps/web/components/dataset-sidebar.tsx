@@ -14,15 +14,15 @@ export function DatasetSidebar({ datasets }: { datasets: DatasetMetadata[] }) {
         </div>
         <div className="grid gap-2">
           {cities.map((city) => (
-            <button
+            <div
               key={city}
-              className="flex items-center justify-between rounded-md border border-slate-200 px-3 py-2 text-left text-sm font-medium text-slate-700 transition hover:border-civic-500 hover:text-civic-900"
+              className="flex items-center justify-between rounded-md border border-slate-200 bg-white px-3 py-2 text-left text-sm font-medium text-slate-700"
             >
               {city}
               <span className="text-xs text-slate-400">
                 {datasets.filter((dataset) => dataset.city === city).length}
               </span>
-            </button>
+            </div>
           ))}
         </div>
       </section>

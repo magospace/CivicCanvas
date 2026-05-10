@@ -1847,3 +1847,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "mobile header navigation"` passed; due the repo script wiring, all 18 product-demo browser tests ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 131, `Remove Confirmed No-Op Demo Controls`, because it addresses confirmed misleading UI affordances without broad architecture changes.
+
+
+## Task 131 Update - Remove Confirmed No-Op Demo Controls
+
+- Task chosen: `TASKS.md` item 131, "Remove Confirmed No-Op Demo Controls".
+- Why this was next: After mobile navigation, this was the next highest-value confirmed review item because clickable-looking no-op controls undermine demo trust without needing architecture work.
+- Scope: `apps/web/components/header.tsx`, `apps/web/components/dataset-sidebar.tsx`, `apps/web/app/saved/page.tsx`, `apps/web/components/app-shell.tsx`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Changes: Converted `No account mode` from a button to a non-interactive status pill; converted dataset-sidebar city rows from no-op buttons to static summaries; made saved-page demo cards link to `/explore?prompt=...`; hydrated the prompt input from the query string without auto-running a dashboard or claiming backend persistence.
+- Safety notes: UI/link behavior only. No data-path, provider, schema, migration, deployment, release-evidence, auth, billing, backend persistence, secret, or generated-artifact changes. `REVIEW_RECOMMENDATIONS.md` and `clauderecommends.md` remain untracked and unstaged.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved demo cards prefill|confirmed review no-op"` passed; due the repo script wiring, all 20 product-demo browser tests ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 133, `Rewrite Seed Starter Dashboard Copy`, as a low-risk first-screen clarity fix from the same review.

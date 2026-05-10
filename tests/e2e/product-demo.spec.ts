@@ -208,6 +208,25 @@ test("saved bundle import rejects unsafe JSON and saved-card actions work", asyn
   await expect(page.getByText("Import rejected")).toBeVisible();
 });
 
+test("saved demo cards prefill the Explore prompt without pretending to persist", async ({ page }) => {
+  await page.goto("/saved");
+
+  await page.getByRole("link", { name: /Show Austin building permits by month and ZIP code/ }).click();
+
+  await expect(page).toHaveURL(/\/explore\?prompt=/);
+  await expect(page.getByLabel("Dashboard prompt")).toHaveValue("Show Austin building permits by month and ZIP code.");
+  await expect(page.getByText("Prompt prefilled from demo link. Generate the dashboard when ready.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Dallas 311 Service Requests Explorer" })).toBeVisible();
+});
+
+test("confirmed review no-op controls are rendered as status text instead of buttons", async ({ page }) => {
+  await page.goto("/explore");
+
+  await expect(page.getByText("No account mode")).toBeVisible();
+  await expect(page.getByRole("button", { name: "No account mode" })).toHaveCount(0);
+  await expect(page.locator("aside").first().getByRole("button")).toHaveCount(0);
+});
+
 test("saved share-link hash rejects malformed bundles without backend persistence", async ({ page }) => {
   let saveRouteCalls = 0;
   await page.route("**/api/canvas/save", async (route) => {

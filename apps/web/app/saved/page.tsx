@@ -24,7 +24,7 @@ export default function SavedPage() {
           ].map((prompt) => (
             <Link
               key={prompt}
-              href="/explore"
+              href={`/explore?prompt=${encodeURIComponent(prompt)}`}
               className="rounded-lg border border-slate-200 bg-white p-4 text-left text-sm text-slate-600 shadow-panel transition hover:border-civic-500"
             >
               <div className="mb-2 flex items-center gap-2 font-semibold text-ink">
