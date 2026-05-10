@@ -131,6 +131,33 @@ describe("release and governance scripts", () => {
     expect(houston.hiddenFields).toContain("precise_address");
   });
 
+  it("reports release evidence currency without mutating release evidence", () => {
+    const stdout = execFileSync("node", ["scripts/release-evidence-precheck.mjs", "--json"], {
+      cwd: process.cwd(),
+      encoding: "utf8"
+    });
+    const body = JSON.parse(stdout);
+
+    expect(body.ok).toBe(true);
+    expect(body.network).toBe("not_used");
+    expect(body.mutatesFiles).toBe(false);
+    expect(body.releaseEvidence.path).toBe("docs/release-evidence.json");
+    expect(body.releaseEvidence.recordedCommit).toMatch(/^[0-9a-f]{7,40}$/);
+    expect(body.repo.headCommit).toMatch(/^[0-9a-f]{40}$/);
+    expect(body.status).toMatch(/current_for_head|historical_not_current_head/);
+    expect(body.requiredBeforeTask35.commands).toEqual(expect.arrayContaining([
+      "pnpm lint",
+      "pnpm typecheck",
+      "pnpm test",
+      "pnpm build",
+      "pnpm governance:audit",
+      "pnpm data:quality",
+      "pnpm verify:prod-local",
+      "pnpm release:check"
+    ]));
+    expect(stdout).not.toContain("DATABASE_URL");
+  });
+
   it("emits a no-network demo readiness snapshot without mutating files", () => {
     const stdout = execFileSync("node", ["scripts/demo-readiness-snapshot.mjs", "--json"], {
       cwd: process.cwd(),

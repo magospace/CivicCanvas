@@ -18,6 +18,8 @@
     "data:quality:json": "node scripts/data-quality.mjs --json",
     "demo:readiness:snapshot": "node scripts/demo-readiness-snapshot.mjs",
     "demo:readiness:snapshot:json": "node scripts/demo-readiness-snapshot.mjs --json",
+    "release:evidence:precheck": "node scripts/release-evidence-precheck.mjs",
+    "release:evidence:precheck:json": "node scripts/release-evidence-precheck.mjs --json",
     "demo:screenshots": "node scripts/capture-demo-screenshots.mjs",
     "demo:screenshots:json": "node scripts/capture-demo-screenshots.mjs --json",
     "live:fallback-proof": "node scripts/live-fallback-proof.mjs",

@@ -905,3 +905,34 @@ Last updated: May 10, 2026 06:17 CDT
 
 - Stop point reached for this cycle after completing five tasks total: Task 68 reconciliation plus Tasks 76, 77, and 78 in this context, with Task 69 remaining as the next candidate.
 - If continuing, evaluate Task 69 as a docs/script dry-run only; avoid release evidence refresh or generated artifact commits unless explicitly approved.
+
+
+## Task 69 Update
+
+- Task chosen: `TASKS.md` item 69, "Add Release Evidence Dry-Run Precheck Script".
+- Why this was next: After Task 78 validation was green and within the requested up-to-five task cycle, Task 69 was the next safe/high-value read-only release readiness task. It improves evidence honesty without refreshing evidence or mutating release artifacts.
+- Scope: `scripts/release-evidence-precheck.mjs`, `package.json`, `apps/web/test/release-scripts.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: The new script is no-network/read-only and does not edit `docs/release-evidence.json`, generated screenshots, deployment config, provider state, secrets, databases, or production resources. No Task 35 evidence refresh was attempted.
+
+### Files Updated
+
+- `scripts/release-evidence-precheck.mjs`: New read-only release evidence precheck with JSON/text modes.
+- `package.json`: Added `release:evidence:precheck` and `release:evidence:precheck:json` scripts.
+- `apps/web/test/release-scripts.test.ts`: Added regression coverage for the precheck output shape, no-network/no-mutation flags, required gate commands, and no secret/env-name leakage.
+- `TASKS.md`: Marks Task 69 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records Task 69 scope, safety notes, validation, and stop point.
+
+### Validation
+
+- RED: `pnpm test -- apps/web/test/release-scripts.test.ts -t "release evidence currency"` failed before implementation because `scripts/release-evidence-precheck.mjs` did not exist.
+- `pnpm release:evidence:precheck:json`: Passed; reported `historical_not_current_head`, no network, no mutation, and required Task 35 gate commands.
+- GREEN: `pnpm test -- apps/web/test/release-scripts.test.ts -t "release evidence currency"`: Passed; Vitest discovered 104 tests across 15 files.
+- `pnpm lint`: Passed.
+- `pnpm test`: Passed with 104 tests across 15 files.
+- `pnpm typecheck`: Passed across shared, MCP server, and web.
+- `git diff --check`: Passed.
+
+### Stop Point
+
+- Completed the requested up-to-five cycle. Remaining untracked file: `clauderecommends.md` preserved as external feedback input.
+- Next recommended task if continuing: Task 70, `Add Provider Output Redaction Utility`, only as a no-spend script/test refactor; avoid live provider calls unless explicitly env-gated and necessary.

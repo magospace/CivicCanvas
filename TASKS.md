@@ -1077,6 +1077,8 @@ Status: Complete on May 10, 2026 at 06:36 CDT.
 
 ## 69. Add Release Evidence Dry-Run Precheck Script
 
+Status: Complete on May 10, 2026 at 06:45 CDT.
+
 - Owner type: Release / QA
 - Goal: Add a no-mutation precheck that reports whether release evidence is current or historical and lists the commands required before Task 35.
 - Scope: Script/tests only; must not edit `docs/release-evidence.json`.
@@ -1085,6 +1087,8 @@ Status: Complete on May 10, 2026 at 06:36 CDT.
 - Acceptance criteria: Command reports current HEAD, recorded evidence commit, mismatch status, required full-gate commands, and exits 0 without modifying evidence.
 - Validation commands: script JSON command, focused Vitest command, `git diff --check`, `pnpm lint`, `pnpm test`.
 - Can run in parallel: No with release-script edits.
+- Completed notes: Added `scripts/release-evidence-precheck.mjs` and package scripts `release:evidence:precheck` / `release:evidence:precheck:json`. The script is read-only, reports current HEAD, recorded evidence commit, current/historical status, and required Task 35 gate commands without editing `docs/release-evidence.json`. Added focused release-script regression coverage.
+- Validation: RED focused test failed before the script existed. GREEN `pnpm release:evidence:precheck:json`, focused release-script test, `pnpm lint`, full `pnpm test`, `pnpm typecheck`, and `git diff --check` passed. The precheck reported `historical_not_current_head`, which is expected because Task 35 was not run.
 
 ## 70. Add Provider Output Redaction Utility
 
