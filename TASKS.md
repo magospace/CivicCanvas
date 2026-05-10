@@ -1207,6 +1207,8 @@ Status: Complete on May 10, 2026 at 06:40 CDT.
 
 ## 78. Guard Unsupported-Prompt Suggestions For Empty Catalog
 
+Status: Complete on May 10, 2026 at 06:42 CDT.
+
 - Owner type: Frontend / Resilience
 - Goal: Avoid `datasets[0]` crashes if catalog loading ever returns no supported suggestion datasets.
 - Scope: `apps/web/lib/dashboard.ts`, focused dashboard test.
@@ -1214,3 +1216,5 @@ Status: Complete on May 10, 2026 at 06:40 CDT.
 - Acceptance criteria: Empty catalog/suggestion list returns a valid governed fallback canvas or structured error instead of throwing from undefined source metadata.
 - Validation commands: focused dashboard test, `pnpm typecheck`, `pnpm test`, `git diff --check`.
 - Can run in parallel: No with dashboard edits.
+- Completed notes: `createDatasetSuggestionCanvas` now accepts an optional catalog for deterministic testing, handles an empty supported-suggestion list with a valid `catalog_suggestions` source, omits dataset cards when no approved suggestions exist, and shows explicit governed guidance instead of crashing or implying unavailable datasets.
+- Validation: RED focused test failed on the old behavior because the fallback source still dereferenced the default Dallas suggestion path; after implementation/fix, the focused test passed with 103 tests across 15 files. `pnpm typecheck`, focused dashboard test file, `pnpm lint`, full `pnpm test`, and `git diff --check` passed.

@@ -771,26 +771,29 @@ export async function generateCanvasForPrompt(
   return createDashboardForIntent({ prompt, intent, filterValues, dataModePreference, options });
 }
 
-export function createDatasetSuggestionCanvas(prompt: string): CanvasDocument {
-  const datasets = supportedSuggestionDatasets(getDatasetCatalog());
+export function createDatasetSuggestionCanvas(prompt: string, catalog: DatasetMetadata[] = getDatasetCatalog()): CanvasDocument {
+  const datasets = supportedSuggestionDatasets(catalog);
   const dataset = datasets[0];
   const sourceNames = datasets.map((candidate) => candidate.sourceName);
-  const approvedSourceText = sourceNames.length === 3
-    ? `${sourceNames[0]}, ${sourceNames[1]}, and ${sourceNames[2]}`
-    : sourceNames.join(", ");
+  const approvedSourceText = sourceNames.length === 0
+    ? "No approved suggestion datasets are available from the current catalog."
+    : sourceNames.length === 3
+      ? `${sourceNames[0]}, ${sourceNames[1]}, and ${sourceNames[2]}`
+      : sourceNames.join(", ");
   const generatedAt = new Date().toISOString();
   const source: SourceAttribution = {
-    datasetId: dataset.id,
-    datasetTitle: dataset.title,
-    sourceName: dataset.sourceName,
-    sourceUrl: dataset.sourceUrl,
+    datasetId: dataset?.id ?? "catalog_suggestions",
+    datasetTitle: dataset?.title ?? "Approved dataset suggestions",
+    sourceName: dataset?.sourceName ?? "Texas Data Canvas approved catalog",
+    sourceUrl: dataset?.sourceUrl ?? "https://texas-data-canvas.local/catalog",
     accessedAt: generatedAt,
     fieldsUsed: [],
     filtersApplied: [],
     queryMethod: `No supported rule-based prompt match for: "${prompt}"`,
     dataMode: "sample",
     caveats: [
-      "The current parser only generates dashboards for approved Dallas 311, Austin permits, and Houston transportation workflows."
+      "The current parser only generates dashboards for approved Dallas 311, Austin permits, and Houston transportation workflows.",
+      ...(datasets.length === 0 ? ["No approved suggestion datasets are available from the current catalog."] : [])
     ],
     license: "Refer to source portal terms"
   };
@@ -811,7 +814,9 @@ export function createDatasetSuggestionCanvas(prompt: string): CanvasDocument {
         type: "SummaryBlock",
         props: {
           heading: "Unsupported prompt for governed generation",
-          text: `Try one of the exact supported prompts below. Approved sources include ${approvedSourceText}. Unknown or sensitive prompts return suggestions instead of hallucinated dashboards.`,
+          text: datasets.length === 0
+            ? `${approvedSourceText} Unknown or sensitive prompts return governed guidance instead of hallucinated dashboards.`
+            : `Try one of the exact supported prompts below. Approved sources include ${approvedSourceText}. Unknown or sensitive prompts return suggestions instead of hallucinated dashboards.`,
           bullets: supportedPromptSuggestions
         }
       },

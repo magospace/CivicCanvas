@@ -2,7 +2,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { validateCanvasDocument, type CanvasBlock } from "@texas-data-canvas/shared";
-import { generateCanvasForPrompt } from "../lib/dashboard";
+import { createDatasetSuggestionCanvas, generateCanvasForPrompt } from "../lib/dashboard";
 import { getCuratedGalleryCanvases, getDatasetCatalog } from "../lib/data";
 
 const allowedGalleryBlockTypes = new Set<CanvasBlock["type"]>([
@@ -238,6 +238,15 @@ describe("dashboard generation", () => {
     if (table?.type === "TableBlock") {
       expect(table.props.columns.map((column) => column.field)).toEqual(["status", "permit_count"]);
     }
+  });
+
+  it("returns a governed unsupported-prompt canvas even when suggestion catalog is empty", () => {
+    const canvas = createDatasetSuggestionCanvas("Show something outside the catalog.", []);
+
+    expect(canvas.title).toContain("Choose");
+    expect(canvas.sources[0].datasetId).toBe("catalog_suggestions");
+    expect(canvas.blocks.some((block) => block.type === "DatasetCardBlock")).toBe(false);
+    expect(JSON.stringify(canvas)).toContain("No approved suggestion datasets are available");
   });
 
   it("loads curated gallery canvases from checked-in validated JSON", () => {

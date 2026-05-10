@@ -875,3 +875,33 @@ Last updated: May 10, 2026 06:17 CDT
 ### Recommended Next Task
 
 - Task 78, `Guard Unsupported-Prompt Suggestions For Empty Catalog`, is the next small resilience task.
+
+
+## Task 78 Update
+
+- Task chosen: `TASKS.md` item 78, "Guard Unsupported-Prompt Suggestions For Empty Catalog".
+- Why this was next: It was the next small verified resilience task after Tasks 76 and 77, still within the dashboard fallback surface already under test.
+- Scope: `apps/web/lib/dashboard.ts`, `apps/web/test/dashboard.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: No schema migration, database, backend persistence, provider/media call, deploy mutation, release evidence refresh, secrets, auth, billing, or production config changed. Normal unsupported-prompt suggestions continue to use approved catalog datasets; the new path only handles an empty supported-suggestion catalog.
+
+### Files Updated
+
+- `apps/web/test/dashboard.test.ts`: Added regression coverage for empty suggestion catalog behavior.
+- `apps/web/lib/dashboard.ts`: Added optional catalog injection for deterministic suggestion-canvas tests and a valid `catalog_suggestions` fallback source/caveat when no supported suggestion datasets are available.
+- `TASKS.md`: Marks Task 78 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records Task 78 scope, safety notes, validation, and stop point.
+
+### Validation
+
+- RED: `pnpm test -- apps/web/test/dashboard.test.ts -t "suggestion catalog is empty"` failed against the old/partial behavior because empty suggestions still produced an invalid or default source path.
+- GREEN: `pnpm test -- apps/web/test/dashboard.test.ts -t "suggestion catalog is empty"`: Passed; Vitest discovered 103 tests across 15 files.
+- `pnpm typecheck`: Passed across shared, MCP server, and web.
+- `pnpm test -- apps/web/test/dashboard.test.ts`: Passed with 103 tests across 15 files.
+- `pnpm lint`: Passed.
+- `pnpm test`: Passed with 103 tests across 15 files.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Stop point reached for this cycle after completing five tasks total: Task 68 reconciliation plus Tasks 76, 77, and 78 in this context, with Task 69 remaining as the next candidate.
+- If continuing, evaluate Task 69 as a docs/script dry-run only; avoid release evidence refresh or generated artifact commits unless explicitly approved.
