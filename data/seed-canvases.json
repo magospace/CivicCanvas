@@ -1,0 +1,14 @@
+[
+  {
+    "id": "canvas_dallas_311_seed",
+    "prompt": "Show Dallas 311 service requests by category and ZIP code for 2024.",
+    "label": "Dallas 311 seed demo canvas",
+    "note": "Seed/demo helper only; route regenerates a governed CanvasDocument and does not read server persistence."
+  },
+  {
+    "id": "canvas_austin_permits_seed",
+    "prompt": "Show Austin building permits by month and ZIP code.",
+    "label": "Austin permits seed demo canvas",
+    "note": "Seed/demo helper only; route regenerates a governed CanvasDocument and does not read server persistence."
+  }
+]

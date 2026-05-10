@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { validateCanvasDocument } from "@texas-data-canvas/shared";
+import { getSeedCanvasPrompt } from "../lib/data";
 import { GET as canvasSeedGET } from "../app/api/canvas/[id]/route";
 
 function getSeedCanvas(id: string) {
@@ -9,7 +10,12 @@ function getSeedCanvas(id: string) {
 }
 
 describe("canvas seed API demo helper", () => {
-  it("returns a generated demo canvas for a hardcoded seed ID instead of stored persistence", async () => {
+  it("loads seed prompts through the repo data loader instead of route-local mocks", () => {
+    expect(getSeedCanvasPrompt("canvas_dallas_311_seed")).toBe("Show Dallas 311 service requests by category and ZIP code for 2024.");
+    expect(getSeedCanvasPrompt("canvas_not_in_seed_map")).toBeUndefined();
+  });
+
+  it("returns a generated demo canvas for a fixture-backed seed ID instead of stored persistence", async () => {
     const response = await getSeedCanvas("canvas_dallas_311_seed");
     const body = await response.json() as {
       canvas: unknown;

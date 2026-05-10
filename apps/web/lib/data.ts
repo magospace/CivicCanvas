@@ -20,6 +20,15 @@ const sampleFileSchema = z.object({
   rows: z.array(z.record(z.union([z.string(), z.number(), z.boolean(), z.null()])))
 });
 
+const seedCanvasSchema = z.object({
+  id: z.string().min(1),
+  prompt: z.string().min(1),
+  label: z.string().min(1),
+  note: z.string().min(1)
+});
+
+const seedCanvasListSchema = z.array(seedCanvasSchema);
+
 const sampleFiles: Record<string, string> = {
   austin_building_permits: "austin-building-permits.sample.json",
   dallas_311_requests: "dallas-311.sample.json",
@@ -68,6 +77,14 @@ export function getCuratedGalleryCanvases(): CanvasDocument[] {
   return galleryCanvasFiles.map((fileName) =>
     validateCanvasDocument(readJson(`data/gallery/${fileName}`))
   );
+}
+
+export function getSeedCanvasPrompts() {
+  return seedCanvasListSchema.parse(readJson("data/seed-canvases.json"));
+}
+
+export function getSeedCanvasPrompt(id: string) {
+  return getSeedCanvasPrompts().find((seed) => seed.id === id)?.prompt;
 }
 
 export function getReleaseEvidence(): ReleaseEvidence {

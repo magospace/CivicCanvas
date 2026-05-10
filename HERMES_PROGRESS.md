@@ -1585,3 +1585,19 @@ Last updated: May 10, 2026 06:17 CDT
 - Safety notes: Planning/durable-state only. No live APIs, OpenAI calls, Fal/media calls, schema/migrations, database operations, deployment mutation, production data, secrets, auth, billing, or generated artifacts. `clauderecommends.md` remains untracked and unstaged.
 - Validation: Manual visual-audit/queue consistency check completed; `git diff --check` passed before commit.
 - Recommended next task: Task 110, `Move Seed Canvas Lookup To Data Loader Fixture`, is the next safe/high-value data-realism implementation task.
+
+## Task 110 Update - Seed Canvas Fixture Loader
+
+- Task chosen: `TASKS.md` item 110, "Move Seed Canvas Lookup To Data Loader Fixture".
+- Why this was next: It was the first safe/high-value task in the replenished data-realism queue and directly replaced hardcoded route-local demo data with fixture data loaded through the app data layer.
+- Scope: `data/seed-canvases.json`, `apps/web/lib/data.ts`, `apps/web/app/api/canvas/[id]/route.ts`, `apps/web/test/canvas-seed-route.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism changes: `/api/canvas/[id]` no longer owns a hardcoded seed prompt object. Seed IDs/prompts now live in validated `data/seed-canvases.json` and are read through `getSeedCanvasPrompt()` in `apps/web/lib/data.ts`. This classifies the seed canvas mapping as fixture file through data loader / acceptable. The route still regenerates a governed canvas and remains explicitly not backend persistence.
+- Safety notes: No live API calls, OpenAI calls, Fal/media calls, schema/migrations, database operations, production data, deployment mutation, secrets, or generated artifacts. `clauderecommends.md` remains untracked and unstaged.
+- Validation:
+  - RED: `pnpm test -- apps/web/test/canvas-seed-route.test.ts -t "loads seed prompts"` failed because `getSeedCanvasPrompt` did not exist yet.
+  - GREEN/focused: `pnpm test -- apps/web/test/canvas-seed-route.test.ts -t "loads seed prompts|fixture-backed seed ID"` passed; Vitest still discovered and passed 16 files / 115 tests.
+  - `pnpm lint`: Passed.
+  - `pnpm typecheck`: Passed.
+  - `pnpm test`: Passed with 16 files / 115 tests.
+  - `git diff --check`: Passed before commit.
+- Recommended next task: Task 111, `Add Data Realism Audit Script`.

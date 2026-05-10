@@ -1756,7 +1756,7 @@ Last replenished: May 10, 2026 after Task 108 visual-risk reconciliation and Tas
 
 ## 110. Move Seed Canvas Lookup To Data Loader Fixture
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Backend/API / Data realism
 - Goal: Replace hardcoded seed canvas prompt mapping inside `/api/canvas/[id]` with a checked-in fixture loaded through `apps/web/lib/data.ts`.
@@ -1767,6 +1767,8 @@ Status: Pending.
 - Acceptance criteria: Seed IDs/prompts live in validated fixture data; route reads via data loader/repository helper; tests prove known seed IDs and unknown IDs use the same route path; docs/copy still state this is a seed/demo helper, not database persistence.
 - Validation commands: focused seed route Vitest, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `git diff --check`.
 - Can run in parallel: No with seed route/data-loader edits.
+- Completed notes: Added validated `data/seed-canvases.json`, added `getSeedCanvasPrompts()`/`getSeedCanvasPrompt()` data-loader helpers, and changed `/api/canvas/[id]` to read fixture-backed seed prompts instead of route-local hardcoded prompt objects. Route behavior remains a seed/demo helper that regenerates governed canvases and does not imply backend persistence.
+- Validation: RED focused seed-loader test failed before helper implementation; GREEN focused seed route Vitest passed; `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `git diff --check` passed.
 
 ## 111. Add Data Realism Audit Script
 
