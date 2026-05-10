@@ -1,6 +1,6 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 05:55 CDT
+Last updated: May 10, 2026 05:57 CDT
 
 ## Current Cycle
 
@@ -397,6 +397,34 @@ Last updated: May 10, 2026 05:55 CDT
 ### Recommended Next Task
 
 - Task 58, `Add Demo Readiness JSON Snapshot Export`, is the next safe task.
+
+## Task 58 Update
+
+- Task chosen: `TASKS.md` item 58, "Add Demo Readiness JSON Snapshot Export".
+- Why this was next: It was the next safe task after Task 57 and gives presenters/agents one no-network machine-readable demo readiness summary without refreshing release evidence.
+- Scope: `scripts/demo-readiness-snapshot.mjs`, `package.json`, `apps/web/test/release-scripts.test.ts`, `docs/HACKATHON_DEMO_READINESS.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Script is no-network and non-mutating. No release evidence refresh, live API call, Fal call, generated media artifact, schema/migration change, database operation, deploy mutation, secrets, auth, billing, or production config changed.
+
+### Files Updated
+
+- `scripts/demo-readiness-snapshot.mjs`: New JSON/text snapshot command for repo status, validation baseline, sample counts, gallery count, live/fallback proof pointer, media proof boundary, release-evidence status, and known blockers.
+- `package.json`: Added `demo:readiness:snapshot` and `demo:readiness:snapshot:json` scripts.
+- `apps/web/test/release-scripts.test.ts`: Added coverage for the no-network, non-mutating snapshot contract.
+- `docs/HACKATHON_DEMO_READINESS.md`: Added the snapshot command to the quick local gate.
+- `TASKS.md`: Marks item 58 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records item 58 scope, safety notes, validation, and next task.
+
+### Validation
+
+- `node scripts/demo-readiness-snapshot.mjs --json`: Passed; reported `network: not_used`, `mutatesFiles: false`, 3 sample datasets, 280 sample rows, 4 gallery canvases, and historical release evidence for current HEAD.
+- `pnpm test -- apps/web/test/release-scripts.test.ts -t "demo readiness snapshot"`: Passed; Vitest discovered the full 15-file suite and reported 94 tests passed.
+- `git diff --check`: Passed.
+- `pnpm lint`: Passed.
+- `pnpm test`: Passed with 15 files, 94 tests.
+
+### Recommended Next Task
+
+- Task 59, `Add Gallery Screenshot Capture Script For Submission Assets`, is the next safe task if implemented with a dry-run/help path and without committing generated screenshots.
 
 ## Historical Sequential Progress
 

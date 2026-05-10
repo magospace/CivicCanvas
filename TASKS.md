@@ -903,6 +903,8 @@ Status: Complete on May 10, 2026 at 05:55 CDT.
 
 ## 58. Add Demo Readiness JSON Snapshot Export
 
+Status: Complete on May 10, 2026 at 05:57 CDT.
+
 - Owner type: QA / Demo tooling
 - Goal: Add a local script that emits a single JSON snapshot of current demo readiness: tests baseline, sample counts, live/fallback matrix pointers, release evidence status, and known blockers.
 - Scope: Script and tests; no release evidence refresh.
@@ -911,6 +913,8 @@ Status: Complete on May 10, 2026 at 05:55 CDT.
 - Acceptance criteria: Script is no-network by default, returns machine-readable JSON, labels release evidence as historical if mismatched, and does not mutate files.
 - Validation commands: `node scripts/demo-readiness-snapshot.mjs --json`, focused Vitest command, `git diff --check`, `pnpm lint`, `pnpm test`.
 - Can run in parallel: No with release script edits; yes with UI-only tasks.
+- Completed notes: Added `scripts/demo-readiness-snapshot.mjs` plus `pnpm demo:readiness:snapshot(:json)` commands. The script emits no-network, non-mutating JSON with repo status, validation baseline, sample counts, gallery count, live/fallback proof pointer, media proof boundary, historical/current release-evidence status, and known blockers. Added release-script test coverage and documented the command in the demo-readiness checklist.
+- Validation: `node scripts/demo-readiness-snapshot.mjs --json`, focused release-scripts Vitest command, `git diff --check`, `pnpm lint`, and full `pnpm test` passed. No network/provider/live calls were made.
 
 ## 59. Add Gallery Screenshot Capture Script For Submission Assets
 

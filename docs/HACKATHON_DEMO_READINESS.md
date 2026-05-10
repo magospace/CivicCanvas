@@ -8,6 +8,7 @@ Run these from the repo root:
 
 ```bash
 git status --short --branch
+pnpm demo:readiness:snapshot:json
 pnpm lint
 pnpm typecheck
 pnpm test
@@ -16,6 +17,7 @@ pnpm test
 Expected result:
 
 - The working tree is clean or contains only intentional demo-doc changes.
+- `pnpm demo:readiness:snapshot:json` emits a no-network, non-mutating JSON summary of sample counts, live/fallback proof pointers, media-proof boundaries, release-evidence status, and known blockers.
 - `pnpm lint` passes. The known `next lint` deprecation notice may still appear.
 - Typecheck and Vitest pass without requiring secrets, hosted URLs, live API access, or production data.
 

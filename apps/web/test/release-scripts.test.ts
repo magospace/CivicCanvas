@@ -87,6 +87,29 @@ describe("release and governance scripts", () => {
     expect(houston.hiddenFields).toContain("precise_address");
   });
 
+  it("emits a no-network demo readiness snapshot without mutating files", () => {
+    const stdout = execFileSync("node", ["scripts/demo-readiness-snapshot.mjs", "--json"], {
+      cwd: process.cwd(),
+      encoding: "utf8"
+    });
+    const body = JSON.parse(stdout);
+
+    expect(body.ok).toBe(true);
+    expect(body.network).toBe("not_used");
+    expect(body.mutatesFiles).toBe(false);
+    expect(body.validationBaseline.dailyLocal).toEqual(["pnpm lint", "pnpm typecheck", "pnpm test"]);
+    expect(body.sampleData.datasetCount).toBe(3);
+    expect(body.sampleData.totalSampleRows).toBeGreaterThan(0);
+    expect(body.liveFallbackProof.command).toBe("pnpm live:fallback-proof:json");
+    expect(body.mediaProof.appGeneratesMediaByDefault).toBe(false);
+    expect(body.releaseEvidence.path).toBe("docs/release-evidence.json");
+    expect(body.releaseEvidence.status).toMatch(/historical_not_current_head|current_for_head/);
+    expect(body.knownBlockers).toEqual(expect.arrayContaining([
+      expect.stringContaining("Release evidence remains historical"),
+      expect.stringContaining("platform-level firewall/rate limiting")
+    ]));
+  });
+
   it("verifies current-doc links and historical-doc labeling", () => {
     const stdout = execFileSync("node", ["scripts/docs-consistency.mjs", "--json"], {
       cwd: process.cwd(),
