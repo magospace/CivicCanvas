@@ -1601,3 +1601,19 @@ Last updated: May 10, 2026 06:17 CDT
   - `pnpm test`: Passed with 16 files / 115 tests.
   - `git diff --check`: Passed before commit.
 - Recommended next task: Task 111, `Add Data Realism Audit Script`.
+
+## Task 111 Update - Data Realism Audit Script
+
+- Task chosen: `TASKS.md` item 111, "Add Data Realism Audit Script".
+- Why this was next: After Task 110 converted seed canvas prompts to fixture-backed data-loader records, a repeatable data-realism proof was the next safe queue item and supports the user's policy for avoiding hardcoded UI mocks.
+- Scope: `scripts/data-realism-audit.mjs`, `package.json`, `apps/web/test/release-scripts.test.ts`, `docs/SAMPLE_AND_PERSISTENCE_REALNESS.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism changes: Added `pnpm data:realism:json`, a no-network/no-mutation audit that classifies catalog metadata, sample rows, gallery canvases, seed canvas fixtures, browser-local saved canvases, optional OpenAI provider fallback, and Fal script-only media proof. It also records remaining hardcoded review items: `explorePromptExamples` (Task 112) and static `headerNavItems` (acceptable UI navigation config). Docs now classify `/api/canvas/[id]` as fixture-backed seed/demo helper instead of hardcoded route helper.
+- Safety notes: Script does not inspect or print env values; test injected fake OpenAI/Fal env values and asserted they were absent. No live APIs, OpenAI calls, Fal/media calls, schema/migrations, database operations, production data, deployment mutation, secrets, auth, billing, or generated artifacts.
+- Validation:
+  - RED: `pnpm test -- apps/web/test/release-scripts.test.ts -t "classifies demo data realism"` failed before the script existed.
+  - GREEN: `pnpm data:realism:json` passed and reported network=`not_used`, mutatesFiles=false, secretsInspected=false, 3 sample datasets / 280 sample rows / 4 gallery fixtures / 2 seed canvas records.
+  - GREEN/focused: `pnpm test -- apps/web/test/release-scripts.test.ts -t "classifies demo data realism"` passed; Vitest discovered and passed 16 files / 116 tests.
+  - `pnpm lint`: Passed.
+  - `pnpm test`: Passed with 16 files / 116 tests.
+  - `git diff --check`: Passed before commit.
+- Recommended next task: Task 112, `Add API-Backed Prompt Example Source`, to remove the remaining hardcoded prompt example chips from the UI component.

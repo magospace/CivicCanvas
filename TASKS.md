@@ -1772,7 +1772,7 @@ Status: Complete on May 10, 2026.
 
 ## 111. Add Data Realism Audit Script
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: QA / Data governance
 - Goal: Add a no-network script that classifies demo data sources as fixture-loader, deterministic fallback, browser-local, hardcoded route seed, fake provider metadata, or blocked.
@@ -1783,6 +1783,8 @@ Status: Pending.
 - Acceptance criteria: Script reports catalog samples, gallery fixtures, seed canvas fixtures, browser-local saved canvases, OpenAI readiness fallback, Fal script-only proof, and flags any remaining hardcoded demo arrays requiring review; output is no-network/non-mutating and redacts env values.
 - Validation commands: script JSON run, focused release-script Vitest, `pnpm lint`, `pnpm test`, `git diff --check`.
 - Can run in parallel: No with release-script/package edits.
+- Completed notes: Added `scripts/data-realism-audit.mjs` plus `pnpm data:realism`/`pnpm data:realism:json`. The report classifies catalog/sample/gallery/seed fixture paths, browser-local saved canvases, optional OpenAI assist, Fal script-only media proof, and remaining hardcoded UI review items without using network, mutating files, or reading/printing env values. Updated realness docs and release-script tests.
+- Validation: RED focused release-script test failed before the script existed; `pnpm data:realism:json`, focused release-script Vitest, `pnpm lint`, `pnpm test`, and `git diff --check` passed.
 
 ## 112. Add API-Backed Prompt Example Source
 

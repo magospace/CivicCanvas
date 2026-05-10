@@ -140,6 +140,37 @@ describe("release and governance scripts", () => {
     )).toBe(true);
   });
 
+  it("classifies demo data realism without network, mutation, or secret leakage", () => {
+    const stdout = execFileSync("node", ["scripts/data-realism-audit.mjs", "--json"], {
+      cwd: process.cwd(),
+      encoding: "utf8",
+      env: { ...process.env, OPENAI_API_KEY: "sk-fake-secret-value", FAL_KEY: "fal-fake-secret-value" }
+    });
+    const body = JSON.parse(stdout);
+
+    expect(body.ok).toBe(true);
+    expect(body.network).toBe("not_used");
+    expect(body.mutatesFiles).toBe(false);
+    expect(body.summary.seedCanvasRecords).toBe(2);
+    expect(body.classifications.map((item: { surface: string }) => item.surface)).toEqual(expect.arrayContaining([
+      "catalog",
+      "sampleRows",
+      "galleryCanvases",
+      "seedCanvasFixtures",
+      "savedCanvases",
+      "openAIProvider",
+      "falMediaProof"
+    ]));
+    const seedFixtures = body.classifications.find((item: { surface: string }) => item.surface === "seedCanvasFixtures");
+    expect(seedFixtures.classification).toBe("fixture_file_through_data_loader");
+    expect(seedFixtures.acceptable).toBe(true);
+    const savedCanvases = body.classifications.find((item: { surface: string }) => item.surface === "savedCanvases");
+    expect(savedCanvases.classification).toBe("browser_local_persistence");
+    expect(body.remainingHardcodedReview.some((item: { surface: string }) => item.surface === "explorePromptExamples")).toBe(true);
+    expect(stdout).not.toContain("sk-fake-secret-value");
+    expect(stdout).not.toContain("fal-fake-secret-value");
+  });
+
   it("reports no-network live/fallback proof for core demo claims", () => {
     const stdout = execFileSync("node", ["scripts/live-fallback-proof.mjs", "--json"], {
       cwd: process.cwd(),

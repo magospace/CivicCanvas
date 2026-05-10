@@ -24,7 +24,7 @@ This matrix keeps demo claims honest about what is checked-in, browser-local, li
 | Saved canvases | Browser `localStorage` through `apps/web/lib/saved-canvases.ts` and `packages/shared/src/persistence/index.ts` | Browser-local only. | Saved canvases are local to the current browser profile. | Do not claim multi-user persistence, account sync, or backend storage. | `pnpm test`, `pnpm test:e2e` |
 | Share links | URL hash containing a validated saved-canvas bundle | Browser/hash based handoff. | Share links are portable demo bundles that import after schema validation. | Do not claim public database-backed URLs or hosted share services. | `pnpm test`, `pnpm test:e2e` |
 | `/api/canvas/save` | `apps/web/app/api/canvas/save/route.ts` | Server validation stub only. | The route validates `CanvasDocument` JSON and returns metadata. | Do not claim it writes to a database, object store, account, or public share service. | `pnpm test -- apps/web/test/canvas-save-route.test.ts` |
-| `/api/canvas/[id]` | `apps/web/app/api/canvas/[id]/route.ts` | Hardcoded seed/demo helper. | The route regenerates known seed canvases for demos. | Do not claim it retrieves arbitrary saved user canvases. | `pnpm test -- apps/web/test/canvas-seed-route.test.ts` |
+| `/api/canvas/[id]` | `data/seed-canvases.json` loaded by `apps/web/lib/data.ts`, then regenerated through `apps/web/app/api/canvas/[id]/route.ts` | Fixture-backed seed/demo helper. | The route regenerates known seed canvases for demos from validated seed fixture prompts. | Do not claim it retrieves arbitrary saved user canvases or database records. | `pnpm test -- apps/web/test/canvas-seed-route.test.ts`, `pnpm data:realism:json` |
 | Release evidence | `docs/release-evidence.json` | Historical checked-in release proof for commit `a5ce07a81ee932bdf7a37724af0e7aab3a3d9f0f`. | Treat it as historical until Task 35 reruns the full gate. | Do not cite it as current branch proof. | `pnpm governance:audit` |
 
 ## Safe Validation Set
@@ -33,5 +33,6 @@ This matrix keeps demo claims honest about what is checked-in, browser-local, li
 git diff --check
 pnpm lint
 pnpm data:quality
+pnpm data:realism:json
 pnpm governance:audit
 ```
