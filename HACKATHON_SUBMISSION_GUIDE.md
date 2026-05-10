@@ -89,11 +89,11 @@ Show Houston transportation incidents by ZIP and incident type for 2024.
 
 Say: "The same pattern works across city datasets: supported prompt, approved fields, bounded query, source-cited visuals, and caveats."
 
-### 2:15-2:40 - Save And Share
+### 2:15-2:40 - Save, Edit, And Share
 
-Action: Save the canvas locally, then open `/saved`.
+Action: Save the canvas locally, open `/saved`, edit the saved title/prompt, reopen it, then show export or hash-share controls.
 
-Say: "Saved canvases are browser-local for this MVP. They can be exported or shared as validated JSON/hash bundles, but I am not claiming a hosted database or account system yet."
+Say: "Saved canvases are browser-local for this MVP. They are editable local records through the normal UI and can be exported or shared as validated JSON/hash bundles, but I am not claiming a hosted database, account system, or public share service yet."
 
 ### 2:40-3:00 - MCP And Agent Skill Close
 
@@ -118,6 +118,7 @@ Status: strong local Brainforge submission, but repo/deploy form fields remain i
 - Must do before Airtable: record Loom with camera on.
 - Should do if possible: deploy to Vercel and smoke-check the URL.
 - Should do if possible: run `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm governance:audit`, and `pnpm data:quality` before recording.
+- Saved-flow checklist: use `docs/LOCAL_DEMO_SMOKE_CHECKLIST.md` to show save, edit title/prompt, reopen, export/share, and delete while saying it is browser-local only.
 - Be careful: do not claim complete live Texas coverage, database persistence, LLM-generated dashboards, or live Miro board writes.
 
 ## Scoring Estimate

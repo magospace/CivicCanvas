@@ -2013,7 +2013,7 @@ Status: Complete on May 10, 2026.
 
 ## 125. Add Local Demo Smoke Checklist For Browser Saved Edits
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Docs / Demo Reliability
 - Goal: Add a concise manual checklist for recording the saved-canvas edit/export/share path added in Task 114.
@@ -2024,6 +2024,8 @@ Status: Pending.
 - Acceptance criteria: Checklist covers save, edit title/prompt, reopen, export, share hash, delete, and no-backend-persistence narration.
 - Validation commands: manual wording/path check, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes with non-doc tasks that do not edit submission guide.
+- Completed notes: Added `docs/LOCAL_DEMO_SMOKE_CHECKLIST.md` covering save, edit title/prompt, reopen, export, share hash, invalid import, delete, and local-only narration. Linked it from the docs index and updated `HACKATHON_SUBMISSION_GUIDE.md` Loom script/submission readiness copy to show the editable browser-local flow honestly.
+- Validation: Manual wording/path check, `pnpm lint`, and `git diff --check` passed.
 
 ## 126. Add Public URL Smoke Placeholder To Submission Guide
 

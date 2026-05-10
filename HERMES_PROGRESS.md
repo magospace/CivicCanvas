@@ -1801,3 +1801,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm data:realism:json` passed with `componentPathsScanned=5` and `hardcodedUiDemoArrayFindings=0`; `pnpm test -- apps/web/test/release-scripts.test.ts -t "classifies demo data realism"` passed; `pnpm lint` passed; `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 125, `Add Local Demo Smoke Checklist For Browser Saved Edits`, to document the normal editable browser-local saved record flow added earlier.
+
+
+## Task 125 Update - Local Demo Smoke Checklist For Browser Saved Edits
+
+- Task chosen: `TASKS.md` item 125, "Add Local Demo Smoke Checklist For Browser Saved Edits".
+- Why this was next: After strengthening automated data-realism checks, the next safe demo-reliability task was documenting the browser-local saved edit/export/share path added in Task 114 for Loom and in-person demos.
+- Scope: `docs/LOCAL_DEMO_SMOKE_CHECKLIST.md`, `docs/README.md`, `HACKATHON_SUBMISSION_GUIDE.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Browser-local saved canvases are documented as editable local records through normal UI and validated JSON/hash bundles, not backend persistence, account sync, public hosted share links, or production storage.
+- Safety notes: Docs only. No live API/provider call was made, no `.env` files were read, no generated artifacts/release evidence/deploy changes were created, and no product behavior changed. `clauderecommends.md` and `REVIEW_RECOMMENDATIONS.md` remain untracked and unstaged.
+- Validation: Manual wording/path check passed; `pnpm lint` passed; `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 127, `Add Source Provenance Mini Table To README`, to make source/sample/live boundaries more judge-scannable.
