@@ -1304,6 +1304,8 @@ Status: Complete on May 10, 2026 at 07:08 CDT.
 
 ## 83. Add Supported Prompt Grammar Doc
 
+Status: Complete on May 10, 2026 at 07:10 CDT.
+
 - Owner type: Product Docs / Prompt Parser
 - Goal: Document supported prompt patterns, synonyms, unsupported/sensitive prompt behavior, and data-mode expectations.
 - Scope: Docs only.
@@ -1312,6 +1314,8 @@ Status: Complete on May 10, 2026 at 07:08 CDT.
 - Acceptance criteria: Examples match deterministic parser support and avoid claiming generic natural-language coverage.
 - Validation commands: manual examples check, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes with script tasks.
+- Completed notes: Added `docs/SUPPORTED_PROMPTS.md` documenting exact supported prompts, bounded synonyms, recognized parameters, unsupported/sensitive prompt behavior, and data-mode boundaries. Linked it from `README.md` and `docs/README.md`.
+- Validation: Manual examples/path/link check passed; `pnpm lint` and `git diff --check` passed.
 
 ## 84. Add Catalog Onboarding Checklist
 

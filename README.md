@@ -229,6 +229,7 @@ Brand assets live under `apps/web/public/brand/`. The header uses the compact Ci
 - [Architecture map](ARCHITECTURE_MAP.md)
 - [Development guide](DEVELOPMENT_GUIDE.md)
 - [Live/fallback proof matrix](docs/LIVE_FALLBACK_PROOF.md)
+- [Supported prompt grammar](docs/SUPPORTED_PROMPTS.md)
 - [Demo video capture checklist](docs/DEMO_VIDEO_CHECKLIST.md)
 - [Hackathon submission checklist](docs/HACKATHON_SUBMISSION_CHECKLIST.md)
 - [Hackathon submission guide](docs/HACKATHON_SUBMISSION_GUIDE.md)

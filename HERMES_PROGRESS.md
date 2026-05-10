@@ -1107,3 +1107,23 @@ Last updated: May 10, 2026 06:17 CDT
 ### Recommended Next Task
 
 - Task 83, `Add Supported Prompt Grammar Doc`, is the next safe docs task.
+
+
+## Task 83 Update
+
+- Task chosen: `TASKS.md` item 83, "Add Supported Prompt Grammar Doc".
+- Why this was next: It was the next safe docs task and reduces overclaiming risk around generic natural language support.
+- Scope: `docs/SUPPORTED_PROMPTS.md`, `docs/README.md`, `README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Docs only. No prompt parser behavior changed; no schema, data, provider, backend, release evidence, deploy, or generated media changes.
+
+### Validation
+
+- Manual examples/path/link check: Passed. Confirmed exact Dallas/Austin/Houston prompts, unsupported/sensitive examples, sample fallback copy, and README/docs links.
+- `pnpm lint`: Passed.
+- `git diff --check`: Passed.
+
+### Stop Point
+
+- Completed five implemented tasks from the replenished queue (Tasks 79-83) after the queue replenishment commit.
+- Remaining untracked files: root `HACKATHON_SUBMISSION_GUIDE.md` input and `clauderecommends.md`, both preserved unstaged.
+- Next recommended task: Task 84, `Add Catalog Onboarding Checklist`, unless release evidence refresh/hosted proof/live provider/backend work is explicitly approved.
