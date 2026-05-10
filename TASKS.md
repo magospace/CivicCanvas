@@ -577,6 +577,8 @@ Status: Complete on May 10, 2026 at 04:22 CDT.
 
 ## 38. Document No Image/Video/Media Provider Path
 
+Status: Complete on May 10, 2026 at 04:24 CDT.
+
 - Owner type: Docs / Demo honesty
 - Goal: Add a concise statement that no image, video, upload, storage-bucket, or paid media-generation provider path is implemented.
 - Why it matters: The app has visual dashboards and Miro preview specs, but no generated media artifact ownership or credit-spending gate exists.
@@ -586,6 +588,8 @@ Status: Complete on May 10, 2026 at 04:22 CDT.
 - Acceptance criteria: Current docs say visual output is validated dashboard UI, static brand assets, client downloads, and Miro spec JSON; no media provider/API claim is introduced.
 - Validation commands: `git diff --check`, `pnpm lint`.
 - Can run in parallel: Yes with tasks not editing the same docs.
+- Completed notes: Added explicit no image/video/media-generation, upload, storage-bucket, paid creative-provider, or credit-spending path wording to `README.md`, `ARCHITECTURE_MAP.md`, `docs/DEMO_SCRIPT.md`, and `REALNESS_AUDIT.md`. Docs now state visual output is limited to validated dashboard UI, static brand assets, client-side CSV/JSON downloads, checked-in gallery canvases, and preview-only MiroExportSpec JSON.
+- Validation: `git diff --check` passed; `pnpm lint` passed.
 
 ## 39. Add Current-HEAD Release Evidence Warning To Demo Handoff
 

@@ -191,6 +191,8 @@ The `/demo-readiness` route is a utility page for checking release gates and pub
 
 The frontend validates catalog data and renders dashboards through a trusted React block registry. It does not execute AI-generated HTML, JavaScript, external scripts, SQL, or arbitrary components.
 
+There is no image, video, media-generation, upload, storage-bucket, or paid creative-provider path in the current app. Visual output is limited to validated dashboard UI, static brand assets, client-side CSV/JSON downloads, checked-in gallery canvases, and preview-only MiroExportSpec JSON.
+
 Brand assets live under `apps/web/public/brand/`. The header uses the compact CivicCanvas mark while the product label remains `Texas Data Canvas`.
 
 ## Current developer docs

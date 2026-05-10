@@ -376,7 +376,7 @@ Validation gaps to keep in mind:
 | Writes build/test output | `pnpm build`, `pnpm test:e2e`, `pnpm verify:prod-local` |
 | MCP stdio IO | `apps/mcp-server/src/index.ts` |
 
-No current side effect writes to a database, queue, Miro board, external storage bucket, or authenticated third-party service.
+No current side effect writes to a database, queue, Miro board, external storage bucket, or authenticated third-party service. There is also no image/video/media-generation provider, upload pipeline, artifact ownership service, or paid media credit gate. Visual artifacts are limited to rendered dashboard UI, static brand assets, checked-in gallery JSON, client-side downloads, and preview-only MiroExportSpec JSON.
 
 ## Background Jobs, Webhooks, Queues, Scheduled Tasks
 
