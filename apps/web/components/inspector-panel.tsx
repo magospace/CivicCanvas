@@ -1,5 +1,5 @@
-import { Download, Filter, Save, Share2, SlidersHorizontal } from "lucide-react";
-import type { BoundedQuerySpec, CanvasBlock, CanvasDocument, DataMode, DataModePreference, MiroExportSpec, PromptIntent, QueryAudit } from "@texas-data-canvas/shared";
+import { Filter, SlidersHorizontal } from "lucide-react";
+import type { BoundedQuerySpec, CanvasBlock, CanvasDocument, DataMode, DataModePreference, PromptIntent, QueryAudit } from "@texas-data-canvas/shared";
 
 type FilterBlock = Extract<CanvasBlock, { type: "FilterBlock" }>;
 
@@ -12,16 +12,8 @@ export function InspectorPanel({
   dataModePreference,
   fallbackReason,
   filterValues,
-  miroTemplate,
   onFilterChange,
   onDataModePreferenceChange,
-  onMiroTemplateChange,
-  onExportMiro,
-  onCopyCanvasJson,
-  onCopyQuerySpec,
-  onExportCsv,
-  onSave,
-  onShare,
   onApplyFilters
 }: {
   canvas: CanvasDocument;
@@ -32,16 +24,8 @@ export function InspectorPanel({
   dataModePreference?: DataModePreference;
   fallbackReason?: string | null;
   filterValues?: Record<string, string>;
-  miroTemplate?: MiroExportSpec["template"];
   onFilterChange?: (field: string, value: string) => void;
   onDataModePreferenceChange?: (mode: DataModePreference) => void;
-  onMiroTemplateChange?: (template: MiroExportSpec["template"]) => void;
-  onExportMiro?: () => void;
-  onCopyCanvasJson?: () => void;
-  onCopyQuerySpec?: () => void;
-  onExportCsv?: () => void;
-  onSave?: () => void;
-  onShare?: () => void;
   onApplyFilters?: () => void;
 }) {
   const source = canvas.sources[0];
@@ -126,68 +110,6 @@ export function InspectorPanel({
               {filter}
             </div>
           ))}
-        </div>
-      </section>
-      <section className="rounded-lg border border-slate-200 p-4">
-        <div className="mb-3 text-sm font-semibold text-ink">Save / share / export</div>
-        <label className="mb-3 grid gap-1.5">
-          <span className="text-xs font-semibold text-slate-500">Miro template</span>
-          <select
-            aria-label="Miro template"
-            value={miroTemplate ?? "briefing_board"}
-            onChange={(event) => onMiroTemplateChange?.(event.target.value as MiroExportSpec["template"])}
-            className="rounded-md border border-slate-200 bg-civic-50 px-3 py-2 text-sm text-slate-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
-          >
-            <option value="briefing_board">Briefing board</option>
-            <option value="slide_deck">Slide deck</option>
-            <option value="community_workshop">Community workshop</option>
-          </select>
-        </label>
-        <div className="grid grid-cols-3 gap-2">
-          <button
-            onClick={onSave}
-            aria-label="Save canvas locally"
-            title="Save canvas locally"
-            className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
-          >
-            <Save className="h-4 w-4" />
-          </button>
-          <button
-            onClick={onShare}
-            aria-label="Copy portable saved-canvas bundle"
-            title="Copy portable saved-canvas bundle"
-            className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
-          >
-            <Share2 className="h-4 w-4" />
-          </button>
-          <button
-            onClick={onExportMiro}
-            aria-label="Generate Miro export preview"
-            title="Generate Miro export preview"
-            className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
-          >
-            <Download className="h-4 w-4" />
-          </button>
-        </div>
-        <div className="mt-3 grid gap-2">
-          <button
-            onClick={onExportCsv}
-            className="rounded-md border border-slate-200 px-3 py-2 text-left text-xs font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
-          >
-            Export table CSV
-          </button>
-          <button
-            onClick={onCopyCanvasJson}
-            className="rounded-md border border-slate-200 px-3 py-2 text-left text-xs font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
-          >
-            Copy CanvasDocument JSON
-          </button>
-          <button
-            onClick={onCopyQuerySpec}
-            className="rounded-md border border-slate-200 px-3 py-2 text-left text-xs font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
-          >
-            Copy BoundedQuerySpec
-          </button>
         </div>
       </section>
       {audits && audits.length > 0 ? (

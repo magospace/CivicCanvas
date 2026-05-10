@@ -1883,3 +1883,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: Initial focused Playwright run exposed two issues: Next route announcer made broad `role=alert` strict locators ambiguous, and mint success text narrowly missed WCAG contrast under axe. Fixed both by scoping alert assertions to `main` and using stronger success text color. `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "app feedback distinguishes"` then passed; due repo script wiring, all 21 product-demo browser tests ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 134, `Deduplicate Inspector Save/Export Controls`, to continue reducing duplicated demo controls while preserving normal save/export flows.
+
+
+## Task 134 Update - Deduplicate Inspector Save/Export Controls
+
+- Task chosen: `TASKS.md` item 134, "Deduplicate Inspector Save/Export Controls".
+- Why this was next: It was the next highest-value demo-polish task after toast feedback because duplicate Inspector and Canvas Tools actions made the demo flow noisier and less trustworthy.
+- Scope: `apps/web/components/inspector-panel.tsx`, `apps/web/components/app-shell.tsx`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Not data-path-related. No dataset, sample, fallback, provider, persistence, schema, or adapter behavior changed.
+- Changes: Removed the Inspector Save/share/export/Miro action section and its action props, leaving Inspector focused on prompt/filter/state/audit details. Added explicit accessible labels to the Canvas Tools save/share/export/JSON/query/Miro buttons so they remain the single action home and tests can target them reliably.
+- Validation: First focused Playwright pass exposed stale test selectors after action labels moved to Canvas Tools; updated the selectors. `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved bundle import|Miro preview"` then passed; due repo script wiring, all 21 product-demo browser tests ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 137, `Add Sources-to-Explore CTA Links`, as a low-risk route-flow improvement that builds on Task 131 prompt prefill.

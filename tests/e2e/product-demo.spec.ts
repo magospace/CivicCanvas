@@ -173,13 +173,13 @@ test("Houston exact-address prompt returns suggestions instead of a dashboard", 
 test("app feedback distinguishes success toasts from dismissible errors", async ({ page }) => {
   await page.goto("/explore");
 
-  await page.getByRole("button", { name: "Query spec" }).click();
+  await page.getByRole("button", { name: "Copy query definition" }).click();
   const appAlert = page.locator("main [role='alert']");
   await expect(appAlert).toContainText("No active BoundedQuerySpec is available for this canvas.");
   await page.getByRole("button", { name: "Dismiss" }).click();
   await expect(appAlert).toHaveCount(0);
 
-  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await page.getByRole("button", { name: "Save canvas locally" }).click();
   await expect(page.getByRole("status")).toContainText("Saved locally: Dallas 311 Service Requests Explorer");
   await expect(page.getByRole("status")).toBeHidden({ timeout: 7000 });
 });

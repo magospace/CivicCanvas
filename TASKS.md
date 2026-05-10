@@ -2179,7 +2179,7 @@ Status: Complete on May 10, 2026.
 
 ## 134. Deduplicate Inspector Save/Export Controls
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: UI / Information Architecture
 - Goal: Make Canvas Tools the single home for save/share/export/Miro actions and keep Inspector focused on state/audit.
@@ -2190,6 +2190,8 @@ Status: Pending.
 - Acceptance criteria: Save/share/export/Miro still work from Canvas Tools, inspector no longer duplicates them, and saved/export/Miro e2e flows pass.
 - Validation command: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved bundle import|Miro preview"`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with inspector/app-shell action edits.
+- Completed notes: Removed duplicate Save/share/export/Miro controls from the Inspector, kept Canvas Tools as the single action home, and added explicit accessible labels to Canvas Tools action buttons so existing save/share/export/Miro flows remain reachable.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved bundle import|Miro preview"` passed; due repo script wiring, all 21 product-demo browser tests ran and passed. `pnpm lint` passed; `git diff --check` passed.
 
 ## 135. Add Demo-Safe Jargon Copy Pass
 

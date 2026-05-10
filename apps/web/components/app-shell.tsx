@@ -299,6 +299,7 @@ export function AppShell({
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={saveCurrentCanvas}
+                aria-label="Save canvas locally"
                 className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
               >
                 <Save className="h-4 w-4" />
@@ -306,6 +307,7 @@ export function AppShell({
               </button>
               <button
                 onClick={shareCurrentCanvas}
+                aria-label="Copy saved-canvas share link"
                 className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
               >
                 <Share2 className="h-4 w-4" />
@@ -313,6 +315,7 @@ export function AppShell({
               </button>
               <button
                 onClick={downloadTableCsv}
+                aria-label="Export current table CSV"
                 className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
               >
                 <Download className="h-4 w-4" />
@@ -320,6 +323,7 @@ export function AppShell({
               </button>
               <button
                 onClick={copyCanvasJson}
+                aria-label="Copy dashboard JSON"
                 className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
               >
                 <FileJson className="h-4 w-4" />
@@ -327,6 +331,7 @@ export function AppShell({
               </button>
               <button
                 onClick={copyQuerySpec}
+                aria-label="Copy query definition"
                 className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
               >
                 <ClipboardList className="h-4 w-4" />
@@ -334,6 +339,7 @@ export function AppShell({
               </button>
               <button
                 onClick={exportMiroSpec}
+                aria-label="Generate Miro export preview"
                 className="inline-flex items-center gap-2 rounded-md bg-civic-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-civic-700 focus:outline-none focus:ring-2 focus:ring-civic-100"
               >
                 <Workflow className="h-4 w-4" />
@@ -488,16 +494,8 @@ export function AppShell({
             dataModePreference={dataModePreference}
             fallbackReason={fallbackReason}
             filterValues={filterValues}
-            miroTemplate={miroTemplate}
             onFilterChange={updateFilter}
             onDataModePreferenceChange={setDataModePreference}
-            onMiroTemplateChange={setMiroTemplate}
-            onExportMiro={exportMiroSpec}
-            onCopyCanvasJson={copyCanvasJson}
-            onCopyQuerySpec={copyQuerySpec}
-            onExportCsv={downloadTableCsv}
-            onSave={saveCurrentCanvas}
-            onShare={shareCurrentCanvas}
             onApplyFilters={generateDashboard}
           />
         </div>
