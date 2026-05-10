@@ -2154,3 +2154,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm test -- apps/web/test/saved-canvases.test.ts` passed; due repo script wiring, 127 tests across 18 files ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 155, `Add API Validation Stub Honesty Test`, to keep the `/api/canvas/save` backend boundary explicit.
+
+
+## Task 155 Update - API Validation Stub Honesty Test
+
+- Task chosen: `TASKS.md` item 155, "Add API Validation Stub Honesty Test".
+- Why this was next: It was the next backend-boundary task after saved-canvas normalization and protects the confusing `/api/canvas/save` route name from implying backend persistence.
+- Scope: `apps/web/test/canvas-save-route.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Validation stub only; must remain labeled. No route behavior changed.
+- Changes: Strengthened assertions so valid save requests return only `saved`, `canvasId`, and `note`, do not include backend-like `savedAt`, `url`, or `storageKey` fields, and do not claim backend persistence, database, object-store, or public share service behavior. Existing invalid-canvas validation coverage remains.
+- Validation: `pnpm test -- apps/web/test/canvas-save-route.test.ts` passed; due repo script wiring, 127 tests across 18 files ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 156, `Add Miro Preview No-Write Guard`, to keep preview-only third-party boundaries protected.

@@ -2517,7 +2517,7 @@ Status: Complete on May 10, 2026.
 
 ## 155. Add API Validation Stub Honesty Test
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Backend Boundary / Test Coverage
 - Goal: Prove `/api/canvas/save` remains a validation stub and does not imply backend persistence.
@@ -2528,6 +2528,8 @@ Status: Pending.
 - Acceptance criteria: Tests assert valid input returns validation success plus no-backend/local-persistence note, invalid input fails, and no persisted lookup is claimed.
 - Validation command: `pnpm test -- apps/web/test/canvas-save-route.test.ts`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with canvas save route edits.
+- Completed notes: Strengthened the canvas-save route test to assert the response remains limited to validation-stub fields (`saved`, `canvasId`, `note`) and does not include backend-like `savedAt`, `url`, or `storageKey` fields or backend/database/object-store/public-share claims.
+- Validation: `pnpm test -- apps/web/test/canvas-save-route.test.ts` passed; due repo script wiring, 127 tests across 18 files ran and passed. `pnpm lint` passed; `git diff --check` passed.
 
 ## 156. Add Miro Preview No-Write Guard
 

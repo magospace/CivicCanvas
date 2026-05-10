@@ -56,6 +56,11 @@ describe("canvas save API validation stub", () => {
     expect(body.canvasId).toBe(canvas.id);
     expect(body.note).toContain("validates CanvasDocument");
     expect(body.note).toContain("browser-local persistence");
+    expect(Object.keys(body).sort()).toEqual(["canvasId", "note", "saved"]);
+    expect(body).not.toHaveProperty("savedAt");
+    expect(body).not.toHaveProperty("url");
+    expect(body).not.toHaveProperty("storageKey");
+    expect(body.note.toLowerCase()).not.toContain("backend persistence");
     expect(JSON.stringify(body).toLowerCase()).not.toContain("database");
     expect(JSON.stringify(body).toLowerCase()).not.toContain("object-store");
     expect(JSON.stringify(body).toLowerCase()).not.toContain("public share service");
