@@ -1364,6 +1364,8 @@ Status: Complete on May 10, 2026 at 07:15 CDT.
 
 ## 87. Add Local Demo Smoke Command Checklist
 
+Status: Complete on May 10, 2026 at 07:17 CDT.
+
 - Owner type: QA / Docs
 - Goal: Add a concise command checklist for final local demo verification that avoids deploy, live spend, and release evidence refresh by default.
 - Scope: Docs only.
@@ -1372,6 +1374,8 @@ Status: Complete on May 10, 2026 at 07:15 CDT.
 - Acceptance criteria: Checklist includes lint/typecheck/test/governance/data-quality/no-spend media/precheck commands and labels optional live/deploy checks.
 - Validation commands: manual path/link check, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes.
+- Completed notes: Expanded the demo readiness quick gate into a no-deploy/no-live-spend/no-release-refresh command checklist and linked it from the README current docs. The checklist includes lint, typecheck, test, governance, data quality, no-network live/fallback proof, no-spend Fal smoke, read-only release-evidence precheck, demo artifact hygiene, and `git diff --check`.
+- Validation: Manual path/link/checklist command check passed; `pnpm lint` and `git diff --check` passed.
 
 ## 88. Add Public URL Smoke Evidence Placeholder
 

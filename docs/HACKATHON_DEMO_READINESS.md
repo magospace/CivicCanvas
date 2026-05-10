@@ -4,15 +4,31 @@ Use this checklist before a local judge demo. It is intentionally local-first an
 
 ## Quick Local Gate
 
-Run these from the repo root:
+Run these from the repo root for a no-deploy, no-live-spend, no-release-refresh local demo check:
 
 ```bash
 git status --short --branch
 pnpm demo:readiness:snapshot:json
+pnpm submission:readiness:json
 pnpm lint
 pnpm typecheck
 pnpm test
+pnpm governance:audit
+pnpm data:quality
+pnpm live:fallback-proof:json
+pnpm media:fal:smoke:json
+pnpm release:evidence:precheck:json
+pnpm demo:artifact-hygiene:json
+git diff --check
 ```
+
+Default expectations:
+
+- Commands above should not require secrets, hosted URLs, provider credentials, production data, database resets, deploy mutation, or paid/live media calls.
+- `pnpm live:fallback-proof:json` is no-network and proves catalog-owned live/fallback boundaries.
+- `pnpm media:fal:smoke:json` is no-spend by default and should report `liveCallCount: 0` unless the live gate is explicitly enabled.
+- `pnpm release:evidence:precheck:json` is read-only and should be treated as a historical-evidence warning until Task 35 reruns the full release gate.
+- `pnpm demo:artifact-hygiene:json` verifies generated demo assets are ignored and not staged.
 
 Expected result:
 

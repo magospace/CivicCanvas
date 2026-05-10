@@ -232,6 +232,7 @@ Brand assets live under `apps/web/public/brand/`. The header uses the compact Ci
 - [Supported prompt grammar](docs/SUPPORTED_PROMPTS.md)
 - [Catalog onboarding checklist](docs/CATALOG_ONBOARDING_CHECKLIST.md)
 - [Demo video capture checklist](docs/DEMO_VIDEO_CHECKLIST.md)
+- [Local demo readiness checklist](docs/HACKATHON_DEMO_READINESS.md)
 - [Hackathon submission checklist](docs/HACKATHON_SUBMISSION_CHECKLIST.md)
 - [Hackathon submission guide](docs/HACKATHON_SUBMISSION_GUIDE.md)
 - [MCP demo proof checklist](docs/MCP_DEMO_PROOF.md)

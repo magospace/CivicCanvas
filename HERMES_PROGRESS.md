@@ -1180,3 +1180,20 @@ Last updated: May 10, 2026 06:17 CDT
 ### Recommended Next Task
 
 - Task 87, `Add Local Demo Smoke Command Checklist`, is next.
+
+## Task 87 Update
+
+- Task chosen: `TASKS.md` item 87, "Add Local Demo Smoke Command Checklist".
+- Why this was next: Task 86 completed cleanly, and Task 87 was the next safe local-demo readiness docs task. It makes final local validation commands explicit while avoiding deploy, live spend, and release evidence refresh by default.
+- Scope: `docs/HACKATHON_DEMO_READINESS.md`, `README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Documentation only. No commands with side effects beyond validation were run; no deploy, live provider/API call, release evidence refresh, generated media, backend persistence, schema, migration, secrets, auth, billing, or production data changed.
+
+### Validation
+
+- Manual path/link/checklist command check: Passed. Confirmed README links the demo readiness checklist and the checklist includes lint/typecheck/test/governance/data-quality/no-spend media/precheck commands while labeling no-deploy/no-live-spend/no-release-refresh defaults.
+- `pnpm lint`: Passed.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 88, `Add Public URL Smoke Evidence Placeholder`, is next.
