@@ -2594,3 +2594,144 @@ Status: Complete on May 10, 2026.
 - Can run in parallel: No with package script edits.
 - Completed notes: Added `pnpm local:push-readiness` / `pnpm local:push-readiness:json`, a local-only git summary command that reports branch, upstream, ahead/behind counts, dirty tracked files, untracked files, recent commits, and an explicit no-push reminder.
 - Validation: `pnpm local:push-readiness` passed and reported branch `feat/v1.3-hosted-launch-readiness`, upstream `origin/main`, ahead 47/behind 0 at validation time, package/script work in progress, and intentionally untracked recommendation files. `pnpm lint` passed; `git diff --check` passed.
+
+
+## 160. Add Final Submission Guard Aggregate Command
+
+Status: Pending.
+
+- Owner type: Release QA / Submission Guard
+- Goal: Add a single no-network aggregate command for the final local submission guard checks added in recent cycles.
+- Scope: Script/package command only; do not run deployment, live providers, or release evidence refresh.
+- Likely files: `scripts/final-submission-guard.mjs`, `package.json`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Validation aggregator; not a data-path change.
+- Acceptance criteria: Command runs/aggregates `submission:todo-scan`, `docs:links`, `hygiene:artifacts`, `provenance:summary`, and `local:push-readiness` without network calls and exits non-zero if any guard fails.
+- Validation command: `pnpm submission:guard`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with package script edits.
+
+## 161. Add Final Data Realism Audit Snapshot
+
+Status: Pending.
+
+- Owner type: Data Realism / Audit Docs
+- Goal: Refresh a concise current snapshot of accepted sample/local/fixture/provider boundaries after Tasks 150-159.
+- Scope: Docs/audit note only; do not change catalog/sample data.
+- Likely files: `REALNESS_AUDIT.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Documentation/audit only.
+- Acceptance criteria: Audit notes latest guards/tests and still classifies catalog, samples, gallery, saved local records, OpenAI fallback, Dallas live, Miro preview, and validation-stub route honestly.
+- Validation command: `git diff --check`.
+- Can run in parallel: Yes with code tasks not editing audit docs.
+
+## 162. Add README Final Local Submission Checklist
+
+Status: Pending.
+
+- Owner type: README / Submission UX
+- Goal: Add a concise final local-only checklist pointing to guard commands and local demo routes.
+- Scope: README docs only.
+- Likely files: `README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Documentation only.
+- Acceptance criteria: README has a short checklist for local Loom, no-spend guards, provider boundaries, public URL TODO, and no-push reminder.
+- Validation command: `pnpm docs:links`, `git diff --check`.
+- Can run in parallel: Yes with non-README tasks.
+
+## 163. Add No-Live-Provider Default E2E Assertion
+
+Status: Pending.
+
+- Owner type: Provider Honesty / E2E
+- Goal: Protect the default demo path from accidentally advertising or triggering live OpenAI/Fal behavior.
+- Scope: Focused Playwright copy/flow assertion only; no live provider calls.
+- Likely files: `tests/e2e/product-demo.spec.ts`, maybe `apps/web/app/demo-readiness/page.tsx`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium.
+- Data realism classification: Deterministic no-key fallback / acceptable if clearly labeled.
+- Acceptance criteria: E2E asserts default UI/readiness copy says no-key/no-live provider default and normal dashboard generation does not call Fal/OpenAI.
+- Validation command: focused Playwright demo-readiness/provider test, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with demo-readiness route edits.
+
+## 164. Add Source Provenance JSON Contract Test
+
+Status: Pending.
+
+- Owner type: Provenance / Script Test
+- Goal: Prove `provenance:summary:json` emits stable machine-readable fields for final transcript/reviewer use.
+- Scope: Script test only unless output contract is missing a field.
+- Likely files: `apps/web/test/release-scripts.test.ts` or new script test, `scripts/source-provenance-summary.mjs`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Fixture/catalog through data loader / acceptable.
+- Acceptance criteria: Test asserts supported dataset count, networkCallsMade=0, Dallas/Austin/Houston prompts, sample file existence flags, hidden/review field reporting, and unsupported metadata-only source entry.
+- Validation command: focused Vitest script test, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with provenance script edits.
+
+## 165. Add Submission TODO Scanner Regression Test
+
+Status: Pending.
+
+- Owner type: Submission Guard / Script Test
+- Goal: Add direct regression coverage for the submission TODO scanner's allowlist and failure classes.
+- Scope: Script test only; no docs value changes unless stale scanner behavior is found.
+- Likely files: `apps/web/test/release-scripts.test.ts`, `scripts/submission-todo-scan.mjs`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium if script needs testability refactor.
+- Data realism classification: Documentation/proof guard.
+- Acceptance criteria: Test verifies current docs pass, unexpected TODO fixture fails, and secret-like assignment fixture fails without printing secret values.
+- Validation command: focused Vitest script test, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with scanner script edits.
+
+## 166. Add Local Push-Readiness JSON Contract Test
+
+Status: Pending.
+
+- Owner type: Git Hygiene / Script Test
+- Goal: Prove `local:push-readiness:json` remains parseable and explicitly no-push.
+- Scope: Script test only.
+- Likely files: `apps/web/test/release-scripts.test.ts`, `scripts/local-push-readiness.mjs`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Not data-path-related.
+- Acceptance criteria: Test runs JSON mode and asserts branch/head fields exist, `pushAllowed` is false, and reminder says not to push unless explicitly instructed.
+- Validation command: focused Vitest script test, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with local push-readiness script edits.
+
+## 167. Add Historical Release Evidence Warning Test
+
+Status: Pending.
+
+- Owner type: Release Honesty / Test Coverage
+- Goal: Protect `/demo-readiness` and docs from hiding the historical release-evidence warning.
+- Scope: E2E or unit assertion only; do not refresh `docs/release-evidence.json`.
+- Likely files: `tests/e2e/product-demo.spec.ts`, maybe docs tests, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Release proof honesty.
+- Acceptance criteria: Test asserts current demo-readiness page warns checked-in release evidence is historical and not current proof when HEAD differs.
+- Validation command: focused Playwright demo-readiness test, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with demo-readiness route edits.
+
+## 168. Add Final Local README Route Smoke Script
+
+Status: Pending.
+
+- Owner type: Demo Reliability / Local Smoke
+- Goal: Add a no-network local route list smoke helper for the exact Loom paths when a dev server is running.
+- Scope: Script only; no server startup or deployment.
+- Likely files: `scripts/local-route-smoke.mjs`, `package.json`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium due to local server dependency.
+- Data realism classification: Route validation only.
+- Acceptance criteria: Command accepts `--url http://localhost:3000`, checks `/explore`, `/sources`, `/saved`, `/gallery`, and `/demo-readiness`, and skips/fails clearly when no server is running without external network calls.
+- Validation command: script help/no-server behavior, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with package script edits.
+
+## 169. Add Final Stop/Submit Decision Note
+
+Status: Pending.
+
+- Owner type: Submission Decision / Docs
+- Goal: Add a concise final note describing what remains for the human before actual submission or push.
+- Scope: Docs/progress only; do not push or deploy.
+- Likely files: `HERMES_PROGRESS.md`, maybe `HACKATHON_SUBMISSION_GUIDE.md`, `TASKS.md`.
+- Risk level: Low.
+- Data realism classification: Documentation only.
+- Acceptance criteria: Note says local validation is strong, public URL/Loom/team fields still require human action, release evidence remains historical, and push/deploy requires explicit instruction.
+- Validation command: `git diff --check`.
+- Can run in parallel: Yes with non-doc tasks.

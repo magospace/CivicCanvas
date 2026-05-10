@@ -2214,3 +2214,13 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm local:push-readiness` passed and reported branch `feat/v1.3-hosted-launch-readiness`, upstream `origin/main`, ahead 47/behind 0 at validation time, package/script work in progress, and intentionally untracked `REVIEW_RECOMMENDATIONS.md`, `clauderecommends.md`, plus the new script before staging. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Remaining status: Tasks 150-159 are now complete, so the next action is to replenish `TASKS.md` before starting more implementation.
+
+
+## Task Queue Replenishment Update - Final Local Submission Hardening
+
+- Task chosen: Replenish `TASKS.md` because Tasks 150-159 are complete and no useful pending tasks remained.
+- Scope: Added Tasks 160-169 covering final aggregate guard command, current data-realism audit snapshot, README local submission checklist, no-live-provider default E2E assertion, provenance JSON contract test, TODO scanner regression test, local push-readiness JSON contract test, historical release-evidence warning test, local route smoke helper, and final stop/submit decision note.
+- Data realism classification: Planning/docs only in this commit. The new queue continues to prioritize no-network/default-safe proof, existing data-loader/API/local-storage paths, honest provider/live/deploy boundaries, and no-push guardrails.
+- Validation: `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 160, `Add Final Submission Guard Aggregate Command`, because it consolidates recent no-network guards without deploying, pushing, spending, or refreshing release evidence.
