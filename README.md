@@ -191,6 +191,13 @@ The dashboard prompt bar and inspector expose the same governed data modes used 
 
 ## Known sample/live boundaries
 
+| Source | Current status | Provenance path | Demo caveat |
+|---|---|---|---|
+| Dallas 311 Service Requests | Live-promoted only for verified non-ZIP aggregate fields; ZIP dashboards use fallback. | `data/catalog/approved-datasets.json`, `data/samples/dallas-311.sample.json`, Dallas Socrata `d7e7-envw`. | Say the ZIP map/table is sample fallback because the verified live source does not expose ZIP safely. |
+| Austin Building Permits | Metadata verified; monthly/ZIP dashboard remains sample-first. | `data/catalog/approved-datasets.json`, `data/samples/austin-building-permits.sample.json`, Austin Socrata `quv8-5ckq`. | Do not claim live monthly grouping until a source-owned month expression is safely verified. |
+| Houston Transportation Incidents | Public-pilot sample-first source with precise locations excluded. | `data/catalog/approved-datasets.json`, `data/samples/houston-transportation-incidents.sample.json`, Houston TranStar source docs. | Live feed access/mapping is not promoted; no precise addresses or exact locations. |
+| Texas Government Spending | Approved metadata/coming-later source, not query-ready in the demo loop. | `data/catalog/approved-datasets.json`. | Keep it out of generated dashboards until samples/live governance are added. |
+
 - Dallas 311 live aggregates are promoted only for verified non-ZIP mapped fields. Dallas ZIP dashboard views intentionally use sample fallback because the verified live Socrata view does not expose ZIP.
 - Austin permit metadata is verified, but monthly live aggregation remains sample-first until a source-owned month grouping is safely verified.
 - Houston transportation incidents is the public-pilot third dataset. It is sample-first, excludes precise locations, and remains live-disabled. Houston TranStar provides sample feed documentation, but live feed access and aggregate-safe mappings are not promoted yet.

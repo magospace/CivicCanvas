@@ -1813,3 +1813,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: Manual wording/path check passed; `pnpm lint` passed; `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 127, `Add Source Provenance Mini Table To README`, to make source/sample/live boundaries more judge-scannable.
+
+
+## Task 127 Update - README Source Provenance Mini Table
+
+- Task chosen: `TASKS.md` item 127, "Add Source Provenance Mini Table To README".
+- Why this was next: After documenting the saved-demo path, the next safest judge-facing improvement was making dataset provenance and sample/live boundaries scannable from the README without changing catalog facts.
+- Scope: `README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: README now classifies Dallas as live-promoted only for verified non-ZIP aggregates with ZIP fallback, Austin as metadata-verified but monthly/ZIP sample-first, Houston as sample-first with precise locations excluded, and Texas Government Spending as approved metadata/coming-later not query-ready. Provenance points to catalog and sample fixture paths.
+- Safety notes: Docs only. No catalog data changed, no live API/provider call was made, no `.env` files were read, no generated artifacts/release evidence/deploy changes were created, and no product behavior changed. `clauderecommends.md` and `REVIEW_RECOMMENDATIONS.md` remain untracked and unstaged.
+- Validation: Manual catalog/README consistency check passed; `pnpm lint` passed; `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 129, `Add Submission Copy Boundary Assertions`, to lock honest README/submission-guide claims with automated checks.

@@ -2043,7 +2043,7 @@ Status: Pending.
 
 ## 127. Add Source Provenance Mini Table To README
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Docs / Data Provenance
 - Goal: Add a compact README table classifying Dallas, Austin, Houston, and Texas spending source status for judges.
@@ -2054,6 +2054,8 @@ Status: Pending.
 - Acceptance criteria: Table distinguishes live-promoted Dallas aggregate fields, Dallas ZIP fallback, Austin/Houston sample-first, Texas spending coming-later metadata, source URLs/catalog path, and caveats.
 - Validation commands: manual catalog/README consistency check, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes with non-README tasks.
+- Completed notes: Added a compact README provenance table for Dallas, Austin, Houston, and Texas Government Spending. The table points to catalog/sample provenance paths, keeps Dallas live proof narrow, labels Austin/Houston sample-first boundaries, and marks Texas spending as coming-later/not query-ready.
+- Validation: Manual catalog/README consistency check, `pnpm lint`, and `git diff --check` passed.
 
 ## 128. Add No-Push Local Branch Readiness Snapshot
 
