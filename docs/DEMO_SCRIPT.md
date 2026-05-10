@@ -26,7 +26,7 @@ Important: the checked-in release evidence is historical and records commit `a5c
 
 ## Opening Pitch
 
-Texas Data Canvas turns approved Texas public datasets into source-cited dashboards. The app is intentionally governed: no accounts, no database, no arbitrary SQL, no arbitrary generated HTML or JavaScript, no LLM-backed dashboard generation, no image/video/media-generation provider, and no live Miro board writes.
+CivicCanvas turns approved Texas public datasets into source-cited dashboards. The app is intentionally governed: no accounts, no database, no arbitrary SQL, no arbitrary generated HTML or JavaScript, no LLM-backed dashboard generation, no image/video/media-generation provider, and no live Miro board writes.
 
 Plain-English prompts are parsed locally with deterministic TypeScript rules for the approved Dallas, Austin, and Houston workflows. Every dashboard is a validated `CanvasDocument` rendered through the trusted React block registry. Every query is a bounded `BoundedQuerySpec` against the approved catalog, static samples, or narrowly verified live public APIs with sample fallback. Visual outputs are the dashboard UI, static brand assets, client-side CSV/JSON downloads, checked-in gallery canvases, and preview-only MiroExportSpec JSON.
 
@@ -166,4 +166,4 @@ Narration: The MCP server reuses the same catalog, bounded query, canvas validat
 
 ## Closing
 
-Texas Data Canvas is not trying to be a generic chatbot. It is a trustworthy civic-data interface: narrow prompts, approved sources, bounded queries, visible caveats, local fallback reliability, and exportable dashboards that keep source and method attached.
+CivicCanvas is not trying to be a generic chatbot. It is a trustworthy civic-data interface: narrow prompts, approved sources, bounded queries, visible caveats, local fallback reliability, and exportable dashboards that keep source and method attached.

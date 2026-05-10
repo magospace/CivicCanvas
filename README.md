@@ -167,7 +167,7 @@ Production-pilot health surfaces are available at `/api/health`, `/api/catalog/h
 
 ## Deployment
 
-The web app is ready for Vercel-style deployment from this monorepo. For hosted deployment, use the manual runbook in `docs/HOSTED_BETA_DEPLOYMENT.md`; this repo has no configured Git remote, so Git-integrated Vercel deployment workflows remain manual. A manual hosted verification workflow is present for checking an already-deployed URL.
+The web app is ready for Vercel-style deployment from this monorepo. For hosted deployment, use the manual runbook in `docs/HOSTED_BETA_DEPLOYMENT.md`; the public GitHub repo is configured at `https://github.com/magospace/CivicCanvas`. A manual hosted verification workflow is present for checking an already-deployed URL.
 
 ```bash
 pnpm preflight
