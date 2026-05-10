@@ -509,6 +509,30 @@ Last updated: May 10, 2026 06:06 CDT
 
 - Task 62, `Add Provider Secret Redaction Regression Test`, is the next safe task.
 
+## Task 62 Update
+
+- Task chosen: `TASKS.md` item 62, "Add Provider Secret Redaction Regression Test".
+- Why this was next: It was the next safe task after Task 61 and protects provider-gated smoke output from accidentally printing fake or real secret-like values.
+- Scope: `apps/web/test/release-scripts.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Test-only. It used fake secret-like strings in subprocess env vars, read no `.env` files, made no provider/live calls, and did not change Fal script behavior because existing output already redacted key echo correctly.
+
+### Files Updated
+
+- `apps/web/test/release-scripts.test.ts`: Added regression coverage that runs `scripts/fal-media-smoke.mjs --json` in no-spend mode with fake FAL/OpenAI/Anthropic secret-like env values and asserts no fake secret appears in stdout.
+- `TASKS.md`: Marks item 62 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records item 62 scope, safety notes, validation, and next state.
+
+### Validation
+
+- `pnpm test -- apps/web/test/release-scripts.test.ts -t "redacts fake Fal provider keys"`: Passed; Vitest discovered the full 15-file suite and reported 96 tests passed.
+- `git diff --check`: Passed.
+- `pnpm lint`: Passed.
+- `pnpm test`: Passed with 15 files, 96 tests.
+
+### Recommended Next Task
+
+- No safe non-approval task remains after Task 62 except high-risk Task 55 and gated Task 35. Replenish `TASKS.md` before further implementation, or explicitly approve Task 55 for local backend persistence/migrations or Task 35 for full release-evidence refresh.
+
 ## Historical Sequential Progress
 
 - Carry-over audit state committed as `a4f09c6` (`docs: add hackathon realness audit`).

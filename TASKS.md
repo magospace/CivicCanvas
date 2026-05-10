@@ -963,6 +963,8 @@ Status: Complete on May 10, 2026 at 06:06 CDT.
 
 ## 62. Add Provider Secret Redaction Regression Test
 
+Status: Complete on May 10, 2026 at 06:06 CDT.
+
 - Owner type: Security / QA
 - Goal: Add a regression test or script check that provider-related smoke scripts and status outputs do not print API keys or common secret env values.
 - Scope: Script tests only; no real secrets.
@@ -971,3 +973,5 @@ Status: Complete on May 10, 2026 at 06:06 CDT.
 - Acceptance criteria: Test injects fake secret-like env values and asserts output redacts or omits them; no real env files are read or committed.
 - Validation commands: focused Vitest command, `git diff --check`, `pnpm lint`, `pnpm test`.
 - Can run in parallel: No with Task 51 if both edit the same script/tests.
+- Completed notes: Added a release-scripts regression test that runs the Fal smoke script in no-spend mode with fake FAL/OpenAI/Anthropic secret-like environment values and asserts the JSON output uses `[REDACTED]`, reports zero live calls, and omits every fake secret value. No real env files or provider calls were used.
+- Validation: Focused release-scripts Vitest command passed; `git diff --check` passed; `pnpm lint` passed; full `pnpm test` passed with 96 tests across 15 files. No live provider/media calls were made.

@@ -171,6 +171,34 @@ describe("release and governance scripts", () => {
     expect(body.appMediaWiring).toBe("not_implemented_dashboard_ui_only");
   });
 
+  it("redacts fake Fal provider keys in no-spend smoke output", () => {
+    const fakeKey = "fal_secret_test_value_do_not_print";
+    const fakeBackupKey = "fal_backup_secret_value_do_not_print";
+    const stdout = execFileSync("node", ["scripts/fal-media-smoke.mjs", "--json"], {
+      cwd: process.cwd(),
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        RUN_LIVE_FAL_SMOKE: "0",
+        FAL_KEY: fakeKey,
+        FAL_API_KEY: fakeBackupKey,
+        OPENAI_API_KEY: "openai_secret_value_do_not_print",
+        ANTHROPIC_API_KEY: "anthropic_secret_value_do_not_print"
+      }
+    });
+    const body = JSON.parse(stdout);
+
+    expect(body.ok).toBe(true);
+    expect(body.status).toBe("skipped_no_spend");
+    expect(body.liveCallCount).toBe(0);
+    expect(body.keyPresent).toBe(true);
+    expect(body.keyEcho).toBe("[REDACTED]");
+    expect(stdout).not.toContain(fakeKey);
+    expect(stdout).not.toContain(fakeBackupKey);
+    expect(stdout).not.toContain("openai_secret_value_do_not_print");
+    expect(stdout).not.toContain("anthropic_secret_value_do_not_print");
+  });
+
   it("blocks live Fal media smoke without a provider key and does not print secrets", () => {
     try {
       execFileSync("node", ["scripts/fal-media-smoke.mjs", "--json"], {
