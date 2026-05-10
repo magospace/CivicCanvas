@@ -1047,6 +1047,8 @@ Status: Complete on May 10, 2026 at 06:15 CDT.
 
 ## 67. Add Local Saved-Canvas Persistence Boundary UI Snapshot Test
 
+Status: Complete on May 10, 2026 at 06:17 CDT.
+
 - Owner type: QA / Browser-local persistence
 - Goal: Strengthen browser/E2E coverage that `/saved` still says browser-local and does not imply backend persistence after new persistence planning docs.
 - Scope: Playwright test only unless copy is missing.
@@ -1055,6 +1057,8 @@ Status: Complete on May 10, 2026 at 06:15 CDT.
 - Acceptance criteria: Test verifies local-only copy, no-account/no-hosted-database wording, import validation rejection, and no `/api/canvas/save` call for malformed share hash.
 - Validation commands: targeted Playwright command, `git diff --check`, `pnpm lint` if test/code changes.
 - Can run in parallel: No with other e2e saved-page edits.
+- Completed notes: Strengthened `tests/e2e/governed-workflows.spec.ts` so the governed workflow smoke intercepts `/api/canvas/save`, confirms normal local save/open flow does not call the persistence-looking API route, and asserts `/saved` visibly says browser-local, no hosted database, and URL-hash share-link validation.
+- Validation: Initial targeted Playwright run failed on an over-strict share-link text assertion; after matching current UI copy, `pnpm test:e2e -- tests/e2e/governed-workflows.spec.ts`, `git diff --check`, and `pnpm lint` passed.
 
 ## 68. Add Miro Preview Artifact Template
 

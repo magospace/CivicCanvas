@@ -1,6 +1,6 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 06:15 CDT
+Last updated: May 10, 2026 06:17 CDT
 
 ## Current Cycle
 
@@ -648,6 +648,30 @@ Last updated: May 10, 2026 06:15 CDT
 ### Recommended Next Task
 
 - Task 67, `Add Local Saved-Canvas Persistence Boundary UI Snapshot Test`, is the next safe task.
+
+## Task 67 Update
+
+- Task chosen: `TASKS.md` item 67, "Add Local Saved-Canvas Persistence Boundary UI Snapshot Test".
+- Why this was next: It was the next safe browser-local persistence task after Task 66 and protects the reliable `/saved` demo boundary after adding persistence readiness docs/scripts.
+- Scope: `tests/e2e/governed-workflows.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: E2E test-only. No saved-canvas behavior changed, no backend persistence added, no database/migration work, no generated media, no provider calls, no release evidence refresh, no deploy mutation, and no secrets touched.
+
+### Files Updated
+
+- `tests/e2e/governed-workflows.spec.ts`: Intercepts `/api/canvas/save`, asserts the governed save/open flow leaves that route uncalled, and verifies `/saved` browser-local/no-hosted-database/URL-hash share-link copy.
+- `TASKS.md`: Marks item 67 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records item 67 scope, safety notes, validation, and next task.
+
+### Validation
+
+- RED-ish: `pnpm test:e2e -- tests/e2e/governed-workflows.spec.ts` initially failed on an over-strict expected share-link phrase.
+- GREEN: `pnpm test:e2e -- tests/e2e/governed-workflows.spec.ts`: Passed, 1 browser test.
+- `git diff --check`: Passed.
+- `pnpm lint`: Passed.
+
+### Recommended Next Task
+
+- Task 68, `Add Miro Preview Artifact Template`, is the next safe task.
 
 ## Historical Sequential Progress
 

@@ -9,6 +9,12 @@ async function generate(page: Page, prompt: string) {
 }
 
 test("sources, saved canvases, and Miro preview stay governed", async ({ page }) => {
+  let saveRouteCalls = 0;
+  await page.route("**/api/canvas/save", async (route) => {
+    saveRouteCalls += 1;
+    await route.continue();
+  });
+
   await page.goto("/sources");
   await expect(page.getByText("precise_address · hidden")).toBeVisible();
   await expect(page.getByText(/intentionally excluded from queries, exports, and generated dashboards/i)).toBeVisible();
@@ -19,8 +25,11 @@ test("sources, saved canvases, and Miro preview stay governed", async ({ page })
   await expect(page.getByText("Saved locally: Dallas 311 Service Requests Explorer")).toBeVisible();
 
   await page.goto("/saved");
+  await expect(page.getByText(/Saved canvases stay browser-local/i)).toBeVisible();
   await expect(page.getByText(/without adding accounts or a hosted database/i)).toBeVisible();
+  await expect(page.getByText(/Share links\s+place the validated bundle in the URL hash/i)).toBeVisible();
   await expect(page.getByText("Dallas 311 Service Requests Explorer")).toBeVisible();
+  expect(saveRouteCalls).toBe(0);
   await page.getByLabel("Open Dallas 311 Service Requests Explorer").click();
   await expect(page).toHaveURL(/\/explore/);
   await expect(page.getByRole("heading", { name: "Dallas 311 Service Requests Explorer" })).toBeVisible();
