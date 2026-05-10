@@ -57,6 +57,18 @@ test("explicit sample data mode is visible in the dashboard flow", async ({ page
   await expect(page.getByText("Data mode control requested sample fallback.").first()).toBeVisible();
 });
 
+test("live data mode request shows governed fallback visibility", async ({ page }) => {
+  await page.goto("/explore");
+  await page.getByLabel("Data mode", { exact: true }).selectOption("live");
+  await generate(page, "Show Austin building permits by month and ZIP code for 2024.");
+
+  await expect(page.getByText("Dashboard generated with fallback: Live public API requested, but this dataset is not live-enabled.")).toBeVisible();
+  await expect(page.getByText("Sample fallback active. Live public API requested, but this dataset is not live-enabled.")).toBeVisible();
+  await expect(page.locator("aside").getByLabel("Inspector data mode")).toHaveValue("live");
+  await expect(page.locator("aside").getByText("Live unavailable, sample fallback used").first()).toBeVisible();
+  await expect(page.getByText("Source and method")).toBeVisible();
+});
+
 test("Austin prompt generates a governed permits dashboard", async ({ page }) => {
   await page.goto("/explore");
   await generate(page, "Show Austin building permits by month and ZIP code for 2024.");
@@ -113,7 +125,7 @@ test("Houston exact-address prompt returns suggestions instead of a dashboard", 
   await expect(page.getByText(/Prompt referenced "exact address"/)).toBeVisible();
 });
 
-test("saved bundle import rejects unsafe JSON", async ({ page }) => {
+test("saved bundle import rejects unsafe JSON and saved-card actions work", async ({ page }) => {
   await page.goto("/explore");
   await generate(page, "Show Dallas 311 service requests by category and ZIP code for 2024.");
   await page.getByLabel("Save canvas locally").click();
@@ -121,6 +133,21 @@ test("saved bundle import rejects unsafe JSON", async ({ page }) => {
   await page.goto("/saved");
   await expect(page.getByText("Dallas 311 Service Requests Explorer")).toBeVisible();
   await expect(page.getByLabel(/Export Dallas 311 Service Requests Explorer table CSV/)).toBeVisible();
+
+  await page.getByLabel("Open Dallas 311 Service Requests Explorer").click();
+  await expect(page).toHaveURL(/\/explore/);
+  await expect(page.getByRole("heading", { name: "Dallas 311 Service Requests Explorer" })).toBeVisible();
+  await page.goto("/saved");
+
+  await page.getByLabel("Duplicate Dallas 311 Service Requests Explorer").click();
+  await expect(page.getByText("Dallas 311 Service Requests Explorer Copy")).toBeVisible();
+  page.once("dialog", async (dialog) => {
+    expect(dialog.message()).toContain("Delete Dallas 311 Service Requests Explorer Copy?");
+    await dialog.accept();
+  });
+  await page.getByLabel("Delete Dallas 311 Service Requests Explorer Copy").click();
+  await expect(page.getByText("Dallas 311 Service Requests Explorer Copy")).not.toBeVisible();
+
   await page.getByRole("button", { name: "Export bundle" }).click();
   await expect(page.locator("pre")).toContainText("\"canvases\"");
   await page.getByRole("button", { name: /^Copy share link$/ }).click();
