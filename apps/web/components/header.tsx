@@ -40,7 +40,7 @@ export function Header() {
             />
           </div>
           <div>
-            <div className="text-base font-semibold leading-5 text-ink">Texas Data Canvas</div>
+            <div className="text-base font-semibold leading-5 text-ink">CivicCanvas</div>
             <div className="text-xs font-medium text-slate-500">Public data, cited visually</div>
           </div>
         </Link>

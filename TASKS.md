@@ -2,6 +2,34 @@
 
 The next executable Hermes/Codex tasks, ordered for safe progress. Each task is scoped for one agent and avoids broad refactors.
 
+## Brainforge/Vicinity Final Readiness Pass
+
+Status: P0 complete on May 10, 2026.
+
+### P0 - Airtable Submission Readiness
+
+- Owner type: Product/Docs. Goal: Replace product-facing UI and submission-doc names with `CivicCanvas` while preserving internal package names such as `@texas-data-canvas/*` and the existing skill path when renaming would add risk. Scope: root README, hackathon submission docs, demo proof docs, web metadata/header, agent skill wording. Risk level: Low. Acceptance criteria: public demo surfaces say CivicCanvas; internal package commands remain stable. Validation commands: `pnpm lint`, `pnpm typecheck`, `pnpm test:e2e` if UI changed. Parallelization notes: Can run independently from backend/provider work.
+- Owner type: QA. Goal: Verify the three exact demo prompts generate source-cited dashboards with maps/charts/tables/caveats, and unsupported prompts show approved suggestions. Scope: dashboard generation tests and Playwright demo flow. Risk level: Low. Acceptance criteria: Dallas, Austin, and Houston exact prompts each include `SourceMethodBlock`, `MapBlock`, `ChartBlock`, `TableBlock`, caveats, source attribution, and safe data-mode metadata. Validation commands: `pnpm test`, `pnpm test:e2e`. Parallelization notes: Can run after naming updates.
+- Owner type: MCP. Goal: Verify MCP server builds and exposes safe discovery, query, summary, source/canvas, audit, visualization, and preview export tools. Scope: `apps/mcp-server`. Risk level: Low. Acceptance criteria: `build` and `inspect` pass without secrets or live-provider calls. Validation commands: `pnpm --filter @texas-data-canvas/mcp-server build`, `pnpm --filter @texas-data-canvas/mcp-server inspect`. Parallelization notes: Can run in parallel with docs checks.
+- Owner type: Agent workflow. Goal: Ensure the agent skill is easy to find and describes safe CivicCanvas civic-data workflows. Scope: `.agents/skills/texas-public-data-explorer/SKILL.md`. Risk level: Low. Acceptance criteria: skill frontmatter and body mention CivicCanvas, approved datasets, bounded queries, SourceMethodBlock, caveats, hidden-field boundaries, sample/live honesty, and validation. Validation commands: `pnpm lint`. Parallelization notes: Docs-only.
+- Owner type: Product trust. Goal: Verify live/sample boundaries remain visible and honest across `/sources`, `/explore`, `/saved`, `/gallery`, and `/demo-readiness`. Scope: UI/docs tests. Risk level: Low. Acceptance criteria: core routes render and visible copy distinguishes sample fallback, live promotion limits, browser-local saves, preview-only Miro, and historical release evidence. Validation commands: `pnpm test:e2e`, `pnpm governance:audit`, `pnpm data:quality`. Parallelization notes: Final pass after P0 patches.
+
+### P1 - Submission Polish After P0
+
+- Add a short `/sources` summary legend for Loom narration if not already done.
+- Add an optional sanitized command transcript for MCP build/inspect output.
+- Add a short docs cross-link from the root README to the agent skill and MCP proof checklist.
+- Add current screenshot capture artifacts only under ignored `demo-artifacts/` if Airtable needs images.
+
+### P2 - Post-Submission Hardening
+
+- Rename internal package paths only after the hackathon if a full monorepo rename is approved.
+- Add real backend persistence behind an explicit local/dev database plan, migrations, seeds, rollback, and UI honesty copy.
+- Expand live API coverage only after field-level verification and fallback preservation.
+- Refresh release evidence only after the gated full release validation task.
+
+---
+
 ## 0. Adapt Development Workflow For Hermes
 
 Status: Complete on May 10, 2026; re-verified by Hermes at 01:08 CDT.

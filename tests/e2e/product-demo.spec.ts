@@ -21,9 +21,9 @@ async function expectNoSeriousAccessibilityViolations(page: Page) {
 
 test("explore route loads the governed shell", async ({ page }) => {
   await page.goto("/explore");
-  await expect(page).toHaveTitle(/Texas Data Canvas/);
+  await expect(page).toHaveTitle(/CivicCanvas/);
   await expect(page.getByAltText("CivicCanvas logo").first()).toBeVisible();
-  await expect(page.getByText("Texas Data Canvas").first()).toBeVisible();
+  await expect(page.getByText("CivicCanvas").first()).toBeVisible();
   await expect(page.getByLabel("Dashboard prompt")).toBeVisible();
   await expect(page.getByText("Known data boundaries")).toBeVisible();
   await expect(page.getByRole("button", { name: "Dallas 311 by ZIP" })).toBeVisible();

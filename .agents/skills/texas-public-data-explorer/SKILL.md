@@ -1,15 +1,15 @@
 ---
 name: texas-public-data-explorer
-description: Use this skill when building or modifying Texas Data Canvas features related to Texas public dataset discovery, bounded public-data queries, dashboard canvas generation, source attribution, MCP tools, safe civic-data visualization, or Miro export specs.
+description: Use this skill when building or modifying CivicCanvas features related to Texas public dataset discovery, bounded public-data queries, dashboard canvas generation, source attribution, MCP tools, safe civic-data visualization, or Miro export specs.
 ---
 
-# Texas Public Data Explorer Skill
+# CivicCanvas Texas Public Data Explorer Skill
 
 ## Purpose
 
-This skill helps Codex or another coding agent build Texas Data Canvas safely and consistently.
+This skill helps Codex or another coding agent build CivicCanvas safely and consistently.
 
-Texas Data Canvas turns Texas public datasets into interactive, source-cited dashboards using maps, charts, tables, filters, summaries, and safe query workflows.
+CivicCanvas turns Texas public datasets into interactive, source-cited dashboards using maps, charts, tables, filters, summaries, and safe query workflows.
 
 ## Use this skill when
 
@@ -106,7 +106,7 @@ When implementing Miro export:
 3. Do not write to Miro without user confirmation.
 4. Do not export sensitive hidden fields.
 5. Prefer aggregate visuals and tables.
-6. Keep Texas Data Canvas as the data-query and governance layer.
+6. Keep CivicCanvas as the data-query and governance layer.
 
 ## Example workflow: Dallas 311
 

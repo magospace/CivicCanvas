@@ -1,6 +1,6 @@
-# Texas Data Canvas Web
+# CivicCanvas Web
 
-Next.js App Router app for the Texas Data Canvas public-data explorer.
+Next.js App Router app for the CivicCanvas public-data explorer.
 
 ## Routes
 

@@ -47,17 +47,59 @@ flowchart LR
   MCP --> A["Agent workflows"]
 ```
 
-## Demo Plan For Loom
+## Loom Demo Script
 
 Target: 3 minutes.
 
-1. Start on `/sources`. Show Dallas, Austin, and Houston approved datasets, plus live/sample confidence notes.
-2. Go to `/explore` and run: `Show Dallas 311 service requests by category and ZIP code for 2024.`
-3. Show the map, chart, table, Source & Method card, and query audit. Say the ZIP view uses visible sample fallback because the verified live Socrata view does not expose ZIP.
-4. Run one secondary prompt: `Show Austin building permits by month and ZIP code for 2024.` or `Show Houston transportation incidents by ZIP and incident type for 2024.`
-5. Save locally, open `/saved`, and mention saved canvases are browser-local, not a database.
-6. Show the MCP/agent angle briefly: mention the repo ships a custom MCP server plus agent skill for safe discovery, bounded query, summaries, canvas generation, and preview-only Miro export specs.
-7. Close with: "CivicCanvas makes Texas public data explorable without hiding source limitations."
+### 0:00-0:20 - Open With Trust
+
+Action: Start on `/sources` and show the approved Dallas, Austin, and Houston data sources.
+
+Say: "This is CivicCanvas. It makes Texas public data explorable through governed dashboards. The important part is trust: every source is approved, every dashboard carries caveats, and the app shows when it is using live data versus sample fallback."
+
+### 0:20-1:10 - Generate The Main Dashboard
+
+Action: Go to `/explore` and enter:
+
+```text
+Show Dallas 311 service requests by category and ZIP code for 2024.
+```
+
+Say: "I can ask in plain English. CivicCanvas does not generate arbitrary code or SQL. It maps supported prompts into a bounded query spec, validates fields against the approved catalog, and renders only trusted dashboard blocks."
+
+### 1:10-1:45 - Show The Evidence
+
+Action: Point to the map, chart, table, filters, Source & Method card, and query audit/inspector.
+
+Say: "Here are the visuals, but the source trail is just as important. This ZIP dashboard uses sample fallback because the verified live Dallas source does not expose ZIP safely. CivicCanvas keeps that boundary visible instead of pretending the data is more complete than it is."
+
+### 1:45-2:15 - Show A Second City
+
+Action: Run one secondary prompt:
+
+```text
+Show Austin building permits by month and ZIP code for 2024.
+```
+
+or:
+
+```text
+Show Houston transportation incidents by ZIP and incident type for 2024.
+```
+
+Say: "The same pattern works across city datasets: supported prompt, approved fields, bounded query, source-cited visuals, and caveats."
+
+### 2:15-2:40 - Save And Share
+
+Action: Save the canvas locally, then open `/saved`.
+
+Say: "Saved canvases are browser-local for this MVP. They can be exported or shared as validated JSON/hash bundles, but I am not claiming a hosted database or account system yet."
+
+### 2:40-3:00 - MCP And Agent Skill Close
+
+Action: Briefly show the repo/docs if practical, or mention the MCP/skill without switching away.
+
+Say: "For the Brainforge/Vicinity requirement, CivicCanvas includes a custom MCP server and an agent skill. Agents can discover sources, run bounded queries, summarize results, and generate safe canvas specs. CivicCanvas makes Texas public data useful without hiding source limitations."
 
 ## README Requirement Check
 
@@ -72,7 +114,7 @@ Target: 3 minutes.
 
 Status: strong local Brainforge submission, but repo/deploy form fields remain incomplete.
 
-- Must do before Airtable: publish a public repo and paste the link.
+- Repo link is ready: https://github.com/magospace/CivicCanvas
 - Must do before Airtable: record Loom with camera on.
 - Should do if possible: deploy to Vercel and smoke-check the URL.
 - Should do if possible: run `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm governance:audit`, and `pnpm data:quality` before recording.

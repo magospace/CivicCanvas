@@ -4,7 +4,7 @@ Use this checklist before filling out the hackathon submission form. It separate
 
 ## Submission Basics
 
-- Project name: Texas Data Canvas.
+- Project name: CivicCanvas.
 - Short description: Governed visual explorer for approved Texas public datasets that turns supported natural-language prompts into source-cited dashboards.
 - License: MIT; see `LICENSE`.
 - Repository setup:

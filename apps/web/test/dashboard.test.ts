@@ -16,6 +16,22 @@ const allowedGalleryBlockTypes = new Set<CanvasBlock["type"]>([
   "DatasetCardBlock"
 ]);
 
+function expectSourceCitedDashboard(generation: Awaited<ReturnType<typeof generateCanvasForPrompt>>) {
+  const blockTypes = generation.canvas.blocks.map((block) => block.type);
+
+  expect(blockTypes).toEqual(expect.arrayContaining([
+    "SummaryBlock",
+    "ChartBlock",
+    "MapBlock",
+    "TableBlock",
+    "SourceMethodBlock"
+  ]));
+  expect(generation.canvas.sources.length).toBeGreaterThan(0);
+  expect(generation.canvas.sources[0].sourceName).toMatch(/Open Data|TranStar/);
+  expect(generation.canvas.sources[0].sourceUrl).toMatch(/^https:\/\//);
+  expect(generation.canvas.sources[0].caveats.length).toBeGreaterThan(0);
+}
+
 describe("dashboard generation", () => {
   it("generates the Dallas demo dashboard", async () => {
     const generation = await generateCanvasForPrompt("Show Dallas 311 service requests by category and ZIP code for 2024.");
@@ -26,9 +42,7 @@ describe("dashboard generation", () => {
     expect(generation.canvas.sources[0].accessedAt).toBe(generation.canvas.createdAt);
     expect(generation.dataMode).toBe("fallback");
     expect(generation.audits.length).toBeGreaterThan(0);
-    expect(generation.canvas.blocks.map((block) => block.type)).toContain("SourceMethodBlock");
-    expect(generation.canvas.blocks.map((block) => block.type)).toContain("ChartBlock");
-    expect(generation.canvas.blocks.map((block) => block.type)).toContain("TableBlock");
+    expectSourceCitedDashboard(generation);
   });
 
   it("generates distinct canvas IDs for repeated saves", async () => {
@@ -39,11 +53,12 @@ describe("dashboard generation", () => {
   });
 
   it("generates the Austin demo dashboard", async () => {
-    const generation = await generateCanvasForPrompt("Show Austin building permits by month and ZIP code.");
+    const generation = await generateCanvasForPrompt("Show Austin building permits by month and ZIP code for 2024.");
 
     expect(generation.canvas.title).toContain("Austin Building Permits");
     expect(generation.audits.length).toBeGreaterThan(0);
     expect(generation.canvas.sources[0].datasetId).toBe("austin_building_permits");
+    expectSourceCitedDashboard(generation);
   });
 
   it("generates the governed Houston transportation dashboard", async () => {
@@ -54,7 +69,7 @@ describe("dashboard generation", () => {
     expect(generation.dataMode).toBe("sample");
     expect(generation.audits.length).toBeGreaterThan(0);
     expect(generation.intent?.matchedTerms).toEqual(expect.arrayContaining(["transportation", "incident"]));
-    expect(generation.canvas.blocks.map((block) => block.type)).toContain("SourceMethodBlock");
+    expectSourceCitedDashboard(generation);
     expect(generation.canvas.blocks.find((block) => block.id === "status-chart")?.type).toBe("ChartBlock");
     expect(generation.canvas.blocks.some((block) => block.type === "DatasetCardBlock")).toBe(false);
     expect(JSON.stringify(generation.canvas)).not.toContain("precise_address");
@@ -124,7 +139,7 @@ describe("dashboard generation", () => {
     expect(dallasSample.fallbackReason).toContain("sample fallback");
 
     const austinLive = await generateCanvasForPrompt(
-      "Show Austin building permits by month and ZIP code.",
+      "Show Austin building permits by month and ZIP code for 2024.",
       {},
       "live"
     );

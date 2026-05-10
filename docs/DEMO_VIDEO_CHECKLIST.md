@@ -1,12 +1,12 @@
 # Demo Video Capture Checklist
 
-Use this checklist to record a short hackathon submission video from the current app. It describes screen-recording the product UI only. It does not claim that Texas Data Canvas generates video, images, or media artifacts.
+Use this checklist to record a short hackathon submission video from the current app. It describes screen-recording the product UI only. It does not claim that CivicCanvas generates video, images, or media artifacts.
 
 ## Boundary Statement For The Video
 
 Say this once near the beginning or in the submission notes:
 
-> This video is a screen recording of the running Texas Data Canvas app. The app currently renders governed dashboard UI, client-side downloads, checked-in gallery canvases, and preview-only MiroExportSpec JSON. It does not generate images or video, upload media, or call a media provider during normal dashboard generation. Optional Fal proof is a separate env-gated smoke script, not part of this recording flow.
+> This video is a screen recording of the running CivicCanvas app. The app currently renders governed dashboard UI, client-side downloads, checked-in gallery canvases, and preview-only MiroExportSpec JSON. It does not generate images or video, upload media, or call a media provider during normal dashboard generation. Optional Fal proof is a separate env-gated smoke script, not part of this recording flow.
 
 Do not show or mention provider keys. Do not run `RUN_LIVE_FAL_SMOKE=1` during the recording unless a separate approved provider-proof task is intentionally being captured.
 
@@ -94,7 +94,7 @@ Expected wording:
 
 Use this closing line:
 
-> Texas Data Canvas is a governed civic-data dashboard interface: approved sources, deterministic prompt parsing, bounded queries, visible caveats, local fallback reliability, and exportable source-cited canvases.
+> CivicCanvas is a governed civic-data dashboard interface: approved sources, deterministic prompt parsing, bounded queries, visible caveats, local fallback reliability, and exportable source-cited canvases.
 
 ## Capture Settings
 

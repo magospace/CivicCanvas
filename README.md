@@ -1,4 +1,4 @@
-# Texas Data Canvas
+# CivicCanvas
 
 Open-source, MCP-powered visual explorer for Texas public datasets.
 
@@ -221,7 +221,7 @@ The frontend validates catalog data and renders dashboards through a trusted Rea
 
 There is no image, video, media-generation, upload, storage-bucket, or paid creative-provider path in the current app. Visual output is limited to validated dashboard UI, static brand assets, client-side CSV/JSON downloads, checked-in gallery canvases, and preview-only MiroExportSpec JSON.
 
-Brand assets live under `apps/web/public/brand/`. The header uses the compact CivicCanvas mark while the product label remains `Texas Data Canvas`.
+Brand assets live under `apps/web/public/brand/`. The header uses the compact CivicCanvas mark and product label.
 
 ## Current developer docs
 

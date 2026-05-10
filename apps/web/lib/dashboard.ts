@@ -784,7 +784,7 @@ export function createDatasetSuggestionCanvas(prompt: string, catalog: DatasetMe
   const source: SourceAttribution = {
     datasetId: dataset?.id ?? "catalog_suggestions",
     datasetTitle: dataset?.title ?? "Approved dataset suggestions",
-    sourceName: dataset?.sourceName ?? "Texas Data Canvas approved catalog",
+    sourceName: dataset?.sourceName ?? "CivicCanvas approved catalog",
     sourceUrl: dataset?.sourceUrl ?? "https://texas-data-canvas.local/catalog",
     accessedAt: generatedAt,
     fieldsUsed: [],

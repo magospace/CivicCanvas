@@ -1,6 +1,6 @@
 # MCP Demo Proof Checklist
 
-Use this checklist when showing the Brainforge/agent portion of Texas Data Canvas in a Loom or judge walkthrough. It is a demo guide only; it does not require secrets, production deployment, live provider spend, arbitrary SQL, or database persistence.
+Use this checklist when showing the Brainforge/agent portion of CivicCanvas in a Loom or judge walkthrough. It is a demo guide only; it does not require secrets, production deployment, live provider spend, arbitrary SQL, or database persistence.
 
 ## Safe Setup Commands
 
@@ -9,12 +9,11 @@ pnpm --filter @texas-data-canvas/mcp-server build
 pnpm --filter @texas-data-canvas/mcp-server inspect
 ```
 
-If an inspector is unavailable in the local environment, show the MCP server package and tests instead:
+The checked-in `inspect` script uses MCP inspector CLI mode to list tools and exit without printing a browser proxy token. The MCP tool test remains a compact fallback proof for the same safe handlers:
 
 ```bash
 pnpm test -- apps/mcp-server/test/tools.test.ts
 ```
-
 
 ## No-Secret Inspect Demo
 
