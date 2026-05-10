@@ -975,3 +975,122 @@ Status: Complete on May 10, 2026 at 06:06 CDT.
 - Can run in parallel: No with Task 51 if both edit the same script/tests.
 - Completed notes: Added a release-scripts regression test that runs the Fal smoke script in no-spend mode with fake FAL/OpenAI/Anthropic secret-like environment values and asserts the JSON output uses `[REDACTED]`, reports zero live calls, and omits every fake secret value. No real env files or provider calls were used.
 - Validation: Focused release-scripts Vitest command passed; `git diff --check` passed; `pnpm lint` passed; full `pnpm test` passed with 96 tests across 15 files. No live provider/media calls were made.
+
+
+---
+
+# Replenished Hackathon Proof And Integration Queue
+
+Last replenished: May 10, 2026 at 06:07 CDT.
+
+This queue follows completion of Tasks 61-62. The only older remaining items are high-risk Task 55 (backend persistence prototype) and gated Task 35 (release evidence refresh). The tasks below prioritize real backend/data/media readiness, provider-gated proof hygiene, demo stability, and honest mock/live/local boundaries while keeping default validation no-secret, no-spend, no-production-mutation, and non-destructive.
+
+## 63. Add Local Persistence Readiness Check Script
+
+- Owner type: Backend / QA
+- Goal: Add a no-database-mutation script that reports whether local backend persistence prerequisites are present, confirms browser-local fallback remains default, and points to the persistence spike plan.
+- Scope: Script/tests/docs only; no migrations or DB files.
+- Likely files: `scripts/local-persistence-readiness.mjs`, `package.json`, `apps/web/test/release-scripts.test.ts`, `docs/LOCAL_PERSISTENCE_SPIKE.md`.
+- Risk level: Low to Medium because it touches backend-readiness messaging but must not implement persistence.
+- Acceptance criteria: Default command reports persistence implementation as not enabled, no database file required, browser-local fallback preserved, and Task 55/plan references; JSON output is machine-readable and non-mutating.
+- Validation commands: `node scripts/local-persistence-readiness.mjs --json`, focused Vitest command, `git diff --check`, `pnpm lint`, `pnpm test`.
+- Can run in parallel: No with other release-script edits; yes with unrelated docs.
+
+## 64. Add Fal Live Proof Result Template And Redaction Checklist
+
+- Owner type: Media / Provider QA
+- Goal: Add a structured template for recording an approved one-call Fal smoke result without committing secrets or generated media.
+- Scope: Docs/tests optional; no live provider call by default.
+- Likely files: `docs/FAL_LIVE_PROOF_TEMPLATE.md`, `docs/DEMO_VIDEO_CHECKLIST.md`, `docs/README.md`.
+- Risk level: Low if docs only; Medium if script behavior changes.
+- Acceptance criteria: Template records gate, model, prompt class, approximate call count, artifact handling, cost caveat, redaction checks, and app-wiring status; clearly states normal dashboard generation still does not call Fal.
+- Validation commands: manual path/link check, `git diff --check`, `pnpm lint`.
+- Can run in parallel: Yes with tasks not editing docs index.
+
+## 65. Add Hosted Smoke Template Consistency Check
+
+- Owner type: Release / QA
+- Goal: Add a local no-network check that hosted smoke template docs preserve required caveats and command placeholders.
+- Scope: Script/test only; no hosted network call.
+- Likely files: `scripts/docs-consistency.mjs` or a new script, `apps/web/test/release-scripts.test.ts`, `docs/HOSTED_SMOKE_TEMPLATE.md`.
+- Risk level: Low.
+- Acceptance criteria: Check verifies the hosted template mentions `pnpm smoke:deploy`, `PLAYWRIGHT_BASE_URL`, platform rate limiting, not release evidence, and no secret pasting.
+- Validation commands: focused script/test, `git diff --check`, `pnpm lint`, `pnpm test`.
+- Can run in parallel: No with other release-script/docs-consistency edits.
+
+## 66. Add Sample Data Freshness Snapshot Script
+
+- Owner type: Data / QA
+- Goal: Emit a local JSON snapshot of sample date ranges, row counts, hidden fields checked, and source freshness checklist link.
+- Scope: Script/tests; no catalog/sample mutation.
+- Likely files: `scripts/sample-freshness-snapshot.mjs`, `package.json`, `apps/web/test/release-scripts.test.ts`, `docs/SOURCE_FRESHNESS_CHECKLIST.md`.
+- Risk level: Low.
+- Acceptance criteria: JSON output is no-network, includes Dallas/Austin/Houston sample ranges and hidden-field boundaries, and does not claim source-owned live freshness.
+- Validation commands: script JSON command, focused Vitest command, `git diff --check`, `pnpm lint`, `pnpm test`.
+- Can run in parallel: No with release-script edits; yes with UI-only tasks.
+
+## 67. Add Local Saved-Canvas Persistence Boundary UI Snapshot Test
+
+- Owner type: QA / Browser-local persistence
+- Goal: Strengthen browser/E2E coverage that `/saved` still says browser-local and does not imply backend persistence after new persistence planning docs.
+- Scope: Playwright test only unless copy is missing.
+- Likely files: `tests/e2e/product-demo.spec.ts` or `tests/e2e/governed-workflows.spec.ts`.
+- Risk level: Low to Medium.
+- Acceptance criteria: Test verifies local-only copy, no-account/no-hosted-database wording, import validation rejection, and no `/api/canvas/save` call for malformed share hash.
+- Validation commands: targeted Playwright command, `git diff --check`, `pnpm lint` if test/code changes.
+- Can run in parallel: No with other e2e saved-page edits.
+
+## 68. Add Miro Preview Artifact Template
+
+- Owner type: Integration / Docs
+- Goal: Add a template for saving or sharing Miro preview JSON manually without claiming board writes.
+- Scope: Docs only.
+- Likely files: `docs/MIRO_PREVIEW_ARTIFACT_TEMPLATE.md`, `docs/MIRO_EXPORT_SPEC.md`, `docs/README.md`.
+- Risk level: Low.
+- Acceptance criteria: Template records source dashboard, template type, validation status, no OAuth/no board-write caveat, and artifact handling; not release evidence unless Task 35 runs.
+- Validation commands: manual path/link check, `git diff --check`, `pnpm lint`.
+- Can run in parallel: Yes with non-Miro tasks.
+
+## 69. Add Release Evidence Dry-Run Precheck Script
+
+- Owner type: Release / QA
+- Goal: Add a no-mutation precheck that reports whether release evidence is current or historical and lists the commands required before Task 35.
+- Scope: Script/tests only; must not edit `docs/release-evidence.json`.
+- Likely files: `scripts/release-evidence-precheck.mjs`, `package.json`, `apps/web/test/release-scripts.test.ts`.
+- Risk level: Medium because it touches release-evidence workflow; safe only if read-only.
+- Acceptance criteria: Command reports current HEAD, recorded evidence commit, mismatch status, required full-gate commands, and exits 0 without modifying evidence.
+- Validation commands: script JSON command, focused Vitest command, `git diff --check`, `pnpm lint`, `pnpm test`.
+- Can run in parallel: No with release-script edits.
+
+## 70. Add Provider Output Redaction Utility
+
+- Owner type: Security / Tooling
+- Goal: Extract small shared redaction helper for provider smoke scripts if more provider proof scripts are added.
+- Scope: Script utility/tests; no real provider calls.
+- Likely files: `scripts/lib/redaction.mjs`, `scripts/fal-media-smoke.mjs`, `apps/web/test/release-scripts.test.ts`.
+- Risk level: Medium because it touches existing provider smoke script.
+- Acceptance criteria: Existing Fal smoke output remains unchanged except implementation uses shared helper; fake secret tests pass.
+- Validation commands: focused Vitest command, `node scripts/fal-media-smoke.mjs --json`, `git diff --check`, `pnpm lint`, `pnpm test`.
+- Can run in parallel: No with provider script edits.
+
+## 71. Add Local Backend Persistence Approval Checklist
+
+- Owner type: Backend / Governance
+- Goal: Add a checklist of explicit approvals, rollback commands, seed/reset scope, and validation gates needed before starting Task 55.
+- Scope: Docs only.
+- Likely files: `docs/LOCAL_PERSISTENCE_SPIKE.md`, `docs/README.md`, `TASKS.md`.
+- Risk level: Low.
+- Acceptance criteria: Checklist makes approval boundaries for migrations, DB files, env vars, seed/reset, and browser-local fallback explicit.
+- Validation commands: manual path/link check, `git diff --check`, `pnpm lint`.
+- Can run in parallel: Yes with non-persistence tasks.
+
+## 72. Add Demo Artifact Git Hygiene Check
+
+- Owner type: QA / Tooling
+- Goal: Add a local check that generated demo artifacts such as screenshots/videos are ignored and not staged accidentally.
+- Scope: Script/tests; no generated artifact commits.
+- Likely files: `scripts/demo-artifact-hygiene.mjs`, `package.json`, `apps/web/test/release-scripts.test.ts`, `.gitignore`.
+- Risk level: Low to Medium.
+- Acceptance criteria: Check verifies `demo-artifacts` is ignored and reports staged generated media extensions if present; default repo state passes.
+- Validation commands: script command, focused Vitest command, `git diff --check`, `pnpm lint`, `pnpm test`.
+- Can run in parallel: No with package/script edits.
