@@ -816,3 +816,32 @@ Last updated: May 10, 2026 06:17 CDT
 ### Recommended Next Task
 
 - Task 76, `Add Dashboard Partial-Query Fallback And Runtime Fallback Reasons`, is the next high-value task from the verified recommendations queue.
+
+
+## Task 76 Update
+
+- Task chosen: `TASKS.md` item 76, "Add Dashboard Partial-Query Fallback And Runtime Fallback Reasons".
+- Why this was next: It was the next high-impact confirmed recommendation after Task 75 and improves demo resilience/honesty by avoiding all-or-nothing dashboard failure when one bounded aggregate fails.
+- Scope: `apps/web/lib/dashboard.ts`, `apps/web/test/dashboard.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: No schema migration, database, backend persistence, provider/media call, deploy mutation, secrets, auth, billing, or release evidence refresh occurred. Existing mock/sample/live fallback behavior remains intact.
+
+### Files Updated
+
+- `apps/web/test/dashboard.test.ts`: Added regression coverage for one aggregate query failing while a validated dashboard still renders with failure caveats/audits.
+- `apps/web/lib/dashboard.ts`: Added optional query-runner injection for focused tests, converted dashboard aggregate execution to `Promise.allSettled`, and synthesize fallback result/audit/caveat records for failed aggregate slots.
+- `TASKS.md`: Marks Task 76 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records Task 76 scope, safety notes, validation, and next task.
+
+### Validation
+
+- RED: `pnpm test -- apps/web/test/dashboard.test.ts -t "one aggregate query fails"` failed before implementation because the extra query runner was ignored and no failure caveat was recorded.
+- GREEN: `pnpm test -- apps/web/test/dashboard.test.ts -t "one aggregate query fails"`: Passed; Vitest discovered the full suite and reported 101 tests across 15 files.
+- `pnpm lint`: Passed.
+- `pnpm typecheck`: Passed across shared, MCP server, and web.
+- `pnpm test`: Passed with 101 tests across 15 files.
+- `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "Dallas prompt"`: Passed with 16 browser tests.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 77, `Replace Runtime-Derived Filter Allowlist With Dataset Field Allowlists`, is the next task. It touches dashboard query construction, so keep it focused and test-first.

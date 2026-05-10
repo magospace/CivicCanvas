@@ -143,6 +143,31 @@ describe("dashboard generation", () => {
     expect(houstonLive.fallbackReason).toContain("not live-enabled");
   });
 
+  it("keeps a validated dashboard when one aggregate query fails and records the failure caveat", async () => {
+    const generation = await generateCanvasForPrompt(
+      "Show Dallas 311 service requests by category and ZIP code for 2024.",
+      {},
+      "auto",
+      {
+        queryRunner: async (adapter, spec) => {
+          if (spec.groupBy.includes("status")) {
+            throw new Error("simulated status aggregate failure");
+          }
+          return adapter.queryDataset(spec);
+        }
+      }
+    );
+
+    expect(generation.canvas.title).toContain("Dallas 311");
+    expect(generation.dataMode).toBe("fallback");
+    expect(generation.fallbackReason).toContain("status");
+    expect(generation.fallbackReason).toContain("simulated status aggregate failure");
+    expect(generation.canvas.sources[0].caveats.join(" ")).toContain("status query failed");
+    expect(generation.audits.some((audit) => audit.safetyDecisions.join(" ").includes("simulated status aggregate failure"))).toBe(true);
+    expect(generation.canvas.blocks.map((block) => block.type)).toContain("SourceMethodBlock");
+    expect(generation.canvas.blocks.find((block) => block.id === "detail-table")?.type).toBe("TableBlock");
+  });
+
   it("verifies data mode, fallback caveats, and source attribution for each supported dashboard", async () => {
     const dallas = await generateCanvasForPrompt("Show Dallas 311 service requests by category and ZIP code for 2024.");
     expect(dallas.requestedDataMode).toBe("auto");

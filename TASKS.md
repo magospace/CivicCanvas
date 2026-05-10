@@ -1179,6 +1179,8 @@ Status: Complete on May 10, 2026 at 06:30 CDT.
 
 ## 76. Add Dashboard Partial-Query Fallback And Runtime Fallback Reasons
 
+Status: Complete on May 10, 2026 at 06:38 CDT.
+
 - Owner type: Dashboard / Data honesty
 - Goal: Prevent one failed dashboard sub-query from killing the whole dashboard and surface specific fallback/failure reasons in source/method output.
 - Scope: `apps/web/lib/dashboard.ts`, shared `QueryAudit` schema if needed, dashboard tests.
@@ -1186,6 +1188,8 @@ Status: Complete on May 10, 2026 at 06:30 CDT.
 - Acceptance criteria: One failed aggregate produces a visible caveat or omitted block instead of full dashboard failure; fallback reasons remain honest and tested.
 - Validation commands: focused dashboard tests, `pnpm typecheck`, `pnpm test`, `git diff --check`, and likely `pnpm test:e2e` for the core demo path.
 - Can run in parallel: No.
+- Completed notes: Added testable dashboard query-runner injection, switched the five dashboard aggregate queries to `Promise.allSettled`, and synthesize fallback query results/audits/caveats when one bounded aggregate fails so the remaining validated dashboard blocks still render. Fallback reason and Source/Method caveats now include failed query details.
+- Validation: RED focused dashboard test failed before implementation; GREEN focused dashboard test passed with 101 tests across 15 files; `pnpm lint`, `pnpm typecheck`, full `pnpm test`, focused product-demo Playwright command, and `git diff --check` passed.
 
 ## 77. Replace Runtime-Derived Filter Allowlist With Dataset Field Allowlists
 

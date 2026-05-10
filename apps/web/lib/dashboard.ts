@@ -44,6 +44,13 @@ type DemoIntent = {
   caveatLead: string;
 };
 
+type QueryExecution = Awaited<ReturnType<DatasetAdapter["queryDataset"]>>;
+type DashboardQueryRunner = (adapter: DatasetAdapter, spec: BoundedQuerySpec) => Promise<QueryExecution>;
+type DashboardGenerationOptions = {
+  queryRunner?: DashboardQueryRunner;
+};
+type DashboardQuerySlot = "monthly" | "category" | "zip" | "status" | "table";
+
 const supportedPromptSuggestions = [
   "Show Dallas 311 service requests by category and ZIP code for 2024.",
   "Show Austin building permits by month and ZIP code for 2024.",
@@ -320,16 +327,96 @@ async function runQuery(adapter: DatasetAdapter, spec: BoundedQuerySpec) {
   return adapter.queryDataset(spec);
 }
 
+function querySlotLabel(slot: DashboardQuerySlot) {
+  return slot === "zip" ? "ZIP" : slot;
+}
+
+function queryFailureMessage(slot: DashboardQuerySlot, error: unknown) {
+  const detail = error instanceof Error ? error.message : "Unknown query failure.";
+  return `${querySlotLabel(slot)} query failed: ${detail}`;
+}
+
+function failedQueryExecution({
+  dataset,
+  spec,
+  slot,
+  error,
+  accessedAt
+}: {
+  dataset: DatasetMetadata;
+  spec: BoundedQuerySpec;
+  slot: DashboardQuerySlot;
+  error: unknown;
+  accessedAt: string;
+}): QueryExecution {
+  const caveat = queryFailureMessage(slot, error);
+  const fieldsUsed = [...spec.groupBy, ...spec.metrics.map((metric) => metric.alias)];
+  const columns = [
+    ...spec.groupBy.map((field) => ({
+      field,
+      label: field.replace(/_/g, " "),
+      type: "string" as const
+    })),
+    ...spec.metrics.map((metric) => ({
+      field: metric.alias,
+      label: metric.alias.replace(/_/g, " "),
+      type: "number" as const
+    }))
+  ];
+
+  return {
+    result: {
+      queryId: `failed_${slot}_${dataset.id}`,
+      datasetId: dataset.id,
+      resultType: "aggregate",
+      dataMode: "fallback",
+      rows: [],
+      columns,
+      source: {
+        datasetId: dataset.id,
+        datasetTitle: dataset.title,
+        sourceName: dataset.sourceName,
+        sourceUrl: dataset.sourceUrl,
+        accessedAt,
+        fieldsUsed,
+        filtersApplied: spec.filters.map((filter) => filter.field),
+        queryMethod: `Bounded ${querySlotLabel(slot)} aggregate failed; dashboard rendered remaining validated blocks.`,
+        dataMode: "fallback",
+        caveats: [caveat],
+        license: "Refer to source portal terms"
+      },
+      caveats: [caveat]
+    },
+    audit: {
+      auditId: `audit_failed_${slot}_${dataset.id}`,
+      queryId: `failed_${slot}_${dataset.id}`,
+      datasetId: dataset.id,
+      fieldsUsed,
+      filtersApplied: spec.filters.map((filter) => filter.field),
+      rowLimit: spec.limit ?? 1,
+      aggregation: true,
+      dataMode: "fallback",
+      executedAt: accessedAt,
+      safetyDecisions: [
+        "Dashboard preserved remaining validated blocks after a bounded aggregate query failure.",
+        caveat
+      ]
+    }
+  };
+}
+
 async function createDashboardForIntent({
   prompt,
   intent,
   filterValues = {},
-  dataModePreference = "auto"
+  dataModePreference = "auto",
+  options = {}
 }: {
   prompt: string;
   intent: DemoIntent;
   filterValues?: DashboardFilterValues;
   dataModePreference?: DataModePreference;
+  options?: DashboardGenerationOptions;
 }): Promise<DashboardGeneration> {
   const catalog = getDatasetCatalog();
   const adapter = getDatasetAdapter();
@@ -400,16 +487,35 @@ async function createDashboardForIntent({
     limit: tableLimit
   };
 
-  const [monthly, byCategory, byZip, byStatus, table] = await Promise.all([
-    runQuery(adapter, monthlySpec),
-    runQuery(adapter, categorySpec),
-    runQuery(adapter, zipSpec),
-    runQuery(adapter, statusSpec),
-    runQuery(adapter, tableSpec)
-  ]);
+  const queryRunner = options.queryRunner ?? runQuery;
+  const generatedAt = new Date().toISOString();
+  const queryEntries: Array<{ slot: DashboardQuerySlot; spec: BoundedQuerySpec }> = [
+    { slot: "monthly", spec: monthlySpec },
+    { slot: "category", spec: categorySpec },
+    { slot: "zip", spec: zipSpec },
+    { slot: "status", spec: statusSpec },
+    { slot: "table", spec: tableSpec }
+  ];
+  const settledQueries = await Promise.allSettled(queryEntries.map((entry) => queryRunner(adapter, entry.spec)));
+  const queryFailures: string[] = [];
+  const [monthly, byCategory, byZip, byStatus, table] = settledQueries.map((settled, index) => {
+    const entry = queryEntries[index];
+    if (settled.status === "fulfilled") {
+      return settled.value;
+    }
+    const failure = queryFailureMessage(entry.slot, settled.reason);
+    queryFailures.push(failure);
+    return failedQueryExecution({
+      dataset,
+      spec: entry.spec,
+      slot: entry.slot,
+      error: settled.reason,
+      accessedAt: generatedAt
+    });
+  }) as [QueryExecution, QueryExecution, QueryExecution, QueryExecution, QueryExecution];
 
   const results = [monthly.result, byCategory.result, byZip.result, byStatus.result, table.result];
-  const actualDataMode: DataMode = results.some((result) => result.dataMode === "fallback") || mode.dataMode === "fallback"
+  const actualDataMode: DataMode = queryFailures.length > 0 || results.some((result) => result.dataMode === "fallback") || mode.dataMode === "fallback"
     ? "fallback"
     : results.every((result) => result.dataMode === "live")
       ? "live"
@@ -421,12 +527,14 @@ async function createDashboardForIntent({
       dataMode: "fallback" as const,
       safetyDecisions: [
         ...audit.safetyDecisions,
-        mode.reason ?? "Dashboard used approved sample fallback for at least one requested live view."
+        mode.reason ?? (queryFailures.join(" ") || "Dashboard used approved sample fallback for at least one requested live view.")
       ]
     }))
     : rawAudits;
-  const modeCaveat = mode.reason ? [`${mode.reason} Approved sample fallback is used for this dashboard.`] : [];
-  const generatedAt = new Date().toISOString();
+  const modeCaveat = [
+    ...(mode.reason ? [`${mode.reason} Approved sample fallback is used for this dashboard.`] : []),
+    ...queryFailures
+  ];
   const source = createCombinedSource(dataset, results, prompt, actualDataMode, modeCaveat, generatedAt);
   const totalCount = monthly.result.rows.reduce((sum, row) => sum + numeric(row, intent.countAlias), 0);
   const zipRows = chartRows(byZip.result, intent.geographyField, intent.countAlias);
@@ -619,14 +727,15 @@ async function createDashboardForIntent({
     querySpec: tableSpec,
     dataMode: actualDataMode,
     requestedDataMode: dataModePreference,
-    fallbackReason: mode.reason
+    fallbackReason: [mode.reason, ...queryFailures].filter(Boolean).join(" ") || undefined
   };
 }
 
 export async function generateCanvasForPrompt(
   prompt: string,
   filterValues: DashboardFilterValues = {},
-  dataModePreference: DataModePreference = "auto"
+  dataModePreference: DataModePreference = "auto",
+  options: DashboardGenerationOptions = {}
 ): Promise<DashboardGeneration> {
   const promptIntent = parsePromptIntent({ prompt, catalog: getDatasetCatalog() });
   const catalog = getDatasetCatalog();
@@ -653,7 +762,7 @@ export async function generateCanvasForPrompt(
     };
   }
 
-  return createDashboardForIntent({ prompt, intent, filterValues, dataModePreference });
+  return createDashboardForIntent({ prompt, intent, filterValues, dataModePreference, options });
 }
 
 export function createDatasetSuggestionCanvas(prompt: string): CanvasDocument {
