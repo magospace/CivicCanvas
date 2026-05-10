@@ -2485,7 +2485,7 @@ Status: Complete on May 10, 2026.
 
 ## 153. Add Local Demo Command Transcript Skeleton
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Judge Proof / Docs
 - Goal: Provide a paste-safe command transcript skeleton for the exact no-spend validations and demo routes.
@@ -2496,6 +2496,8 @@ Status: Pending.
 - Acceptance criteria: Template includes redaction rules, local validation command list, expected known governance warning, and local/Loom/public URL boundaries.
 - Validation command: `git diff --check`.
 - Can run in parallel: Yes with code tasks not editing README.
+- Completed notes: Added `docs/LOCAL_SUBMISSION_TRANSCRIPT.md`, a paste-safe local validation transcript skeleton with redaction rules, expected no-spend command summaries, route proof steps, provider/live call summary, public URL boundary, and historical release-evidence warning. Linked it from README.
+- Validation: `git diff --check` passed.
 
 ## 154. Add Saved-Canvas Legacy Normalization Test
 

@@ -2130,3 +2130,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 153, `Add Local Demo Command Transcript Skeleton`, to make no-spend validation proof paste-safe.
+
+
+## Task 153 Update - Local Demo Command Transcript Skeleton
+
+- Task chosen: `TASKS.md` item 153, "Add Local Demo Command Transcript Skeleton".
+- Why this was next: It was the next safe judge-proof task after provider summary docs and makes local no-spend validation evidence paste-safe without committing generated outputs.
+- Scope: `docs/LOCAL_SUBMISSION_TRANSCRIPT.md`, `README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Documentation only.
+- Changes: Added a transcript skeleton with redaction rules, repo-state expectations, no-spend validation commands and expected summaries, local route proof sequence, live API/OpenAI/Fal call count placeholders, public URL TODO/smoke boundary, and historical release-evidence warning. Linked it from README.
+- Validation: `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 154, `Add Saved-Canvas Legacy Normalization Test`, for executable browser-local persistence/data-realism coverage.
