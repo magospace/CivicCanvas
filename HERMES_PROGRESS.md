@@ -1825,3 +1825,13 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: Manual catalog/README consistency check passed; `pnpm lint` passed; `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 129, `Add Submission Copy Boundary Assertions`, to lock honest README/submission-guide claims with automated checks.
+
+
+## Claude Code Recommendation Triage - Local Action Plan
+
+- Recommendation files found: exact lowercase `review_recommendations.md` was absent; found and read `REVIEW_RECOMMENDATIONS.md` plus referenced untracked `clauderecommends.md`.
+- Guardrail: user explicitly requested no GitHub push; all commits from this cycle must remain local. External recommendation files remain untracked and unstaged.
+- Triage action: Added Tasks 130-139 to `TASKS.md` from useful confirmed recommendations while preserving existing Tasks 126, 128, and 129 and existing CivicCanvas/Brainforge/local-demo priorities.
+- Classification summary: P0 confirmed mobile nav, duplicate controls, no-op controls, and status feedback; P1 useful jargon, seed starter clarity, toolbar/chart/date/source-method/inspector/saved/sources/focus/mode-label/why-dashboard polish; P2 useful accessibility/perf/data memoization/sample expansion; older critical items 1-5 from `clauderecommends.md` already resolved/stale; broad Sentry/analytics/CI/refactor/schema/persistence/Miro/deploy/release-evidence work deferred as risky or out of local demo scope.
+- Planned execution cap: Pick up to three highest-value safe tasks. Start with Task 130 mobile header navigation, then Task 131 no-op controls/deep-link prompt prefill, then Task 133 seed starter copy if validation remains green.
+- Live API/media/OpenAI calls: 0.

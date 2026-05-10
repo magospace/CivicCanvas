@@ -2084,3 +2084,170 @@ Status: Pending.
 - Acceptance criteria: Tests assert required honest phrases and reject common overclaim phrases in current submission docs; no network or file mutation.
 - Validation commands: focused release-script Vitest, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with release-script/docs-consistency test edits.
+
+
+---
+
+# Claude Code Review Recommendation Triage - Local Action Plan
+
+Last triaged: May 10, 2026. Source recommendations file found as `REVIEW_RECOMMENDATIONS.md` (uppercase spelling); exact lowercase `review_recommendations.md` was not present. Also read existing untracked `clauderecommends.md` because the review references it. Both files remain external untracked inputs and should not be committed unless explicitly requested.
+
+Triage summary:
+
+- P0 demo blocker / public demo readiness:
+  - Mobile navigation missing below `md`; useful and confirmed. Add responsive menu without changing routes.
+  - Duplicate save/share/export controls across toolbar and inspector; useful but larger UI surgery, so queued after safer demo blockers.
+  - Dead/no-op controls and misleading demo-card links; useful and confirmed. Convert no-op controls to static labels or real links and prefill demo prompts where safe.
+  - Status banner has no severity/dismiss behavior; useful but medium UI-state risk, queued after nav/no-op fixes.
+- P1 demo polish / reliability:
+  - Replace internal jargon in visible UI; useful but broad copy pass, queued.
+  - Add starter/empty-state clarity or at least rewrite seed dashboard copy; useful. Safe seed-copy subset queued before full empty-state redesign.
+  - Add per-button feedback, simplify dense toolbar, chart tooltips/label improvements, date presets, Source & Method visual weight, inspector collapse, saved-card action grouping, `/sources` CTA, stronger focus-ring contrast, mode-label consistency, and move "Why this dashboard?" higher; useful but not all demo-critical today.
+  - Hide `/demo-readiness` from top-level public nav: mixed. Useful for public polish but risky for hackathon readiness because judges/developers need the page during local validation; defer unless public hosted URL exists.
+- P2 useful after demo:
+  - SVG `<title>/<desc>`, gallery image priority, 44 px touch targets, disclosure chevrons, print CSS, reduced-motion CSS, `/sources` URL-persisted filters, map legend wording, dataset sidebar status pills, Houston sample expansion, data/adapters memoization, health cache, MCP schema dedupe.
+- Already done / stale:
+  - Older `clauderecommends.md` critical items 1-5 are already marked resolved in `REVIEW_RECOMMENDATIONS.md` and should not be reimplemented.
+  - README source provenance, MCP proof, OpenAI smoke boundary, and saved-flow docs were already added in completed Tasks 120-127.
+- Risky / defer:
+  - Sentry/analytics/telemetry, PR-gating changes, Lighthouse/CodeQL required checks, large dashboard module split, schema broadening, real persistence, real Miro writes, production deployment/rate-limit platform changes, and release evidence refresh are outside the current local demo scope or require approval.
+
+## 130. Add Mobile Header Navigation
+
+Status: Pending.
+
+- Owner type: UI / Demo Blocker
+- Goal: Make `/explore`, `/saved`, `/sources`, `/gallery`, and `/demo-readiness` reachable from the header on mobile widths.
+- Scope: Responsive header menu only; keep CivicCanvas naming and existing routes.
+- Likely files: `apps/web/components/header.tsx`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Medium because header navigation is global.
+- Data realism classification: Not data-path-related.
+- Acceptance criteria: At mobile viewport, a menu button opens/closes the nav, links preserve active labels, Escape closes the menu, and desktop nav still renders.
+- Validation command: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "mobile header navigation"`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with header route/nav edits.
+
+## 131. Remove Confirmed No-Op Demo Controls
+
+Status: Pending.
+
+- Owner type: UI / Demo Clarity
+- Goal: Remove or make real controls that currently look clickable but do not act.
+- Scope: Convert the header no-account control to a static status pill, convert dataset-sidebar city controls to static summaries unless a scoped filter is implemented, and make saved-page demo cards deep-link with a prompt query value that prefills the prompt bar.
+- Likely files: `apps/web/components/header.tsx`, `apps/web/components/dataset-sidebar.tsx`, `apps/web/app/saved/page.tsx`, `apps/web/components/app-shell.tsx`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium.
+- Data realism classification: Not data-path-related; preserves local-only saved-canvas honesty.
+- Acceptance criteria: No-account is non-interactive, city rows are no longer buttons, saved demo cards link to `/explore?prompt=...`, and `/explore` hydrates the prompt from the query string without auto-running a dashboard.
+- Validation command: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved demo cards prefill"`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with header/app-shell/saved-page edits.
+
+## 132. Add Toast Severity And Dismiss Behavior
+
+Status: Pending.
+
+- Owner type: UI / Feedback Reliability
+- Goal: Replace the single persistent status banner with clear success/error feedback.
+- Scope: App-shell status state only; no backend changes.
+- Likely files: `apps/web/components/app-shell.tsx`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Medium.
+- Data realism classification: Not data-path-related.
+- Acceptance criteria: Success messages use `role="status"` and auto-dismiss, errors use `role="alert"` with explicit close, and rapid save/share/export actions remain understandable.
+- Validation command: focused Playwright for save/share/error paths, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with app-shell status/action edits.
+
+## 133. Rewrite Seed Starter Dashboard Copy
+
+Status: Pending.
+
+- Owner type: UI Copy / Demo Clarity
+- Goal: Remove first-screen dev jargon from the seeded `/explore` dashboard.
+- Scope: Seed canvas copy only; do not redesign the full empty state.
+- Likely files: `apps/web/lib/seed-canvas.ts`, maybe focused tests, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Seed remains local synthetic/sample data and must stay labeled as such.
+- Acceptance criteria: Seed description tells users it is a sample starter and invites prompt generation; `P1 seed dashboard` and `CanvasDocument JSON` no longer appear in the first loaded dashboard copy.
+- Validation command: `pnpm test -- apps/web/test/dashboard.test.ts`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes with non-seed tasks.
+
+## 134. Deduplicate Inspector Save/Export Controls
+
+Status: Pending.
+
+- Owner type: UI / Information Architecture
+- Goal: Make Canvas Tools the single home for save/share/export/Miro actions and keep Inspector focused on state/audit.
+- Scope: Remove duplicate inspector action row/list after ensuring Canvas Tools has accessible labels for all actions.
+- Likely files: `apps/web/components/inspector-panel.tsx`, `apps/web/components/app-shell.tsx`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Medium.
+- Data realism classification: Not data-path-related.
+- Acceptance criteria: Save/share/export/Miro still work from Canvas Tools, inspector no longer duplicates them, and saved/export/Miro e2e flows pass.
+- Validation command: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved bundle import|Miro preview"`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with inspector/app-shell action edits.
+
+## 135. Add Demo-Safe Jargon Copy Pass
+
+Status: Pending.
+
+- Owner type: UI Copy / Product Clarity
+- Goal: Replace visible terms such as `Validated CanvasSpec`, `CanvasDocument JSON`, `BoundedQuerySpec`, and `allowlisted blocks` with user-facing labels while preserving developer detail where useful.
+- Scope: Visible copy and tests only; no schema or export format changes.
+- Likely files: `apps/web/components/canvas/canvas-renderer.tsx`, `apps/web/components/app-shell.tsx`, `apps/web/components/inspector-panel.tsx`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Medium due to existing tests expecting current copy.
+- Data realism classification: Copy must preserve no-arbitrary-code/no-hidden-fields honesty.
+- Acceptance criteria: Public UI says Dashboard/Dashboard JSON/Query definition/panels, technical labels remain available in advanced/export contexts, and product-demo tests pass.
+- Validation command: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with app-shell/inspector/canvas copy edits.
+
+## 136. Improve Chart And Map Accessibility Copy
+
+Status: Pending.
+
+- Owner type: Accessibility / UI Polish
+- Goal: Add SVG `<title>`/`<desc>` and clearer chart/map labels without adopting a new map/chart library.
+- Scope: Existing SVG blocks only.
+- Likely files: `apps/web/components/canvas-blocks.tsx`, tests if needed, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium.
+- Data realism classification: Map remains stylized/approximate and must be labeled that way.
+- Acceptance criteria: Chart and map SVGs expose useful text alternatives and the map legend explains the metric context.
+- Validation command: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "accessibility"`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes with non-canvas-block tasks.
+
+## 137. Add Sources-to-Explore CTA Links
+
+Status: Pending.
+
+- Owner type: UI / Demo Flow
+- Goal: Let users jump from a dataset card on `/sources` to a supported Explore prompt.
+- Scope: Sources catalog CTA links only; no catalog schema changes.
+- Likely files: `apps/web/components/sources-catalog.tsx`, tests, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium.
+- Data realism classification: CTA prompts must match supported prompt examples and sample/live labels.
+- Acceptance criteria: Each supported dataset card has an `Open in Explore` link with a prompt query, unsupported/coming-later datasets do not imply query readiness, and the prompt prefill path from Task 131 handles the query.
+- Validation command: focused Playwright for `/sources` CTA, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No if Task 131 prompt-prefill path is being edited.
+
+## 138. Improve Focus Ring Contrast
+
+Status: Pending.
+
+- Owner type: Accessibility / Visual Polish
+- Goal: Replace low-contrast `focus:ring-civic-100` usage on interactive controls with a stronger visible ring.
+- Scope: Focus class updates only; avoid broad restyling.
+- Likely files: `apps/web/components/**/*.tsx`, maybe `apps/web/app/**/*.tsx`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium due to broad class edits.
+- Data realism classification: Not data-path-related.
+- Acceptance criteria: Keyboard focus is visibly stronger on white/civic backgrounds, and no component behavior changes.
+- Validation command: `pnpm lint`, targeted Playwright accessibility check, `git diff --check`.
+- Can run in parallel: No with broad UI class edits.
+
+## 139. Defer Broad Architecture And Hosted-Ops Recommendations
+
+Status: Pending.
+
+- Owner type: Planning / Risk Control
+- Goal: Preserve useful non-demo recommendations without implementing risky architecture/ops changes during hackathon submission work.
+- Scope: Document deferred Sentry/analytics/CI requirements, large refactors, schema broadening, platform rate limiting, release-evidence refresh, real persistence, and real Miro writes as future/backlog work only.
+- Likely files: `TASKS.md`, `HERMES_PROGRESS.md`, future roadmap docs if approved.
+- Risk level: Low.
+- Data realism classification: Keeps claims honest by not implying production readiness.
+- Acceptance criteria: Final report explicitly names deferred/rejected recommendations and why.
+- Validation command: `git diff --check`.
+- Can run in parallel: Yes with implementation tasks.
