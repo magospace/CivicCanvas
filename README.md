@@ -12,6 +12,16 @@ Open-source, MCP-powered visual explorer for Texas public datasets.
 - Dataset/synthetic data provenance: approved catalog metadata lives in `data/catalog/approved-datasets.json`; Dallas/Austin/Houston sample rows live in `data/samples/*.sample.json` and are schema-aligned fallback samples with provenance/caveats visible in the UI.
 - Known limitations and next steps: no backend saved-canvas database, no arbitrary SQL/dataset access, no live Miro writes, limited live public API coverage, and hosted firewall/rate-limit proof remains a deployment task.
 
+## Using Provided Keys
+
+The public repo never includes real provider credentials. If the team gives you a key separately, copy `.env.example` to `.env.local`, paste the value there, and restart the dev server.
+
+```bash
+cp .env.example .env.local
+```
+
+Use `OPENAI_API_KEY` only for optional server-side prompt assist and source-aware summary wording. Do not commit `.env.local`, paste real keys into issues, or expose keys as `NEXT_PUBLIC_*` values.
+
 ## What it does
 
 Users ask natural-language questions about Texas public data. The app parses supported prompts with deterministic local TypeScript rules, discovers approved public datasets, runs safe bounded queries, and renders interactive dashboards with maps, charts, tables, filters, summaries, and source attribution. OpenAI is optional and server-side only for prompt-assist/summary wording when `OPENAI_API_KEY` is configured; it is not required for the default local demo and cannot generate dashboard code, arbitrary SQL, non-catalog dataset access, or hidden-field overrides.
