@@ -2356,7 +2356,7 @@ Status: Complete on May 10, 2026.
 
 ## 145. Add Gallery Fixture Loader Regression Proof
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Data Realism / Test Coverage
 - Goal: Strengthen proof that gallery demo records are loaded through the existing data loader and validated, not imported component-local mocks.
@@ -2367,6 +2367,8 @@ Status: Pending.
 - Acceptance criteria: Test asserts checked-in gallery fixtures are loaded via `apps/web/lib/data.ts`, pass validation, include Source & Method, and include no hidden fields.
 - Validation command: `pnpm test -- apps/web/test/gallery-fixtures.test.ts`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes with docs-only tasks.
+- Completed notes: Added a focused gallery fixture data-realism test file proving gallery canvases load through `getCuratedGalleryCanvases`, validate against governed canvas schemas, include Source & Method blocks, avoid hidden/review fields, reference only approved catalog sources except the governed suggestion fixture, and are not directly imported by gallery UI code.
+- Validation: `pnpm test -- apps/web/test/gallery-fixtures.test.ts` passed; due repo script wiring, 126 Vitest tests across 18 files ran and passed. `pnpm lint` passed; `git diff --check` passed.
 
 ## 146. Add No-Key Provider Readiness Screenshot Copy Guard
 

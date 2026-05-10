@@ -2025,3 +2025,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 145, `Add Gallery Fixture Loader Regression Proof`, because it adds executable proof for the README's gallery fixture/data-loader classification.
+
+
+## Task 145 Update - Gallery Fixture Loader Regression Proof
+
+- Task chosen: `TASKS.md` item 145, "Add Gallery Fixture Loader Regression Proof".
+- Why this was next: It adds executable proof for the README/data-realism claim that gallery demo records are fixture files loaded through the app data loader, not component-local mock arrays.
+- Scope: `apps/web/test/gallery-fixtures.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Fixture file through data loader / acceptable. No product behavior, catalog, sample, provider, schema, or persistence code changed.
+- Changes: Added focused Vitest coverage asserting checked-in gallery canvases load through `getCuratedGalleryCanvases`, match the fixture count, validate with `validateCanvasDocument`, include `SourceMethodBlock`, avoid hidden/review fields such as `precise_address`, reference approved catalog datasets except the governed `catalog_suggestions` fixture, and are not directly imported or named by gallery UI route/component files.
+- Validation: `pnpm test -- apps/web/test/gallery-fixtures.test.ts` passed; due repo script wiring, 126 Vitest tests across 18 files ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 146, `Add No-Key Provider Readiness Screenshot Copy Guard`, to further protect optional OpenAI/provider boundary copy.
