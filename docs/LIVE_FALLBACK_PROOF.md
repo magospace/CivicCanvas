@@ -20,12 +20,17 @@ This matrix is the quick truth source for judge-demo data claims. It names what 
 
 ## Validation Proof
 
-Run these local checks before claiming the matrix is current:
+Use the no-network proof command for routine validation:
 
 ```bash
 pnpm live:fallback-proof:json
-pnpm governance:audit
-pnpm data:quality
+```
+
+If an approved reviewer intentionally runs network live smoke, record results with `docs/LIVE_API_SMOKE_TEMPLATE.md` instead of changing catalog mappings or release evidence from the smoke notes.
+
+Run focused dashboard/query tests when data-mode behavior changes:
+
+```bash
 pnpm test -- apps/web/test/dashboard.test.ts
 pnpm test -- packages/shared/test/query-audit.test.ts
 ```

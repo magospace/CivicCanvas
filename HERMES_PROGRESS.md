@@ -1302,3 +1302,24 @@ Last updated: May 10, 2026 06:17 CDT
 ### Recommended Next Task
 
 - Task 93, `Add Live Public Data Optional Smoke Evidence Template`, is next.
+
+
+## Task 93 Update
+
+- Task chosen: `TASKS.md` item 93, "Add Live Public Data Optional Smoke Evidence Template".
+- Why this was next: Task 92 completed cleanly, and Task 93 was the next safe live-data honesty docs task. It supports optional live public API proof recording without running network smoke or changing catalog mappings.
+- Scope: `docs/LIVE_API_SMOKE_TEMPLATE.md`, `docs/LIVE_FALLBACK_PROOF.md`, `docs/README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Documentation only. No live API smoke was run, no catalog/sample/adapters changed, no release evidence refresh, deploy, provider call, generated media, backend persistence, schema, migration, secrets, auth, billing, or production data changed.
+
+### Validation
+
+- Manual path/link/boundary check: Passed. Confirmed template captures command/date, Dallas non-ZIP live fields, Dallas ZIP fallback, Austin/Houston sample-first caveats, and no-release-evidence boundary.
+- `pnpm live:fallback-proof:json`: Passed.
+- `pnpm lint`: Passed.
+- `git diff --check`: Passed.
+
+### Stop Point
+
+- Completed five tasks from the replenished queue: Tasks 89, 90, 91, 92, and 93.
+- Remaining untracked file: `clauderecommends.md`, preserved as external feedback input.
+- Next recommended task: Task 94, `Add MCP Inspect No-Secret Submission Note`, unless a gated live/deploy/provider/backend/release-evidence task is explicitly approved.

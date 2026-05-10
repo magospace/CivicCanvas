@@ -22,6 +22,7 @@ Use this index to choose the current source of truth before opening older milest
 | [`DATA_GOVERNANCE.md`](DATA_GOVERNANCE.md) | Dataset approval, hidden-field, aggregation, caveat, and fallback expectations. |
 | [`LIVE_ADAPTERS.md`](LIVE_ADAPTERS.md) | Live public API adapter boundaries and fallback behavior. |
 | [`LIVE_FALLBACK_PROOF.md`](LIVE_FALLBACK_PROOF.md) | Dallas, Austin, and Houston demo prompt proof matrix for live, sample, and fallback claims. |
+| [`LIVE_API_SMOKE_TEMPLATE.md`](LIVE_API_SMOKE_TEMPLATE.md) | Optional network live-API smoke evidence template that preserves Dallas/Austin/Houston fallback boundaries and release-evidence caveats. |
 | [`SUPPORTED_PROMPTS.md`](SUPPORTED_PROMPTS.md) | Deterministic prompt grammar, supported synonyms, data modes, and unsupported/sensitive prompt behavior. |
 | [`SOURCE_FRESHNESS_CHECKLIST.md`](SOURCE_FRESHNESS_CHECKLIST.md) | Source freshness, terms, field-review, and evidence checklist before stronger live-data claims. |
 | [`CATALOG_ONBOARDING_CHECKLIST.md`](CATALOG_ONBOARDING_CHECKLIST.md) | New-dataset onboarding checklist for safe field classifications, live verification, sample fallback, hidden fields, and validation gates. |

@@ -1461,6 +1461,8 @@ Status: Complete on May 10, 2026.
 
 ## 93. Add Live Public Data Optional Smoke Evidence Template
 
+Status: Complete on May 10, 2026.
+
 - Owner type: Data / Live Smoke Docs
 - Goal: Add a template for recording optional `pnpm smoke:live:json` evidence without changing catalog mappings or overclaiming unsupported live fields.
 - Scope: Docs only; no live call by default.
@@ -1469,6 +1471,8 @@ Status: Complete on May 10, 2026.
 - Acceptance criteria: Template captures command, date, Dallas non-ZIP live fields, Dallas ZIP fallback, Austin/Houston sample-first caveats, and no-release-evidence boundary.
 - Validation commands: manual path/link check, `pnpm live:fallback-proof:json`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes.
+- Completed notes: Added `docs/LIVE_API_SMOKE_TEMPLATE.md` for optional network live smoke notes, linked it from docs index, and pointed `LIVE_FALLBACK_PROOF.md` to the template for approved smoke runs while preserving no-network default proof and Dallas/Austin/Houston fallback boundaries.
+- Validation: Manual path/link/boundary check, `pnpm live:fallback-proof:json`, `pnpm lint`, and `git diff --check` passed.
 
 ## 94. Add MCP Inspect No-Secret Submission Note
 
