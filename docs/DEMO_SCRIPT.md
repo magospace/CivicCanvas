@@ -22,6 +22,8 @@ Open `http://localhost:3000/explore`.
 
 Do not refresh `docs/release-evidence.json` for this demo script. Release evidence is a separate gated task.
 
+Important: the checked-in release evidence is historical and records commit `a5ce07a81ee932bdf7a37724af0e7aab3a3d9f0f`, not the current branch `HEAD`. Do not cite it as current proof during the judge demo unless Task 35 has rerun the full release gate and intentionally refreshed the evidence for the intended commit.
+
 ## Opening Pitch
 
 Texas Data Canvas turns approved Texas public datasets into source-cited dashboards. The app is intentionally governed: no accounts, no database, no arbitrary SQL, no arbitrary generated HTML or JavaScript, no LLM-backed dashboard generation, no image/video/media-generation provider, and no live Miro board writes.

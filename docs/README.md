@@ -36,7 +36,7 @@ Use this index to choose the current source of truth before opening older milest
 | [`DEMO_SCRIPT.md`](DEMO_SCRIPT.md) | Demo prompts and walkthrough steps. |
 | [`HACKATHON_DEMO_READINESS.md`](HACKATHON_DEMO_READINESS.md) | Local-first judge-demo checklist that does not refresh release evidence. |
 | [`ACCEPTANCE_CRITERIA.md`](ACCEPTANCE_CRITERIA.md) | Product acceptance checklist. |
-| [`release-evidence.json`](release-evidence.json) | Historical release evidence consumed by health/demo-readiness/governance checks. Do not refresh without rerunning the release gate. |
+| [`release-evidence.json`](release-evidence.json) | Historical release evidence consumed by health/demo-readiness/governance checks. It records commit `a5ce07a81ee932bdf7a37724af0e7aab3a3d9f0f`, not the current branch `HEAD`; do not cite it as current proof or refresh it without rerunning the release gate through Task 35. |
 
 ## Historical And Reference Docs
 

@@ -4,10 +4,10 @@ Last reconciled: May 10, 2026
 
 ## Release Evidence Warning
 
-`pnpm governance:audit` currently passes, but emits this warning:
+`pnpm governance:audit` currently passes, but emits a warning like this:
 
 ```text
-release evidence commit differs from HEAD: Recorded a5ce07a; current HEAD is 2021b47.
+release evidence commit differs from HEAD: Recorded a5ce07a; current HEAD is <current branch HEAD>.
 Refresh hosted release evidence before tagging if this is not intentional.
 ```
 
@@ -17,15 +17,17 @@ The warning is caused by `docs/release-evidence.json`. That file records:
 - `branch`: `feat/v1.3-hosted-launch-readiness`
 - `commit`: `a5ce07a81ee932bdf7a37724af0e7aab3a3d9f0f`
 
-The current branch `HEAD` is:
+The current branch has advanced beyond that evidence. As of this Task 39 documentation pass, the pre-commit `HEAD` was:
 
-- `2021b47806547d89760065dd13dc290b840c39f6`
+- `43e900d5ba11c3c0364a10a62381ff586e6229d5`
+
+Any later commit on this branch is also not covered by the checked-in release evidence until Task 35 reruns the full gate and refreshes `docs/release-evidence.json`.
 
 `scripts/governance-audit.mjs` treats this as a warning, not a failure, when the recorded commit resolves locally but does not equal `HEAD`.
 
 ## Why This Exists
 
-The release evidence file is a historical evidence surface for release reviewers and `/demo-readiness`. It records the commit and gate results that were verified at the time evidence was produced. The current `HEAD` contains later governance-audit and release-evidence-check changes, so blindly changing the evidence commit to `HEAD` would imply that every recorded gate in `docs/release-evidence.json` was rerun for the newer commit.
+The release evidence file is a historical evidence surface for release reviewers and `/demo-readiness`. It records the commit and gate results that were verified at the time evidence was produced. The current branch contains later docs, tests, governance, and tooling changes, so blindly changing the evidence commit to `HEAD` would imply that every recorded gate in `docs/release-evidence.json` was rerun for the newer commit.
 
 That would break the audit trail unless the full release gate was actually rerun and the evidence was intentionally refreshed.
 

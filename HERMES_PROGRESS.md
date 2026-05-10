@@ -1,22 +1,22 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 04:24 CDT
+Last updated: May 10, 2026 04:27 CDT
 
 ## Current Cycle
 
-- Task chosen: `TASKS.md` item 38, "Document No Image/Video/Media Provider Path".
-- Why this was next: Item 38 follows the Miro preview-only alignment and closes the next realness-audit wording gap around generated visual/media artifacts.
-- Scope: `README.md`, `ARCHITECTURE_MAP.md`, `docs/DEMO_SCRIPT.md`, `REALNESS_AUDIT.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Task chosen: `TASKS.md` item 39, "Add Current-HEAD Release Evidence Warning To Demo Handoff".
+- Why this was next: Item 39 follows the media-provider wording pass and keeps demo/release docs honest while Task 35 remains approval-gated.
+- Scope: `GOVERNANCE_NOTE.md`, `docs/DEMO_SCRIPT.md`, `docs/README.md`, `REALNESS_AUDIT.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
 - Safety notes: Documentation only. No product behavior, runtime source code, tests, package scripts, config, source data, secrets, auth, billing, migrations, production config, deploy scripts, release evidence, catalog data, samples, live API calls, or destructive operations were changed. Release evidence was not refreshed.
 
 ## Files Updated
 
-- `README.md`: Added the explicit no image/video/media-generation, upload, storage-bucket, paid creative-provider, or credit-spending boundary.
-- `ARCHITECTURE_MAP.md`: Added the same no-media-provider boundary to the side-effects section.
-- `docs/DEMO_SCRIPT.md`: Added no media-provider wording to the opening pitch and visual output narration.
-- `REALNESS_AUDIT.md`: Updated the media-generation row to record the docs boundary.
-- `TASKS.md`: Marked item 38 complete with validation notes.
-- `HERMES_PROGRESS.md`: Recorded item 38 scope, safety notes, and validation.
+- `GOVERNANCE_NOTE.md`: Updated the release-evidence warning to avoid stale exact-current-HEAD wording and state that the branch has advanced beyond recorded evidence.
+- `docs/DEMO_SCRIPT.md`: Added a judge-demo warning not to cite checked-in release evidence as current proof.
+- `docs/README.md`: Labeled `release-evidence.json` as historical evidence for commit `a5ce07a...`, not current branch proof.
+- `REALNESS_AUDIT.md`: Updated the release-evidence row with the new warning surfaces.
+- `TASKS.md`: Marked item 39 complete with validation notes.
+- `HERMES_PROGRESS.md`: Recorded item 39 scope, safety notes, and validation.
 
 ## Sequential Progress
 
@@ -30,7 +30,8 @@ Last updated: May 10, 2026 04:24 CDT
 - Task 34 committed as `2fbcf44` (`chore: migrate web lint to eslint cli`).
 - Task 36 committed as `476143a` (`docs: clarify saved canvas persistence boundary`).
 - Task 37 committed as `452e608` (`docs: align miro preview-only wording`).
-- Task 38 completed and ready to commit as `docs: document no media provider path`.
+- Task 38 committed as `43e900d` (`docs: document no media provider path`).
+- Task 39 committed as `bb75c66` (`docs: warn release evidence is historical`).
 
 ## Sequential Task Plan
 
@@ -230,6 +231,9 @@ Current `git status --short --branch` shows branch `feat/v1.3-hosted-launch-read
 - `pnpm lint`: Passed for Task 37 docs.
 - `git diff --check`: Passed for Task 38 docs.
 - `pnpm lint`: Passed for Task 38 docs.
+- `git diff --check`: Passed for Task 39 docs.
+- `pnpm lint`: Passed for Task 39 docs.
+- `pnpm governance:audit`: Passed 19/19 checks and preserved the expected historical release-evidence commit mismatch warning.
 
 ## Blockers
 
@@ -237,4 +241,4 @@ Current `git status --short --branch` shows branch `feat/v1.3-hosted-launch-read
 
 ## Recommended Next Task
 
-- Do not run `TASKS.md` item 35, "Refresh Release Evidence Only After Full Validation Gate", without explicit approval. The next safe non-release task is item 36, "Clarify Saved-Canvas Validation Stub Honesty".
+- Do not run `TASKS.md` item 35, "Refresh Release Evidence Only After Full Validation Gate", without explicit approval. The next safe non-release task is item 40, "Add Sample Data Provenance And Persistence Realness Matrix".

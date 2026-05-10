@@ -593,6 +593,8 @@ Status: Complete on May 10, 2026 at 04:24 CDT.
 
 ## 39. Add Current-HEAD Release Evidence Warning To Demo Handoff
 
+Status: Complete on May 10, 2026 at 04:27 CDT.
+
 - Owner type: Release / Docs
 - Goal: Make it obvious in demo handoff docs that checked-in release evidence is historical until Task 35 reruns the full gate.
 - Why it matters: `docs/release-evidence.json` records `a5ce07a81ee932bdf7a37724af0e7aab3a3d9f0f`, while the audited HEAD is `05145a59ac40`.
@@ -602,6 +604,8 @@ Status: Complete on May 10, 2026 at 04:24 CDT.
 - Acceptance criteria: Demo/release docs warn not to cite release evidence as current proof; Task 35 remains the only evidence-refresh path.
 - Validation commands: `git diff --check`, `pnpm lint`, optionally `pnpm governance:audit` to confirm the warning remains expected.
 - Can run in parallel: Yes with non-release-evidence tasks.
+- Completed notes: Updated `GOVERNANCE_NOTE.md`, `docs/DEMO_SCRIPT.md`, `docs/README.md`, and `REALNESS_AUDIT.md` to say checked-in release evidence records `a5ce07a81ee932bdf7a37724af0e7aab3a3d9f0f`, the branch has advanced beyond it, and it must not be cited as current proof until Task 35 reruns the full release gate and refreshes evidence.
+- Validation: `git diff --check` passed; `pnpm lint` passed; `pnpm governance:audit` passed 19/19 checks while preserving the expected release-evidence commit mismatch warning.
 
 ## 40. Add Sample Data Provenance And Persistence Realness Matrix
 
