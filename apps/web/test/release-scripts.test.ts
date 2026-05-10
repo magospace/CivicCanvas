@@ -91,6 +91,40 @@ describe("release and governance scripts", () => {
     expect(body.checks.map((check: { name: string }) => check.name)).toContain("historical docs are labeled away from current starting points");
   });
 
+  it("reports Fal media smoke as skipped by default with no spend", () => {
+    const stdout = execFileSync("node", ["scripts/fal-media-smoke.mjs", "--json"], {
+      cwd: process.cwd(),
+      encoding: "utf8",
+      env: { ...process.env, RUN_LIVE_FAL_SMOKE: "0", FAL_KEY: "", FAL_API_KEY: "" }
+    });
+    const body = JSON.parse(stdout);
+
+    expect(body.ok).toBe(true);
+    expect(body.status).toBe("skipped_no_spend");
+    expect(body.liveGateEnabled).toBe(false);
+    expect(body.liveCallCount).toBe(0);
+    expect(body.appMediaWiring).toBe("not_implemented_dashboard_ui_only");
+  });
+
+  it("blocks live Fal media smoke without a provider key and does not print secrets", () => {
+    try {
+      execFileSync("node", ["scripts/fal-media-smoke.mjs", "--json"], {
+        cwd: process.cwd(),
+        encoding: "utf8",
+        stdio: "pipe",
+        env: { ...process.env, RUN_LIVE_FAL_SMOKE: "1", FAL_KEY: "", FAL_API_KEY: "" }
+      });
+      throw new Error("Expected Fal media smoke to fail without a provider key.");
+    } catch (error) {
+      const stdout = String((error as { stdout?: string }).stdout ?? "");
+      const body = JSON.parse(stdout);
+      expect(body.ok).toBe(false);
+      expect(body.status).toBe("blocked_missing_key");
+      expect(body.liveCallCount).toBe(0);
+      expect(stdout).not.toContain("fal_secret");
+    }
+  });
+
   it("verifies Vercel output safely when no local output exists", () => {
     const stdout = execFileSync("node", ["scripts/verify-vercel-build-output.mjs", "--json"], {
       cwd: process.cwd(),

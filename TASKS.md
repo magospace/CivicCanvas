@@ -802,6 +802,8 @@ This queue follows completion of Tasks 46-50. It prioritizes hackathon submissio
 
 ## 51. Add Env-Gated Fal Media Proof Script
 
+Status: Complete on May 10, 2026 at 05:38 CDT.
+
 - Owner type: Media / QA
 - Goal: Add a no-spend-by-default script that proves whether Fal image generation is configured and, only when explicitly env-gated, performs one minimal live proof call.
 - Scope: `scripts/*`, `apps/web/test/release-scripts.test.ts`, `README.md` or `docs/HACKATHON_DEMO_READINESS.md` if command documentation is needed.
@@ -810,6 +812,8 @@ This queue follows completion of Tasks 46-50. It prioritizes hackathon submissio
 - Acceptance criteria: Default run exits successfully with JSON/text saying live Fal proof is skipped unless `RUN_LIVE_FAL_SMOKE=1`; missing API key under the gate fails safely without printing the key; docs/tests say current app generation is still not wired to media output unless a later task implements it; optional live call is one minimal request only.
 - Validation commands: `node scripts/fal-media-smoke.mjs --json`, focused Vitest command for script tests, `git diff --check`, `pnpm lint`, `pnpm test` if Vitest coverage changes.
 - Can run in parallel: No with other package/script edits; yes with unrelated docs after command naming is stable.
+- Completed notes: Added `scripts/fal-media-smoke.mjs` and `pnpm media:fal:smoke(:json)` commands. The default path is no-spend/no-provider-call and reports that app media generation is not wired into dashboard output. The live path requires `RUN_LIVE_FAL_SMOKE=1` plus `FAL_KEY`/`FAL_API_KEY`, fails safely without a key, and is designed for one minimal request only. README documents both paths and the billing/approval boundary.
+- Validation: `node scripts/fal-media-smoke.mjs --json`, focused release-scripts Vitest command, `git diff --check`, `pnpm lint`, and full `pnpm test` passed. No live Fal call was made.
 
 ## 52. Add Media Provider Status API Boundary
 

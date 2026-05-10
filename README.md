@@ -79,6 +79,15 @@ pnpm smoke:deploy:json -- --url http://localhost:3000
 PLAYWRIGHT_BASE_URL=https://your-deployment.example pnpm test:e2e:remote
 ```
 
+Optional Fal media-provider proof is no-spend by default and not wired into dashboard generation:
+
+```bash
+pnpm media:fal:smoke:json
+RUN_LIVE_FAL_SMOKE=1 FAL_KEY=<redacted> pnpm media:fal:smoke:json
+```
+
+The first command makes no provider call. The second command is explicitly live/paid-provider-gated, performs at most one minimal proof request, and must not be used unless billing risk and credentials are intentionally approved.
+
 `pnpm smoke:live` is optional and only checks catalog entries with `liveAvailable: true`.
 `pnpm smoke:deploy` requires a running local or hosted URL.
 `pnpm verify:prod-local` builds `apps/web`, runs `next start` on an available local port, then runs hosted-style smoke and remote-mode Playwright against that production server.

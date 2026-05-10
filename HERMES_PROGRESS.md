@@ -1,6 +1,6 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 05:35 CDT
+Last updated: May 10, 2026 05:38 CDT
 
 ## Current Cycle
 
@@ -237,6 +237,34 @@ Last updated: May 10, 2026 05:35 CDT
 - Action: Replenished `TASKS.md` with Tasks 51-62 focused on hackathon submission readiness, real provider/media proof gates, live public-data proof, local backend persistence planning/prototype boundaries, demo stability, screenshot/submission tooling, hosted smoke templates, and provider secret redaction.
 - Safety notes: Replenishment is planning only. No provider calls, media generation, schema/migration changes, database operations, release evidence refresh, deploy mutation, production data access, secrets, auth, or billing changes were made.
 - Selected next task: Task 51, `Add Env-Gated Fal Media Proof Script`, because it is the first safe/high-value task and establishes an honest no-spend-by-default provider-gated media proof path.
+
+## Task 51 Update
+
+- Task chosen: `TASKS.md` item 51, "Add Env-Gated Fal Media Proof Script".
+- Why this was next: It was the first safe/high-value task in the replenished queue and moves toward an honest provider-gated media proof path while keeping default local validation no-spend.
+- Scope: `scripts/fal-media-smoke.mjs`, `package.json`, `apps/web/test/release-scripts.test.ts`, `README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: No live Fal call was made. No provider secret was read from files or printed. The default path is no-spend/no-network and explicitly reports that dashboard media generation is not implemented.
+
+### Files Updated
+
+- `scripts/fal-media-smoke.mjs`: Added a no-spend default smoke script and an explicit `RUN_LIVE_FAL_SMOKE=1` + `FAL_KEY`/`FAL_API_KEY` live proof path intended for one minimal request.
+- `package.json`: Added `media:fal:smoke` and `media:fal:smoke:json` scripts.
+- `apps/web/test/release-scripts.test.ts`: Added coverage for default skipped/no-spend behavior and missing-key live-gate failure.
+- `README.md`: Documented no-spend default and env-gated live Fal proof commands plus billing/approval boundary.
+- `TASKS.md`: Marks item 51 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records item 51 scope, safety notes, and validation.
+
+### Validation
+
+- `node scripts/fal-media-smoke.mjs --json`: Passed; reported `skipped_no_spend` and `liveCallCount: 0`.
+- `pnpm test -- apps/web/test/release-scripts.test.ts -t "Fal media"`: Passed. The command discovered the full Vitest suite and reported 15 files, 92 tests passed.
+- `git diff --check`: Passed.
+- `pnpm lint`: Passed.
+- `pnpm test`: Passed with 15 files, 92 tests.
+
+### Recommended Next Task
+
+- Task 52, `Add Media Provider Status API Boundary`, is the next safe task.
 
 ## Historical Sequential Progress
 
