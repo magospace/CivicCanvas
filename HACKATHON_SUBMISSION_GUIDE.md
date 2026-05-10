@@ -97,7 +97,7 @@ Say: "Saved canvases are browser-local for this MVP. They are editable local rec
 
 ### 2:40-3:00 - MCP And Agent Skill Close
 
-Action: Briefly show the repo/docs if practical, or mention the MCP/skill without switching away.
+Action: Briefly show `docs/MCP_DEMO_TRANSCRIPT_TEMPLATE.md`, `apps/mcp-server/src`, and `.agents/skills/texas-public-data-explorer/SKILL.md` if practical, or mention the MCP/skill without switching away.
 
 Say: "For the Brainforge/Vicinity requirement, CivicCanvas includes a custom MCP server and an agent skill. Agents can discover sources, run bounded queries, summarize results, and generate safe canvas specs. CivicCanvas makes Texas public data useful without hiding source limitations."
 

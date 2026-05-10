@@ -1977,3 +1977,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm audit:demo-data` passed; `pnpm lint` passed; `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 145, `Add Gallery Fixture Loader Regression Proof`, because it proves checked-in demo records flow through data loaders and validation rather than component-local mocks.
+
+
+## Task 141 Update - MCP Judge Demo Transcript Proof
+
+- Task chosen: `TASKS.md` item 141, "Add MCP Judge Demo Transcript Proof".
+- Why this was next: After the data-realism audit guard, this was a safe high-impact Brainforge/Vicinity submission task because judges need to quickly see MCP server + agent skill proof during Loom or repo review.
+- Scope: `docs/MCP_DEMO_TRANSCRIPT_TEMPLATE.md`, `HACKATHON_SUBMISSION_GUIDE.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Documentation/proof guidance only. It keeps catalog/sample/gallery/saved/local/preview boundaries explicit and does not imply live production data, backend persistence, or real Miro writes.
+- Changes: Added a concise 15-second Loom proof section that points to the custom MCP server, the agent skill, and a paste-safe green test summary. Updated the submission guide's MCP close to point at the exact transcript, MCP source, and skill path.
+- Validation: `pnpm test -- apps/mcp-server/test/tools.test.ts` passed; due repo script wiring, all 123 Vitest tests across 17 files ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 142, `Add Source Provenance Quick-Check Script`, for a no-network source/fallback proof summary.

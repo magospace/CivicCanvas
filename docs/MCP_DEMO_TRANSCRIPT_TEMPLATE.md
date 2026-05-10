@@ -16,6 +16,15 @@ Expected proof shape:
 - Inspector/tool listing shows CivicCanvas tools without requiring production credentials.
 - Test proof exercises the same safe handlers and Zod output validation.
 
+## 15-Second Loom Proof
+
+If time is tight, show this proof without leaving the browser for long:
+
+1. Open this file or the repo tree and point to `apps/mcp-server/src` and `.agents/skills/texas-public-data-explorer/SKILL.md`.
+2. Say: "The Brainforge proof is not just UI copy: CivicCanvas ships a custom MCP server plus an agent skill. The tools list approved Texas sources, run bounded source-cited queries, validate catalog health, generate validated dashboard JSON, and create preview-only Miro specs."
+3. Show one terminal line from `pnpm test -- apps/mcp-server/test/tools.test.ts` or a prior green run summary if available.
+4. Say the boundary: "No arbitrary SQL, hidden fields, production database, account system, or live Miro write is being claimed."
+
 ## Tool Transcript Skeleton
 
 Fill in only paste-safe summaries. Do not paste raw environment dumps, access tokens, or full local absolute paths.

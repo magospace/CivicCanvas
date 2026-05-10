@@ -2292,7 +2292,7 @@ Status: Complete on May 10, 2026.
 
 ## 141. Add MCP Judge Demo Transcript Proof
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Brainforge / MCP Proof Docs
 - Goal: Make the MCP/agent skill proof judge-scannable without requiring live tools during Loom recording.
@@ -2303,6 +2303,8 @@ Status: Pending.
 - Acceptance criteria: Loom script can show MCP/skill proof in 15 seconds, commands are no-secret/no-spend, and Brainforge/Vicinity fit is explicit.
 - Validation command: `git diff --check`, optionally `pnpm lint` if README/MD tooling is unaffected.
 - Can run in parallel: Yes with implementation tasks that do not edit the same docs.
+- Completed notes: Added a 15-second Loom proof block to the MCP transcript template and pointed the submission guide close at the transcript, MCP server source, and agent skill path so judges can quickly verify Brainforge/Vicinity fit.
+- Validation: `pnpm test -- apps/mcp-server/test/tools.test.ts` passed; due repo script wiring, all 123 Vitest tests across 17 files ran and passed. `pnpm lint` passed; `git diff --check` passed.
 
 ## 142. Add Source Provenance Quick-Check Script
 
