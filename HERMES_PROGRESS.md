@@ -1533,3 +1533,13 @@ Last updated: May 10, 2026 06:17 CDT
 - Files updated: Added a paste-safe optional live API smoke template and linked it from the submission command transcript template.
 - Validation: Path/wording checks for the new template and transcript link passed; `pnpm lint` and `git diff --check` passed.
 - Recommended next task: Task 107, `Add Provider-Gated Media Honesty Note To Health UI`.
+
+## Task 107 Update
+
+- Task chosen: `TASKS.md` item 107, "Add Provider-Gated Media Honesty Note To Health UI".
+- Why this was next: It was the next pending provider-honesty task after Task 106 and makes media/Fal boundaries visible in the demo readiness UI.
+- Scope: `apps/web/app/demo-readiness/page.tsx`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: UI/test only. No Fal call was run, no media generation was added, no provider credentials were used, and no generated artifacts were created or committed.
+- Files updated: Demo readiness safety model now states Fal media proof is optional script-only and normal dashboard generation does not call Fal or create image/video artifacts; E2E asserts the copy.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "demo readiness route"` ran the full product-demo spec with 17 browser tests and passed; `pnpm lint` and `git diff --check` passed.
+- Recommended next task: Task 108, `Reconcile Remaining Visual Audit Risks Into Queue`.

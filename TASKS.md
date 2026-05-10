@@ -1706,7 +1706,7 @@ Status: Complete on May 10, 2026.
 
 ## 107. Add Provider-Gated Media Honesty Note To Health UI
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Provider / UI Honesty
 - Goal: Make app-visible health/demo surfaces state that Fal media proof is script-only and not wired into dashboard generation.
@@ -1716,6 +1716,8 @@ Status: Pending.
 - Acceptance criteria: `/demo-readiness` visibly says normal dashboard generation does not call Fal or create image/video, while `RUN_LIVE_FAL_SMOKE=1` remains optional/script-level proof; E2E asserts the boundary.
 - Validation commands: targeted Playwright demo-readiness test, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with demo-readiness route/test edits.
+- Completed notes: `/demo-readiness` safety model now explicitly says Fal media proof is optional script-only and normal dashboard generation does not call Fal or create image/video artifacts. Product-demo E2E asserts this boundary.
+- Validation: Targeted demo-readiness Playwright command ran the full product-demo spec with 17 browser tests; `pnpm lint` and `git diff --check` passed.
 
 ## 108. Reconcile Remaining Visual Audit Risks Into Queue
 

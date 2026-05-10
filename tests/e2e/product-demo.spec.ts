@@ -233,6 +233,7 @@ test("demo readiness route shows public release boundaries", async ({ page }) =>
   await expect(page.getByText(/Do not cite checked-in release evidence as current proof/i)).toBeVisible();
   await expect(page.getByText("Sample data quality")).toBeVisible();
   await expect(page.getByText("Hosted blocker", { exact: true })).toBeVisible();
+  await expect(page.getByText(/normal dashboard generation does not call Fal or create image\/video artifacts/i)).toBeVisible();
   await expect(page.getByText("Houston live verification")).toBeVisible();
   await expect(page.getByText(/Houston TranStar publishes sample JSON feeds/i)).toBeVisible();
   await expect(page.getByRole("heading", { name: /Houston Transportation/ })).toBeVisible();
