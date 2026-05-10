@@ -2147,7 +2147,7 @@ Status: Complete on May 10, 2026.
 
 ## 132. Add Toast Severity And Dismiss Behavior
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: UI / Feedback Reliability
 - Goal: Replace the single persistent status banner with clear success/error feedback.
@@ -2158,6 +2158,8 @@ Status: Pending.
 - Acceptance criteria: Success messages use `role="status"` and auto-dismiss, errors use `role="alert"` with explicit close, and rapid save/share/export actions remain understandable.
 - Validation command: focused Playwright for save/share/error paths, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with app-shell status/action edits.
+- Completed notes: Replaced the single generic status string with typed success/error feedback. Success messages render as accessible `role="status"` toasts and auto-dismiss after 5 seconds; error messages render as `role="alert"` with a Dismiss button. Toast success contrast was adjusted to satisfy axe.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "app feedback distinguishes"` passed after fixing strict alert/save selectors and success-toast contrast; the project script executed all 21 product-demo browser tests. `pnpm lint` passed; `git diff --check` passed.
 
 ## 133. Rewrite Seed Starter Dashboard Copy
 

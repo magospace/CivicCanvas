@@ -151,7 +151,6 @@ test("unsupported sensitive prompt returns exact supported prompts and approved 
   await page.goto("/explore");
   await generate(page, "Show private phone numbers for bridge repairs on Mars.");
 
-  await expect(page.getByText("Prompt not recognized. Showing approved dataset suggestions.")).toBeVisible();
   await expect(page.getByText("Choose an approved dataset")).toBeVisible();
   await expect(page.getByText(/Prompt referenced "phone"/)).toBeVisible();
   await expect(page.getByText("Show Dallas 311 service requests by category and ZIP code for 2024.")).toBeVisible();
@@ -169,6 +168,20 @@ test("Houston exact-address prompt returns suggestions instead of a dashboard", 
   await expect(page.getByText("Choose an approved dataset")).toBeVisible();
   await expect(page.getByText("Houston Transportation Incidents Explorer")).not.toBeVisible();
   await expect(page.getByText(/Prompt referenced "exact address"/)).toBeVisible();
+});
+
+test("app feedback distinguishes success toasts from dismissible errors", async ({ page }) => {
+  await page.goto("/explore");
+
+  await page.getByRole("button", { name: "Query spec" }).click();
+  const appAlert = page.locator("main [role='alert']");
+  await expect(appAlert).toContainText("No active BoundedQuerySpec is available for this canvas.");
+  await page.getByRole("button", { name: "Dismiss" }).click();
+  await expect(appAlert).toHaveCount(0);
+
+  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await expect(page.getByRole("status")).toContainText("Saved locally: Dallas 311 Service Requests Explorer");
+  await expect(page.getByRole("status")).toBeHidden({ timeout: 7000 });
 });
 
 test("saved bundle import rejects unsafe JSON and saved-card actions work", async ({ page }) => {

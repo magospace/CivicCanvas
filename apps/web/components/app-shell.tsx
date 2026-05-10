@@ -18,6 +18,11 @@ type PromptExample = {
   dataModeNote: string;
 };
 
+type StatusMessage = {
+  message: string;
+  tone: "success" | "error";
+};
+
 export function AppShell({
   aiSuggestionsActive,
   canvas,
@@ -39,7 +44,7 @@ export function AppShell({
   const [fallbackReason, setFallbackReason] = useState<string | null>(null);
   const [filterValues, setFilterValues] = useState<Record<string, string>>({});
   const [isGenerating, setIsGenerating] = useState(false);
-  const [status, setStatus] = useState<string | null>(null);
+  const [status, setStatus] = useState<StatusMessage | null>(null);
   const [miroSpec, setMiroSpec] = useState<MiroExportSpec | null>(null);
   const [miroTemplate, setMiroTemplate] = useState<MiroExportSpec["template"]>("briefing_board");
   const activeSource = activeCanvas.sources[0];
@@ -48,6 +53,15 @@ export function AppShell({
     activeSource.dataMode === "sample"
     ? "Houston is running in sample-first mode. Live promotion is blocked until Houston TranStar live feed access and aggregate-safe mappings are verified."
     : null;
+
+  useEffect(() => {
+    if (status?.tone !== "success") {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => setStatus(null), 5000);
+    return () => window.clearTimeout(timeoutId);
+  }, [status]);
 
   useEffect(() => {
     function openSavedCanvas(saved: ReturnType<typeof takePendingOpenCanvas>) {
@@ -62,7 +76,7 @@ export function AppShell({
       setDataMode(saved.canvas.sources[0]?.dataMode ?? "sample");
       setDataModePreference("auto");
       setFallbackReason(null);
-      setStatus(`Opened saved canvas: ${saved.title}`);
+      setStatus({ message: `Opened saved canvas: ${saved.title}`, tone: "success" });
     }
 
     const pending = takePendingOpenCanvas();
@@ -77,19 +91,19 @@ export function AppShell({
         const shared = imported?.[0];
         if (shared) {
           openSavedCanvas(shared);
-          setStatus(`Imported shared canvas link: ${shared.title}`);
+          setStatus({ message: `Imported shared canvas link: ${shared.title}`, tone: "success" });
           window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
           return;
         }
       } catch (error) {
-        setStatus(error instanceof Error ? error.message : "Shared canvas link was rejected.");
+        setStatus({ message: error instanceof Error ? error.message : "Shared canvas link was rejected.", tone: "error" });
       }
     }
 
     const promptFromQuery = new URLSearchParams(window.location.search).get("prompt")?.trim();
     if (promptFromQuery) {
       setPrompt(promptFromQuery);
-      setStatus("Prompt prefilled from demo link. Generate the dashboard when ready.");
+      setStatus({ message: "Prompt prefilled from demo link. Generate the dashboard when ready.", tone: "success" });
     }
   }, []);
 
@@ -116,15 +130,16 @@ export function AppShell({
       setQuerySpec(payload.querySpec ?? null);
       setDataMode(payload.dataMode ?? payload.canvas?.sources?.[0]?.dataMode ?? "sample");
       setFallbackReason(payload.fallbackReason ?? null);
-      setStatus(
-        payload.suggestedDatasets
+      setStatus({
+        message: payload.suggestedDatasets
           ? "Prompt not recognized. Showing approved dataset suggestions."
           : payload.fallbackReason
             ? `Dashboard generated with fallback: ${payload.fallbackReason}`
-            : "Dashboard generated from bounded governed queries."
-      );
+            : "Dashboard generated from bounded governed queries.",
+        tone: "success"
+      });
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Dashboard generation failed.");
+      setStatus({ message: error instanceof Error ? error.message : "Dashboard generation failed.", tone: "error" });
     } finally {
       setIsGenerating(false);
     }
@@ -143,19 +158,19 @@ export function AppShell({
         throw new Error(payload.error?.message ?? payload.error ?? "Miro export spec failed.");
       }
 
-      setStatus(`Miro export spec generated with ${payload.spec.frames.length} frames. Preview-only.`);
+      setStatus({ message: `Miro export spec generated with ${payload.spec.frames.length} frames. Preview-only.`, tone: "success" });
       setMiroSpec(payload.spec);
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Miro export spec failed.");
+      setStatus({ message: error instanceof Error ? error.message : "Miro export spec failed.", tone: "error" });
     }
   }
 
   function saveCurrentCanvas() {
     try {
       saveCanvasLocally({ canvas: activeCanvas, audits, prompt, intent: intent ?? undefined });
-      setStatus(`Saved locally: ${activeCanvas.title}`);
+      setStatus({ message: `Saved locally: ${activeCanvas.title}`, tone: "success" });
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Could not save canvas.");
+      setStatus({ message: error instanceof Error ? error.message : "Could not save canvas.", tone: "error" });
     }
   }
 
@@ -168,18 +183,18 @@ export function AppShell({
         intent: intent ?? undefined
       });
       await navigator.clipboard?.writeText(share.url);
-      setStatus("No-backend share link copied. The hash bundle is validated before import.");
+      setStatus({ message: "No-backend share link copied. The hash bundle is validated before import.", tone: "success" });
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Could not copy saved-canvas share link.");
+      setStatus({ message: error instanceof Error ? error.message : "Could not copy saved-canvas share link.", tone: "error" });
     }
   }
 
   async function copyCanvasJson() {
     try {
       await navigator.clipboard?.writeText(canvasDocumentJson(activeCanvas));
-      setStatus("Validated CanvasDocument JSON copied to clipboard.");
+      setStatus({ message: "Validated CanvasDocument JSON copied to clipboard.", tone: "success" });
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Could not copy canvas JSON.");
+      setStatus({ message: error instanceof Error ? error.message : "Could not copy canvas JSON.", tone: "error" });
     }
   }
 
@@ -187,13 +202,13 @@ export function AppShell({
     try {
       const json = boundedQuerySpecJson(querySpec);
       if (!json) {
-        setStatus("No active BoundedQuerySpec is available for this canvas.");
+        setStatus({ message: "No active BoundedQuerySpec is available for this canvas.", tone: "error" });
         return;
       }
       await navigator.clipboard?.writeText(json);
-      setStatus("Active BoundedQuerySpec copied to clipboard.");
+      setStatus({ message: "Active BoundedQuerySpec copied to clipboard.", tone: "success" });
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Could not copy query spec.");
+      setStatus({ message: error instanceof Error ? error.message : "Could not copy query spec.", tone: "error" });
     }
   }
 
@@ -201,7 +216,7 @@ export function AppShell({
     try {
       const csv = tableCsv(activeCanvas);
       if (!csv) {
-        setStatus("No table block is available for CSV export.");
+        setStatus({ message: "No table block is available for CSV export.", tone: "error" });
         return;
       }
       const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
@@ -211,9 +226,9 @@ export function AppShell({
       anchor.download = `${activeCanvas.title.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}-table.csv`;
       anchor.click();
       URL.revokeObjectURL(url);
-      setStatus("Current table exported as CSV.");
+      setStatus({ message: "Current table exported as CSV.", tone: "success" });
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Could not export table CSV.");
+      setStatus({ message: error instanceof Error ? error.message : "Could not export table CSV.", tone: "error" });
     }
   }
 
@@ -241,11 +256,24 @@ export function AppShell({
           />
           {status ? (
             <div
-              role="status"
-              aria-live="polite"
-              className="rounded-lg border border-civic-100 bg-white px-4 py-3 text-sm text-civic-700 shadow-sm"
+              role={status.tone === "error" ? "alert" : "status"}
+              aria-live={status.tone === "error" ? "assertive" : "polite"}
+              className={`flex items-start justify-between gap-3 rounded-lg border px-4 py-3 text-sm shadow-sm ${
+                status.tone === "error"
+                  ? "border-signal/30 bg-signal/10 text-signal"
+                  : "border-mint/30 bg-mint/10 text-civic-900"
+              }`}
             >
-              {status}
+              <span>{status.message}</span>
+              {status.tone === "error" ? (
+                <button
+                  type="button"
+                  onClick={() => setStatus(null)}
+                  className="rounded-md px-2 py-1 text-xs font-semibold underline-offset-2 hover:underline focus:outline-none focus:ring-2 focus:ring-civic-500"
+                >
+                  Dismiss
+                </button>
+              ) : null}
             </div>
           ) : null}
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm">

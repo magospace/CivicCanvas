@@ -1871,3 +1871,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm test -- apps/web/test/dashboard.test.ts` passed; due repo script wiring, 123 Vitest tests across 17 files ran and passed. `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "explore route loads"` passed; due repo script wiring, all 20 product-demo browser tests ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 132 (`Add Toast Severity And Dismiss Behavior`) or Task 134 (`Deduplicate Inspector Save/Export Controls`), depending on whether feedback clarity or information architecture matters more before the next demo.
+
+
+## Task 132 Update - Toast Severity And Dismiss Behavior
+
+- Task chosen: `TASKS.md` item 132, "Add Toast Severity And Dismiss Behavior".
+- Why this was next: It was the highest-value pending demo-reliability task after Task 133 because repeated save/share/export/generation feedback needed clearer success/error semantics before Loom or in-person demos.
+- Scope: `apps/web/components/app-shell.tsx`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Not data-path-related. Existing fixture/sample/local saved-canvas behavior remains unchanged. The task only changes UI feedback for real product actions.
+- Changes: Replaced the single generic status string with typed success/error feedback. Success toasts use `role="status"`, auto-dismiss after 5 seconds, and use axe-safe contrast. Error toasts use `role="alert"`, remain visible, and include a Dismiss button.
+- Validation: Initial focused Playwright run exposed two issues: Next route announcer made broad `role=alert` strict locators ambiguous, and mint success text narrowly missed WCAG contrast under axe. Fixed both by scoping alert assertions to `main` and using stronger success text color. `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "app feedback distinguishes"` then passed; due repo script wiring, all 21 product-demo browser tests ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 134, `Deduplicate Inspector Save/Export Controls`, to continue reducing duplicated demo controls while preserving normal save/export flows.
