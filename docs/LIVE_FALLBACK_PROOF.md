@@ -23,11 +23,14 @@ This matrix is the quick truth source for judge-demo data claims. It names what 
 Run these local checks before claiming the matrix is current:
 
 ```bash
+pnpm live:fallback-proof:json
 pnpm governance:audit
 pnpm data:quality
 pnpm test -- apps/web/test/dashboard.test.ts
 pnpm test -- packages/shared/test/query-audit.test.ts
 ```
+
+`pnpm live:fallback-proof:json` is no-network and catalog-driven. It proves the narrow Dallas live-capable mapping, the Dallas ZIP fallback boundary, Austin sample-first/month limitation, and Houston sample-first/hidden-address boundary.
 
 For a full local test baseline:
 

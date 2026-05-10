@@ -68,6 +68,25 @@ describe("release and governance scripts", () => {
     )?.distinctMonths).toBe(12);
   });
 
+  it("reports no-network live/fallback proof for core demo claims", () => {
+    const stdout = execFileSync("node", ["scripts/live-fallback-proof.mjs", "--json"], {
+      cwd: process.cwd(),
+      encoding: "utf8"
+    });
+    const body = JSON.parse(stdout);
+
+    expect(body.ok).toBe(true);
+    expect(body.network).toBe("not_used");
+    const dallas = body.rows.find((row: { datasetId: string }) => row.datasetId === "dallas_311_requests");
+    expect(dallas.liveAvailable).toBe(true);
+    expect(dallas.liveMappedFields).toContain("category");
+    expect(dallas.liveMappedFields).not.toContain("zip_code");
+    expect(dallas.sampleOnlyFields).toContain("zip_code");
+    const houston = body.rows.find((row: { datasetId: string }) => row.datasetId === "houston_transportation_incidents");
+    expect(houston.renderedMode).toBe("sample_first");
+    expect(houston.hiddenFields).toContain("precise_address");
+  });
+
   it("verifies current-doc links and historical-doc labeling", () => {
     const stdout = execFileSync("node", ["scripts/docs-consistency.mjs", "--json"], {
       cwd: process.cwd(),

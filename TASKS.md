@@ -832,6 +832,8 @@ Status: Complete on May 10, 2026 at 05:40 CDT.
 
 ## 53. Add Live Public API Proof Report For Supported Dallas Aggregate
 
+Status: Complete on May 10, 2026 at 05:43 CDT.
+
 - Owner type: Data / Live API QA
 - Goal: Add a deterministic report or test path showing the narrow real Dallas live aggregate support and the fallback behavior for unsupported ZIP views without overclaiming live support.
 - Scope: Existing live smoke/query helpers, local tests, docs proof matrix.
@@ -840,6 +842,8 @@ Status: Complete on May 10, 2026 at 05:40 CDT.
 - Acceptance criteria: No-network validation proves expected live/fallback metadata; optional network command remains explicit; docs identify exactly which Dallas path is live-capable and which demo prompt still falls back.
 - Validation commands: focused Vitest test, `pnpm smoke:live:json` only if network is intentionally used, `git diff --check`, `pnpm lint`, `pnpm test`, `pnpm governance:audit` if docs/catalog assumptions change.
 - Can run in parallel: No with catalog/adapter edits; yes with unrelated UI/docs.
+- Completed notes: Added `scripts/live-fallback-proof.mjs` and `pnpm live:fallback-proof(:json)` for a no-network catalog-driven report. It proves Dallas has narrow live mapped fields but ZIP remains sample-only, Austin month grouping is not promoted live, and Houston is sample-first with `precise_address` hidden. Release-scripts coverage and the live/fallback proof doc now reference the command.
+- Validation: `node scripts/live-fallback-proof.mjs --json`, focused release-scripts Vitest command, `git diff --check`, `pnpm lint`, and full `pnpm test` passed. `pnpm smoke:live:json` was skipped because no network/live proof was needed for this no-network task.
 
 ## 54. Add Local Backend Persistence Spike Plan With Rollback Assumptions
 

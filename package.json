@@ -16,6 +16,8 @@
     "governance:audit:json": "node scripts/governance-audit.mjs --json",
     "data:quality": "node scripts/data-quality.mjs",
     "data:quality:json": "node scripts/data-quality.mjs --json",
+    "live:fallback-proof": "node scripts/live-fallback-proof.mjs",
+    "live:fallback-proof:json": "node scripts/live-fallback-proof.mjs --json",
     "verify:prod-local": "node scripts/verify-prod-local.mjs",
     "verify:vercel-output": "node scripts/verify-vercel-build-output.mjs",
     "release:check": "node scripts/governance-audit.mjs && node scripts/data-quality.mjs && node scripts/verify-prod-local.mjs && node scripts/verify-vercel-build-output.mjs",
