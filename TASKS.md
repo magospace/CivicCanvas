@@ -1391,3 +1391,120 @@ Status: Complete on May 10, 2026 at 07:19 CDT.
 - Can run in parallel: Yes.
 - Completed notes: Added a public URL smoke placeholder to the hosted smoke template with URL, deploy smoke command, remote browser command, expected version/commit, platform firewall/rate-limit caveat, and not-release-evidence status unless Task 35 runs.
 - Validation: Manual wording check passed; `pnpm lint` and `git diff --check` passed.
+
+
+---
+
+# Hackathon Submission Hardening Queue
+
+Last replenished: May 10, 2026 after Task 88. Existing untracked input preserved: `clauderecommends.md`. Gated work remains blocked unless explicitly approved: Task 35 release-evidence refresh, Task 55 local backend persistence/migrations, hosted deployment mutation/proof, live provider spend, production data operations, secrets/auth/billing, and platform configuration changes.
+
+## 89. Add Public Repo/Remote Readiness To Submission Script
+
+- Owner type: QA / Submission Tooling
+- Goal: Make `pnpm submission:readiness:json` report git remote/public repo readiness without network calls or leaking credentials.
+- Scope: No-network script/test only; do not configure remotes.
+- Likely files: `scripts/submission-readiness.mjs`, `apps/web/test/release-scripts.test.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium.
+- Acceptance criteria: JSON reports current branch, whether a remote URL is configured, redacted remote host/path metadata, and a submission TODO if no public repo URL is configured; no remote mutation or network call occurs.
+- Validation commands: `pnpm submission:readiness:json`, focused Vitest command, `pnpm lint`, `pnpm test`, `git diff --check`.
+- Can run in parallel: No with submission readiness script edits.
+
+## 90. Add Readme Submission Link Consistency Check
+
+- Owner type: Docs / QA Tooling
+- Goal: Extend docs consistency checks so README and docs index retain links to key submission/demo docs.
+- Scope: Script/test only, with docs wording fix only if the check reveals drift.
+- Likely files: `scripts/docs-consistency.mjs`, `apps/web/test/release-scripts.test.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Acceptance criteria: Consistency JSON includes submission-doc link checks for README and docs index; current repo passes.
+- Validation commands: `node scripts/docs-consistency.mjs --json`, focused Vitest command, `pnpm lint`, `pnpm test`, `git diff --check`.
+- Can run in parallel: No with docs consistency script edits.
+
+## 91. Add No-Spend Media Proof Contract To Submission Readiness
+
+- Owner type: Provider / QA Tooling
+- Goal: Make submission readiness explicitly require the no-spend Fal proof script and classify live Fal proof as gated/not run.
+- Scope: Script/test only; no live Fal call.
+- Likely files: `scripts/submission-readiness.mjs`, `apps/web/test/release-scripts.test.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Acceptance criteria: JSON includes media proof status, no-spend command, live gate command name, app media wiring caveat, and no live call count.
+- Validation commands: `pnpm submission:readiness:json`, `pnpm media:fal:smoke:json`, focused Vitest command, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with submission readiness script edits.
+
+## 92. Add Backend Persistence Gate To Health/Readiness Docs
+
+- Owner type: Persistence / Docs
+- Goal: Ensure current submission/demo docs point future real backend work to the local persistence readiness script and approval checklist.
+- Scope: Docs only; no persistence implementation.
+- Likely files: `docs/HACKATHON_SUBMISSION_GUIDE.md`, `docs/HACKATHON_SUBMISSION_CHECKLIST.md`, `docs/LOCAL_PERSISTENCE_SPIKE.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Acceptance criteria: Docs tell reviewers saved canvases are browser-local today and future backend persistence requires Task 55 approval, local/dev DB scope, rollback/seed assumptions, and `pnpm persistence:readiness:json`.
+- Validation commands: manual wording check, `pnpm persistence:readiness:json`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes with non-doc tasks.
+
+## 93. Add Live Public Data Optional Smoke Evidence Template
+
+- Owner type: Data / Live Smoke Docs
+- Goal: Add a template for recording optional `pnpm smoke:live:json` evidence without changing catalog mappings or overclaiming unsupported live fields.
+- Scope: Docs only; no live call by default.
+- Likely files: `docs/LIVE_API_SMOKE_TEMPLATE.md`, `docs/LIVE_FALLBACK_PROOF.md`, `docs/README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Acceptance criteria: Template captures command, date, Dallas non-ZIP live fields, Dallas ZIP fallback, Austin/Houston sample-first caveats, and no-release-evidence boundary.
+- Validation commands: manual path/link check, `pnpm live:fallback-proof:json`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes.
+
+## 94. Add MCP Inspect No-Secret Submission Note
+
+- Owner type: MCP / Docs
+- Goal: Add a safe note for demonstrating MCP inspect/build in Loom without dumping env vars or implying arbitrary SQL/provider access.
+- Scope: Docs only.
+- Likely files: `docs/MCP_DEMO_PROOF.md`, `docs/HACKATHON_SUBMISSION_GUIDE.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Acceptance criteria: Docs include exact safe commands, safe narration, no-secret/no-arbitrary-SQL caveat, and preview-only Miro boundary.
+- Validation commands: manual wording check, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes.
+
+## 95. Add Submission Readiness Known-Blockers Doc Snapshot
+
+- Owner type: QA / Docs
+- Goal: Add a concise checked-in doc explaining the current submission blockers emitted by `pnpm submission:readiness:json`.
+- Scope: Docs only.
+- Likely files: `docs/SUBMISSION_BLOCKERS.md`, `docs/README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Acceptance criteria: Doc lists public repo URL, Loom URL, team roster, optional hosted URL, historical release evidence, platform rate limit, and backend/media boundaries without implying they are fixed.
+- Validation commands: manual path/link check, `pnpm submission:readiness:json`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes.
+
+## 96. Add Safe Submission Command Transcript Template
+
+- Owner type: Submission / Docs
+- Goal: Add a paste-safe transcript template for final validation commands that redacts local paths/secrets and separates optional live/deploy evidence.
+- Scope: Docs only.
+- Likely files: `docs/SUBMISSION_COMMAND_TRANSCRIPT_TEMPLATE.md`, `docs/HACKATHON_SUBMISSION_CHECKLIST.md`, `docs/README.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Acceptance criteria: Template has sections for local no-spend commands, optional hosted/live commands, redaction rules, and not-release-evidence caveat.
+- Validation commands: manual path/link check, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes.
+
+## 97. Add Demo Readiness Snapshot Blocker Assertions
+
+- Owner type: QA / Tests
+- Goal: Strengthen tests for `demo-readiness-snapshot` so release-evidence and hosted-rate-limit blockers stay visible.
+- Scope: Test only unless script output is missing required fields.
+- Likely files: `apps/web/test/release-scripts.test.ts`, optionally `scripts/demo-readiness-snapshot.mjs`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium.
+- Acceptance criteria: Focused test asserts known blockers include historical release evidence and platform firewall/rate-limit wording, and snapshot remains no-network/non-mutating.
+- Validation commands: focused Vitest command, `pnpm test`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with release-script tests.
+
+## 98. Add Final No-Artifact Submission Hygiene Checklist
+
+- Owner type: Submission / Artifact Hygiene
+- Goal: Ensure final submission docs remind agents not to commit screenshots/videos/provider artifacts or `.env` files.
+- Scope: Docs only.
+- Likely files: `docs/HACKATHON_SUBMISSION_CHECKLIST.md`, `docs/DEMO_VIDEO_CHECKLIST.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Acceptance criteria: Docs point to `pnpm demo:artifact-hygiene:json`, mention ignored `demo-artifacts/`, and prohibit `.env`, screenshots/videos, generated provider artifacts unless a task explicitly approves them.
+- Validation commands: manual wording check, `pnpm demo:artifact-hygiene:json`, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes.
