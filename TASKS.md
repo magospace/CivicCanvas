@@ -2372,7 +2372,7 @@ Status: Complete on May 10, 2026.
 
 ## 146. Add No-Key Provider Readiness Screenshot Copy Guard
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Provider Honesty / UI Test
 - Goal: Protect `/demo-readiness` copy so OpenAI/provider proof remains optional, server-side, live-gated, and no-key safe.
@@ -2383,6 +2383,8 @@ Status: Pending.
 - Acceptance criteria: E2E verifies no-key/optional/provider-gated wording and avoids implying dashboard generation uses OpenAI.
 - Validation command: focused Playwright for demo-readiness, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with demo-readiness route edits.
+- Completed notes: Added `/demo-readiness` safety copy stating no-key OpenAI mode uses deterministic guided suggestions and is the default local demo path, and added e2e assertions guarding optional/server-side/live-gated/no-dashboard-code provider boundaries.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "demo readiness"` passed; due repo script wiring, all 21 product-demo browser tests ran and passed. `pnpm lint` passed; `git diff --check` passed.
 
 ## 147. Add Public URL Smoke Placeholder Guard
 

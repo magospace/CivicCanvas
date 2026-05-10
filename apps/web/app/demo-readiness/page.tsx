@@ -33,6 +33,7 @@ const safetyRules = [
   "Miro remains preview/spec-only.",
   "Fal media proof is optional script-only; normal dashboard generation does not call Fal or create image/video artifacts.",
   "OpenAI proof is optional, server-side, live-gated, and cannot generate dashboard code, SQL, or hidden-field output.",
+  "No-key OpenAI mode uses deterministic guided suggestions and is the default local demo path.",
   "No auth, database, LLM parser, arbitrary generated UI, or live external map layers."
 ];
 

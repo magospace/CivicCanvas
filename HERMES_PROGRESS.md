@@ -2037,3 +2037,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm test -- apps/web/test/gallery-fixtures.test.ts` passed; due repo script wiring, 126 Vitest tests across 18 files ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 146, `Add No-Key Provider Readiness Screenshot Copy Guard`, to further protect optional OpenAI/provider boundary copy.
+
+
+## Task 146 Update - No-Key Provider Readiness Screenshot Copy Guard
+
+- Task chosen: `TASKS.md` item 146, "Add No-Key Provider Readiness Screenshot Copy Guard".
+- Why this was next: It protects a high-risk demo honesty boundary: optional OpenAI support must remain server-side, live-gated, no-key safe, and not presented as dashboard generation authority.
+- Scope: `apps/web/app/demo-readiness/page.tsx`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Deterministic no-key fallback / acceptable if clearly labeled. No live provider calls or secrets were used.
+- Changes: Added `/demo-readiness` safety copy that no-key OpenAI mode uses deterministic guided suggestions and is the default local demo path. Strengthened e2e assertions for optional/server-side/live-gated OpenAI proof, no-key deterministic fallback wording, live gate command visibility, and no dashboard-code/SQL/hidden-field output claims.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "demo readiness"` passed; due repo script wiring, all 21 product-demo browser tests ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 147, `Add Public URL Smoke Placeholder Guard`, to keep public/deployed URL claims honest while this remains local-only and unpushed.
