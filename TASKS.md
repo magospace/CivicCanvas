@@ -2453,7 +2453,7 @@ Status: Complete on May 10, 2026.
 
 ## 151. Add README Link Consistency Guard
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Docs QA / Submission Proof
 - Goal: Add a no-network check that README and submission guide path references resolve locally.
@@ -2464,6 +2464,8 @@ Status: Pending.
 - Acceptance criteria: Check validates local markdown/code path links used in public submission docs and reports unresolved links clearly.
 - Validation command: `pnpm docs:links`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with package script edits.
+- Completed notes: Added `pnpm docs:links` / `pnpm docs:links:json`, a no-network local markdown link checker for README and hackathon submission guide. It ignores external URLs and validates local markdown targets resolve to files.
+- Validation: `pnpm docs:links` passed (19 local markdown links checked, 0 issues). `pnpm lint` passed; `git diff --check` passed.
 
 ## 152. Add Provider Smoke Readiness Summary To Submission Guide
 

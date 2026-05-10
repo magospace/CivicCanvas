@@ -2106,3 +2106,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: Initial `pnpm submission:todo-scan` failed on the intentionally allowed README TODO guidance and README data-realism table non-claim; tightened the scanner allowlist/classification. `pnpm submission:todo-scan` then passed with 0 issues. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 151, `Add README Link Consistency Guard`, to continue no-network submission hardening.
+
+
+## Task 151 Update - README Link Consistency Guard
+
+- Task chosen: `TASKS.md` item 151, "Add README Link Consistency Guard".
+- Why this was next: It was the next low-risk no-network submission hardening task after the TODO scanner and helps avoid broken judge-facing path references.
+- Scope: `scripts/check-doc-links.mjs`, `package.json`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Documentation guard; not data-path-related.
+- Changes: Added `pnpm docs:links` and `pnpm docs:links:json`. The script checks local markdown links in `README.md` and `HACKATHON_SUBMISSION_GUIDE.md`, ignores external URLs/anchors, and reports unresolved local file targets.
+- Validation: `pnpm docs:links` passed with 19 local markdown links checked and 0 issues. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 152, `Add Provider Smoke Readiness Summary To Submission Guide`, to keep provider proof posture scannable without live calls.
