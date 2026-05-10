@@ -1,6 +1,6 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 06:12 CDT
+Last updated: May 10, 2026 06:15 CDT
 
 ## Current Cycle
 
@@ -620,6 +620,34 @@ Last updated: May 10, 2026 06:12 CDT
 ### Recommended Next Task
 
 - Task 66, `Add Sample Data Freshness Snapshot Script`, is the next safe task for a future cycle.
+
+## Task 66 Update
+
+- Task chosen: `TASKS.md` item 66, "Add Sample Data Freshness Snapshot Script".
+- Why this was next: It was the next safe data QA task after Task 65 and improves sample-data proof without mutating catalog/sample files or claiming source-owned live freshness.
+- Scope: `scripts/sample-freshness-snapshot.mjs`, `package.json`, `apps/web/test/release-scripts.test.ts`, `docs/SOURCE_FRESHNESS_CHECKLIST.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Script is no-network and non-mutating. No catalog/sample data changed, no live API calls were made, no provider calls, database work, release evidence refresh, deploy mutation, secrets, auth, billing, or production config changes occurred.
+
+### Files Updated
+
+- `scripts/sample-freshness-snapshot.mjs`: New JSON/text snapshot for sample row counts, date ranges, distinct months, live/fallback metadata, hidden-field boundaries, and synthetic/sample freshness claim.
+- `package.json`: Added `sample:freshness` and `sample:freshness:json` scripts.
+- `apps/web/test/release-scripts.test.ts`: Added coverage for the no-network sample freshness contract and Houston `precise_address` absence.
+- `docs/SOURCE_FRESHNESS_CHECKLIST.md`: Added the sample freshness command to validation commands.
+- `TASKS.md`: Marks item 66 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records item 66 scope, safety notes, validation, and next task.
+
+### Validation
+
+- `node scripts/sample-freshness-snapshot.mjs --json`: Passed; reported 3 datasets, 280 rows, date ranges for Dallas/Austin/Houston, Houston hidden `precise_address` absent, and `network: not_used`.
+- `pnpm test -- apps/web/test/release-scripts.test.ts -t "sample freshness"`: Passed; Vitest discovered the full 15-file suite and reported 98 tests passed.
+- `git diff --check`: Passed.
+- `pnpm lint`: Passed.
+- `pnpm test`: Passed with 15 files, 98 tests.
+
+### Recommended Next Task
+
+- Task 67, `Add Local Saved-Canvas Persistence Boundary UI Snapshot Test`, is the next safe task.
 
 ## Historical Sequential Progress
 

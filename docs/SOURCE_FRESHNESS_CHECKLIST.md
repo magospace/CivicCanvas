@@ -41,6 +41,7 @@ A future task may promote a path only when all of these are recorded:
 Run these after source/freshness docs or catalog assumptions change:
 
 ```bash
+pnpm sample:freshness:json
 pnpm live:fallback-proof:json
 pnpm governance:audit
 pnpm data:quality

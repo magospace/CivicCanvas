@@ -1032,6 +1032,8 @@ Status: Complete on May 10, 2026 at 06:12 CDT.
 
 ## 66. Add Sample Data Freshness Snapshot Script
 
+Status: Complete on May 10, 2026 at 06:15 CDT.
+
 - Owner type: Data / QA
 - Goal: Emit a local JSON snapshot of sample date ranges, row counts, hidden fields checked, and source freshness checklist link.
 - Scope: Script/tests; no catalog/sample mutation.
@@ -1040,6 +1042,8 @@ Status: Complete on May 10, 2026 at 06:12 CDT.
 - Acceptance criteria: JSON output is no-network, includes Dallas/Austin/Houston sample ranges and hidden-field boundaries, and does not claim source-owned live freshness.
 - Validation commands: script JSON command, focused Vitest command, `git diff --check`, `pnpm lint`, `pnpm test`.
 - Can run in parallel: No with release-script edits; yes with UI-only tasks.
+- Completed notes: Added `scripts/sample-freshness-snapshot.mjs` and `pnpm sample:freshness(:json)` to report checked-in sample row counts, date ranges, distinct months, live/fallback metadata, hidden-field checks, and source freshness checklist link. Output is no-network/non-mutating and labels all samples as synthetic/schema-aligned rather than source-owned live freshness. Added release-script coverage and referenced the command from the source freshness checklist.
+- Validation: `node scripts/sample-freshness-snapshot.mjs --json`, focused release-scripts Vitest command, `git diff --check`, `pnpm lint`, and full `pnpm test` passed with 98 tests across 15 files. No catalog/sample data changed and no live API calls were made.
 
 ## 67. Add Local Saved-Canvas Persistence Boundary UI Snapshot Test
 

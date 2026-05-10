@@ -24,6 +24,8 @@
     "live:fallback-proof:json": "node scripts/live-fallback-proof.mjs --json",
     "persistence:readiness": "node scripts/local-persistence-readiness.mjs",
     "persistence:readiness:json": "node scripts/local-persistence-readiness.mjs --json",
+    "sample:freshness": "node scripts/sample-freshness-snapshot.mjs",
+    "sample:freshness:json": "node scripts/sample-freshness-snapshot.mjs --json",
     "verify:prod-local": "node scripts/verify-prod-local.mjs",
     "verify:vercel-output": "node scripts/verify-vercel-build-output.mjs",
     "release:check": "node scripts/governance-audit.mjs && node scripts/data-quality.mjs && node scripts/verify-prod-local.mjs && node scripts/verify-vercel-build-output.mjs",

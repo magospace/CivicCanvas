@@ -90,6 +90,28 @@ describe("release and governance scripts", () => {
     expect(stdout).not.toContain("fake-secret-value");
   });
 
+  it("reports sample freshness without claiming source-owned live freshness", () => {
+    const stdout = execFileSync("node", ["scripts/sample-freshness-snapshot.mjs", "--json"], {
+      cwd: process.cwd(),
+      encoding: "utf8"
+    });
+    const body = JSON.parse(stdout);
+
+    expect(body.ok).toBe(true);
+    expect(body.network).toBe("not_used");
+    expect(body.mutatesFiles).toBe(false);
+    expect(body.sourceFreshnessChecklist).toBe("docs/SOURCE_FRESHNESS_CHECKLIST.md");
+    expect(body.note).toContain("does not prove source-owned live freshness");
+    expect(body.summary.datasetCount).toBe(3);
+    expect(body.summary.totalRows).toBe(280);
+    const houston = body.samples.find((sample: { datasetId: string }) => sample.datasetId === "houston_transportation_incidents");
+    expect(houston.hiddenFieldsChecked).toContain("precise_address");
+    expect(houston.hiddenFieldsAbsent).toBe(true);
+    expect(body.samples.every((sample: { sourceFreshnessClaim: string }) =>
+      sample.sourceFreshnessClaim === "synthetic_schema_aligned_sample_not_source_owned_live_freshness"
+    )).toBe(true);
+  });
+
   it("reports no-network live/fallback proof for core demo claims", () => {
     const stdout = execFileSync("node", ["scripts/live-fallback-proof.mjs", "--json"], {
       cwd: process.cwd(),
