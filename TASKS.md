@@ -1379,6 +1379,8 @@ Status: Complete on May 10, 2026 at 07:17 CDT.
 
 ## 88. Add Public URL Smoke Evidence Placeholder
 
+Status: Complete on May 10, 2026 at 07:19 CDT.
+
 - Owner type: Hosted Readiness / Docs
 - Goal: Add a template section for recording a public URL smoke check without mutating deployment config or release evidence.
 - Scope: Docs only; no deploy.
@@ -1387,3 +1389,5 @@ Status: Complete on May 10, 2026 at 07:17 CDT.
 - Acceptance criteria: Template captures URL, command, version expectation, firewall/rate-limit caveat, and says not release evidence unless Task 35 runs.
 - Validation commands: manual wording check, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes.
+- Completed notes: Added a public URL smoke placeholder to the hosted smoke template with URL, deploy smoke command, remote browser command, expected version/commit, platform firewall/rate-limit caveat, and not-release-evidence status unless Task 35 runs.
+- Validation: Manual wording check passed; `pnpm lint` and `git diff --check` passed.

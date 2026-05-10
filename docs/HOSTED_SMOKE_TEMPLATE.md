@@ -10,6 +10,28 @@ Do not paste secrets, provider tokens, Vercel project metadata with credentials,
 
 ## Smoke Session Metadata
 
+Use this placeholder before and after testing a public URL. Leave fields as `not run` unless the hosted URL was actually deployed and smoke-tested.
+
+- Public URL under review: `[not run / https://example]`
+- Smoke command to run:
+
+  ```bash
+  pnpm smoke:deploy -- --url <hosted-url> --expect-version <expected-version>
+  ```
+
+- Remote browser command to run, if applicable:
+
+  ```bash
+  PLAYWRIGHT_BASE_URL=<hosted-url> pnpm test:e2e:remote
+  ```
+
+- Expected version: `v1.3.0-hosted-launch-readiness` or `[fill exact deployed version]`.
+- Expected commit: `[short/full commit from deployment metadata, if known]`.
+- Platform firewall/rate-limit caveat: `[not configured / configured externally with proof / unknown]`.
+- Release-evidence status: `not release evidence unless Task 35 reruns the full gate and refreshes docs/release-evidence.json`.
+
+## Detailed Smoke Session Notes
+
 - Reviewer: `[name or initials]`
 - Date/time with timezone: `[YYYY-MM-DD HH:mm TZ]`
 - Hosted URL: `[https://example]`
