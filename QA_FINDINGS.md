@@ -1,19 +1,20 @@
 # QA Findings
 
-Last audited: May 10, 2026 03:11 CDT
+Last audited: May 10, 2026 04:18 CDT
 
 ## Scope
 
-Read `AGENTS.md`, `TASKS.md`, `HERMES_PROGRESS.md`, `README.md`, `GOVERNANCE_NOTE.md`, `DEVELOPMENT_GUIDE.md`, and the current git status. This update reconciles QA findings after completed coverage, test-organization, dirty-worktree handoff, and lint-migration-spike tasks. It does not change product behavior.
+Read `AGENTS.md`, `TASKS.md`, `HERMES_PROGRESS.md`, `README.md`, `GOVERNANCE_NOTE.md`, `DEVELOPMENT_GUIDE.md`, and the current git status. This update reconciles QA findings after completed coverage, test-organization, dirty-worktree handoff, E2E judge-demo hardening, governed workflow smoke coverage, and ESLint CLI migration tasks. It does not change product behavior.
 
 ## Command Audit
 
 Latest relevant validation from completed Hermes cycles:
 
-- `git status --short --branch`: captured the dirty worktree on branch `feat/v1.3-hosted-launch-readiness`; see `HERMES_PROGRESS.md` for categorized handoff.
-- `pnpm lint`: passed. Warning: the script still invokes deprecated `next lint`.
+- `git status --short --branch`: clean at the start of the current sequential cycle on branch `feat/v1.3-hosted-launch-readiness`.
+- `pnpm lint`: passed through the ESLint CLI with no deprecated `next lint` warning.
 - `pnpm typecheck`: passed across shared, MCP server, and web packages.
-- `pnpm test`: passed, 87 tests across 14 files.
+- `pnpm test`: passed, 89 tests across 15 files.
+- `pnpm test:e2e`: passed, 18 browser tests.
 - `pnpm governance:audit`: earlier audit passed 19/19 checks. Warning remains that `docs/release-evidence.json` records commit `a5ce07a`, while current `HEAD` is `2021b47`.
 - `pnpm data:quality`: earlier audit passed, 3 samples, 280 rows, 4 gallery canvases.
 
@@ -30,30 +31,6 @@ Evidence:
 Recommended fix:
 
 Refresh `docs/release-evidence.json` only during an intentional release-evidence update after rerunning the full release gate for the intended release commit. Until then, avoid treating checked-in release evidence as proof for the current working tree.
-
-### Medium: dirty worktree must be reviewed before release evidence refresh
-
-Evidence:
-
-- `git status --short --branch` shows modified tracked files and many untracked docs/test artifacts from prior safe cycles.
-- `HERMES_PROGRESS.md` item 26 handoff groups those files into durable workflow docs, architecture/readiness docs, focused route/unit tests, e2e tests, and web/MCP behavior-touching changes.
-- The dirty tree includes one behavior-touching tracked file, `apps/web/lib/dashboard.ts`, plus validation proof and handoff files that must be intentionally reviewed before commit or release evidence refresh.
-
-Recommended fix:
-
-Review and intentionally commit or otherwise reconcile the dirty tree before running release-evidence refresh work. Do not clean, revert, stage, or commit implicitly during unrelated safe-cycle tasks.
-
-### Low: lint command depends on deprecated Next.js lint entrypoint
-
-Evidence:
-
-- `package.json:13` runs `pnpm --filter @texas-data-canvas/web lint`.
-- `apps/web/package.json:10` runs `next lint`.
-- Current lint output says `next lint` is deprecated and will be removed in Next.js 16.
-
-Recommended fix:
-
-The documentation spike for `TASKS.md` item 24 is complete. `DEVELOPMENT_GUIDE.md` now records the current `next lint` wiring, confirms `eslint` and `eslint-config-next` are already present in `apps/web/package.json`, and recommends running the official `npx @next/codemod@canary next-lint-to-eslint-cli .` migration in a dedicated package/config task. Treat implementation as a separate package/config change requiring `pnpm lint`, `pnpm typecheck`, and `pnpm test`.
 
 ### Low: hosted rate limiting still depends on platform controls
 
@@ -90,7 +67,7 @@ Resolution:
 Resolution:
 
 - Broad web tests were split into focused files including `apps/web/test/dashboard.test.ts`, `apps/web/test/dashboard-exports.test.ts`, `apps/web/test/api-contracts.test.ts`, and `apps/web/test/release-scripts.test.ts`.
-- Latest completed `pnpm test` baseline passed with 87 tests across 14 files.
+- Latest completed `pnpm test` baseline passed with 89 tests across 15 files.
 - `TASKS.md` item 9 is complete.
 
 ### Resolved: public-data transparency and governance coverage gaps
@@ -101,7 +78,9 @@ Resolution:
 - Data-mode/fallback visibility now has unit and e2e coverage.
 - Source catalog UI coverage verifies field classifications, live/sample confidence, hidden-field warnings, and city filtering.
 - Gallery fixture regression coverage validates checked-in canvases, source/method attribution, allowed block types, and hidden-field absence.
-- `TASKS.md` items 7, 8, 15, 16, 18, and 23 are complete.
+- Judge-demo E2E coverage verifies the exact primary Dallas prompt through generated dashboard inspection.
+- Governed workflow E2E coverage verifies `/sources`, browser-local saved-canvas handoff, and preview-only Miro response/UI boundaries.
+- `TASKS.md` items 7, 8, 15, 16, 18, 23, 32, and 33 are complete.
 
 ### Resolved: MCP, prompt intent, query audit, and middleware coverage gaps
 
@@ -125,7 +104,17 @@ Resolution:
 Resolution:
 
 - `HERMES_PROGRESS.md` now groups modified and untracked files by purpose, identifies expected prior-cycle artifacts, calls out reviewer attention before commit, and explicitly blocks release-evidence refresh from the dirty tree.
+- The dirty-tree reconciliation groups from that handoff have since been intentionally committed; the current sequential cycle started from a clean branch.
 - `TASKS.md` item 26 is complete.
+
+### Resolved: lint command depended on deprecated Next.js entrypoint
+
+Resolution:
+
+- `apps/web/package.json` now runs `eslint . --ext .js,.jsx,.ts,.tsx --max-warnings=0` instead of `next lint`.
+- `apps/web/.eslintrc.json` still extends `next/core-web-vitals`.
+- `apps/web/postcss.config.js` uses a named config object so the direct ESLint CLI pass has no warnings.
+- `TASKS.md` items 24 and 34 are complete.
 
 ## Risky File Watchlist
 

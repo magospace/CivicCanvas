@@ -509,6 +509,8 @@ Status: Complete on May 10, 2026 at 04:16 CDT.
 
 ## 34. Migrate From Deprecated `next lint` To ESLint CLI In Isolation
 
+Status: Complete on May 10, 2026 at 04:18 CDT.
+
 - Owner type: DevOps / Tooling
 - Goal: Replace deprecated `next lint` with the ESLint CLI using the documented migration path, without changing unrelated packages or product behavior.
 - Why it matters: `pnpm lint` passes but warns that `next lint` will be removed in Next.js 16; removing the warning improves final maintenance confidence.
@@ -518,6 +520,8 @@ Status: Complete on May 10, 2026 at 04:16 CDT.
 - Acceptance criteria: `pnpm lint` runs through the ESLint CLI without the Next.js deprecation warning; lint coverage still uses Next core-web-vitals rules; no dependency upgrades or broad package changes are bundled unless required by the official codemod and reviewed.
 - Validation commands: `pnpm lint`, `pnpm typecheck`, `pnpm test`.
 - Can run in parallel: No. Do not parallelize with package/config/tooling changes or another task editing lint config/scripts.
+- Completed notes: Switched the web lint script to `eslint . --ext .js,.jsx,.ts,.tsx --max-warnings=0`, preserved the existing `next/core-web-vitals` config, and converted `apps/web/postcss.config.js` to a named export object to satisfy the direct ESLint CLI pass. No dependencies were upgraded.
+- Validation: `pnpm lint`, `pnpm typecheck`, and `pnpm test` passed. `pnpm lint` no longer emits the deprecated `next lint` warning.
 
 ## 35. Refresh Release Evidence Only After Full Validation Gate
 

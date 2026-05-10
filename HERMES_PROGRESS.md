@@ -1,19 +1,22 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 04:16 CDT
+Last updated: May 10, 2026 04:18 CDT
 
 ## Current Cycle
 
-- Task chosen: `TASKS.md` item 33, "Add Governed Workflow E2E Coverage For Sources, Saved, And Miro Preview".
-- Why this was next: Item 33 is the next incomplete safe task after the primary judge-demo E2E proof and covers the secondary governed demo workflows judges are likely to inspect.
-- Scope: `tests/e2e/governed-workflows.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
-- Safety notes: No product behavior, runtime source code, package scripts, config, source data, secrets, auth, billing, migrations, production config, deploy scripts, release evidence, catalog data, samples, live API calls, or destructive operations were changed. Release evidence was not refreshed.
+- Task chosen: `TASKS.md` item 34, "Migrate From Deprecated `next lint` To ESLint CLI In Isolation".
+- Why this was next: Item 34 is the next incomplete safe task after the E2E proof tasks and removes a known tooling/deprecation risk without changing product behavior.
+- Scope: `apps/web/package.json`, `apps/web/postcss.config.js`, `DEVELOPMENT_GUIDE.md`, `QA_FINDINGS.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: No product behavior, runtime source code, source data, secrets, auth, billing, migrations, production config, deploy scripts, release evidence, catalog data, samples, live API calls, or destructive operations were changed. Package script/config changes were limited to the selected lint-tooling task. Release evidence was not refreshed.
 
 ## Files Updated
 
-- `tests/e2e/governed-workflows.spec.ts`: Added a focused Playwright smoke for `/sources` hidden-field governance, browser-local saved-canvas handoff, no-account/no-hosted-database saved-page copy, and preview-only Miro response/UI boundaries.
-- `TASKS.md`: Marked item 33 complete with validation notes.
-- `HERMES_PROGRESS.md`: Recorded item 33 scope, safety notes, and validation.
+- `apps/web/package.json`: Replaced deprecated `next lint` with the direct ESLint CLI command and zero-warning enforcement.
+- `apps/web/postcss.config.js`: Converted the anonymous default export to a named config object so the direct CLI pass has no warnings.
+- `DEVELOPMENT_GUIDE.md`: Replaced the migration spike with current ESLint CLI linting guidance.
+- `QA_FINDINGS.md`: Resolved the deprecated lint entrypoint finding and refreshed current test/e2e validation counts.
+- `TASKS.md`: Marked item 34 complete with validation notes.
+- `HERMES_PROGRESS.md`: Recorded item 34 scope, safety notes, and validation.
 
 ## Sequential Progress
 
@@ -23,7 +26,8 @@ Last updated: May 10, 2026 04:16 CDT
 - Task 30 committed as `7ef1ca8` (`docs: add public data fallback proof matrix`).
 - Task 31 committed as `8667205` (`test: add core demo fallback proof`).
 - Task 32 committed as `2585388` (`test: strengthen judge demo e2e path`).
-- Task 33 completed and ready to commit as `test: add governed workflow e2e smoke`.
+- Task 33 committed as `2529af4` (`test: add governed workflow e2e smoke`).
+- Task 34 completed and ready to commit as `chore: migrate web lint to eslint cli`.
 
 ## Sequential Task Plan
 
@@ -220,6 +224,9 @@ Current `git status --short --branch` shows branch `feat/v1.3-hosted-launch-read
 - `pnpm test:e2e`: Passed with 17 browser tests after adding the judge-demo spec.
 - `pnpm test:e2e -- tests/e2e/governed-workflows.spec.ts`: Passed.
 - `pnpm test:e2e`: Passed with 18 browser tests after adding the governed-workflows spec.
+- `pnpm lint`: Passed through the ESLint CLI with no deprecated `next lint` warning.
+- `pnpm typecheck`: Passed.
+- `pnpm test`: Passed with 89 tests across 15 files.
 
 ## Blockers
 
@@ -227,4 +234,4 @@ Current `git status --short --branch` shows branch `feat/v1.3-hosted-launch-read
 
 ## Recommended Next Task
 
-- `TASKS.md` item 34, "Migrate From Deprecated `next lint` To ESLint CLI In Isolation", if tooling scope remains clear.
+- Do not run `TASKS.md` item 35, "Refresh Release Evidence Only After Full Validation Gate", without explicit approval. The next safe non-release task is item 36, "Clarify Saved-Canvas Validation Stub Honesty".

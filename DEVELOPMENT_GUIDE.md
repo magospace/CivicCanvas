@@ -207,28 +207,20 @@ Treat these as situational checks, not routine validation:
 | `pnpm smoke:deploy -- --url <url>` | Requires a running local or hosted deployment URL. |
 | `pnpm test:e2e:remote` | Requires `PLAYWRIGHT_BASE_URL`. |
 
-### `next lint` Deprecation Migration Spike
+### ESLint CLI Linting
 
 Current state:
 
 - Root `package.json` runs `pnpm --filter @texas-data-canvas/web lint`.
-- `apps/web/package.json` currently maps `lint` to `next lint`.
+- `apps/web/package.json` maps `lint` to `eslint . --ext .js,.jsx,.ts,.tsx --max-warnings=0`.
 - `apps/web/.eslintrc.json` extends `next/core-web-vitals`.
 - `apps/web/package.json` already includes `eslint` and `eslint-config-next` dev dependencies.
-- `pnpm lint` passes today, but Next.js warns that `next lint` is deprecated and will be removed in Next.js 16.
+- `pnpm lint` runs through the ESLint CLI directly, preserving Next core-web-vitals coverage without the deprecated `next lint` entrypoint.
 
-Recommended low-risk migration path:
+Maintenance rules:
 
-1. Do not change lint scripts during unrelated feature/test work.
-2. In a dedicated package/config task, run the official migration from `apps/web` or the repo root:
-
-   ```bash
-   npx @next/codemod@canary next-lint-to-eslint-cli .
-   ```
-
-3. Review the generated ESLint config/script diff before keeping it. The expected end state is that `pnpm lint` invokes the ESLint CLI directly while preserving `next/core-web-vitals` coverage.
-4. Avoid upgrading Next.js, React, TypeScript, or ESLint in the same change unless the migration output explicitly requires it.
-5. Validate the migration with:
+1. Avoid upgrading Next.js, React, TypeScript, or ESLint during unrelated work.
+2. Validate package/config changes with:
 
    ```bash
    pnpm lint
@@ -236,7 +228,7 @@ Recommended low-risk migration path:
    pnpm test
    ```
 
-6. If the ESLint CLI flags new issues that `next lint` did not report, fix only lint-scope issues in the same task or revert the script/config change and record blockers in `QA_FINDINGS.md`.
+3. If the ESLint CLI flags new issues, fix only lint-scope issues in the same task or record blockers in `QA_FINDINGS.md`.
 
 ## Suggested Next Improvements
 
