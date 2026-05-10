@@ -1514,3 +1514,12 @@ Last updated: May 10, 2026 06:17 CDT
 - Files updated: Header now uses `usePathname` to set `aria-current="page"` and visible active styling for the current route; product-demo E2E asserts Explore is active on `/explore`.
 - Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "explore route loads"` ran the full product-demo spec with 17 browser tests and passed; `pnpm lint`, `pnpm typecheck`, and `git diff --check` passed.
 - Recommended next task: Task 105, `Add No-Spend Loom Screenshot Capture Helper`, appears already implemented as a dry-run/capture script but remains pending in `TASKS.md`; verify and reconcile it before new tooling.
+
+## Task 105 Update
+
+- Task chosen: `TASKS.md` item 105, "Add No-Spend Loom Screenshot Capture Helper".
+- Why this was next: It was the next pending task after Task 104. Inspection showed the helper already existed, so the safe action was verification and durable-state reconciliation rather than rewriting the script.
+- Scope: `TASKS.md` and `HERMES_PROGRESS.md` only for this reconciliation commit. Existing verified implementation is `scripts/capture-demo-screenshots.mjs`, package scripts `demo:screenshots`/`demo:screenshots:json`, and release-script coverage.
+- Safety notes: No browser capture was run, no generated screenshots/media were created, no provider calls or live APIs were used, and no generated artifacts were committed.
+- Validation: `pnpm demo:screenshots:json` reported dry-run mode with `mutatesFiles: false` and `generatedMediaArtifact: false`; focused release-script Vitest passed; `pnpm lint` and `git diff --check` passed.
+- Recommended next task: Task 106, `Add Optional Live Public API Smoke Transcript Stub`.

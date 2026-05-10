@@ -1676,7 +1676,7 @@ Status: Complete on May 10, 2026.
 
 ## 105. Add No-Spend Loom Screenshot Capture Helper
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Demo Tooling
 - Goal: Provide a repeatable local script for capturing ignored Loom prep screenshots without committing generated artifacts.
@@ -1686,6 +1686,8 @@ Status: Pending.
 - Acceptance criteria: Script requires an explicit local `--url`, writes only under ignored `demo-artifacts/`, redacts no secrets because it captures local pages only, and has a dry-run or help mode covered by tests.
 - Validation commands: script help/dry-run, focused Vitest, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with package/script/release-script edits.
+- Completed notes: Verified existing `scripts/capture-demo-screenshots.mjs` and `pnpm demo:screenshots:json` dry-run behavior. The script defaults to no-browser/no-file dry run, reports `generatedMediaArtifact: false`, requires `--run` for intentional capture, writes captures under ignored `demo-artifacts/screenshots`, and is covered by release-script tests. No screenshot artifacts were created or committed.
+- Validation: `pnpm demo:screenshots:json`, focused release-script Vitest for dry-run screenshot capture, `pnpm lint`, and `git diff --check` passed.
 
 ## 106. Add Optional Live Public API Smoke Transcript Stub
 
