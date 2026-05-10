@@ -2437,7 +2437,7 @@ Status: Complete on May 10, 2026.
 
 ## 150. Add Submission TODO Scanner
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Submission Ops / No-Secret Guard
 - Goal: Add a no-network script that reports remaining submission placeholders and validates that TODO deployed/Loom/team fields are explicit rather than hidden in prose.
@@ -2448,6 +2448,8 @@ Status: Pending.
 - Acceptance criteria: Script exits green when known allowed TODO submission fields are present and fails on new unlabeled hosted/deployment readiness claims or secret-like values in submission docs.
 - Validation command: `pnpm submission:todo-scan`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with package script edits.
+- Completed notes: Added `pnpm submission:todo-scan` / `pnpm submission:todo-scan:json`, a no-network scanner for submission docs that allows only explicitly labeled deployed-URL/Loom/team placeholders, guards public hosted readiness claims, production persistence claims, live Miro write claims, and secret-like assignments.
+- Validation: Initial `pnpm submission:todo-scan` failed on intentionally allowed README TODO guidance and a README data-realism table non-claim; tightened the scanner allowlist/classification, then `pnpm submission:todo-scan` passed with 0 issues. `pnpm lint` passed; `git diff --check` passed.
 
 ## 151. Add README Link Consistency Guard
 

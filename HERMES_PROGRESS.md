@@ -2094,3 +2094,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 150, `Add Submission TODO Scanner`, because it is low-risk, no-network, and protects final submission fields without mutating deployment or secrets.
+
+
+## Task 150 Update - Submission TODO Scanner
+
+- Task chosen: `TASKS.md` item 150, "Add Submission TODO Scanner".
+- Why this was next: It was the first safe/high-value item in the newly replenished queue and protects final submission docs without deployment, provider calls, or secrets.
+- Scope: `scripts/submission-todo-scan.mjs`, `package.json`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Documentation/proof guard; not data-path-related. It preserves honest public URL, persistence, Miro, and secret boundaries.
+- Changes: Added `pnpm submission:todo-scan` and `pnpm submission:todo-scan:json`. The script scans `HACKATHON_SUBMISSION_GUIDE.md`, `README.md`, and `docs/HOSTED_BETA_DEPLOYMENT.md`, allows only explicitly labeled deployed-URL/Loom/team/README-smoke TODOs, and flags unexpected TODOs, hosted readiness overclaims, production-persistence claims, live Miro write claims, or secret-like assignments.
+- Validation: Initial `pnpm submission:todo-scan` failed on the intentionally allowed README TODO guidance and README data-realism table non-claim; tightened the scanner allowlist/classification. `pnpm submission:todo-scan` then passed with 0 issues. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 151, `Add README Link Consistency Guard`, to continue no-network submission hardening.

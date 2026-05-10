@@ -31,6 +31,8 @@
     "demo:artifact-hygiene:json": "node scripts/demo-artifact-hygiene.mjs --json",
     "submission:readiness": "node scripts/submission-readiness.mjs",
     "submission:readiness:json": "node scripts/submission-readiness.mjs --json",
+    "submission:todo-scan": "node scripts/submission-todo-scan.mjs",
+    "submission:todo-scan:json": "node scripts/submission-todo-scan.mjs --json",
     "live:fallback-proof": "node scripts/live-fallback-proof.mjs",
     "live:fallback-proof:json": "node scripts/live-fallback-proof.mjs --json",
     "persistence:readiness": "node scripts/local-persistence-readiness.mjs",
