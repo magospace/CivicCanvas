@@ -1981,7 +1981,7 @@ Status: Complete on May 10, 2026.
 
 ## 123. Add README MCP Quick-Proof Commands
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Docs / Submission Readiness
 - Goal: Make the README judge-scannable for MCP/agent-skill proof without rebranding internal packages.
@@ -1992,6 +1992,8 @@ Status: Pending.
 - Acceptance criteria: README includes concise MCP server run/test commands, agent skill path, and honest preview-only Miro note in the submission checklist or verification section.
 - Validation commands: manual path/command check, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes with non-README tasks.
+- Completed notes: Added README submission-checklist MCP proof commands plus a dedicated MCP / Agent Quick Proof section that names the MCP server build/inspect/test commands, agent skill path, governed catalog/query data path, and preview-only Miro boundary.
+- Validation: Manual path/command check, `pnpm lint`, and `git diff --check` passed.
 
 ## 124. Add Data Realism CI Guard For Component Demo Arrays
 

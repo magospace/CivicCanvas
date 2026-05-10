@@ -8,6 +8,7 @@ Open-source, MCP-powered visual explorer for Texas public datasets.
 - Track: Brainforge / Vicinity Texas Open Data Track.
 - Quick start: `pnpm install` then `pnpm dev`; open `http://localhost:3000/explore`.
 - Demo reproduction: open `/sources`, run the Dallas 311 prompt in `/explore`, show source/method/caveats/query audit, save/share locally, then mention the MCP server and agent skill.
+- MCP/agent proof: `pnpm --filter @texas-data-canvas/mcp-server build`, `pnpm --filter @texas-data-canvas/mcp-server inspect`, and `pnpm test -- apps/mcp-server/test/tools.test.ts` prove the custom server/skill path without secrets.
 - Env vars: sample mode requires no secrets. Optional server-side OpenAI prompt-assist uses `OPENAI_API_KEY` from `.env.local` or the server environment; keys are never exposed to the browser.
 - Dataset/synthetic data provenance: approved catalog metadata lives in `data/catalog/approved-datasets.json`; Dallas/Austin/Houston sample rows live in `data/samples/*.sample.json` and are schema-aligned fallback samples with provenance/caveats visible in the UI.
 - Known limitations and next steps: no backend saved-canvas database, no arbitrary SQL/dataset access, no live Miro writes, limited live public API coverage, and hosted firewall/rate-limit proof remains a deployment task.
@@ -76,6 +77,20 @@ Useful routes:
 - `/saved` - browser-local saved canvases, portable JSON bundles, and URL-hash share links.
 - `/gallery` - checked-in validated demo canvases rendered through the allowlisted block registry.
 - `/demo-readiness` - utility release console with catalog health, known boundaries, gate commands, and hosted blockers.
+
+## MCP / Agent Quick Proof
+
+CivicCanvas includes a custom MCP server and repo-scoped agent skill for the Brainforge / Vicinity track. The MCP tools use the same approved catalog, bounded query specs, Zod schemas, sample/live adapters, hidden-field rules, and source attribution paths as the web app; they are not hardcoded demo arrays, arbitrary SQL access, or production database access.
+
+```bash
+pnpm --filter @texas-data-canvas/mcp-server build
+pnpm --filter @texas-data-canvas/mcp-server inspect
+pnpm test -- apps/mcp-server/test/tools.test.ts
+```
+
+Show or cite `.agents/skills/texas-public-data-explorer/SKILL.md` as the agent skill proof. The safe Loom path is source discovery → catalog health → bounded query → query audit → validated `CanvasDocument` → preview-only `MiroExportSpec`. Miro output is JSON preview only; there is no OAuth, board ID, access token, or live board write.
+
+Use `docs/MCP_DEMO_PROOF.md` and `docs/MCP_DEMO_TRANSCRIPT_TEMPLATE.md` for a paste-safe transcript.
 
 ## Verification
 

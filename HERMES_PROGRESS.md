@@ -1777,3 +1777,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: Manual path/wording check passed; `pnpm lint` passed; `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 123, `Add README MCP Quick-Proof Commands`, to make MCP proof even more judge-scannable from the repository landing page.
+
+
+## Task 123 Update - README MCP Quick-Proof Commands
+
+- Task chosen: `TASKS.md` item 123, "Add README MCP Quick-Proof Commands".
+- Why this was next: Task 120 added a detailed transcript template; README still needed judge-scannable MCP/agent proof commands and a clear quick-proof path from the repo landing page.
+- Scope: `README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: README now states MCP tools use approved catalog, bounded query specs, Zod schemas, sample/live adapters, hidden-field rules, and source attribution paths. It explicitly says the proof is not hardcoded demo arrays, arbitrary SQL, or production database access.
+- Safety notes: Docs only. No MCP client was run, no live API/provider call was made, no `.env` files were read, and no generated artifacts/release evidence/deploy changes were created. `clauderecommends.md` and `REVIEW_RECOMMENDATIONS.md` remain untracked and unstaged.
+- Validation: Manual README path/command check passed; `pnpm lint` passed; `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 124, `Add Data Realism CI Guard For Component Demo Arrays`, to strengthen future enforcement of the data-realism policy.
