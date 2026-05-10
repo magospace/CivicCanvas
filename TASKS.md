@@ -1721,7 +1721,7 @@ Status: Complete on May 10, 2026.
 
 ## 108. Reconcile Remaining Visual Audit Risks Into Queue
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Planning / QA
 - Goal: Convert any remaining unresolved `docs/VISUAL_UI_UX_AUDIT.md` P1/P2 items into scoped future tasks after the first polish fixes land.
@@ -1731,6 +1731,8 @@ Status: Pending.
 - Acceptance criteria: Remaining mobile prompt ordering, source-card density, nav active state, saved empty CTA, and technical-label polish risks are either completed, deferred, or represented as scoped tasks with validation commands.
 - Validation commands: manual audit/queue consistency check, `git diff --check`.
 - Can run in parallel: Yes with implementation tasks if it does not edit the same task/progress files.
+- Completed notes: Reconciled the visual audit after Tasks 99-107. Chart rendering, dashboard status strip, filter label polish, saved empty CTA, mobile prompt-first layout, sources summary legend, active nav state, screenshot helper, live-smoke template, and Fal media honesty are complete. Remaining lower-priority visual risk is source-card density/lower-card whitespace, captured in the replenished data-realism/demo-stability queue below.
+- Validation: Manual audit/queue consistency check and `git diff --check` passed.
 
 ## 109. Add Server-Only OpenAI Assist Wrapper
 
@@ -1746,3 +1748,148 @@ Status: Complete on May 10, 2026.
 - Can run in parallel: No with schema/provider/API/UI test edits.
 - Completed notes: Added `apps/web/lib/openai-provider.ts` using fetch-based server-side OpenAI calls with JSON response validation and deterministic fallbacks; added shared structured schemas/types; health metadata now exposes OpenAI readiness without key values or env var names; `/explore` shows "Guided suggestions" unless the server-side key is active; docs and `.env.example` document `OPENAI_API_KEY=` without a real value.
 - Validation: Focused OpenAI/API Vitest passed; `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm governance:audit`, `pnpm data:quality`, MCP server build, targeted product-demo Playwright run, and `git diff --check` passed. No live OpenAI calls were made.
+---
+
+# Data Realism And Demo Stability Queue
+
+Last replenished: May 10, 2026 after Task 108 visual-risk reconciliation and Task 109 OpenAI boundary work. This queue prioritizes real demo data paths, fixture/data-loader realism, local/editable browser demo records, live/API proof where safe, and honest mock/live boundaries. Gated work remains blocked unless explicitly approved: Task 35 release-evidence refresh, Task 55 backend persistence/migrations, production data operations, external deployment mutation, secrets/auth/billing, destructive database work, and paid live provider calls without the relevant env gate.
+
+## 110. Move Seed Canvas Lookup To Data Loader Fixture
+
+Status: Pending.
+
+- Owner type: Backend/API / Data realism
+- Goal: Replace hardcoded seed canvas prompt mapping inside `/api/canvas/[id]` with a checked-in fixture loaded through `apps/web/lib/data.ts`.
+- Scope: API seed lookup only; preserve generated seed canvas behavior and no-backend-persistence honesty.
+- Likely files: `data/seed-canvases.json`, `apps/web/lib/data.ts`, `apps/web/app/api/canvas/[id]/route.ts`, `apps/web/test/canvas-seed-route.test.ts`, docs if route wording changes, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium.
+- Data realism classification: Current route-level object is hardcoded UI/API mock-like seed mapping and should be replaced with fixture file through normal data loader.
+- Acceptance criteria: Seed IDs/prompts live in validated fixture data; route reads via data loader/repository helper; tests prove known seed IDs and unknown IDs use the same route path; docs/copy still state this is a seed/demo helper, not database persistence.
+- Validation commands: focused seed route Vitest, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `git diff --check`.
+- Can run in parallel: No with seed route/data-loader edits.
+
+## 111. Add Data Realism Audit Script
+
+Status: Pending.
+
+- Owner type: QA / Data governance
+- Goal: Add a no-network script that classifies demo data sources as fixture-loader, deterministic fallback, browser-local, hardcoded route seed, fake provider metadata, or blocked.
+- Scope: Audit/report only; no product behavior changes.
+- Likely files: `scripts/data-realism-audit.mjs`, `package.json`, `apps/web/test/release-scripts.test.ts`, `docs/SAMPLE_AND_PERSISTENCE_REALNESS.md`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium.
+- Data realism classification: Converts current manual policy into repeatable proof.
+- Acceptance criteria: Script reports catalog samples, gallery fixtures, seed canvas fixtures, browser-local saved canvases, OpenAI readiness fallback, Fal script-only proof, and flags any remaining hardcoded demo arrays requiring review; output is no-network/non-mutating and redacts env values.
+- Validation commands: script JSON run, focused release-script Vitest, `pnpm lint`, `pnpm test`, `git diff --check`.
+- Can run in parallel: No with release-script/package edits.
+
+## 112. Add API-Backed Prompt Example Source
+
+Status: Pending.
+
+- Owner type: UI/API / Data realism
+- Goal: Move hardcoded `/explore` prompt example chips into a shared seed/read-model helper or API-backed metadata path.
+- Scope: Prompt examples only; do not change dashboard generation semantics.
+- Likely files: `apps/web/lib/data.ts` or shared prompt helper, optional `apps/web/app/api/*`, `apps/web/components/app-shell.tsx`, `apps/web/test/*`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Medium.
+- Data realism classification: Current `promptExamples` is hardcoded UI config; acceptable as navigation config but should move to a fixture/read model if treated as demo records.
+- Acceptance criteria: Prompt examples are loaded from a validated fixture/helper also used by unsupported suggestion copy; tests prove UI examples and suggestion fallbacks stay aligned and route through the shared source.
+- Validation commands: focused Vitest, `pnpm lint`, `pnpm typecheck`, targeted product-demo Playwright, `git diff --check`.
+- Can run in parallel: No with app-shell/prompt helper edits.
+
+## 113. Strengthen Gallery Fixture Read Path Proof
+
+Status: Pending.
+
+- Owner type: QA / Data realism
+- Goal: Prove checked-in gallery canvases are loaded through the normal data loader and rendered through `/gallery`, not imported directly by UI components.
+- Scope: Tests/docs only unless a drift is found.
+- Likely files: `apps/web/lib/data.ts`, `apps/web/test/gallery-fixtures.test.ts` or `dashboard.test.ts`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Fixture files through data loader are acceptable.
+- Acceptance criteria: Tests assert gallery route/card count matches data-loader fixture count, fixtures validate with source/method attribution, and hidden fields remain absent.
+- Validation commands: focused Vitest, targeted gallery Playwright, `pnpm lint`, `pnpm test`, `git diff --check`.
+- Can run in parallel: Yes unless editing the same gallery tests.
+
+## 114. Add Browser-Local Saved Canvas Edit Proof
+
+Status: Pending.
+
+- Owner type: UI / Data realism
+- Goal: Demonstrate saved demo records are editable/replaceable through normal product flows rather than fake immutable state.
+- Scope: Browser-local saved canvas title/prompt metadata editing or focused test proof if already possible.
+- Likely files: `apps/web/components/saved-canvases.tsx`, `apps/web/lib/saved-canvases.ts`, `apps/web/test/saved-canvases.test.ts`, `tests/e2e/product-demo.spec.ts`, docs, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Medium.
+- Data realism classification: Browser-local persistence is acceptable if editable and clearly local.
+- Acceptance criteria: User can update saved canvas metadata locally or tests prove existing duplicate/delete/import/export flows cover replaceability; UI copy remains browser-local/no-backend.
+- Validation commands: focused saved-canvas Vitest, targeted saved Playwright, `pnpm lint`, `pnpm typecheck`, `git diff --check`.
+- Can run in parallel: No with saved-page edits.
+
+## 115. Add OpenAI No-Key And Mocked-Live Route Smoke
+
+Status: Pending.
+
+- Owner type: Provider / QA
+- Goal: Add an API-level smoke route or script proving OpenAI assist remains server-only, no-key deterministic by default, and schema-validated with mocked live-shaped output.
+- Scope: No live OpenAI call by default; use mocked provider output unless `RUN_LIVE_OPENAI_SMOKE=1` is deliberately added in a later task.
+- Likely files: `apps/web/lib/openai-provider.ts`, `apps/web/test/openai-provider.test.ts`, optional script/docs, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Medium.
+- Data realism classification: Provider-gated fallback metadata is acceptable only when labeled and tested.
+- Acceptance criteria: No-key and mocked-valid/mocked-invalid paths are covered through the same wrapper used by app code; no secrets/env var values leak in output.
+- Validation commands: focused OpenAI provider Vitest, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `git diff --check`.
+- Can run in parallel: No with OpenAI provider tests.
+
+## 116. Add Optional Live OpenAI Smoke Gate
+
+Status: Pending.
+
+- Owner type: Provider / Live proof
+- Goal: Add a tiny env-gated `RUN_LIVE_OPENAI_SMOKE=1` proof script that makes one minimal server-side OpenAI structured-output call when credentials are available.
+- Scope: Script/docs/test; default path must be no-spend and no-network.
+- Likely files: `scripts/openai-smoke.mjs`, `package.json`, `apps/web/test/release-scripts.test.ts`, `README.md`, docs, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Medium to High due to live provider spend; run live only if credentials and env gate are present.
+- Data realism classification: Live provider proof is acceptable if gated, purposeful, redacted, and fallback remains deterministic.
+- Acceptance criteria: Default script reports skipped/no-key without network; live mode makes one minimal call, validates schema, writes no committed artifact, and redacts all secrets; tests cover no-key and redaction.
+- Validation commands: no-key script JSON, focused release-script Vitest, `pnpm lint`, `pnpm test`; optional live run only with `RUN_LIVE_OPENAI_SMOKE=1` and key present; `git diff --check`.
+- Can run in parallel: No with provider smoke script edits.
+
+## 117. Reconcile Realness Audit After OpenAI Boundary Change
+
+Status: Pending.
+
+- Owner type: Docs / Realness
+- Goal: Update `REALNESS_AUDIT.md` so OpenAI is no longer described as absent while preserving no-LLM-dashboard-generation honesty.
+- Scope: Docs only.
+- Likely files: `REALNESS_AUDIT.md`, `QA_FINDINGS.md` if active risks change, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low.
+- Data realism classification: Provider metadata must be labeled optional/server-only and not default-local.
+- Acceptance criteria: Audit says OpenAI is optional server-side prompt/summary assist, disabled without key, schema-validated, and not dashboard/code/SQL generation; no secret values or live proof overclaims.
+- Validation commands: manual wording check, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes with non-doc tasks that do not edit the same files.
+
+## 118. Improve Source Card Density Without Hiding Caveats
+
+Status: Pending.
+
+- Owner type: UI / Demo polish
+- Goal: Address remaining visual audit source-card density/lower whitespace while keeping catalog caveats and hidden-field warnings visible.
+- Scope: `/sources` layout/copy only; do not change catalog facts.
+- Likely files: `apps/web/app/sources/page.tsx`, `tests/e2e/sources.spec.ts`, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Low to Medium.
+- Data realism classification: Catalog fixture through data loader remains acceptable; UI must not turn sample/live metadata into fake claims.
+- Acceptance criteria: Source cards are easier to scan, Dallas live-promoted status remains honest, sample-first sources remain labeled, hidden-field warnings remain visible, and E2E covers the key labels.
+- Validation commands: targeted sources Playwright, `pnpm lint`, `git diff --check`.
+- Can run in parallel: No with sources page/test edits.
+
+## 119. Add Live Public API Smoke If Network Proof Is Available
+
+Status: Pending.
+
+- Owner type: Live data / QA
+- Goal: Run or strengthen an approved live public API proof for the narrow Dallas aggregate path while preserving sample fallback for ZIP/Austin/Houston.
+- Scope: Existing live smoke/proof scripts and docs; no catalog promotion unless evidence supports it.
+- Likely files: `scripts/smoke-live.mjs`, `docs/LIVE_API_SMOKE_TEMPLATE.md`, tests/docs, `TASKS.md`, `HERMES_PROGRESS.md`.
+- Risk level: Medium due to network dependency.
+- Data realism classification: Live public API proof is preferred for supported Dallas aggregate; deterministic fallback remains acceptable and clearly labeled for unsupported shapes.
+- Acceptance criteria: If network is available, run the existing live smoke and record sanitized counts/caveats; if not, preserve no-network proof and report the blocker. No unsupported dataset/field is promoted from smoke alone.
+- Validation commands: `pnpm live:fallback-proof:json`, optional `pnpm smoke:live:json`, focused tests if script changes, `pnpm lint`, `git diff --check`.
+- Can run in parallel: Yes if no script edits; no with live-smoke script changes.

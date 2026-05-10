@@ -1573,3 +1573,15 @@ Last updated: May 10, 2026 06:17 CDT
   - `git diff --check`: Passed.
 - Live API/media calls: 0 OpenAI calls, 0 Fal/media calls, 0 public live API calls.
 - Recommended next task: Task 108, `Reconcile Remaining Visual Audit Risks Into Queue`, remains the next safe pending queue item after this OpenAI standardization task.
+
+## Task 108 Update - Visual Audit Reconciliation And Data Realism Queue
+
+- Task chosen: `TASKS.md` item 108, "Reconcile Remaining Visual Audit Risks Into Queue".
+- Why this was next: Task 109 was recovered, validated, and committed first because it was already complete but uncommitted from the prior tool-limit stop. Task 108 was then the next pending safe queue item. The user also supplied a data-realism policy, so this reconciliation replenished the queue with fixture/API/read-model tasks before further implementation.
+- Scope: `TASKS.md` and `HERMES_PROGRESS.md`.
+- Data realism audit notes: Current catalog/sample data loads through `apps/web/lib/data.ts` from `data/catalog` and `data/samples` (fixture file through data loader / acceptable). Gallery canvases load through `getCuratedGalleryCanvases` from checked-in files (fixture file through data loader / acceptable). Dashboard seed canvas uses sample rows from `getSampleRows` (deterministic fallback / acceptable and labeled). `/api/canvas/[id]` still keeps a route-local seed prompt object (hardcoded API mock-like seed mapping / should replace), now captured as Task 110. `/explore` prompt example chips are UI-hardcoded config (acceptable as UI config, but should move to shared fixture/read-model if treated as demo records), now Task 112. OpenAI/Fal provider readiness is provider-gated metadata and must remain labeled, covered by Tasks 115-116.
+- Visual reconciliation notes: Completed Tasks 99-107 already resolved chart polish, dashboard status strip, filter label polish, saved empty CTA, mobile prompt-first layout, sources legend, active nav, screenshot helper verification, optional live smoke template, and Fal media honesty. Remaining visual risk is source-card density/lower-card whitespace, now Task 118.
+- Queue action: Added Tasks 110-119 under `Data Realism And Demo Stability Queue`, prioritizing seed fixture replacement, data-realism auditing, prompt-example read-model alignment, saved-canvas editability proof, provider smoke guardrails, realness audit reconciliation, source-card density, and optional live Dallas public API proof.
+- Safety notes: Planning/durable-state only. No live APIs, OpenAI calls, Fal/media calls, schema/migrations, database operations, deployment mutation, production data, secrets, auth, billing, or generated artifacts. `clauderecommends.md` remains untracked and unstaged.
+- Validation: Manual visual-audit/queue consistency check completed; `git diff --check` passed before commit.
+- Recommended next task: Task 110, `Move Seed Canvas Lookup To Data Loader Fixture`, is the next safe/high-value data-realism implementation task.
