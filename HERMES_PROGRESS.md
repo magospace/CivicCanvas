@@ -1687,3 +1687,14 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: Manual wording check passed; `pnpm lint` passed; `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 119, `Add Live Public API Smoke If Network Proof Is Available`, is a safer real-data proof than Task 116 live OpenAI spend and can use existing public endpoints.
+
+## Task 119 Update - Live Public API Smoke Proof
+
+- Task chosen: `TASKS.md` item 119, "Add Live Public API Smoke If Network Proof Is Available".
+- Why this was next: After no-key/mocked OpenAI proof and realness-audit reconciliation, the safest higher-realness proof was the existing public live-data smoke for the narrow Dallas aggregate path. It directly supports the Loom story without provider spend or catalog promotion.
+- Scope: `docs/LIVE_API_SMOKE_TEMPLATE.md`, `TASKS.md`, and `HERMES_PROGRESS.md`; no live-smoke script or catalog mapping changes.
+- Data realism changes: Recorded live proof for one approved public Dallas Socrata aggregate path (`dallas_311_requests`, `d7e7-envw`, 2024 requests by category, 3 live aggregate rows). Deterministic fallback remains clearly labeled for Dallas ZIP dashboards, Austin monthly dashboards, and Houston sample-first transportation dashboards.
+- Safety notes: Public-data GET smoke only. No secrets, OpenAI, Fal/media, paid provider calls, schema/migration, backend persistence, deploy mutation, release evidence refresh, production data, or generated artifacts. No unsupported fields were promoted.
+- Validation: `pnpm live:fallback-proof:json` passed with no network; `pnpm smoke:live:json` passed with one public Dallas live aggregate API check; `pnpm lint` passed; `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 1 public Dallas Socrata live smoke call; 0 OpenAI; 0 Fal/media.
+- Recommended next task: Task 116 remains optional/high-care for env-gated live OpenAI proof, or Task 118 for lower-risk source-card density polish.

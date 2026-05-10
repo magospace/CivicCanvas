@@ -1906,7 +1906,7 @@ Status: Pending.
 
 ## 119. Add Live Public API Smoke If Network Proof Is Available
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Live data / QA
 - Goal: Run or strengthen an approved live public API proof for the narrow Dallas aggregate path while preserving sample fallback for ZIP/Austin/Houston.
@@ -1917,3 +1917,5 @@ Status: Pending.
 - Acceptance criteria: If network is available, run the existing live smoke and record sanitized counts/caveats; if not, preserve no-network proof and report the blocker. No unsupported dataset/field is promoted from smoke alone.
 - Validation commands: `pnpm live:fallback-proof:json`, optional `pnpm smoke:live:json`, focused tests if script changes, `pnpm lint`, `git diff --check`.
 - Can run in parallel: Yes if no script edits; no with live-smoke script changes.
+- Completed notes: Ran the existing no-network live/fallback proof and optional live public API smoke. The live smoke made one approved public Dallas Socrata aggregate check for 2024 category counts, returned 3 live aggregate rows, and did not promote Dallas ZIP, Austin monthly, or Houston sample-first dashboards. Added paste-safe evidence to the live API smoke template.
+- Validation: `pnpm live:fallback-proof:json`, `pnpm smoke:live:json`, `pnpm lint`, and `git diff --check` passed. Live public API call count: 1.

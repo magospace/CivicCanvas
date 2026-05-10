@@ -36,6 +36,29 @@ Unsupported fields or failed checks:
 - [summarize any blocked fields without pasting raw private data, tokens, local paths, or full provider responses]
 ```
 
+## Latest Local Smoke Evidence - 2026-05-10 13:44 local
+
+This is paste-safe optional smoke evidence, not release evidence. It did not use secrets and did not refresh `docs/release-evidence.json`.
+
+```text
+Command: pnpm smoke:live:json
+Result: passed
+Network used: yes, approved public Dallas Socrata endpoint only
+Live call count: 1 public API check
+Dataset: dallas_311_requests
+External dataset ID: d7e7-envw
+Check: 2024 requests by category
+Tested fields: created_date, category
+Rows returned: 3 aggregate rows
+Data mode: live
+Reason: Verified live registry check returned an array response.
+
+Boundary that remains true:
+- Dallas ZIP dashboards still use approved sample fallback because ZIP is not in the verified live mapping.
+- Austin monthly and Houston transportation demo dashboards remain sample-first/fallback and were not promoted by this smoke.
+- No unsupported fields, hidden fields, secrets, provider calls, deployment mutation, or release evidence refresh were involved.
+```
+
 ## Safe Wording
 
 - "Optional live smoke was run against approved public-data adapters."
