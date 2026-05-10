@@ -19,6 +19,8 @@
     "data:realism": "node scripts/data-realism-audit.mjs",
     "data:realism:json": "node scripts/data-realism-audit.mjs --json",
     "audit:demo-data": "node scripts/audit-hardcoded-demo-data.mjs",
+    "provenance:summary": "node scripts/source-provenance-summary.mjs",
+    "provenance:summary:json": "node scripts/source-provenance-summary.mjs --json",
     "demo:readiness:snapshot": "node scripts/demo-readiness-snapshot.mjs",
     "demo:readiness:snapshot:json": "node scripts/demo-readiness-snapshot.mjs --json",
     "release:evidence:precheck": "node scripts/release-evidence-precheck.mjs",

@@ -2308,7 +2308,7 @@ Status: Complete on May 10, 2026.
 
 ## 142. Add Source Provenance Quick-Check Script
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Data Provenance / Submission Proof
 - Goal: Provide a no-network script that summarizes approved catalog sources, sample files, hidden fields, live capability, and fallback status for judges/reviewers.
@@ -2319,6 +2319,8 @@ Status: Pending.
 - Acceptance criteria: Script exits green, lists Dallas/Austin/Houston supported prompts and source/fallback classifications, and does not call live APIs or print secrets.
 - Validation command: `pnpm provenance:summary`, `pnpm data:quality`, `git diff --check`.
 - Can run in parallel: No with package script edits.
+- Completed notes: Added `pnpm provenance:summary` / `pnpm provenance:summary:json`, a no-network catalog/sample provenance summary that lists supported Dallas/Austin/Houston prompts, source URLs, live promotion status, fallback sample files, live-capable/sample-only fields, hidden/review fields, and unsupported metadata-only catalog entries.
+- Validation: `pnpm provenance:summary` passed with 0 issues and 0 network calls; `pnpm data:quality` passed (3 samples, 280 rows, 4 gallery canvases); `pnpm lint` passed; `git diff --check` passed.
 
 ## 143. Tighten Saved Demo Checklist Around Editable Local Records
 

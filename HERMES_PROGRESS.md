@@ -1989,3 +1989,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm test -- apps/mcp-server/test/tools.test.ts` passed; due repo script wiring, all 123 Vitest tests across 17 files ran and passed. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 142, `Add Source Provenance Quick-Check Script`, for a no-network source/fallback proof summary.
+
+
+## Task 142 Update - Source Provenance Quick-Check Script
+
+- Task chosen: `TASKS.md` item 142, "Add Source Provenance Quick-Check Script".
+- Why this was next: It is the next safe data-realism/submission proof task after MCP proof, giving judges/reviewers a no-network summary of approved sources, fallback samples, hidden fields, and live/sample boundaries.
+- Scope: `scripts/source-provenance-summary.mjs`, `package.json`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Fixture/catalog through data loader plus deterministic fallback / acceptable. The script reads checked-in catalog, prompt-example, and sample-file metadata only; it performs 0 network calls and does not touch secrets.
+- Changes: Added `pnpm provenance:summary` and `pnpm provenance:summary:json`. The script lists supported Dallas/Austin/Houston prompts, source names/URLs, external IDs, live promotion state, fallback sample files and existence, live-capable/sample-only fields, hidden/review fields, and metadata-only unsupported catalog entries.
+- Validation: `pnpm provenance:summary` passed with 0 issues and reported 0 network calls. `pnpm data:quality` passed: 3 samples, 280 rows, 4 gallery canvases. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 143, `Tighten Saved Demo Checklist Around Editable Local Records`, to make the browser-local saved-record demo path more judge-proof.
