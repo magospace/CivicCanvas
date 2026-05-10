@@ -29,6 +29,15 @@ const seedCanvasSchema = z.object({
 
 const seedCanvasListSchema = z.array(seedCanvasSchema);
 
+const promptExampleSchema = z.object({
+  label: z.string().min(1),
+  prompt: z.string().min(1),
+  datasetId: z.string().min(1),
+  dataModeNote: z.string().min(1)
+});
+
+const promptExampleListSchema = z.array(promptExampleSchema);
+
 const sampleFiles: Record<string, string> = {
   austin_building_permits: "austin-building-permits.sample.json",
   dallas_311_requests: "dallas-311.sample.json",
@@ -85,6 +94,10 @@ export function getSeedCanvasPrompts() {
 
 export function getSeedCanvasPrompt(id: string) {
   return getSeedCanvasPrompts().find((seed) => seed.id === id)?.prompt;
+}
+
+export function getPromptExamples() {
+  return promptExampleListSchema.parse(readJson("data/prompt-examples.json"));
 }
 
 export function getReleaseEvidence(): ReleaseEvidence {

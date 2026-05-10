@@ -1617,3 +1617,20 @@ Last updated: May 10, 2026 06:17 CDT
   - `pnpm test`: Passed with 16 files / 116 tests.
   - `git diff --check`: Passed before commit.
 - Recommended next task: Task 112, `Add API-Backed Prompt Example Source`, to remove the remaining hardcoded prompt example chips from the UI component.
+
+## Task 112 Update - Prompt Example Fixture Source
+
+- Task chosen: `TASKS.md` item 112, "Add API-Backed Prompt Example Source".
+- Why this was next: It was the next data-realism task after the audit script and removed the remaining hardcoded `/explore` demo prompt chips from the UI component.
+- Scope: `data/prompt-examples.json`, `apps/web/lib/data.ts`, `apps/web/app/explore/page.tsx`, `apps/web/components/app-shell.tsx`, `apps/web/lib/openai-provider.ts`, `apps/web/test/prompt-examples.test.ts`, `apps/web/test/release-scripts.test.ts`, `scripts/data-realism-audit.mjs`, `docs/SAMPLE_AND_PERSISTENCE_REALNESS.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism changes: Prompt examples are now validated fixture records loaded through `getPromptExamples()` and passed into the normal `/explore` app shell path. The deterministic/OpenAI fallback suggestions reuse the same fixture-backed prompt examples, keeping UI chips and unsupported prompt guidance aligned. `pnpm data:realism:json` now classifies `promptExamples` as `fixture_file_through_data_loader`; remaining hardcoded review is only `headerNavItems`, which is static navigation config rather than demo data.
+- Safety notes: No live APIs, OpenAI calls, Fal/media calls, schema/migrations, database operations, production data, deployment mutation, secrets, auth, billing, or generated artifacts. The OpenAI wrapper still uses deterministic fallback by default and reads only server-side readiness at runtime.
+- Validation:
+  - RED: `pnpm test -- apps/web/test/prompt-examples.test.ts -t "loads supported prompt chips"` failed before `getPromptExamples()` existed.
+  - GREEN/focused: `pnpm test -- apps/web/test/prompt-examples.test.ts apps/web/test/openai-provider.test.ts apps/web/test/release-scripts.test.ts` passed; Vitest discovered and passed 17 files / 117 tests.
+  - `pnpm lint`: Passed.
+  - `pnpm typecheck`: Passed.
+  - `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "explore route loads"`: Passed; project script ran the full product-demo spec with 17 browser tests.
+  - `pnpm data:realism:json`: Passed, no network/no mutation/no env values read or printed, promptExampleRecords=3, remainingHardcodedReviewCount=1.
+  - `git diff --check`: Passed before commit.
+- Recommended next task: Task 113, `Strengthen Gallery Fixture Read Path Proof`.

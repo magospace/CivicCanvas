@@ -157,6 +157,7 @@ describe("release and governance scripts", () => {
       "sampleRows",
       "galleryCanvases",
       "seedCanvasFixtures",
+      "promptExamples",
       "savedCanvases",
       "openAIProvider",
       "falMediaProof"
@@ -164,9 +165,12 @@ describe("release and governance scripts", () => {
     const seedFixtures = body.classifications.find((item: { surface: string }) => item.surface === "seedCanvasFixtures");
     expect(seedFixtures.classification).toBe("fixture_file_through_data_loader");
     expect(seedFixtures.acceptable).toBe(true);
+    const promptExamples = body.classifications.find((item: { surface: string }) => item.surface === "promptExamples");
+    expect(promptExamples.classification).toBe("fixture_file_through_data_loader");
+    expect(promptExamples.acceptable).toBe(true);
     const savedCanvases = body.classifications.find((item: { surface: string }) => item.surface === "savedCanvases");
     expect(savedCanvases.classification).toBe("browser_local_persistence");
-    expect(body.remainingHardcodedReview.some((item: { surface: string }) => item.surface === "explorePromptExamples")).toBe(true);
+    expect(body.remainingHardcodedReview.some((item: { surface: string }) => item.surface === "explorePromptExamples")).toBe(false);
     expect(stdout).not.toContain("sk-fake-secret-value");
     expect(stdout).not.toContain("fal-fake-secret-value");
   });

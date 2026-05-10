@@ -26,6 +26,7 @@ const galleryFiles = [
   "unsupported-sensitive-prompt.canvas.json"
 ];
 const sampleDatasets = catalog.filter((dataset) => dataset.fallbackSampleFile);
+const promptExamples = readJson("data/prompt-examples.json");
 const samples = sampleDatasets.map((dataset) => {
   const sample = readJson(`data/samples/${dataset.fallbackSampleFile}`);
   return {
@@ -74,6 +75,13 @@ const classifications = [
     note: "Known seed canvas IDs/prompts are fixture-backed and loaded by getSeedCanvasPrompt; route is still not database persistence."
   },
   {
+    surface: "promptExamples",
+    classification: "fixture_file_through_data_loader",
+    acceptable: Array.isArray(promptExamples) && promptExamples.length > 0 && promptExamples.every((example) => example.label && example.prompt && example.datasetId),
+    path: "data/prompt-examples.json",
+    note: "Explore prompt chips and deterministic/OpenAI fallback suggestions share validated fixture-backed examples loaded through the app data layer."
+  },
+  {
     surface: "savedCanvases",
     classification: "browser_local_persistence",
     acceptable: true,
@@ -98,14 +106,6 @@ const classifications = [
 
 const remainingHardcodedReview = [
   {
-    surface: "explorePromptExamples",
-    classification: "hardcoded_ui_config_review_needed",
-    acceptableForNow: true,
-    path: "apps/web/components/app-shell.tsx",
-    recommendedTask: 112,
-    note: "Prompt chips are UI examples, not persisted demo records, but should move to a shared fixture/read-model if used as demo data."
-  },
-  {
     surface: "headerNavItems",
     classification: "static_ui_navigation_config",
     acceptableForNow: true,
@@ -127,6 +127,7 @@ const output = {
     totalSampleRows: samples.reduce((sum, sample) => sum + sample.rowCount, 0),
     galleryFixtures: gallery.length,
     seedCanvasRecords: Array.isArray(seedCanvases) ? seedCanvases.length : 0,
+    promptExampleRecords: Array.isArray(promptExamples) ? promptExamples.length : 0,
     remainingHardcodedReviewCount: remainingHardcodedReview.length
   },
   classifications,

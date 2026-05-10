@@ -11,29 +11,23 @@ import { PromptBar } from "./prompt-bar";
 import { boundedQuerySpecJson, canvasDocumentJson, tableCsv } from "../lib/dashboard-exports";
 import { createCanvasShareBundleLink, importSavedCanvasHash, saveCanvasLocally, takePendingOpenCanvas } from "../lib/saved-canvases";
 
-const promptExamples = [
-  {
-    label: "Dallas 311 by ZIP",
-    prompt: "Show Dallas 311 service requests by category and ZIP code for 2024."
-  },
-  {
-    label: "Austin permits trend",
-    prompt: "Show Austin building permits by month and ZIP code for 2024."
-  },
-  {
-    label: "Houston incidents",
-    prompt: "Show Houston transportation incidents by ZIP and incident type for 2024."
-  }
-];
+type PromptExample = {
+  label: string;
+  prompt: string;
+  datasetId: string;
+  dataModeNote: string;
+};
 
 export function AppShell({
   aiSuggestionsActive,
   canvas,
-  datasets
+  datasets,
+  promptExamples
 }: {
   aiSuggestionsActive?: boolean;
   canvas: CanvasDocument;
   datasets: DatasetMetadata[];
+  promptExamples: PromptExample[];
 }) {
   const [prompt, setPrompt] = useState("Show Dallas 311 service requests by category and ZIP code for 2024.");
   const [activeCanvas, setActiveCanvas] = useState(canvas);

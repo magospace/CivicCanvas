@@ -1788,7 +1788,7 @@ Status: Complete on May 10, 2026.
 
 ## 112. Add API-Backed Prompt Example Source
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: UI/API / Data realism
 - Goal: Move hardcoded `/explore` prompt example chips into a shared seed/read-model helper or API-backed metadata path.
@@ -1799,6 +1799,8 @@ Status: Pending.
 - Acceptance criteria: Prompt examples are loaded from a validated fixture/helper also used by unsupported suggestion copy; tests prove UI examples and suggestion fallbacks stay aligned and route through the shared source.
 - Validation commands: focused Vitest, `pnpm lint`, `pnpm typecheck`, targeted product-demo Playwright, `git diff --check`.
 - Can run in parallel: No with app-shell/prompt helper edits.
+- Completed notes: Added validated `data/prompt-examples.json`, loaded prompt examples through `getPromptExamples()`, passed them from `/explore` into `AppShell`, and reused the same fixture-backed examples for deterministic/OpenAI fallback prompt suggestions. Updated the data-realism audit so prompt examples are classified as fixture file through data loader; remaining hardcoded review is only static header navigation config.
+- Validation: RED prompt-example loader test failed before `getPromptExamples()` existed; focused prompt/OpenAI/release-script Vitest passed; `pnpm lint`, `pnpm typecheck`, targeted product-demo Playwright, `pnpm data:realism:json`, and `git diff --check` passed.
 
 ## 113. Strengthen Gallery Fixture Read Path Proof
 

@@ -7,15 +7,14 @@ import {
   type QueryResult,
   type SourceAwareSummary
 } from "@texas-data-canvas/shared";
+import { getPromptExamples } from "./data";
 
 const OPENAI_CHAT_COMPLETIONS_URL = "https://api.openai.com/v1/chat/completions";
 const DEFAULT_OPENAI_MODEL = "gpt-4o-mini";
 
-const supportedPromptSuggestions = [
-  "Show Dallas 311 service requests by category and ZIP code for 2024.",
-  "Show Austin building permits by month and ZIP code for 2024.",
-  "Show Houston transportation incidents by ZIP and incident type for 2024."
-];
+function supportedPromptSuggestions() {
+  return getPromptExamples().map((example) => example.prompt);
+}
 
 type EnvLike = Partial<Record<string, string | undefined>>;
 type FetchLike = typeof fetch;
@@ -57,10 +56,11 @@ function deterministicPromptAssist(prompt: string, catalog: DatasetMetadata[]): 
   const hasApprovedDataset = intent.datasetCandidates.some((datasetId) => catalogIds(catalog).has(datasetId));
   const sensitive = containsSensitivePrompt(prompt) || intent.rejectedFields.length > 0;
   const mode = hasApprovedDataset && !sensitive ? "supported" : "unsupported";
-  const closestSupportedPrompt = supportedPromptSuggestions.find((suggestion) => {
+  const suggestions = supportedPromptSuggestions();
+  const closestSupportedPrompt = suggestions.find((suggestion) => {
     const city = intent.city?.toLowerCase();
     return city ? suggestion.toLowerCase().includes(city) : false;
-  }) ?? supportedPromptSuggestions[0];
+  }) ?? suggestions[0];
 
   return promptAssistResultSchema.parse({
     provider: "deterministic_fallback",
@@ -185,7 +185,7 @@ export async function assistPromptWithOpenAI({
         prompt,
         approvedDatasetIds: catalog.map((dataset) => dataset.id),
         supportedQueryShapes: ["approved_dataset_query", "catalog_discovery", "unsupported_refusal"],
-        supportedPromptSuggestions
+        supportedPromptSuggestions: supportedPromptSuggestions(),
       }
     }));
 

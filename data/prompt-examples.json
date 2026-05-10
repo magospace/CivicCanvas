@@ -1,0 +1,20 @@
+[
+  {
+    "label": "Dallas 311 by ZIP",
+    "prompt": "Show Dallas 311 service requests by category and ZIP code for 2024.",
+    "datasetId": "dallas_311_requests",
+    "dataModeNote": "ZIP dashboard views use sample fallback because verified Dallas live mappings do not expose ZIP."
+  },
+  {
+    "label": "Austin permits trend",
+    "prompt": "Show Austin building permits by month and ZIP code for 2024.",
+    "datasetId": "austin_building_permits",
+    "dataModeNote": "Austin monthly/ZIP demo remains sample-first until source-owned month grouping is safely verified."
+  },
+  {
+    "label": "Houston incidents",
+    "prompt": "Show Houston transportation incidents by ZIP and incident type for 2024.",
+    "datasetId": "houston_transportation_incidents",
+    "dataModeNote": "Houston remains sample-first until live feed access and aggregate-safe mappings are verified."
+  }
+]
