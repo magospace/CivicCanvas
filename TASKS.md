@@ -477,6 +477,8 @@ Status: Complete on May 10, 2026 at 04:11 CDT.
 
 ## 32. Strengthen Main Judge-Demo E2E Path
 
+Status: Complete on May 10, 2026 at 04:13 CDT.
+
 - Owner type: QA / E2E
 - Goal: Add or strengthen Playwright coverage for the exact judge-demo path from `/explore` prompt entry through generated dashboard inspection.
 - Why it matters: Unit tests cannot fully prove the visible judge flow; a stable browser test protects the final narrated demo.
@@ -486,6 +488,8 @@ Status: Complete on May 10, 2026 at 04:11 CDT.
 - Acceptance criteria: Test runs the primary Dallas prompt, verifies generated title/blocks, source/method attribution, data-mode/fallback indicators, inspector query/audit visibility, and no unsupported prompt state for supported input.
 - Validation commands: Targeted Playwright command for the new/updated spec, then `pnpm test:e2e` if runtime permits; run `pnpm lint` if component labels/copy are changed.
 - Can run in parallel: Yes, but not with another task editing `tests/e2e/product-demo.spec.ts` or the new judge-demo spec.
+- Completed notes: Added `tests/e2e/judge-demo.spec.ts` for the exact primary Dallas judge prompt, asserting generated dashboard title and blocks, source/method attribution, fallback copy, inspector reason codes, safety decisions, active bounded query JSON, and absence of the unsupported-prompt state.
+- Validation: `pnpm test:e2e -- tests/e2e/judge-demo.spec.ts` passed after tightening duplicate text locators in the new spec.
 
 ## 33. Add Governed Workflow E2E Coverage For Sources, Saved, And Miro Preview
 

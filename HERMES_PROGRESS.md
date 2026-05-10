@@ -1,19 +1,19 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 04:11 CDT
+Last updated: May 10, 2026 04:13 CDT
 
 ## Current Cycle
 
-- Task chosen: `TASKS.md` item 31, "Add Public-Data Live/Fallback Proof Coverage For Core Demo Path".
-- Why this was next: Item 31 is the next incomplete safe task after the live/fallback proof matrix and turns those claims into focused automated proof for the exact judge-demo prompts.
-- Scope: `apps/web/test/demo-proof.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Task chosen: `TASKS.md` item 32, "Strengthen Main Judge-Demo E2E Path".
+- Why this was next: Item 32 is the next incomplete safe task after the core demo fallback proof and adds browser-level proof for the exact primary judge flow.
+- Scope: `tests/e2e/judge-demo.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
 - Safety notes: No product behavior, runtime source code, package scripts, config, source data, secrets, auth, billing, migrations, production config, deploy scripts, release evidence, catalog data, samples, live API calls, or destructive operations were changed. Release evidence was not refreshed.
 
 ## Files Updated
 
-- `apps/web/test/demo-proof.test.ts`: Added focused Vitest coverage for exact Dallas/Austin/Houston judge-demo prompts, source/method attribution, data modes, fallback reasons, caveats, hidden-field absence, and explicit live-request fallback behavior.
-- `TASKS.md`: Marked item 31 complete with validation notes.
-- `HERMES_PROGRESS.md`: Recorded item 31 scope, safety notes, and validation.
+- `tests/e2e/judge-demo.spec.ts`: Added a focused Playwright proof for the exact primary Dallas judge prompt, visible generated blocks, fallback indicators, source/method attribution, inspector reason codes, audit decisions, active bounded query JSON, and absence of unsupported-prompt state.
+- `TASKS.md`: Marked item 32 complete with validation notes.
+- `HERMES_PROGRESS.md`: Recorded item 32 scope, safety notes, and validation.
 
 ## Sequential Progress
 
@@ -21,7 +21,8 @@ Last updated: May 10, 2026 04:11 CDT
 - Task 28 committed as `bb42631` (`docs: add final judge demo script`).
 - Task 29 committed as `2563468` (`docs: add local demo readiness checklist`).
 - Task 30 committed as `7ef1ca8` (`docs: add public data fallback proof matrix`).
-- Task 31 completed and ready to commit as `test: add core demo fallback proof`.
+- Task 31 committed as `8667205` (`test: add core demo fallback proof`).
+- Task 32 completed and ready to commit as `test: strengthen judge demo e2e path`.
 
 ## Sequential Task Plan
 
@@ -34,9 +35,15 @@ Last updated: May 10, 2026 04:11 CDT
 3. Task 30, "Add Public-Data Live/Fallback Proof Matrix".
    - Validation: manual path/link check, `git diff --check`, `pnpm governance:audit`, `pnpm lint`.
    - Expected commit: `docs: add public data fallback proof matrix`.
-4. Task 36, "Clarify Saved-Canvas Validation Stub Honesty", if still safe after the first three tasks.
-   - Validation: `git diff --check`, `pnpm lint`; focused route tests only if test files change.
-   - Expected commit: `docs: clarify saved canvas validation stub`.
+4. Task 32, "Strengthen Main Judge-Demo E2E Path".
+   - Validation: targeted Playwright command for `tests/e2e/judge-demo.spec.ts`, `git diff --check`.
+   - Expected commit: `test: strengthen judge demo e2e path`.
+5. Task 33, "Add Governed Workflow E2E Coverage For Sources, Saved, And Miro Preview".
+   - Validation: targeted Playwright command for the new/updated governed workflow spec, `git diff --check`.
+   - Expected commit: `test: add governed workflow e2e smoke`.
+6. Task 34, "Migrate From Deprecated `next lint` To ESLint CLI In Isolation", if E2E tasks pass and tooling scope remains clear.
+   - Validation: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `git diff --check`.
+   - Expected commit: `chore: migrate web lint to eslint cli`.
 
 ## Dirty Worktree Reconciliation Plan
 
@@ -208,9 +215,7 @@ Current `git status --short --branch` shows branch `feat/v1.3-hosted-launch-read
 
 ## Validation
 
-- `git diff --check`: Passed with no whitespace or conflict-marker output.
-- `pnpm test -- apps/web/test/demo-proof.test.ts`: Passed.
-- `pnpm test`: Passed.
+- `pnpm test:e2e -- tests/e2e/judge-demo.spec.ts`: Passed after tightening duplicate-text locators in the new spec.
 
 ## Blockers
 
@@ -218,4 +223,4 @@ Current `git status --short --branch` shows branch `feat/v1.3-hosted-launch-read
 
 ## Recommended Next Task
 
-- `TASKS.md` item 32, "Strengthen Main Judge-Demo E2E Path".
+- `TASKS.md` item 33, "Add Governed Workflow E2E Coverage For Sources, Saved, And Miro Preview".
