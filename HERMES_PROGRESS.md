@@ -1163,3 +1163,20 @@ Last updated: May 10, 2026 06:17 CDT
 ### Recommended Next Task
 
 - Task 86, `Add Release Evidence Warning To Submission Guide`, is next.
+
+## Task 86 Update
+
+- Task chosen: `TASKS.md` item 86, "Add Release Evidence Warning To Submission Guide".
+- Why this was next: Task 85 completed cleanly, and Task 86 was the next safe release-honesty docs task. It keeps submission guidance from overclaiming historical release evidence.
+- Scope: `docs/HACKATHON_SUBMISSION_GUIDE.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Documentation only. `docs/release-evidence.json` was not edited or refreshed. No release gate, deploy, live API call, provider call, generated media, backend persistence, schema, migration, secrets, auth, billing, or production data changed.
+
+### Validation
+
+- Manual wording check: Passed. Confirmed the guide warns release evidence is historical, points to Task 35 and `pnpm release:evidence:precheck:json`, and says not to edit/cite stale evidence as current proof.
+- `pnpm release:evidence:precheck:json`: Passed and reported historical/not-current evidence without mutation.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 87, `Add Local Demo Smoke Command Checklist`, is next.

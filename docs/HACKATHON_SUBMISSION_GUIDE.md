@@ -4,6 +4,18 @@ Due: May 10, 2026 at 11:00 AM CST.
 
 Source note: Adopted from root-level submission-guide input. Keep local/sample/live/browser-local boundaries honest; do not treat historical release evidence as current proof unless gated Task 35 reruns the full release gate.
 
+## Release Evidence Warning
+
+Checked-in `docs/release-evidence.json` is historical audit context, not current submission proof for this branch. Before citing release evidence as current, Task 35 must intentionally rerun the full release gate for the intended commit and refresh `docs/release-evidence.json`.
+
+Safe precheck command:
+
+```bash
+pnpm release:evidence:precheck:json
+```
+
+If that command reports historical or stale evidence, say "release evidence is historical" in the submission notes and rely on the local validation commands actually run for the Loom/submission. Do not edit `docs/release-evidence.json` from this guide.
+
 ## Submission Fields
 
 - Project title: CivicCanvas

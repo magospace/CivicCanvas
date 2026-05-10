@@ -1349,6 +1349,8 @@ Status: Complete on May 10, 2026 at 07:13 CDT.
 
 ## 86. Add Release Evidence Warning To Submission Guide
 
+Status: Complete on May 10, 2026 at 07:15 CDT.
+
 - Owner type: Release / Docs
 - Goal: Ensure the submission guide prominently warns that release evidence is historical until gated Task 35 reruns full validation.
 - Scope: Docs only; must not edit `docs/release-evidence.json`.
@@ -1357,6 +1359,8 @@ Status: Complete on May 10, 2026 at 07:13 CDT.
 - Acceptance criteria: Guide tells submitters not to cite release evidence as current proof; points to `pnpm release:evidence:precheck:json`.
 - Validation commands: manual wording check, `pnpm release:evidence:precheck:json`, `git diff --check`.
 - Can run in parallel: Yes with non-release tasks.
+- Completed notes: Added a prominent release-evidence warning near the top of the submission guide, including Task 35 gating, the safe precheck command, and instructions not to edit or cite stale `docs/release-evidence.json` as current proof.
+- Validation: Manual wording check passed; `pnpm release:evidence:precheck:json` and `git diff --check` passed.
 
 ## 87. Add Local Demo Smoke Command Checklist
 
