@@ -2061,3 +2061,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 149, `Review Release Evidence Warning Placement`, before running the final broad no-spend validation task.
+
+
+## Task 149 Update - Release Evidence Warning Placement
+
+- Task chosen: `TASKS.md` item 149, "Review Release Evidence Warning Placement".
+- Why this was next: After public URL honesty, release-evidence warning placement was the remaining low-risk docs honesty task before broad no-spend validation.
+- Scope: `README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`. Reviewed existing `GOVERNANCE_NOTE.md` and `docs/README.md` warnings without changing them.
+- Data realism classification: Not data-path-related; release proof honesty only.
+- Changes: Tightened the README validation section to state that `docs/release-evidence.json` is historical evidence, not proof for the current local `HEAD`, and must not be cited as current proof or refreshed outside an intentional release gate for the intended commit. Did not edit `docs/release-evidence.json`.
+- Validation: `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 148, `Add Final No-Spend Validation Checklist Task`, to record the broad local validation set after the docs honesty updates.

@@ -152,7 +152,7 @@ The default provider smoke commands make no provider calls. The live commands ar
 `pnpm verify:prod-local` builds `apps/web`, runs `next start` on an available local port, then runs hosted-style smoke and remote-mode Playwright against that production server.
 `pnpm verify:vercel-output` inspects `.vercel/output` after `vercel build` when available, and skips output inspection safely when it is absent.
 `pnpm verify` runs the local release gate: preflight, live smoke, and Playwright browser smoke.
-Do not refresh `docs/release-evidence.json` as part of daily checks; refresh it only after intentionally rerunning the relevant release gate for the intended release commit.
+`docs/release-evidence.json` is historical evidence, not proof for the current local `HEAD`. Do not cite it as current release proof or refresh it as part of daily checks; refresh it only after intentionally rerunning the relevant release gate for the intended release commit.
 
 Cleanup command, only when intentionally resetting local artifacts:
 

@@ -2418,7 +2418,7 @@ Status: Pending.
 
 ## 149. Review Release Evidence Warning Placement
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Release Honesty / Docs
 - Goal: Ensure historical release evidence warnings remain visible after the latest local commits without refreshing gated evidence.
@@ -2429,3 +2429,5 @@ Status: Pending.
 - Acceptance criteria: Docs clearly state checked-in release evidence is historical and not proof of current HEAD.
 - Validation command: `git diff --check`.
 - Can run in parallel: Yes with non-doc tasks.
+- Completed notes: Reviewed existing `GOVERNANCE_NOTE.md` and `docs/README.md` warning placement, then tightened README validation copy so `docs/release-evidence.json` is clearly historical evidence and not proof for current local `HEAD`. Did not edit `docs/release-evidence.json`.
+- Validation: `git diff --check` passed.
