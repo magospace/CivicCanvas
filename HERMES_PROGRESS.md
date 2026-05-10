@@ -1,6 +1,6 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 05:12 CDT
+Last updated: May 10, 2026 05:14 CDT
 
 ## Current Cycle
 
@@ -24,8 +24,8 @@ Last updated: May 10, 2026 05:12 CDT
    - Status: Complete.
    - Validation: RED/green health-route contract, full Vitest suite, `pnpm lint`, `pnpm typecheck`, `git diff --check`.
 3. Task 45, `Add Sample Provenance Regression Test`.
-   - Status: Planned after task 44 if validation stays green and scope remains safe.
-   - Validation: focused test or `pnpm data:quality`, `git diff --check`, `pnpm lint`, `pnpm test` if Vitest coverage is added.
+   - Status: Complete.
+   - Validation: RED/green release-scripts data-quality coverage, `pnpm data:quality`, `pnpm lint`, `pnpm typecheck`, `git diff --check`.
 
 ## Files Updated
 
@@ -49,7 +49,7 @@ Last updated: May 10, 2026 05:12 CDT
 
 ## Recommended Next Task
 
-- Task 45, `Add Sample Provenance Regression Test`, is the next safe task. Keep it local and data-governance focused; do not edit catalog/sample data unless a test exposes a safe, scoped mismatch.
+- Task 46, `Add Current Docs Cross-Link Consistency Check`, is the next safe task. Keep it local and docs/test focused; do not delete or rewrite historical docs.
 
 ## Task 44 Update
 
@@ -78,6 +78,33 @@ Last updated: May 10, 2026 05:12 CDT
 ### Recommended Next Task
 
 - Task 45, `Add Sample Provenance Regression Test`, is the next safe task if the cycle continues.
+
+## Task 45 Update
+
+- Task chosen: `TASKS.md` item 45, "Add Sample Provenance Regression Test".
+- Why this was next: Item 45 was the next safe task after task 44 and adds local automated proof that sample files do not expose hidden catalog fields.
+- Scope: `scripts/data-quality.mjs`, `apps/web/test/release-scripts.test.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: No catalog or sample data was changed. No live APIs, secrets, deploy config, release evidence, auth, billing, migrations, production config, generated media, or destructive operations were touched.
+
+### Files Updated
+
+- `scripts/data-quality.mjs`: Reports `hiddenFieldsChecked` and `hiddenFieldsAbsent` for sample-backed datasets and fails data quality if hidden catalog fields appear in sample rows.
+- `apps/web/test/release-scripts.test.ts`: Asserts Houston sample provenance output checks and excludes `precise_address`.
+- `TASKS.md`: Marks item 45 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records item 45 scope, safety notes, and validation.
+
+### Validation
+
+- RED: `pnpm test -- apps/web/test/release-scripts.test.ts -t "reports sample data quality for release handoff"` failed because `hiddenFieldsAbsent` was undefined before implementation. The command discovered the full Vitest suite and reported 1 failed / 88 passed.
+- GREEN: `pnpm test -- apps/web/test/release-scripts.test.ts -t "reports sample data quality for release handoff"` passed after implementation. The command ran the full Vitest suite: 15 files, 89 tests passed.
+- `pnpm data:quality`: Passed with 3 samples, 280 rows, 4 gallery canvases.
+- `pnpm lint`: Passed.
+- `pnpm typecheck`: Passed.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 46, `Add Current Docs Cross-Link Consistency Check`, is the next safe task if a future cycle continues.
 
 ## Historical Sequential Progress
 

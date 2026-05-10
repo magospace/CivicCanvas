@@ -40,6 +40,12 @@ function qualityForDataset(dataset) {
   const categoryField = dataset.fields.find((field) =>
     ["category", "permit_type", "incident_type"].includes(field.name)
   )?.name;
+  const hiddenFields = dataset.fields
+    .filter((field) => field.classification === "sensitive_hide")
+    .map((field) => field.name);
+  const hiddenFieldsPresent = hiddenFields.filter((fieldName) => rows.some((row) =>
+    Object.prototype.hasOwnProperty.call(row, fieldName)
+  ));
   const expectedZip = dataset.fields.some((field) => field.name === "zip_code");
   const missingZipRows = expectedZip
     ? rows.filter((row) => typeof row.zip_code !== "string" || row.zip_code.length === 0).length
@@ -56,6 +62,9 @@ function qualityForDataset(dataset) {
   if (expectedZip && rows.length > 0 && missingZipRows / rows.length > maximumMissingZipRatio) {
     issues.push(`missing ZIP ratio ${missingZipRows}/${rows.length} exceeds ${maximumMissingZipRatio}`);
   }
+  if (hiddenFieldsPresent.length > 0) {
+    issues.push(`hidden field(s) present in sample rows: ${hiddenFieldsPresent.join(", ")}`);
+  }
 
   return {
     datasetId: dataset.id,
@@ -68,6 +77,8 @@ function qualityForDataset(dataset) {
     distinctMonths,
     expectedZip,
     missingZipRows,
+    hiddenFieldsChecked: hiddenFields,
+    hiddenFieldsAbsent: hiddenFieldsPresent.length === 0,
     topCategories: categoryField ? countValues(rows, categoryField) : [],
     topStatuses: countValues(rows, "status"),
     minimumRows,

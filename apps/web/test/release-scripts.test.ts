@@ -58,6 +58,11 @@ describe("release and governance scripts", () => {
     ]));
     expect(body.summary.totalSampleRows).toBeGreaterThan(0);
     expect(body.datasets.every((dataset: { ok: boolean }) => dataset.ok)).toBe(true);
+    const houston = body.datasets.find((dataset: { datasetId: string }) =>
+      dataset.datasetId === "houston_transportation_incidents"
+    );
+    expect(houston?.hiddenFieldsAbsent).toBe(true);
+    expect(houston?.hiddenFieldsChecked).toContain("precise_address");
     expect(body.datasets.find((dataset: { datasetId: string }) =>
       dataset.datasetId === "austin_building_permits"
     )?.distinctMonths).toBe(12);

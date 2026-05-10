@@ -697,6 +697,8 @@ Status: Complete on May 10, 2026 at 05:12 CDT.
 
 ## 45. Add Sample Provenance Regression Test
 
+Status: Complete on May 10, 2026 at 05:14 CDT.
+
 - Owner type: QA / Data governance
 - Goal: Add a focused local test or script assertion that sample files remain synthetic/schema-aligned fallback data and do not expose hidden fields such as Houston precise addresses.
 - Why it matters: The sample/persistence realness matrix is only useful if future sample edits preserve the documented boundaries.
@@ -706,6 +708,8 @@ Status: Complete on May 10, 2026 at 05:12 CDT.
 - Acceptance criteria: Automated check covers Dallas/Austin/Houston sample row counts or minimum shape, confirms Houston precise-address fields are absent, and keeps existing `pnpm data:quality` behavior green.
 - Validation commands: focused test or `pnpm data:quality`, `git diff --check`, `pnpm lint`, `pnpm test` if Vitest coverage is added.
 - Can run in parallel: Yes with docs-only tasks. Do not parallelize with catalog/sample edits.
+- Completed notes: Extended `scripts/data-quality.mjs` to report hidden catalog fields checked per sample dataset, fail if hidden fields appear in sample rows, and expose `hiddenFieldsAbsent` in JSON output. Strengthened the release-scripts test to assert Houston sample rows exclude `precise_address`.
+- Validation: RED release-scripts test failed before hidden-field provenance metadata existed; focused release-scripts command passed after implementation and ran the full 89-test Vitest suite; `pnpm data:quality`, `pnpm lint`, `pnpm typecheck`, and `git diff --check` passed.
 
 ## 46. Add Current Docs Cross-Link Consistency Check
 
