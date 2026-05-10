@@ -1603,7 +1603,7 @@ Status: Complete on May 10, 2026.
 
 ## 102. Add Mobile Prompt-First Explore Layout
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: UI / Responsive UX
 - Goal: Make the mobile `/explore` first viewport show the prompt loop before source discovery so the demo action is obvious within 15 seconds.
@@ -1613,6 +1613,8 @@ Status: Pending.
 - Acceptance criteria: At mobile width, prompt card appears before Cities/Topics/Datasets; no horizontal overflow; desktop layout remains unchanged; data-mode and sample fallback copy remain visible.
 - Validation commands: targeted mobile Playwright test, `pnpm lint`, `pnpm typecheck`, `git diff --check`.
 - Can run in parallel: No with app-shell/sidebar layout edits.
+- Completed notes: Reordered `/explore` grid children so the prompt/canvas column appears before source discovery on small screens while preserving desktop order at `lg`. Mobile Playwright coverage now asserts the prompt appears above the Cities section and no horizontal overflow occurs after dashboard generation.
+- Validation: Targeted mobile Playwright command ran the product-demo spec and passed 17 browser tests; `pnpm lint`, `pnpm typecheck`, and `git diff --check` passed.
 
 ## 103. Add Sources Page Summary Legend
 

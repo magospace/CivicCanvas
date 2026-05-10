@@ -275,6 +275,13 @@ test("key public-beta flows have no serious accessibility violations", async ({ 
 test("mobile viewport has no horizontal overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/explore");
+
+  const promptBox = await page.getByLabel("Dashboard prompt").boundingBox();
+  const citiesBox = await page.getByText("CITIES").boundingBox();
+  expect(promptBox).not.toBeNull();
+  expect(citiesBox).not.toBeNull();
+  expect(promptBox!.y).toBeLessThan(citiesBox!.y);
+
   await generate(page, "Show Dallas 311 service requests by category and ZIP code for 2024.");
 
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 2);

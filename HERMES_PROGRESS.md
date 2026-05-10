@@ -1472,3 +1472,13 @@ Last updated: May 10, 2026 06:17 CDT
 - Files updated: Submission readiness now includes `visualAudit` metadata for `docs/VISUAL_UI_UX_AUDIT.md`, ignored `demo-artifacts/ui-audit` guidance, localized polish status, and remaining visual risks. Release-script tests assert the metadata and docs list the visual-polish boundary.
 - Validation: `pnpm submission:readiness:json`, `pnpm test -- apps/web/test/release-scripts.test.ts -t "submission bundle readiness"`, `pnpm lint`, and `git diff --check` passed.
 - Next recommended task: Task 102, `Add Mobile Prompt-First Explore Layout`.
+
+## Task 102 Update
+
+- Task chosen: `TASKS.md` item 102, "Add Mobile Prompt-First Explore Layout".
+- Why this was next: Task 101 completed cleanly, and Task 102 addresses the highest remaining P1 Loom visual risk by moving the core prompt loop above source discovery on mobile.
+- Scope: `apps/web/components/app-shell.tsx`, `tests/e2e/product-demo.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Responsive layout ordering only. Desktop three-column layout, dataset/source content, sample/live boundary copy, persistence, APIs, schema, provider/media paths, release evidence, deploy config, secrets, auth, billing, and production data were not changed.
+- Files updated: `AppShell` wraps the sidebar and inspector in ordered grid items so the prompt/canvas section is first on small screens and desktop order is preserved at `lg`. The mobile overflow E2E now asserts the prompt appears before the Cities section before generating the Dallas dashboard.
+- Validation: `PLAYWRIGHT_BASE_URL=http://localhost:3015 pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "mobile viewport"` passed; the project script ran the full product-demo spec with 17 browser tests. `pnpm lint`, `pnpm typecheck`, and `git diff --check` passed.
+- Stop point: Completed five work items this cycle counting queue replenishment plus Tasks 99, 100, 101, and 102. Next recommended task is Task 103, `Add Sources Page Summary Legend`.

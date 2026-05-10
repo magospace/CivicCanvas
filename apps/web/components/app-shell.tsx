@@ -222,8 +222,10 @@ export function AppShell({
     <main id="main-content" className="min-h-screen bg-civic-50">
       <Header />
       <div className="mx-auto grid max-w-[1600px] lg:grid-cols-[280px_minmax(0,1fr)_330px]">
-        <DatasetSidebar datasets={datasets} />
-        <section className="min-w-0 space-y-5 px-4 py-5 md:px-6">
+        <div className="order-2 lg:order-1">
+          <DatasetSidebar datasets={datasets} />
+        </div>
+        <section className="order-1 min-w-0 space-y-5 px-4 py-5 md:px-6 lg:order-2">
           <PromptBar
             prompt={prompt}
             dataModePreference={dataModePreference}
@@ -444,27 +446,29 @@ export function AppShell({
             </section>
           ) : null}
         </section>
-        <InspectorPanel
-          canvas={activeCanvas}
-          audits={audits}
-          intent={intent}
-          querySpec={querySpec}
-          dataMode={dataMode}
-          dataModePreference={dataModePreference}
-          fallbackReason={fallbackReason}
-          filterValues={filterValues}
-          miroTemplate={miroTemplate}
-          onFilterChange={updateFilter}
-          onDataModePreferenceChange={setDataModePreference}
-          onMiroTemplateChange={setMiroTemplate}
-          onExportMiro={exportMiroSpec}
-          onCopyCanvasJson={copyCanvasJson}
-          onCopyQuerySpec={copyQuerySpec}
-          onExportCsv={downloadTableCsv}
-          onSave={saveCurrentCanvas}
-          onShare={shareCurrentCanvas}
-          onApplyFilters={generateDashboard}
-        />
+        <div className="order-3 lg:order-3">
+          <InspectorPanel
+            canvas={activeCanvas}
+            audits={audits}
+            intent={intent}
+            querySpec={querySpec}
+            dataMode={dataMode}
+            dataModePreference={dataModePreference}
+            fallbackReason={fallbackReason}
+            filterValues={filterValues}
+            miroTemplate={miroTemplate}
+            onFilterChange={updateFilter}
+            onDataModePreferenceChange={setDataModePreference}
+            onMiroTemplateChange={setMiroTemplate}
+            onExportMiro={exportMiroSpec}
+            onCopyCanvasJson={copyCanvasJson}
+            onCopyQuerySpec={copyQuerySpec}
+            onExportCsv={downloadTableCsv}
+            onSave={saveCurrentCanvas}
+            onShare={shareCurrentCanvas}
+            onApplyFilters={generateDashboard}
+          />
+        </div>
       </div>
     </main>
   );
