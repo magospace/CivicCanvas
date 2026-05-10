@@ -888,6 +888,8 @@ Status: Complete on May 10, 2026 at 05:53 CDT.
 
 ## 57. Add Submission Metadata Checklist
 
+Status: Complete on May 10, 2026 at 05:55 CDT.
+
 - Owner type: Submission / Docs
 - Goal: Add a hackathon submission readiness checklist covering project description, install/run command, demo URL caveats, license, screenshots, and honest real/mock/live claims.
 - Scope: Docs only.
@@ -896,6 +898,8 @@ Status: Complete on May 10, 2026 at 05:53 CDT.
 - Acceptance criteria: Checklist separates local demo proof, hosted proof, live API proof, media proof, and release evidence; no unchecked claim is presented as complete.
 - Validation commands: manual path/link check, `git diff --check`, `pnpm lint`.
 - Can run in parallel: Yes with test/code tasks not editing docs index.
+- Completed notes: Added `docs/HACKATHON_SUBMISSION_CHECKLIST.md` covering project metadata, exact demo prompts, install/run commands, route references, local/hosted/live/media/release-evidence proof sections, asset hygiene, and safe claim wording for mock/live/local boundaries. Linked it from README and the docs index.
+- Validation: Manual path/link check passed; `git diff --check` passed; `pnpm lint` passed.
 
 ## 58. Add Demo Readiness JSON Snapshot Export
 

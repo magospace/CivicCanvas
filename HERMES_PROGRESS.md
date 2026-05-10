@@ -1,6 +1,6 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 05:53 CDT
+Last updated: May 10, 2026 05:55 CDT
 
 ## Current Cycle
 
@@ -372,6 +372,31 @@ Last updated: May 10, 2026 05:53 CDT
 ### Recommended Next Task
 
 - Task 57, `Add Submission Metadata Checklist`, is the next safe task.
+
+## Task 57 Update
+
+- Task chosen: `TASKS.md` item 57, "Add Submission Metadata Checklist".
+- Why this was next: It was the next safe hackathon submission task after Task 56 and improves submission readiness without changing app behavior.
+- Scope: `docs/HACKATHON_SUBMISSION_CHECKLIST.md`, `docs/README.md`, `README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Documentation only. No hosted deployment mutation, release evidence refresh, live API call, Fal call, generated media commit, schema/migration change, database operation, secrets, auth, billing, or production config changed.
+
+### Files Updated
+
+- `docs/HACKATHON_SUBMISSION_CHECKLIST.md`: New submission checklist with project metadata, exact demo prompts, claim boundaries, local/hosted/live/media/release-evidence proof sections, and screenshot/video asset hygiene.
+- `docs/README.md`: Linked the submission checklist in release/demo docs.
+- `README.md`: Linked the submission checklist from current developer docs.
+- `TASKS.md`: Marks item 57 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records item 57 scope, safety notes, validation, and next task.
+
+### Validation
+
+- Manual path/link check via `python3`: Passed.
+- `git diff --check`: Passed.
+- `pnpm lint`: Passed.
+
+### Recommended Next Task
+
+- Task 58, `Add Demo Readiness JSON Snapshot Export`, is the next safe task.
 
 ## Historical Sequential Progress
 
