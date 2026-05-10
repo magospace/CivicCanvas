@@ -1,6 +1,6 @@
 # Hermes Progress
 
-Last updated: May 10, 2026 05:29 CDT
+Last updated: May 10, 2026 05:31 CDT
 
 ## Current Cycle
 
@@ -49,7 +49,7 @@ Last updated: May 10, 2026 05:29 CDT
 
 ## Recommended Next Task
 
-- Task 49, `Add Saved-Canvas Share-Link Size Boundary E2E Or Component Coverage`, is the next safe task. Keep it docs-only and do not claim platform firewall/rate-limit controls are configured.
+- Task 50, `Consolidate Remaining Historical-Doc Warnings Into Docs Index`, is the next safe task. Keep it docs-only and do not claim platform firewall/rate-limit controls are configured.
 
 ## Task 44 Update
 
@@ -131,7 +131,7 @@ Last updated: May 10, 2026 05:29 CDT
 
 ### Recommended Next Task
 
-- Task 49, `Add Saved-Canvas Share-Link Size Boundary E2E Or Component Coverage`, is the next safe task.
+- Task 50, `Consolidate Remaining Historical-Doc Warnings Into Docs Index`, is the next safe task.
 
 ## Task 47 Update
 
@@ -156,7 +156,7 @@ Last updated: May 10, 2026 05:29 CDT
 
 ### Recommended Next Task
 
-- Task 49, `Add Saved-Canvas Share-Link Size Boundary E2E Or Component Coverage`, is the next safe task.
+- Task 50, `Consolidate Remaining Historical-Doc Warnings Into Docs Index`, is the next safe task.
 
 ## Task 48 Update
 
@@ -182,7 +182,31 @@ Last updated: May 10, 2026 05:29 CDT
 
 ### Recommended Next Task
 
-- Task 49, `Add Saved-Canvas Share-Link Size Boundary E2E Or Component Coverage`, is the next safe task.
+- Task 50, `Consolidate Remaining Historical-Doc Warnings Into Docs Index`, is the next safe task.
+
+## Task 49 Update
+
+- Task chosen: `TASKS.md` item 49, "Add Saved-Canvas Share-Link Size Boundary E2E Or Component Coverage".
+- Why this was next: Item 49 was the next safe task after item 48 and strengthens browser-visible proof that saved-canvas share links are URL-hash/local validation flows, not backend persistence.
+- Scope: `tests/e2e/product-demo.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Safety notes: Browser test only. No saved-canvas storage architecture, server persistence, database, schema migration, provider calls, media generation, deploy config, secrets, auth, billing, production config, or release evidence refresh changed.
+
+### Files Updated
+
+- `tests/e2e/product-demo.spec.ts`: Added a malformed share-link hash test for `/saved#canvasBundle=...` that verifies a user-visible rejection, no localStorage write, and no `/api/canvas/save` call.
+- `TASKS.md`: Marks item 49 complete with validation notes.
+- `HERMES_PROGRESS.md`: Records item 49 scope, safety notes, and validation.
+
+### Validation
+
+- `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "saved share-link hash"`: Passed. The project script ran the full product-demo spec: 16 browser tests passed.
+- `pnpm lint`: Passed.
+- `pnpm test`: Passed with 15 files, 90 tests.
+- `git diff --check`: Passed.
+
+### Recommended Next Task
+
+- Task 50, `Consolidate Remaining Historical-Doc Warnings Into Docs Index`, is the next safe task.
 
 ## Historical Sequential Progress
 

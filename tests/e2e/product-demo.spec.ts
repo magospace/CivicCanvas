@@ -158,6 +158,22 @@ test("saved bundle import rejects unsafe JSON and saved-card actions work", asyn
   await expect(page.getByText("Import rejected")).toBeVisible();
 });
 
+test("saved share-link hash rejects malformed bundles without backend persistence", async ({ page }) => {
+  let saveRouteCalls = 0;
+  await page.route("**/api/canvas/save", async (route) => {
+    saveRouteCalls += 1;
+    await route.continue();
+  });
+
+  await page.goto("/saved#canvasBundle=bm90IGpzb24");
+
+  await expect(page.getByText("Shared link rejected")).toBeVisible();
+  await expect(page.getByText("Save a generated dashboard from /explore or import a validated saved-canvas bundle.")).toBeVisible();
+  await expect(page).toHaveURL(/\/saved#canvasBundle=/);
+  expect(saveRouteCalls).toBe(0);
+  expect(await page.evaluate(() => window.localStorage.getItem("tdc.savedCanvases.v1"))).toBeNull();
+});
+
 test("Miro preview always includes Source & Method", async ({ page }) => {
   await page.goto("/explore");
   await generate(page, "Show Dallas 311 service requests by category and ZIP code for 2024.");

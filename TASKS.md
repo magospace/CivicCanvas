@@ -761,6 +761,8 @@ Status: Complete on May 10, 2026 at 05:29 CDT.
 
 ## 49. Add Saved-Canvas Share-Link Size Boundary E2E Or Component Coverage
 
+Status: Complete on May 10, 2026 at 05:31 CDT.
+
 - Owner type: QA / Browser-local persistence
 - Goal: Add focused coverage for the user-facing oversized or malformed share/import boundary on `/saved` or in saved-canvas helpers.
 - Why it matters: Share links are URL-hash based and browser-local; demos should fail safely instead of implying public hosted storage.
@@ -770,6 +772,8 @@ Status: Complete on May 10, 2026 at 05:29 CDT.
 - Acceptance criteria: Test proves malformed or oversized import/share data shows a safe local validation error and does not call a backend persistence path.
 - Validation commands: focused Vitest or targeted Playwright command, `git diff --check`, `pnpm lint`, `pnpm test`; add targeted `pnpm test:e2e` if browser coverage changes.
 - Can run in parallel: Yes, but not with another task editing saved-canvas tests/components.
+- Completed notes: Added Playwright coverage for a malformed `/saved#canvasBundle=...` share-link hash. The test asserts the user sees `Shared link rejected`, no saved canvas is written to browser localStorage, and `/api/canvas/save` is not called.
+- Validation: Targeted Playwright command passed and ran the full product-demo spec with 16 browser tests; `pnpm lint`, `pnpm test`, and `git diff --check` passed.
 
 ## 50. Consolidate Remaining Historical-Doc Warnings Into Docs Index
 
