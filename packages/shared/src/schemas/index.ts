@@ -134,6 +134,15 @@ export const deploymentSmokeResultSchema = z.object({
   schemaVersion: schemaVersionSchema,
   checkedAt: z.string().datetime(),
   baseUrl: z.string().url(),
+  expectedVersion: z.string().min(1).optional(),
+  summary: z.object({
+    ok: z.boolean(),
+    total: z.number().int().nonnegative(),
+    passed: z.number().int().nonnegative(),
+    failed: z.number().int().nonnegative(),
+    durationMs: z.number().int().nonnegative(),
+    expectedVersion: z.string().min(1).optional()
+  }).optional(),
   results: z.array(
     z.object({
       checkedAt: z.string().datetime(),

@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { Copy, ExternalLink, FileJson, Link2, Trash2 } from "lucide-react";
+import { Copy, Download, ExternalLink, FileJson, Link2, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { SavedCanvas } from "@texas-data-canvas/shared";
+import { tableCsv } from "../lib/dashboard-exports";
+import { downloadTextFile, safeDownloadName } from "../lib/client-downloads";
 import {
   clearAllSavedCanvases,
   deleteSavedCanvas,
@@ -66,6 +68,20 @@ export function SavedCanvases() {
       const detail = error instanceof Error ? error.message : "Could not create share link.";
       setImportError(detail);
     }
+  }
+
+  function downloadSavedCanvasCsv(item: SavedCanvas) {
+    const csv = tableCsv(item.canvas);
+    if (!csv) {
+      setImportError(`${item.title} does not include a table block to export.`);
+      return;
+    }
+
+    downloadTextFile(
+      safeDownloadName(`${item.title}-table`, "csv"),
+      csv,
+      "text/csv;charset=utf-8"
+    );
   }
 
   if (items.length === 0) {
@@ -141,7 +157,7 @@ export function SavedCanvases() {
               </span>
             </div>
             <p className="mt-3 text-sm leading-6 text-slate-600">{item.prompt}</p>
-            <div className="mt-4 grid grid-cols-5 gap-2">
+            <div className="mt-4 grid grid-cols-6 gap-2">
               <Link
                 href="/explore"
                 onClick={() => queueCanvasForOpen(item)}
@@ -174,6 +190,14 @@ export function SavedCanvases() {
                 className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
               >
                 <FileJson className="h-4 w-4" />
+              </button>
+              <button
+                onClick={() => downloadSavedCanvasCsv(item)}
+                aria-label={`Export ${item.title} table CSV`}
+                title={`Export ${item.title} table CSV`}
+                className="flex h-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-civic-500 hover:text-civic-700 focus:border-civic-500 focus:outline-none focus:ring-2 focus:ring-civic-100"
+              >
+                <Download className="h-4 w-4" />
               </button>
               <button
                 onClick={() => {

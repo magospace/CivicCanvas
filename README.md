@@ -36,6 +36,7 @@ Useful routes:
 - `/sources` - approved catalog and live/sample confidence notes.
 - `/saved` - browser-local saved canvases, portable JSON bundles, and URL-hash share links.
 - `/gallery` - checked-in validated demo canvases rendered through the allowlisted block registry.
+- `/demo-readiness` - utility release console with catalog health, known boundaries, gate commands, and hosted blockers.
 
 ## Verification
 
@@ -75,6 +76,13 @@ The dashboard prompt bar and inspector expose the same governed data modes used 
 - Auto: use live public APIs only when the approved catalog marks the requested dataset and fields as live-ready.
 - Live public API: request live data and fall back to approved samples with a visible caveat if live access is unavailable or unsafe.
 - Sample fallback: force local sample data for deterministic demos.
+
+## Known sample/live boundaries
+
+- Dallas 311 live aggregates are promoted only for verified non-ZIP mapped fields. Dallas ZIP dashboard views intentionally use sample fallback because the verified live Socrata view does not expose ZIP.
+- Austin permit metadata is verified, but monthly live aggregation remains sample-first until a source-owned month grouping is safely verified.
+- Houston transportation incidents is the default v0.9 third-dataset candidate, but it stays in coming-later/suggestion mode until catalog metadata, field classification, fallback samples, source caveats, adapter mapping, and bounded query tests are complete.
+- Sample fallback remains mandatory for every live-enabled dataset so public demos stay reliable when live portals time out or reject a safe aggregate.
 
 ## MCP server
 
@@ -119,6 +127,8 @@ pnpm smoke:deploy -- --url https://your-deployment.example --expect-version v0.6
 Saved canvases remain browser-local. Use `/saved` to export/import portable saved-canvas bundles for demos and handoffs. Share links place the validated bundle in the URL hash and import only after schema validation; they are not public database-backed URLs.
 
 The `/explore` inspector includes a "Why this dashboard?" section with matched prompt terms, reason codes, safety decisions, selected data mode, and active bounded query JSON. Dashboard exports stay client-side and governed: current table CSV, validated `CanvasDocument` JSON, and active `BoundedQuerySpec` JSON.
+
+The `/demo-readiness` route is a utility page for checking release gates and public-demo boundaries. It is intentionally not a marketing landing page.
 
 ## Workspace packages
 

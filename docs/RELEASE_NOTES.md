@@ -1,5 +1,13 @@
 # Release Notes
 
+## v0.9.0-public-reliability (active)
+
+- Adds `/demo-readiness` as a utility release console for catalog health, known sample/live boundaries, hosted blockers, gate commands, and safety rules.
+- Improves `/sources` degraded-health copy and deploy smoke JSON summaries for CI/release dashboards.
+- Extends gallery and saved-canvas views with client-side table CSV and validated CanvasDocument JSON export affordances.
+- Documents Dallas ZIP sample fallback, Austin sample-first monthly aggregation, and the Houston transportation candidate policy.
+- Keeps hosted release tags blocked until a real public URL passes hosted smoke and remote Playwright.
+
 ## v0.8.0-product-readiness (locally complete / untagged)
 
 - Adds cleaned CivicCanvas brand assets, repaired person mark, header integration, and app icon consistency.

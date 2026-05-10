@@ -109,3 +109,19 @@ Locally closed out on branch `feat/v0.7-public-hardening`:
   - `pnpm smoke:deploy -- --url http://localhost:3006`
 
 Release remains blocked on public hosted verification. No `v0.7.0-public-hardening` or `v0.8.0-product-readiness` tag has been created in this repo context.
+
+## v0.9 Public Reliability Status
+
+Started on branch `feat/v0.9-public-reliability` from the locally closed-out v0.8 branch:
+
+- `/demo-readiness` provides catalog health, hosted blockers, known Dallas/Austin sample/live boundaries, release gate commands, and safety rules.
+- Deploy smoke JSON includes a summary for release dashboards and now covers `/demo-readiness`.
+- `/sources` includes a degraded-health callout if catalog/sample validation fails.
+- Gallery canvases and saved canvases expose client-side CSV/JSON export affordances where table data is present.
+- README now documents known sample/live boundaries and the Houston transportation third-dataset candidate policy.
+- Local verification passed on May 9, 2026:
+  - `pnpm verify`
+  - `pnpm smoke:deploy -- --url http://localhost:3006`
+  - `pnpm smoke:deploy:json -- --url http://localhost:3006`
+
+The Houston transportation candidate remains coming-later until the governance checklist passes. Release tags remain blocked on public hosted verification.

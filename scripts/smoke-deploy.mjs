@@ -3,6 +3,7 @@ const urlArgIndex = args.indexOf("--url");
 const expectedVersionIndex = args.indexOf("--expect-version");
 const jsonMode = args.includes("--json");
 const checkedAt = new Date().toISOString();
+const startedAt = Date.now();
 
 if (urlArgIndex === -1 || !args[urlArgIndex + 1]) {
   console.error("Usage: pnpm smoke:deploy -- --url <base-url> [--expect-version <version>] [--json]");
@@ -171,6 +172,15 @@ const checks = [
     })
   },
   {
+    name: "demo_readiness_page",
+    path: "/demo-readiness",
+    kind: "text",
+    expect: (body) => ({
+      ok: body.includes("Demo readiness") && body.includes("Known sample/live boundaries"),
+      reason: "Expected demo readiness utility page to render."
+    })
+  },
+  {
     name: "production_headers",
     path: "/explore",
     kind: "text",
@@ -274,13 +284,31 @@ for (const check of checks) {
   }
 }
 
+const summary = {
+  ok: results.every((result) => result.ok),
+  total: results.length,
+  passed: results.filter((result) => result.ok).length,
+  failed: results.filter((result) => !result.ok).length,
+  durationMs: Date.now() - startedAt,
+  ...(expectedVersion ? { expectedVersion } : {})
+};
+const payload = {
+  schemaVersion: "1.0",
+  checkedAt,
+  baseUrl: baseUrl.toString(),
+  ...(expectedVersion ? { expectedVersion } : {}),
+  summary,
+  results
+};
+
 if (jsonMode) {
-  console.log(JSON.stringify({ schemaVersion: "1.0", checkedAt, baseUrl: baseUrl.toString(), results }, null, 2));
+  console.log(JSON.stringify(payload, null, 2));
 } else {
   for (const result of results) {
     const label = result.ok ? "OK" : "FAILED";
     console.log(`Deploy smoke ${label}: ${result.name} (${result.status}) ${result.url}. ${result.reason}`);
   }
+  console.log(`Deploy smoke summary: ${summary.passed}/${summary.total} passed in ${summary.durationMs}ms.`);
 }
 
 if (results.some((result) => !result.ok)) {

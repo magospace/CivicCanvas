@@ -5,6 +5,11 @@ import { getCatalogHealth, getDatasetCatalog } from "../../lib/data";
 export default function SourcesPage() {
   const datasets = getDatasetCatalog();
   const health = getCatalogHealth();
+  const healthClassName = health.status === "ok"
+    ? "border-mint/30 bg-mint/10 text-civic-900"
+    : health.status === "degraded"
+      ? "border-amber-200 bg-amber-50 text-amber-800"
+      : "border-signal/30 bg-signal/10 text-signal";
 
   return (
     <main className="min-h-screen bg-civic-50">
@@ -21,9 +26,21 @@ export default function SourcesPage() {
             Hosted beta keeps Dallas ZIP dashboards on sample fallback and keeps Austin monthly
             live aggregation blocked until a source-owned month expression is safely verified.
           </p>
-          <div className="mt-4 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-civic-700 shadow-sm">
+          <div className={`mt-4 rounded-md border px-3 py-2 text-xs font-semibold shadow-sm ${healthClassName}`}>
             Catalog health: {health.status} / {health.datasetCount} datasets / {health.liveEnabledDatasets.length} live-enabled
           </div>
+          {health.status !== "ok" ? (
+            <div className="mt-3 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900">
+              Catalog health is degraded. Dashboards should stay in sample fallback until catalog/sample issues are resolved.
+              {health.issues.length > 0 ? (
+                <ul className="mt-2 list-disc pl-4">
+                  {health.issues.slice(0, 4).map((issue, index) => (
+                    <li key={`${issue.code}-${index}`}>{issue.path.join(".")}: {issue.message}</li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+          ) : null}
         </div>
         <SourcesCatalog datasets={datasets} />
       </section>

@@ -1,12 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Database, GalleryHorizontalEnd, LayoutDashboard, Search, UserCircle } from "lucide-react";
+import { ClipboardCheck, Database, GalleryHorizontalEnd, LayoutDashboard, Search, UserCircle } from "lucide-react";
 
 const navItems = [
   { href: "/explore", label: "Explore", icon: Search },
   { href: "/saved", label: "Saved Canvases", icon: LayoutDashboard },
   { href: "/sources", label: "Sources", icon: Database },
-  { href: "/gallery", label: "Gallery", icon: GalleryHorizontalEnd }
+  { href: "/gallery", label: "Gallery", icon: GalleryHorizontalEnd },
+  { href: "/demo-readiness", label: "Demo", icon: ClipboardCheck }
 ];
 
 export function Header() {

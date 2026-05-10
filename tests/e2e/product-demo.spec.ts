@@ -86,6 +86,7 @@ test("saved bundle import rejects unsafe JSON", async ({ page }) => {
 
   await page.goto("/saved");
   await expect(page.getByText("Dallas 311 Service Requests Explorer")).toBeVisible();
+  await expect(page.getByLabel(/Export Dallas 311 Service Requests Explorer table CSV/)).toBeVisible();
   await page.getByRole("button", { name: "Export bundle" }).click();
   await expect(page.locator("pre")).toContainText("\"canvases\"");
   await page.getByRole("button", { name: /^Copy share link$/ }).click();
@@ -113,6 +114,17 @@ test("gallery route renders checked-in validated canvases", async ({ page }) => 
   await expect(page.getByText("Dallas 311 Sample Dashboard")).toBeVisible();
   await expect(page.getByText("Austin Permits Sample Dashboard")).toBeVisible();
   await expect(page.getByText("Unsupported Sensitive Prompt Example")).toBeVisible();
+  await expect(page.getByLabel("Download Dallas 311 Sample Dashboard table CSV")).toBeVisible();
+  await expect(page.getByLabel("Download Austin Permits Sample Dashboard CanvasDocument JSON")).toBeVisible();
+});
+
+test("demo readiness route shows public release boundaries", async ({ page }) => {
+  await page.goto("/demo-readiness");
+
+  await expect(page.getByText("Demo readiness")).toBeVisible();
+  await expect(page.getByText("Known sample/live boundaries")).toBeVisible();
+  await expect(page.getByText("Hosted blocker", { exact: true })).toBeVisible();
+  await expect(page.getByText("Houston Transportation Incidents and Road Projects")).toBeVisible();
 });
 
 test("key public-beta flows have no serious accessibility violations", async ({ page }) => {
@@ -133,6 +145,10 @@ test("key public-beta flows have no serious accessibility violations", async ({ 
 
   await page.goto("/gallery");
   await expect(page.getByText("Validated sample canvases")).toBeVisible();
+  await expectNoSeriousAccessibilityViolations(page);
+
+  await page.goto("/demo-readiness");
+  await expect(page.getByText("Demo readiness")).toBeVisible();
   await expectNoSeriousAccessibilityViolations(page);
 
   await page.goto("/saved");

@@ -128,16 +128,17 @@ The May 9, 2026 external review was accepted where it applied to the hosted-beta
 - Add a third verified dataset only after Dallas/Austin hosted reliability is solid.
 - Keep `v0.7.0-public-hardening` and future `v0.8.0-product-readiness` tags blocked until the required hosted public URL checks pass.
 
-## v0.9 Public Reliability Next
+## v0.9 Public Reliability Active
 
-The next branch should focus on public reliability rather than infrastructure expansion:
+Active branch: `feat/v0.9-public-reliability`. This pass focuses on public reliability rather than infrastructure expansion:
 
-1. Add `docs/V0_9_PUBLIC_RELIABILITY_PLAN.md`.
-2. Add clearer degraded-health UI and utility-focused demo readiness copy.
-3. Improve deploy smoke JSON output for CI dashboards.
-4. Document known Dallas/Austin sample/live boundaries in the README.
-5. Extend CSV export affordances to gallery and saved canvases.
+1. Added `docs/V0_9_PUBLIC_RELIABILITY_PLAN.md`.
+2. Added clearer degraded-health UI and a utility-focused `/demo-readiness` route.
+3. Improved deploy smoke JSON output for CI dashboards.
+4. Documented known Dallas/Austin sample/live boundaries in the README.
+5. Extended CSV/JSON export affordances to gallery and saved canvases.
 6. Keep Houston transportation as the default third-dataset candidate, but do not wire it into dashboard generation until catalog metadata, field classification, local fallback sample, source caveats, adapter mapping, and bounded query tests are complete.
+7. Verified locally on May 9, 2026 with `pnpm verify`, `pnpm smoke:deploy -- --url http://localhost:3006`, and `pnpm smoke:deploy:json -- --url http://localhost:3006`.
 
 ## Release Gate
 
