@@ -2646,7 +2646,7 @@ Status: Complete on May 10, 2026.
 
 ## 163. Add No-Live-Provider Default E2E Assertion
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Provider Honesty / E2E
 - Goal: Protect the default demo path from accidentally advertising or triggering live OpenAI/Fal behavior.
@@ -2657,6 +2657,8 @@ Status: Pending.
 - Acceptance criteria: E2E asserts default UI/readiness copy says no-key/no-live provider default and normal dashboard generation does not call Fal/OpenAI.
 - Validation command: focused Playwright demo-readiness/provider test, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with demo-readiness route edits.
+- Completed notes: Added a Playwright default-dashboard-generation test that routes `/api/provider/**` and `/api/media/**`, runs the Dallas default demo flow, verifies guided/no-AI-assisted default copy and sample fallback output, and asserts no optional provider/media API route was called. Existing demo-readiness assertions still cover no-key/OpenAI/Fal boundary copy.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "default dashboard generation does not call optional provider routes"` passed; due repo script wiring, the full product-demo spec ran and passed with 22 browser tests. `pnpm lint` passed. `git diff --check` passed.
 
 ## 164. Add Source Provenance JSON Contract Test
 

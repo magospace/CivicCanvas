@@ -103,6 +103,27 @@ test("explicit sample data mode is visible in the dashboard flow", async ({ page
   await expect(page.getByText("Data mode control requested sample fallback.").first()).toBeVisible();
 });
 
+test("default dashboard generation does not call optional provider routes", async ({ page }) => {
+  const providerRequests: string[] = [];
+  await page.route("**/api/provider/**", async (route) => {
+    providerRequests.push(route.request().url());
+    await route.continue();
+  });
+  await page.route("**/api/media/**", async (route) => {
+    providerRequests.push(route.request().url());
+    await route.continue();
+  });
+
+  await page.goto("/explore");
+  await expect(page.getByText("Guided suggestions / governed data mode")).toBeVisible();
+  await expect(page.getByText("AI-assisted suggestions / governed data mode")).toHaveCount(0);
+  await generate(page, "Show Dallas 311 service requests by category and ZIP code for 2024.");
+
+  await expect(page.getByText("Validated Dashboard")).toBeVisible();
+  await expect(page.getByText("Showing sample fallback data")).toBeVisible();
+  expect(providerRequests).toEqual([]);
+});
+
 test("live data mode request shows governed fallback visibility", async ({ page }) => {
   await page.goto("/explore");
   await page.getByLabel("Data mode", { exact: true }).selectOption("live");

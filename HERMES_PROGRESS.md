@@ -2260,3 +2260,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm docs:links` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 164, `Add Source Provenance JSON Contract Test`, because it adds executable proof for the source/provenance JSON used by the new aggregate guard and final transcript.
+
+
+## Task 163 Update - No-Live-Provider Default E2E Assertion
+
+- Task chosen: `TASKS.md` item 163, "Add No-Live-Provider Default E2E Assertion".
+- Why this was next: It protects the default Loom path from accidentally advertising or triggering optional OpenAI/Fal behavior, which is a high-risk demo honesty boundary.
+- Scope: `tests/e2e/product-demo.spec.ts`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Deterministic no-key fallback / acceptable if clearly labeled. No live provider calls or secrets were used.
+- Changes: Added a Playwright test that intercepts `/api/provider/**` and `/api/media/**`, runs the default Dallas dashboard generation path, verifies guided/no-AI-assisted default copy plus sample fallback output, and asserts no optional provider/media API route was called.
+- Validation: `pnpm test:e2e -- tests/e2e/product-demo.spec.ts -g "default dashboard generation does not call optional provider routes"` passed; due repo script wiring, the full product-demo spec ran and passed with 22 browser tests. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 164, `Add Source Provenance JSON Contract Test`, for machine-readable provenance proof used by transcript and aggregate guard commands.
