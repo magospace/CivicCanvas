@@ -2236,3 +2236,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `pnpm submission:guard` passed. `pnpm lint` passed. `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 161, `Add Final Data Realism Audit Snapshot`, to refresh the audit doc with the latest completed guardrails.
+
+
+## Task 161 Update - Final Data Realism Audit Snapshot
+
+- Task chosen: `TASKS.md` item 161, "Add Final Data Realism Audit Snapshot".
+- Why this was next: It was the next pending data-realism task after the aggregate guard and preserves the current accepted sample/local/fixture/provider classifications for final submission review.
+- Scope: `REALNESS_AUDIT.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Documentation/audit only. No app data path changed.
+- Changes: Added a final local submission snapshot classifying approved catalog metadata, deterministic sample fallbacks, narrow Dallas live paths, gallery fixtures through data loaders, browser-local saved records, `/api/canvas/save` validation-stub behavior, optional OpenAI fallback, script-only Fal/media proof, preview-only Miro export, historical release evidence, and the final local submission guard.
+- Validation: `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 162, `Add README Final Local Submission Checklist`, to make the final local command/demo flow judge-scannable from the public README.

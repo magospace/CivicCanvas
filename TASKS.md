@@ -2614,7 +2614,7 @@ Status: Complete on May 10, 2026.
 
 ## 161. Add Final Data Realism Audit Snapshot
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Data Realism / Audit Docs
 - Goal: Refresh a concise current snapshot of accepted sample/local/fixture/provider boundaries after Tasks 150-159.
@@ -2625,6 +2625,8 @@ Status: Pending.
 - Acceptance criteria: Audit notes latest guards/tests and still classifies catalog, samples, gallery, saved local records, OpenAI fallback, Dallas live, Miro preview, and validation-stub route honestly.
 - Validation command: `git diff --check`.
 - Can run in parallel: Yes with code tasks not editing audit docs.
+- Completed notes: Added a final local submission snapshot classifying catalog metadata, deterministic sample fallbacks, narrow Dallas live paths, gallery fixtures, browser-local saved records, validation-stub save route, optional OpenAI fallback, script-only Fal/media proof, preview-only Miro export, historical release evidence, and the aggregate submission guard.
+- Validation: `git diff --check` passed.
 
 ## 162. Add README Final Local Submission Checklist
 

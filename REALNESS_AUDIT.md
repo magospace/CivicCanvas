@@ -47,8 +47,26 @@ pnpm release:check
 
 Do not use `pnpm clean`, deploy commands, production data mutation, release-evidence refresh, or paid provider calls as part of a routine realness audit.
 
+## Final Local Submission Snapshot - May 10, 2026 20:15 CDT
+
+This snapshot reflects the latest local-only guardrail tasks through Task 160. It did not run live OpenAI, Fal/media, hosted smoke, release-evidence refresh, database work, migrations, deploys, or pushes. Current guard commands are intentionally no-network/default-safe unless an explicit live gate is set.
+
+| Area | Classification | Latest proof | Current boundary |
+|---|---|---|---|
+| Approved source catalog | Fixture file through normal data loaders / acceptable. | `pnpm provenance:summary` reads `data/catalog/approved-datasets.json`, `data/prompt-examples.json`, and sample-file existence. | Catalog entries are approved metadata; metadata-only sources such as Texas Government Spending are not query-ready until samples/live governance are added. |
+| Dallas/Austin/Houston sample rows | Deterministic fallback fixture files / acceptable when labeled. | `pnpm data:quality`, `pnpm provenance:summary`, dashboard tests, and demo-readiness copy. | Samples are synthetic/schema-aligned fallback rows, not complete source-owned extracts. |
+| Narrow Dallas live path | Real public API path for verified aggregate fields / acceptable with visible fallback limits. | `docs/LIVE_FALLBACK_PROOF.md`, catalog live verification metadata, dashboard tests. | Dallas ZIP dashboards and the core judge prompt remain sample fallback because ZIP is not safely exposed live. |
+| Gallery dashboards | Fixture files through gallery loader / acceptable. | `apps/web/test/gallery-fixtures.test.ts` proves `getCuratedGalleryCanvases` loads checked-in canvases and validates them. | Gallery UI must not directly import component-local demo records. |
+| Saved canvases | Editable browser-local records / acceptable when labeled. | `apps/web/test/saved-canvases.test.ts` legacy import/edit/export regression plus `docs/LOCAL_DEMO_SMOKE_CHECKLIST.md`. | LocalStorage/hash-share only; no account sync, backend database, object store, or public share service. |
+| `/api/canvas/save` | Validation stub only / must remain labeled. | `apps/web/test/canvas-save-route.test.ts` asserts validation-only response shape and no backend-like fields. | Route validates `CanvasDocument`; it does not persist server-side. |
+| Optional OpenAI assist | Provider-gated deterministic fallback / acceptable if labeled. | `pnpm provider:openai:smoke:json` no-spend path and provider tests. | Server-side helper only; dashboards remain deterministic governed TypeScript; no arbitrary SQL/code/hidden fields. |
+| Fal/media proof | Script-only provider readiness metadata / acceptable if labeled. | `pnpm media:fal:smoke:json` no-spend path and health/submission docs. | Normal dashboard generation does not create image/video artifacts. |
+| Miro export | Preview-only third-party spec / acceptable when labeled. | `apps/web/test/miro-export-route.test.ts` no-write/OAuth/board guard. | No Miro OAuth, board ID, access token, or board write exists. |
+| Release evidence | Historical proof only / must not be cited as current HEAD. | README/demo-readiness warnings and governance audit warning history. | Task 35 remains gated; do not refresh evidence without full intentional release gate. |
+| Final local guard | Validation aggregator / not data-path-related. | `pnpm submission:guard` runs TODO scan, docs links, artifact hygiene, provenance, and local push readiness. | No network/live provider calls, deploy, release-evidence refresh, or push. |
+
 ## Audit Notes
 
-- Current user-facing copy is mostly honest about local saves, sample fallback, preview-only Miro output, no auth, and no database.
+- Current user-facing copy is mostly honest about local saves, sample fallback, preview-only Miro output, no auth, no database, no normal media generation, and optional provider boundaries.
 - The main release/demo risks are overclaiming live data, treating synthetic samples as full source extracts, treating release evidence as current, and letting route names imply persistence where none exists.
-- No product behavior was changed by this audit.
+- No product behavior was changed by this audit snapshot.
