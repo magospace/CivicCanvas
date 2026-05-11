@@ -43,6 +43,8 @@
     "persistence:readiness:json": "node scripts/local-persistence-readiness.mjs --json",
     "local:push-readiness": "node scripts/local-push-readiness.mjs",
     "local:push-readiness:json": "node scripts/local-push-readiness.mjs --json",
+    "submission:guard": "node scripts/final-submission-guard.mjs",
+    "submission:guard:json": "node scripts/final-submission-guard.mjs --json",
     "sample:freshness": "node scripts/sample-freshness-snapshot.mjs",
     "sample:freshness:json": "node scripts/sample-freshness-snapshot.mjs --json",
     "verify:prod-local": "node scripts/verify-prod-local.mjs",

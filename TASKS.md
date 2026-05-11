@@ -2598,7 +2598,7 @@ Status: Complete on May 10, 2026.
 
 ## 160. Add Final Submission Guard Aggregate Command
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: Release QA / Submission Guard
 - Goal: Add a single no-network aggregate command for the final local submission guard checks added in recent cycles.
@@ -2609,6 +2609,8 @@ Status: Pending.
 - Acceptance criteria: Command runs/aggregates `submission:todo-scan`, `docs:links`, `hygiene:artifacts`, `provenance:summary`, and `local:push-readiness` without network calls and exits non-zero if any guard fails.
 - Validation command: `pnpm submission:guard`, `pnpm lint`, `git diff --check`.
 - Can run in parallel: No with package script edits.
+- Completed notes: Added `pnpm submission:guard` and `pnpm submission:guard:json`, which run the current no-network local submission guards with live provider env gates forced off and report that no deploy, push, release-evidence refresh, or live/provider calls were attempted.
+- Validation: `pnpm submission:guard` passed, aggregating TODO scan, docs link check, generated artifact hygiene, source provenance summary, and local push-readiness. `pnpm lint` passed. `git diff --check` passed.
 
 ## 161. Add Final Data Realism Audit Snapshot
 

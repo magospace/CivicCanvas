@@ -2224,3 +2224,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 160, `Add Final Submission Guard Aggregate Command`, because it consolidates recent no-network guards without deploying, pushing, spending, or refreshing release evidence.
+
+
+## Task 160 Update - Final Submission Guard Aggregate Command
+
+- Task chosen: `TASKS.md` item 160, "Add Final Submission Guard Aggregate Command".
+- Why this was next: It was the first pending task after the local submission hardening queue replenishment and consolidates recent no-network guardrails into one final local command.
+- Scope: `scripts/final-submission-guard.mjs`, `package.json`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Validation aggregator / not a data-path change. It exercises existing catalog/provenance and submission-honesty guards without changing app data behavior.
+- Changes: Added `pnpm submission:guard` and `pnpm submission:guard:json`. The command runs `submission:todo-scan:json`, `docs:links:json`, `hygiene:artifacts:json`, `provenance:summary:json`, and `local:push-readiness:json` with live provider env gates forced off, then reports no network/live provider calls, no deploy, no release-evidence refresh, and no push.
+- Validation: `pnpm submission:guard` passed. `pnpm lint` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 161, `Add Final Data Realism Audit Snapshot`, to refresh the audit doc with the latest completed guardrails.
