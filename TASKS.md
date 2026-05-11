@@ -2630,7 +2630,7 @@ Status: Complete on May 10, 2026.
 
 ## 162. Add README Final Local Submission Checklist
 
-Status: Pending.
+Status: Complete on May 10, 2026.
 
 - Owner type: README / Submission UX
 - Goal: Add a concise final local-only checklist pointing to guard commands and local demo routes.
@@ -2641,6 +2641,8 @@ Status: Pending.
 - Acceptance criteria: README has a short checklist for local Loom, no-spend guards, provider boundaries, public URL TODO, and no-push reminder.
 - Validation command: `pnpm docs:links`, `git diff --check`.
 - Can run in parallel: Yes with non-README tasks.
+- Completed notes: Added a final local submission checklist with `pnpm submission:guard`, optional broader no-spend validation, local Loom route sequence, no-push reminder, provider live-gate boundaries, and deployed URL TODO/release-evidence honesty.
+- Validation: `pnpm docs:links` passed; `git diff --check` passed.
 
 ## 163. Add No-Live-Provider Default E2E Assertion
 

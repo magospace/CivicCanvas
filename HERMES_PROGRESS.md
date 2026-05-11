@@ -2248,3 +2248,15 @@ Last updated: May 10, 2026 06:17 CDT
 - Validation: `git diff --check` passed before commit.
 - Live API/media/OpenAI calls: 0.
 - Recommended next task: Task 162, `Add README Final Local Submission Checklist`, to make the final local command/demo flow judge-scannable from the public README.
+
+
+## Task 162 Update - README Final Local Submission Checklist
+
+- Task chosen: `TASKS.md` item 162, "Add README Final Local Submission Checklist".
+- Why this was next: It is the next safe README/submission UX task and gives a judge-scannable final local no-push/no-spend workflow.
+- Scope: `README.md`, `TASKS.md`, and `HERMES_PROGRESS.md`.
+- Data realism classification: Documentation only. It clarifies existing sample/local/provider boundaries rather than changing data behavior.
+- Changes: Added a final local submission checklist covering `pnpm submission:guard`, optional broader no-spend validation, the exact local Loom route sequence, no-push reminder, default no-live-provider posture, explicit OpenAI/Fal live gates, public URL TODO until hosted smoke passes, and historical release-evidence boundary.
+- Validation: `pnpm docs:links` passed. `git diff --check` passed before commit.
+- Live API/media/OpenAI calls: 0.
+- Recommended next task: Task 164, `Add Source Provenance JSON Contract Test`, because it adds executable proof for the source/provenance JSON used by the new aggregate guard and final transcript.

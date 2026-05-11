@@ -13,6 +13,32 @@ Open-source, MCP-powered visual explorer for Texas public datasets.
 - Dataset/synthetic data provenance: approved catalog metadata lives in `data/catalog/approved-datasets.json`; Dallas/Austin/Houston sample rows live in `data/samples/*.sample.json` and are schema-aligned fallback samples with provenance/caveats visible in the UI.
 - Known limitations and next steps: no backend saved-canvas database, no arbitrary SQL/dataset access, no live Miro writes, limited live public API coverage, and hosted firewall/rate-limit proof remains a deployment task.
 
+## Final Local Submission Checklist
+
+Use this checklist when recording the Loom or handing the repo to judges from a local machine. It is intentionally local-first and no-spend by default.
+
+1. Start from a clean reviewed tree except intentionally untracked external recommendation files such as `REVIEW_RECOMMENDATIONS.md` or `clauderecommends.md`. Do not push unless a human explicitly asks.
+2. Run the aggregate no-network guard:
+
+```bash
+pnpm submission:guard
+```
+
+3. If time allows, run the broader no-spend validation set before recording:
+
+```bash
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm governance:audit
+pnpm data:quality
+pnpm test:e2e -- tests/e2e/product-demo.spec.ts
+```
+
+4. Record the local demo at `http://localhost:3000/explore`: show `/sources`, run the Dallas prompt, point to source/method/caveats/query audit, save/edit/share locally, and close with the MCP server plus agent skill proof.
+5. Keep provider boundaries honest: default local demos make no OpenAI or Fal calls. Optional live proof requires explicit env gates (`RUN_LIVE_OPENAI_SMOKE=1` or `RUN_LIVE_FAL_SMOKE=1`) and server-side keys; normal dashboard generation still does not create media or provider-generated dashboard code.
+6. Keep the deployed URL as `TODO` until the exact public URL passes `pnpm smoke:deploy -- --url <public-url> --expect-version v1.3.0-hosted-launch-readiness`. Historical `docs/release-evidence.json` is not proof for current `HEAD`.
+
 ## Using Provided Keys
 
 The public repo never includes real provider credentials. If the team gives you a key separately, copy `.env.example` to `.env.local`, paste the value there, and restart the dev server.
