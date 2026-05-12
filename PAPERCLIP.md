@@ -16,6 +16,16 @@ Paperclip is the durable control plane for CivicCanvas work. Repo files remain t
 
 `WORKFLOW.md` is the active Paperclip/Symphony automated run contract for this repo. Read it before automated issue work; it defines tracker state, git-worktree workspace policy, validation hooks, Codex app-server posture, and the prompt template.
 
+## Native Agent Goals
+
+There are three goal layers:
+
+- Paperclip company goals: product and company strategy.
+- Paperclip issues: the visible work envelope agents should claim, update, and complete.
+- Native `/goal`: a per-session execution loop for one Paperclip issue or one bounded phase only.
+
+When `WORKFLOW.md` contains a `goals` block, use the rendered `/goal` command for Codex, Claude Code, or Hermes runs that should continue across turns. Do not use `/goal` for vague portfolio backlogs or "keep working forever" instructions. Check status with `/goal`, pause with `/goal pause`, resume with `/goal resume`, and clear with `/goal clear`.
+
 ## Official OpenAI Docs
 
 Use the OpenAI developer documentation MCP server named `openaiDeveloperDocs` before implementing or advising on OpenAI API, Responses API, Agents SDK, ChatGPT Apps SDK, Codex, MCP, skills, model selection, or prompt/model migration work. If the MCP is unavailable, use official OpenAI docs as fallback evidence and record the gap in `HERMES_PROGRESS.md`.

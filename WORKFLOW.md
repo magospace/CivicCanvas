@@ -31,6 +31,12 @@ agent:
   maxTurns: 5
   maxConcurrentPerCompany: 1
   maxConcurrentPortfolio: 3
+goals:
+  enabled: true
+  mode: agent-native
+  scope: one-paperclip-issue
+  maxTurns: 8
+  conditionTemplate: Complete Paperclip issue {{ issue.identifier }} for {{ company.name }} under WORKFLOW.md. Stop only when the scoped issue is complete, validation evidence is shown in the transcript using these checks {{ validation.commands }}, git status is clean or explicitly classified as preserved dirty work, a scoped commit exists, push is done when safe, TASKS.md and HERMES_PROGRESS.md are updated if present, and Paperclip has a completion comment. Stop early if validation fails, credentials are missing, scope is unclear, destructive production data access is needed, or secrets or private artifacts would be exposed. Do not force push, do not commit .env values, and preserve unrelated dirty work. Stop after {{ goal.maxTurns }} turns with a blocker summary if not complete.
 codex:
   command: codex app-server
   sandbox: workspace-write
@@ -54,6 +60,8 @@ You are working on {{ issue.identifier }} for {{ company.name }}.
 
 Complete the Paperclip issue with production-quality implementation, validation, durable repo updates, and a clear Paperclip handoff.
 
+Paperclip company goals define product strategy, Paperclip issues define the work envelope, and the agent-native `/goal` command generated from this file defines the execution loop for this one issue only.
+
 Issue:
 {{ issue.title }}
 
@@ -73,6 +81,7 @@ Read `AGENTS.md`, `PAPERCLIP.md`, `TASKS.md`, `HERMES_PROGRESS.md` if present, `
 ## Operating Rules
 
 - Treat Paperclip as the visible issue tracker and this `WORKFLOW.md` as the active automated run contract.
+- Use `/goal` only for this Paperclip issue or a bounded phase of it; never use it as a "keep working forever" backlog.
 - Use the Paperclip issue as the work envelope and keep repo memory synchronized.
 - Use scoped git worktrees for automated issue work.
 - Preserve unrelated dirty work from the user or other agents.
