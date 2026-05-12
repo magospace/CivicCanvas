@@ -1,5 +1,13 @@
 # AGENTS.md
 
+## Paperclip Control Plane
+
+If this run is launched from Paperclip, assigned through Paperclip, or needs cross-agent coordination, read `PAPERCLIP.md` before selecting work. Paperclip issues are the visible work envelopes; `TASKS.md` and `HERMES_PROGRESS.md` remain the detailed repo-local queue and run log.
+
+## Official OpenAI Docs
+
+Use the OpenAI developer documentation MCP server named `openaiDeveloperDocs` before implementing or advising on OpenAI API, Responses API, Agents SDK, ChatGPT Apps SDK, Codex, MCP, skills, model selection, or prompt/model migration work. If the MCP is unavailable, use official OpenAI docs as fallback evidence and record the gap in `HERMES_PROGRESS.md`.
+
 Repo-specific instructions for Hermes and other coding agents working on Texas Data Canvas.
 
 ## Project Purpose
