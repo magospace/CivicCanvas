@@ -30,7 +30,7 @@ agent:
   lane: codex
   maxTurns: 5
   maxConcurrentPerCompany: 1
-  maxConcurrentPortfolio: 3
+  maxConcurrentPortfolio: 2
 goals:
   enabled: true
   mode: agent-native
@@ -84,6 +84,7 @@ Read `AGENTS.md`, `PAPERCLIP.md`, `TASKS.md`, `HERMES_PROGRESS.md` if present, `
 - Use `/goal` only for this Paperclip issue or a bounded phase of it; never use it as a "keep working forever" backlog.
 - Use the Paperclip issue as the work envelope and keep repo memory synchronized.
 - Use scoped git worktrees for automated issue work.
+- Respect local capacity: default maximum is 1 active agent per company and 2 active Paperclip/Symphony agents across the 24 GB Mac.
 - Preserve unrelated dirty work from the user or other agents.
 - Do not print or commit secrets, `.env` values, generated caches, or raw private artifacts.
 - Do not force push.

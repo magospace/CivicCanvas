@@ -26,6 +26,16 @@ There are three goal layers:
 
 When `WORKFLOW.md` contains a `goals` block, use the rendered `/goal` command for Codex, Claude Code, or Hermes runs that should continue across turns. Do not use `/goal` for vague portfolio backlogs or "keep working forever" instructions. Check status with `/goal`, pause with `/goal pause`, resume with `/goal resume`, and clear with `/goal clear`.
 
+## Local Capacity Policy
+
+This Mac should not run the whole portfolio at once. Default capacity is 1 active Paperclip/Symphony agent per company and 2 active agents portfolio-wide. Check capacity with:
+
+```bash
+npm --prefix /Users/eduardobrambila/agent-stack run paperclip:capacity
+```
+
+Do not wake or assign more work when capacity is full. Use explicit capacity override only when Eduardo intentionally wants a short burst.
+
 ## Official OpenAI Docs
 
 Use the OpenAI developer documentation MCP server named `openaiDeveloperDocs` before implementing or advising on OpenAI API, Responses API, Agents SDK, ChatGPT Apps SDK, Codex, MCP, skills, model selection, or prompt/model migration work. If the MCP is unavailable, use official OpenAI docs as fallback evidence and record the gap in `HERMES_PROGRESS.md`.
