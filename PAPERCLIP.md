@@ -12,6 +12,10 @@ Paperclip is the durable control plane for CivicCanvas work. Repo files remain t
 - Product Engineering project: `06393449-a9a8-4c9e-9a18-352ba0cfdb08`
 - Current company goal: Build a production Texas public-data canvas for governed dashboards, safe dataset discovery, bounded queries, source attribution, MCP workflows, local persistence, and deploy-ready civic data exploration.
 
+## Symphony Workflow Contract
+
+`WORKFLOW.md` is the active Paperclip/Symphony automated run contract for this repo. Read it before automated issue work; it defines tracker state, git-worktree workspace policy, validation hooks, Codex app-server posture, and the prompt template.
+
 ## Official OpenAI Docs
 
 Use the OpenAI developer documentation MCP server named `openaiDeveloperDocs` before implementing or advising on OpenAI API, Responses API, Agents SDK, ChatGPT Apps SDK, Codex, MCP, skills, model selection, or prompt/model migration work. If the MCP is unavailable, use official OpenAI docs as fallback evidence and record the gap in `HERMES_PROGRESS.md`.

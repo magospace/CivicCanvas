@@ -1,0 +1,101 @@
+---
+tracker:
+  kind: paperclip
+  apiBase: http://127.0.0.1:3100/api
+  dashboard: http://127.0.0.1:3100
+  activeStates:
+    - todo
+    - in_progress
+    - in_review
+  terminalStates:
+    - done
+    - cancelled
+workspace:
+  strategy: git-worktree
+  root: /Users/eduardobrambila/agent-stack/workers/paperclip
+  branchPrefix: paperclip
+hooks:
+  preflight:
+    - git status --short --branch
+    - git diff --check
+  validation:
+    - git status --short --branch
+    - git diff --check
+    - pnpm typecheck
+    - pnpm lint
+    - pnpm test
+    - pnpm build
+    - pnpm test:e2e
+agent:
+  lane: codex
+  maxTurns: 5
+  maxConcurrentPerCompany: 1
+  maxConcurrentPortfolio: 3
+codex:
+  command: codex app-server
+  sandbox: workspace-write
+  approvalPolicy: never
+  posture:
+    - no destructive production operations
+    - no force push
+    - no secrets
+paperclip:
+  company: CivicCanvas
+  issuePrefix: CIV
+  repoPath: /Users/eduardobrambila/AppRepos/CivicCanvas/texas-data-canvas-dev-packet
+  project: Product Engineering
+  wakeAutomatically: false
+---
+# Paperclip Symphony Workflow
+
+You are working on {{ issue.identifier }} for {{ company.name }}.
+
+## Outcome
+
+Complete the Paperclip issue with production-quality implementation, validation, durable repo updates, and a clear Paperclip handoff.
+
+Issue:
+{{ issue.title }}
+
+Description:
+{{ issue.description }}
+
+Repository:
+{{ repo.path }}
+
+Branch:
+{{ repo.branch }}
+
+## Required Reading
+
+Read `AGENTS.md`, `PAPERCLIP.md`, `TASKS.md`, `HERMES_PROGRESS.md` if present, `QA_FINDINGS.md` if present, and the files relevant to this issue before editing.
+
+## Operating Rules
+
+- Treat Paperclip as the visible issue tracker and this `WORKFLOW.md` as the active automated run contract.
+- Use the Paperclip issue as the work envelope and keep repo memory synchronized.
+- Use scoped git worktrees for automated issue work.
+- Preserve unrelated dirty work from the user or other agents.
+- Do not print or commit secrets, `.env` values, generated caches, or raw private artifacts.
+- Do not force push.
+- Do not perform destructive production operations.
+- Use live providers only when the issue explicitly allows them.
+- Update `TASKS.md`, `HERMES_PROGRESS.md`, and the Paperclip issue/comment when the task changes durable state.
+
+## Validation
+
+Run the most relevant checks for the changed area, starting from:
+{{ validation.commands }}
+
+## Final Report
+
+Report:
+
+1. Paperclip issue identifier and status.
+2. Commit hash and push status.
+3. Validation commands and results.
+4. Changed files.
+5. Live provider/API calls and produced artifacts, if any.
+6. Remaining dirty/untracked files.
+7. Remaining risks.
+8. Next recommended Paperclip issue or repo task.
