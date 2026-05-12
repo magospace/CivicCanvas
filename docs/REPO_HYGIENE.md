@@ -8,10 +8,10 @@ Main blocker: Mock/demo/seed language is widespread and needs classification bef
 
 ## Git State
 
-- Before foundation sync: ## feat/v1.3-hosted-launch-readiness...origin/main [ahead 53]
-- After foundation sync: ## feat/v1.3-hosted-launch-readiness...origin/main [ahead 53]
+- Before foundation sync: ## feat/v1.3-hosted-launch-readiness...origin/main [ahead 54]
+- After foundation sync: ## feat/v1.3-hosted-launch-readiness...origin/main [ahead 54]
 - Dirty tracked files after sync: 1
-- Untracked files after sync: 6
+- Untracked files after sync: 4
 - Upstream: origin/main
 - Push remote: DISABLED_LOCAL_ONLY_DO_NOT_PUSH
 
@@ -30,6 +30,4 @@ Main blocker: Mock/demo/seed language is widespread and needs classification bef
 ?? PAPERCLIP.md
 ?? REVIEW_RECOMMENDATIONS.md
 ?? clauderecommends.md
-?? docs/PRODUCTION_ROADMAP.md
-?? docs/VALIDATION.md
 ```
