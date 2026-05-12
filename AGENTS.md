@@ -8,6 +8,19 @@ If this run is launched from Paperclip, assigned through Paperclip, or needs cro
 
 Use the OpenAI developer documentation MCP server named `openaiDeveloperDocs` before implementing or advising on OpenAI API, Responses API, Agents SDK, ChatGPT Apps SDK, Codex, MCP, skills, model selection, or prompt/model migration work. If the MCP is unavailable, use official OpenAI docs as fallback evidence and record the gap in `HERMES_PROGRESS.md`.
 
+## Subagent Policy
+
+Codex or Claude subagents may be used only as bounded helpers inside one active Paperclip issue. They do not own Paperclip issues, commits, pushes, or final reporting; the parent agent owns integration, validation, scoped commit, safe push, and Paperclip handoff.
+
+Default limits:
+
+- max 2 concurrent subagents inside one parent issue run;
+- max depth 1, with no recursive fan-out;
+- explicit, bounded instruction required before spawning;
+- disjoint file ownership required for write-heavy subtasks.
+
+Good uses: read-heavy exploration, code review, test triage, asset/research inventory, and independent implementation slices. Avoid portfolio-wide fanout, same-file concurrent edits, dirty-tree reconciliation with unclear ownership, unclear product decisions, destructive production operations, or vague "keep improving" work.
+
 Repo-specific instructions for Hermes and other coding agents working on Texas Data Canvas.
 
 ## Project Purpose

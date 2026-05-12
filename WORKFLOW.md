@@ -31,6 +31,25 @@ agent:
   maxTurns: 5
   maxConcurrentPerCompany: 1
   maxConcurrentPortfolio: 2
+subagents:
+  enabled: true
+  scope: inside-one-paperclip-issue
+  maxConcurrent: 2
+  maxDepth: 1
+  requireExplicitInstruction: true
+  parentOwnsCommit: true
+  allowedUseCases:
+    - read-heavy exploration
+    - code review
+    - test triage
+    - independent implementation slices
+    - asset or research inventory
+  disallowedUseCases:
+    - portfolio-wide fanout
+    - recursive delegation
+    - same-file concurrent edits
+    - unclear product decisions
+    - destructive production operations
 goals:
   enabled: true
   mode: agent-native
@@ -82,6 +101,9 @@ Read `AGENTS.md`, `PAPERCLIP.md`, `TASKS.md`, `HERMES_PROGRESS.md` if present, `
 
 - Treat Paperclip as the visible issue tracker and this `WORKFLOW.md` as the active automated run contract.
 - Use `/goal` only for this Paperclip issue or a bounded phase of it; never use it as a "keep working forever" backlog.
+- Use subagents only as bounded helpers inside this issue. The parent agent owns integration, validation, commit, push, and Paperclip reporting.
+- Do not spawn more than 2 subagents, do not recurse, and do not use subagents for portfolio-wide fanout or ambiguous product decisions.
+- Prefer subagents for read-heavy exploration, review, test triage, asset inventory, or disjoint implementation slices with explicit file ownership.
 - Use the Paperclip issue as the work envelope and keep repo memory synchronized.
 - Use scoped git worktrees for automated issue work.
 - Respect local capacity: default maximum is 1 active agent per company and 2 active Paperclip/Symphony agents across the 24 GB Mac.
