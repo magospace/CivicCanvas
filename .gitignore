@@ -13,3 +13,8 @@ pnpm-debug.log*
 playwright-report
 test-results
 demo-artifacts
+
+# Paperclip generated run artifacts
+.paperclip-symphony/
+PaperclipWorkers/
+logs/paperclip-symphony/
