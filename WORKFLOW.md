@@ -12,7 +12,7 @@ tracker:
     - cancelled
 workspace:
   strategy: git-worktree
-  root: /Users/eduardobrambila/agent-stack/workers/paperclip
+  root: /Users/eduardobrambila/PaperclipWorkers
   branchPrefix: paperclip
 hooks:
   preflight:
@@ -28,6 +28,7 @@ hooks:
     - pnpm test:e2e
 agent:
   lane: codex
+  modelProfile: builder_high
   maxTurns: 5
   maxConcurrentPerCompany: 1
   maxConcurrentPortfolio: 2
@@ -106,6 +107,7 @@ Read `AGENTS.md`, `PAPERCLIP.md`, `TASKS.md`, `HERMES_PROGRESS.md` if present, `
 - Prefer subagents for read-heavy exploration, review, test triage, asset inventory, or disjoint implementation slices with explicit file ownership.
 - Use the Paperclip issue as the work envelope and keep repo memory synchronized.
 - Use scoped git worktrees for automated issue work.
+- Automated Paperclip issue worktrees live under `/Users/eduardobrambila/PaperclipWorkers` by default. Override with `PAPERCLIP_WORKER_ROOT` only for intentional local testing.
 - Respect local capacity: default maximum is 1 active agent per company and 2 active Paperclip/Symphony agents across the 24 GB Mac.
 - Preserve unrelated dirty work from the user or other agents.
 - Do not print or commit secrets, `.env` values, generated caches, or raw private artifacts.
