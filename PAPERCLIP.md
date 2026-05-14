@@ -12,6 +12,18 @@ Paperclip is the durable control plane for CivicCanvas work. Repo files remain t
 - Product Engineering project: `06393449-a9a8-4c9e-9a18-352ba0cfdb08`
 - Current company goal: Build a production Texas public-data canvas for governed dashboards, safe dataset discovery, bounded queries, source attribution, MCP workflows, local persistence, and deploy-ready civic data exploration.
 
+## Paperclip Runtime Workspace
+
+When Paperclip launches this run with `PAPERCLIP_WORKSPACE_CWD`, that path is the authoritative execution workspace. Before reading repo docs, editing files, running validation, or committing, run:
+
+```bash
+cd "$PAPERCLIP_WORKSPACE_CWD"
+pwd
+git status --short --branch
+```
+
+If `PAPERCLIP_WORKSPACE_CWD` differs from the source repo path in `PAPERCLIP_WORKSPACES_JSON`, treat the source repo as read-only reference for this run. Do not edit or commit in the source repo unless Eduardo explicitly approved a source-repo pilot.
+
 ## Symphony Workflow Contract
 
 `WORKFLOW.md` is the active Paperclip/Symphony automated run contract for this repo. Read it before automated issue work; it defines tracker state, git-worktree workspace policy, validation hooks, Codex app-server posture, and the prompt template.

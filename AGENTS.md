@@ -4,6 +4,18 @@
 
 If this run is launched from Paperclip, assigned through Paperclip, or needs cross-agent coordination, read `PAPERCLIP.md` before selecting work. Paperclip issues are the visible work envelopes; `TASKS.md` and `HERMES_PROGRESS.md` remain the detailed repo-local queue and run log.
 
+## Paperclip Runtime Workspace
+
+When Paperclip launches this run with `PAPERCLIP_WORKSPACE_CWD`, that path is the authoritative execution workspace. Before reading repo docs, editing files, running validation, or committing, run:
+
+```bash
+cd "$PAPERCLIP_WORKSPACE_CWD"
+pwd
+git status --short --branch
+```
+
+If `PAPERCLIP_WORKSPACE_CWD` differs from the source repo path in `PAPERCLIP_WORKSPACES_JSON`, treat the source repo as read-only reference for this run. Do not edit or commit in the source repo unless Eduardo explicitly approved a source-repo pilot.
+
 ## Official OpenAI Docs
 
 Use the OpenAI developer documentation MCP server named `openaiDeveloperDocs` before implementing or advising on OpenAI API, Responses API, Agents SDK, ChatGPT Apps SDK, Codex, MCP, skills, model selection, or prompt/model migration work. If the MCP is unavailable, use official OpenAI docs as fallback evidence and record the gap in `HERMES_PROGRESS.md`.
