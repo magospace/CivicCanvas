@@ -6,7 +6,7 @@ MCP-powered Texas public-data dashboard explorer with governed dataset catalog, 
 
 ## Design Intent
 
-The visual language should support this goal: Product goal needs confirmation from Eduardo.
+The visual language should support this goal: Build a production Texas public-data canvas for governed dashboards, safe dataset discovery, bounded queries, source attribution, MCP workflows, local persistence, and deploy-ready civic data exploration.
 
 ## Current Status
 
