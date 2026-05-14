@@ -8,6 +8,16 @@ If this run is launched from Paperclip, assigned through Paperclip, or needs cro
 
 Use the OpenAI developer documentation MCP server named `openaiDeveloperDocs` before implementing or advising on OpenAI API, Responses API, Agents SDK, ChatGPT Apps SDK, Codex, MCP, skills, model selection, or prompt/model migration work. If the MCP is unavailable, use official OpenAI docs as fallback evidence and record the gap in `HERMES_PROGRESS.md`.
 
+## Product Visual Identity
+
+Use Google's `DESIGN.md` format as the repo-owned visual identity contract. For UI, brand, asset, component, or visual polish work:
+
+- read repo-root `DESIGN.md` when present;
+- if missing, inspect existing UI/assets and create a product-specific `DESIGN.md` before broad redesign work;
+- preserve this product's own visual language instead of copying another portfolio app;
+- validate changed design files with `npm --prefix /Users/eduardobrambila/agent-stack run design:lint -- DESIGN.md`;
+- report whether `DESIGN.md` was present, changed, missing, or intentionally deferred.
+
 ## Subagent Policy
 
 Codex or Claude subagents may be used only as bounded helpers inside one active Paperclip issue. They do not own Paperclip issues, commits, pushes, or final reporting; the parent agent owns integration, validation, scoped commit, safe push, and Paperclip handoff.
@@ -20,6 +30,20 @@ Default limits:
 - disjoint file ownership required for write-heavy subtasks.
 
 Good uses: read-heavy exploration, code review, test triage, asset/research inventory, and independent implementation slices. Avoid portfolio-wide fanout, same-file concurrent edits, dirty-tree reconciliation with unclear ownership, unclear product decisions, destructive production operations, or vague "keep improving" work.
+
+## Agent Routing Matrix
+
+Paperclip agents are available role templates, not an always-on workforce. Route one issue to one lane before checkout prep:
+
+| Issue type | Primary lane | Fallback lane |
+| --- | --- | --- |
+| build / implementation | Codex Builder | Hermes Orchestrator |
+| review / QA / security / release | Claude QA Reviewer | Codex QA Backup |
+| planning / roadmap / task replenishment | CEO | Codex CEO Backup |
+| recovery / dirty tree / interrupted run | Hermes Orchestrator | Hermes CodexPro Orchestrator |
+| creative / media / provider-live | Creative Media Planner | Codex Creative Backup |
+
+Use `paperclip:agent-routing` or the MCP `paperclip_agent_routing` tool to generate the issue-scoped `agent-routing` document. Browser overlays may display or copy routing commands only; CLI/MCP readiness and capacity gates remain authoritative.
 
 Repo-specific instructions for Hermes and other coding agents working on Texas Data Canvas.
 

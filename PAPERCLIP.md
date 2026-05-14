@@ -26,6 +26,16 @@ There are three goal layers:
 
 When `WORKFLOW.md` contains a `goals` block, use the rendered `/goal` command for Codex, Claude Code, or Hermes runs that should continue across turns. Do not use `/goal` for vague portfolio backlogs or "keep working forever" instructions. Check status with `/goal`, pause with `/goal pause`, resume with `/goal resume`, and clear with `/goal clear`.
 
+## Product Visual Identity
+
+Use Google's `DESIGN.md` format as the repo-owned visual identity contract. For UI, brand, asset, component, or visual polish work:
+
+- read repo-root `DESIGN.md` when present;
+- if missing, inspect existing UI/assets and create a product-specific `DESIGN.md` before broad redesign work;
+- preserve this product's own visual language instead of copying another portfolio app;
+- validate changed design files with `npm --prefix /Users/eduardobrambila/agent-stack run design:lint -- DESIGN.md`;
+- report whether `DESIGN.md` was present, changed, missing, or intentionally deferred.
+
 ## Local Capacity Policy
 
 This Mac should not run the whole portfolio at once. Default capacity is 1 active Paperclip/Symphony agent per company and 2 active agents portfolio-wide. Check capacity with:
@@ -35,6 +45,20 @@ npm --prefix /Users/eduardobrambila/agent-stack run paperclip:capacity
 ```
 
 Do not wake or assign more work when capacity is full. Use explicit capacity override only when Eduardo intentionally wants a short burst.
+
+## Agent Routing Matrix
+
+Paperclip agents are available role templates, not an always-on workforce. Route one issue to one lane before checkout prep:
+
+| Issue type | Primary lane | Fallback lane |
+| --- | --- | --- |
+| build / implementation | Codex Builder | Hermes Orchestrator |
+| review / QA / security / release | Claude QA Reviewer | Codex QA Backup |
+| planning / roadmap / task replenishment | CEO | Codex CEO Backup |
+| recovery / dirty tree / interrupted run | Hermes Orchestrator | Hermes CodexPro Orchestrator |
+| creative / media / provider-live | Creative Media Planner | Codex Creative Backup |
+
+Use `paperclip:agent-routing` or the MCP `paperclip_agent_routing` tool to generate the issue-scoped `agent-routing` document. Browser overlays may display or copy routing commands only; CLI/MCP readiness and capacity gates remain authoritative.
 
 ## Official OpenAI Docs
 

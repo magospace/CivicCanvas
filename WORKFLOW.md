@@ -72,6 +72,7 @@ paperclip:
   project: Product Engineering
   wakeAutomatically: false
 ---
+
 # Paperclip Symphony Workflow
 
 You are working on {{ issue.identifier }} for {{ company.name }}.
@@ -96,7 +97,7 @@ Branch:
 
 ## Required Reading
 
-Read `AGENTS.md`, `PAPERCLIP.md`, `TASKS.md`, `HERMES_PROGRESS.md` if present, `QA_FINDINGS.md` if present, and the files relevant to this issue before editing.
+Read `AGENTS.md`, `PAPERCLIP.md`, `DESIGN.md` if this touches UI/brand/components, `TASKS.md`, `HERMES_PROGRESS.md` if present, `QA_FINDINGS.md` if present, and the files relevant to this issue before editing.
 
 ## Operating Rules
 
@@ -114,6 +115,7 @@ Read `AGENTS.md`, `PAPERCLIP.md`, `TASKS.md`, `HERMES_PROGRESS.md` if present, `
 - Do not force push.
 - Do not perform destructive production operations.
 - Use live providers only when the issue explicitly allows them.
+- Preserve the repo's own `DESIGN.md` visual identity when UI is touched; if it changes, validate it with `npm --prefix /Users/eduardobrambila/agent-stack run design:lint -- DESIGN.md`.
 - Update `TASKS.md`, `HERMES_PROGRESS.md`, and the Paperclip issue/comment when the task changes durable state.
 
 ## Validation
